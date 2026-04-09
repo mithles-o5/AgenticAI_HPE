@@ -1,0 +1,45 @@
+# API Mock Generator - Instructions
+
+This project allows you to autonomously crawl API documentation and generate production-ready FastAPI mock servers.
+
+## 1. Setup Environment
+First, ensure your virtual environment is active and dependencies are installed:
+```powershell
+# Activate the environment
+env\Scripts\activate
+
+# Install requirements
+python -m pip install -r requirements.txt
+```
+
+## 2. Generating New Mocks
+The `mock_gen.py` script uses "Specialized Adapters" to handle complex documentation like HPE OneView.
+
+### To generate from a URL:
+```powershell
+python mock_gen.py --source "https://support.hpe...index.html" --name my_mock_server
+```
+
+### To generate from a local text dump (for offline/complex pages):
+1. Copy the documentation text into a file (e.g., `docs.txt`).
+2. Run:
+```powershell
+python mock_gen.py --source docs.txt --name my_mock_server
+```
+
+## 3. Running the Mock Server
+All generated mocks are stored in the `mock_servers` directory.
+
+### Launch the HPE Server Hardware Mock:
+```powershell
+python -m uvicorn mock_servers.hpe_server_hardware.mock_server:app --port 9090 --reload
+```
+
+### Accessing the API:
+- **Interactive Documentation**: http://127.0.0.1:9090/docs (Swagger UI)
+- **Base API Path**: http://127.0.0.1:9090/rest/...
+
+## 4. Troubleshooting
+- **ModuleNotFoundError**: Always use `python -m uvicorn` to ensure Python finds the `mock_servers` package. 
+- **Unicode Errors**: The script has been updated to remove emojis, but ensure your terminal supports UTF-8 if you see encoding issues.
+- **Timeouts**: If crawling a massive site fails, use the "Local Text Dump" method described above.
