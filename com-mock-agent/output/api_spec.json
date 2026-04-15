@@ -1,0 +1,713 @@
+{
+  "title": "HPE OneView / COM Mock API",
+  "version": "4600",
+  "source_url": "https://support.hpe.com/docs/display/public/dp00003271en_us/index.html#rest/server-hardware",
+  "total_endpoints": 90,
+  "total_sections": 18,
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/rest/server-hardware",
+      "summary": "List server-hardware",
+      "category": "SERVERS",
+      "subcategory": "server-hardware"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/server-hardware/{id}",
+      "summary": "Get server-hardware by ID",
+      "category": "SERVERS",
+      "subcategory": "server-hardware"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/server-hardware",
+      "summary": "Create server-hardware",
+      "category": "SERVERS",
+      "subcategory": "server-hardware"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/server-hardware/{id}",
+      "summary": "Update server-hardware",
+      "category": "SERVERS",
+      "subcategory": "server-hardware"
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/server-hardware/{id}",
+      "summary": "Delete server-hardware",
+      "category": "SERVERS",
+      "subcategory": "server-hardware"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/server-hardware-types",
+      "summary": "List server-hardware-types",
+      "category": "SERVERS",
+      "subcategory": "server-hardware-types"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/server-hardware-types/{id}",
+      "summary": "Get server-hardware-types by ID",
+      "category": "SERVERS",
+      "subcategory": "server-hardware-types"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/server-hardware-types",
+      "summary": "Create server-hardware-types",
+      "category": "SERVERS",
+      "subcategory": "server-hardware-types"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/server-hardware-types/{id}",
+      "summary": "Update server-hardware-types",
+      "category": "SERVERS",
+      "subcategory": "server-hardware-types"
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/server-hardware-types/{id}",
+      "summary": "Delete server-hardware-types",
+      "category": "SERVERS",
+      "subcategory": "server-hardware-types"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/server-profiles",
+      "summary": "List server-profiles",
+      "category": "SERVERS",
+      "subcategory": "server-profiles"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/server-profiles/{id}",
+      "summary": "Get server-profiles by ID",
+      "category": "SERVERS",
+      "subcategory": "server-profiles"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/server-profiles",
+      "summary": "Create server-profiles",
+      "category": "SERVERS",
+      "subcategory": "server-profiles"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/server-profiles/{id}",
+      "summary": "Update server-profiles",
+      "category": "SERVERS",
+      "subcategory": "server-profiles"
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/server-profiles/{id}",
+      "summary": "Delete server-profiles",
+      "category": "SERVERS",
+      "subcategory": "server-profiles"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/server-profile-templates",
+      "summary": "List server-profile-templates",
+      "category": "SERVERS",
+      "subcategory": "server-profile-templates"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/server-profile-templates/{id}",
+      "summary": "Get server-profile-templates by ID",
+      "category": "SERVERS",
+      "subcategory": "server-profile-templates"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/server-profile-templates",
+      "summary": "Create server-profile-templates",
+      "category": "SERVERS",
+      "subcategory": "server-profile-templates"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/server-profile-templates/{id}",
+      "summary": "Update server-profile-templates",
+      "category": "SERVERS",
+      "subcategory": "server-profile-templates"
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/server-profile-templates/{id}",
+      "summary": "Delete server-profile-templates",
+      "category": "SERVERS",
+      "subcategory": "server-profile-templates"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/ethernet-networks",
+      "summary": "List ethernet-networks",
+      "category": "NETWORKING",
+      "subcategory": "ethernet-networks"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/ethernet-networks/{id}",
+      "summary": "Get ethernet-networks by ID",
+      "category": "NETWORKING",
+      "subcategory": "ethernet-networks"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/ethernet-networks",
+      "summary": "Create ethernet-networks",
+      "category": "NETWORKING",
+      "subcategory": "ethernet-networks"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/ethernet-networks/{id}",
+      "summary": "Update ethernet-networks",
+      "category": "NETWORKING",
+      "subcategory": "ethernet-networks"
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/ethernet-networks/{id}",
+      "summary": "Delete ethernet-networks",
+      "category": "NETWORKING",
+      "subcategory": "ethernet-networks"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/fc-networks",
+      "summary": "List fc-networks",
+      "category": "NETWORKING",
+      "subcategory": "fc-networks"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/fc-networks/{id}",
+      "summary": "Get fc-networks by ID",
+      "category": "NETWORKING",
+      "subcategory": "fc-networks"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/fc-networks",
+      "summary": "Create fc-networks",
+      "category": "NETWORKING",
+      "subcategory": "fc-networks"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/fc-networks/{id}",
+      "summary": "Update fc-networks",
+      "category": "NETWORKING",
+      "subcategory": "fc-networks"
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/fc-networks/{id}",
+      "summary": "Delete fc-networks",
+      "category": "NETWORKING",
+      "subcategory": "fc-networks"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/network-sets",
+      "summary": "List network-sets",
+      "category": "NETWORKING",
+      "subcategory": "network-sets"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/network-sets/{id}",
+      "summary": "Get network-sets by ID",
+      "category": "NETWORKING",
+      "subcategory": "network-sets"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/network-sets",
+      "summary": "Create network-sets",
+      "category": "NETWORKING",
+      "subcategory": "network-sets"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/network-sets/{id}",
+      "summary": "Update network-sets",
+      "category": "NETWORKING",
+      "subcategory": "network-sets"
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/network-sets/{id}",
+      "summary": "Delete network-sets",
+      "category": "NETWORKING",
+      "subcategory": "network-sets"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/storage-systems",
+      "summary": "List storage-systems",
+      "category": "STORAGE",
+      "subcategory": "storage-systems"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/storage-systems/{id}",
+      "summary": "Get storage-systems by ID",
+      "category": "STORAGE",
+      "subcategory": "storage-systems"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/storage-systems",
+      "summary": "Create storage-systems",
+      "category": "STORAGE",
+      "subcategory": "storage-systems"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/storage-systems/{id}",
+      "summary": "Update storage-systems",
+      "category": "STORAGE",
+      "subcategory": "storage-systems"
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/storage-systems/{id}",
+      "summary": "Delete storage-systems",
+      "category": "STORAGE",
+      "subcategory": "storage-systems"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/storage-pools",
+      "summary": "List storage-pools",
+      "category": "STORAGE",
+      "subcategory": "storage-pools"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/storage-pools/{id}",
+      "summary": "Get storage-pools by ID",
+      "category": "STORAGE",
+      "subcategory": "storage-pools"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/storage-pools",
+      "summary": "Create storage-pools",
+      "category": "STORAGE",
+      "subcategory": "storage-pools"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/storage-pools/{id}",
+      "summary": "Update storage-pools",
+      "category": "STORAGE",
+      "subcategory": "storage-pools"
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/storage-pools/{id}",
+      "summary": "Delete storage-pools",
+      "category": "STORAGE",
+      "subcategory": "storage-pools"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/volumes",
+      "summary": "List volumes",
+      "category": "STORAGE",
+      "subcategory": "volumes"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/volumes/{id}",
+      "summary": "Get volumes by ID",
+      "category": "STORAGE",
+      "subcategory": "volumes"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/volumes",
+      "summary": "Create volumes",
+      "category": "STORAGE",
+      "subcategory": "volumes"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/volumes/{id}",
+      "summary": "Update volumes",
+      "category": "STORAGE",
+      "subcategory": "volumes"
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/volumes/{id}",
+      "summary": "Delete volumes",
+      "category": "STORAGE",
+      "subcategory": "volumes"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/enclosures",
+      "summary": "List enclosures",
+      "category": "FACILITIES",
+      "subcategory": "enclosures"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/enclosures/{id}",
+      "summary": "Get enclosures by ID",
+      "category": "FACILITIES",
+      "subcategory": "enclosures"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/enclosures",
+      "summary": "Create enclosures",
+      "category": "FACILITIES",
+      "subcategory": "enclosures"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/enclosures/{id}",
+      "summary": "Update enclosures",
+      "category": "FACILITIES",
+      "subcategory": "enclosures"
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/enclosures/{id}",
+      "summary": "Delete enclosures",
+      "category": "FACILITIES",
+      "subcategory": "enclosures"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/enclosure-groups",
+      "summary": "List enclosure-groups",
+      "category": "FACILITIES",
+      "subcategory": "enclosure-groups"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/enclosure-groups/{id}",
+      "summary": "Get enclosure-groups by ID",
+      "category": "FACILITIES",
+      "subcategory": "enclosure-groups"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/enclosure-groups",
+      "summary": "Create enclosure-groups",
+      "category": "FACILITIES",
+      "subcategory": "enclosure-groups"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/enclosure-groups/{id}",
+      "summary": "Update enclosure-groups",
+      "category": "FACILITIES",
+      "subcategory": "enclosure-groups"
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/enclosure-groups/{id}",
+      "summary": "Delete enclosure-groups",
+      "category": "FACILITIES",
+      "subcategory": "enclosure-groups"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/racks",
+      "summary": "List racks",
+      "category": "FACILITIES",
+      "subcategory": "racks"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/racks/{id}",
+      "summary": "Get racks by ID",
+      "category": "FACILITIES",
+      "subcategory": "racks"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/racks",
+      "summary": "Create racks",
+      "category": "FACILITIES",
+      "subcategory": "racks"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/racks/{id}",
+      "summary": "Update racks",
+      "category": "FACILITIES",
+      "subcategory": "racks"
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/racks/{id}",
+      "summary": "Delete racks",
+      "category": "FACILITIES",
+      "subcategory": "racks"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/tasks",
+      "summary": "List tasks",
+      "category": "ACTIVITY",
+      "subcategory": "tasks"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/tasks/{id}",
+      "summary": "Get tasks by ID",
+      "category": "ACTIVITY",
+      "subcategory": "tasks"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/tasks",
+      "summary": "Create tasks",
+      "category": "ACTIVITY",
+      "subcategory": "tasks"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/tasks/{id}",
+      "summary": "Update tasks",
+      "category": "ACTIVITY",
+      "subcategory": "tasks"
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/tasks/{id}",
+      "summary": "Delete tasks",
+      "category": "ACTIVITY",
+      "subcategory": "tasks"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/alerts",
+      "summary": "List alerts",
+      "category": "ACTIVITY",
+      "subcategory": "alerts"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/alerts/{id}",
+      "summary": "Get alerts by ID",
+      "category": "ACTIVITY",
+      "subcategory": "alerts"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/alerts",
+      "summary": "Create alerts",
+      "category": "ACTIVITY",
+      "subcategory": "alerts"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/alerts/{id}",
+      "summary": "Update alerts",
+      "category": "ACTIVITY",
+      "subcategory": "alerts"
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/alerts/{id}",
+      "summary": "Delete alerts",
+      "category": "ACTIVITY",
+      "subcategory": "alerts"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/events",
+      "summary": "List events",
+      "category": "ACTIVITY",
+      "subcategory": "events"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/events/{id}",
+      "summary": "Get events by ID",
+      "category": "ACTIVITY",
+      "subcategory": "events"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/events",
+      "summary": "Create events",
+      "category": "ACTIVITY",
+      "subcategory": "events"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/events/{id}",
+      "summary": "Update events",
+      "category": "ACTIVITY",
+      "subcategory": "events"
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/events/{id}",
+      "summary": "Delete events",
+      "category": "ACTIVITY",
+      "subcategory": "events"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/firmware-drivers",
+      "summary": "List firmware-drivers",
+      "category": "FIRMWARE",
+      "subcategory": "firmware-drivers"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/firmware-drivers/{id}",
+      "summary": "Get firmware-drivers by ID",
+      "category": "FIRMWARE",
+      "subcategory": "firmware-drivers"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/firmware-drivers",
+      "summary": "Create firmware-drivers",
+      "category": "FIRMWARE",
+      "subcategory": "firmware-drivers"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/firmware-drivers/{id}",
+      "summary": "Update firmware-drivers",
+      "category": "FIRMWARE",
+      "subcategory": "firmware-drivers"
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/firmware-drivers/{id}",
+      "summary": "Delete firmware-drivers",
+      "category": "FIRMWARE",
+      "subcategory": "firmware-drivers"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/scopes",
+      "summary": "List scopes",
+      "category": "SETTINGS",
+      "subcategory": "scopes"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/scopes/{id}",
+      "summary": "Get scopes by ID",
+      "category": "SETTINGS",
+      "subcategory": "scopes"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/scopes",
+      "summary": "Create scopes",
+      "category": "SETTINGS",
+      "subcategory": "scopes"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/scopes/{id}",
+      "summary": "Update scopes",
+      "category": "SETTINGS",
+      "subcategory": "scopes"
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/scopes/{id}",
+      "summary": "Delete scopes",
+      "category": "SETTINGS",
+      "subcategory": "scopes"
+    }
+  ],
+  "sections": [
+    {
+      "name": "server-hardware",
+      "base_path": "/rest/server-hardware"
+    },
+    {
+      "name": "server-hardware-types",
+      "base_path": "/rest/server-hardware-types"
+    },
+    {
+      "name": "server-profiles",
+      "base_path": "/rest/server-profiles"
+    },
+    {
+      "name": "server-profile-templates",
+      "base_path": "/rest/server-profile-templates"
+    },
+    {
+      "name": "ethernet-networks",
+      "base_path": "/rest/ethernet-networks"
+    },
+    {
+      "name": "fc-networks",
+      "base_path": "/rest/fc-networks"
+    },
+    {
+      "name": "network-sets",
+      "base_path": "/rest/network-sets"
+    },
+    {
+      "name": "storage-systems",
+      "base_path": "/rest/storage-systems"
+    },
+    {
+      "name": "storage-pools",
+      "base_path": "/rest/storage-pools"
+    },
+    {
+      "name": "volumes",
+      "base_path": "/rest/volumes"
+    },
+    {
+      "name": "enclosures",
+      "base_path": "/rest/enclosures"
+    },
+    {
+      "name": "enclosure-groups",
+      "base_path": "/rest/enclosure-groups"
+    },
+    {
+      "name": "racks",
+      "base_path": "/rest/racks"
+    },
+    {
+      "name": "tasks",
+      "base_path": "/rest/tasks"
+    },
+    {
+      "name": "alerts",
+      "base_path": "/rest/alerts"
+    },
+    {
+      "name": "events",
+      "base_path": "/rest/events"
+    },
+    {
+      "name": "firmware-drivers",
+      "base_path": "/rest/firmware-drivers"
+    },
+    {
+      "name": "scopes",
+      "base_path": "/rest/scopes"
+    }
+  ]
+}
