@@ -1,0 +1,5 @@
+https://developer.greenlake.hpe.com/docs/greenlake/services/data-services/public/openapi/data-services-public-v1beta1/data-services-api/storage-locations
+https://developer.greenlake.hpe.com/app-data.json
+https://developer.greenlake.hpe.com/page-data/docs/greenlake/services/data-services/public/openapi/data-services-public-v1beta1/data-services-api/storage-locations/data.json
+https://developer.greenlake.hpe.com/page-data/shared/oas-docs/greenlake/services/data-services/public/openapi/data-services-public-v1beta1/data-services-api.yaml.json
+https://developer.greenlake.hpe.com/page-data/shared/sidebar-docs/greenlake/services/data-services/sidebars.yaml.json
