@@ -1,0 +1,14 @@
+{
+    "mahasriya@company.com": {
+        "name": "Mahasriya Somalinga",
+        "role": "operator"
+    },
+    "kishore@company.com": {
+        "name": "Kishore Raj",
+        "role": "admin"
+    },
+    "arun@company.com": {
+        "name": "Arun Kumar",
+        "role": "senior_admin"
+    }
+}
