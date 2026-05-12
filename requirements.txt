@@ -1,0 +1,5 @@
+mcp
+
+# Optional future dependencies:
+# requests>=2.31.0   # Only needed when you add real HPE OneView / Compute Ops HTTP calls
+# redis>=5.0.0       # Only needed if ResourceCache is replaced with Redis
