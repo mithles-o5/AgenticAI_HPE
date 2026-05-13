@@ -1,0 +1,815 @@
+{
+    "post_rest_login_sessions": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "post_rest_login_sessions_auth_token": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "post_rest_certificates_client_rabbitmq": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_certificates_client_rabbitmq_keypair_default": {},
+    "get_rest_certificates_ca": {},
+    "delete_rest_certificates_ca_rabbitmq_readonly": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_server_hardware_id_chassis": {},
+    "get_rest_server_hardware_id_firmwareinventory": {},
+    "get_rest_server_hardware_id_networkadapters": {},
+    "get_rest_server_hardware_id_powersupplies": {},
+    "get_rest_server_hardware_id_processors": {},
+    "get_rest_server_hardware_id_softwareinventory": {},
+    "get_rest_server_hardware_id_thermal": {},
+    "get_rest_rack_managers_id_chassis_uuid": {},
+    "post_rest_ethernet_networks_bulk": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "put_rest_storage_volumes_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_updates": {},
+    "get_rest_updates_id": {},
+    "get_rest_rack_managers": {},
+    "get_rest_scopes_resources": {},
+    "post_rest_rack_managers": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_rack_managers_chassis": {},
+    "get_rest_rack_managers_managers": {},
+    "get_rest_rack_managers_partitions": {},
+    "get_rest_rack_managers_id": {},
+    "patch_rest_rack_managers_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_rack_managers_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_rack_managers_id_chassis": {},
+    "get_rest_rack_managers_id_chassis_utilization": {},
+    "get_rest_rack_managers_id_environmentalconfiguration": {},
+    "get_rest_rack_managers_id_managers": {},
+    "get_rest_rack_managers_id_managers_managerid": {},
+    "get_rest_rack_managers_id_partitions": {},
+    "get_rest_rack_managers_id_partitions_uuid": {},
+    "get_rest_rack_managers_id_remotesupportsettings": {},
+    "get_rest_server_hardware": {
+        "members": [
+            {
+                "uri": "/rest/server-hardware/server01",
+                "name": "DL380 Gen10 - Dev",
+                "powerState": "On",
+                "processorUtilization": 30,
+                "memoryUtilization": 50,
+                "environment": "dev"
+            },
+            {
+                "uri": "/rest/server-hardware/server02",
+                "name": "DL360 Gen10 - Prod",
+                "powerState": "On",
+                "processorUtilization": 20,
+                "memoryUtilization": 40,
+                "environment": "prod"
+            }
+        ],
+        "count": 2
+    },
+    "get_rest_server_hardware_id": {},
+    "post_rest_server_hardware": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "post_rest_server_hardware_discovery": {
+        "mpHostsAndRanges": [
+            "enc-ilo.corp.com",
+            "172.1.1.1-172.1.1.10"
+        ],
+        "username": "Administrator",
+        "password": "mypassword",
+        "licensingIntent": "OneView",
+        "configurationState": "Managed",
+        "initialScopeUris": [
+            "/rest/scopes/13c1606f-f1cb-473b-9c01-02e3a1a54589"
+        ]
+    },
+    "post_rest_server_hardware_firmware_compliance": {
+        "firmwareBaselineId": "SPP2017101_2017_1027_10",
+        "serverUUID": "36343537-3338-4E43-3735-313730343038"
+    },
+    "get_rest_server_hardware_schema": {},
+    "patch_rest_server_hardware_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_server_hardware_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_server_hardware_id_advancedmemoryprotection": {},
+    "get_rest_server_hardware_id_bios": {},
+    "get_rest_server_hardware_id_devices": {},
+    "get_rest_server_hardware_id_environmentalconfiguration": {},
+    "put_rest_server_hardware_id_environmentalconfiguration": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_server_hardware_id_firmware": {},
+    "get_rest_server_hardware_id_ilossourl": {},
+    "get_rest_server_hardware_id_javaremoteconsoleurl": {},
+    "get_rest_server_hardware_id_localstorage": {},
+    "get_rest_server_hardware_id_localstoragev2": {},
+    "get_rest_server_hardware_id_memory": {},
+    "get_rest_server_hardware_id_memorylist": {},
+    "put_rest_server_hardware_id_mpfirmwareversion": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_server_hardware_id_physicalserverhardware": {},
+    "put_rest_server_hardware_id_powerstate": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "put_rest_server_hardware_id_refreshstate": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_server_hardware_id_remoteconsoleurl": {},
+    "get_rest_server_hardware_id_utilization": {},
+    "post_rest_migrate": {
+        "ipAddress": "myoneview.example.com",
+        "username": "Administrator",
+        "password": "averysecurepasswordforAdministrator",
+        "uri": "/rest/server-hardware/34343738-3036-584D-5131-303030323131"
+    },
+    "post_rest_migrate_migratable_server_hardware": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_server_hardware_types": {},
+    "get_rest_server_hardware_types_id": {},
+    "put_rest_server_hardware_types_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_server_hardware_types_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_server_profile_templates": {},
+    "get_rest_server_profiles_available_networks": {},
+    "get_rest_server_profiles_profile_ports": {},
+    "get_rest_enclosure_groups": {},
+    "get_rest_os_deployment_plans": {},
+    "get_rest_storage_systems_arrayid_managedports": {},
+    "get_rest_storage_volumes_attachable_volumes": {},
+    "post_rest_server_profile_templates": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_server_profile_templates_available_networks": {},
+    "post_rest_server_profile_templates_from_server_profile": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_server_profile_templates_id": {},
+    "put_rest_server_profile_templates_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "patch_rest_server_profile_templates_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_server_profile_templates_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_server_profile_templates_id_new_profile": {},
+    "get_rest_server_profiles_available_targets": {},
+    "get_rest_server_profile_templates_id_transformation": {},
+    "get_rest_server_profiles": {
+        "members": [
+            {
+                "uri": "/rest/server-profiles/profile-1",
+                "name": "Web-Server-Profile",
+                "serverHardwareUri": "/rest/server-hardware/server01",
+                "status": "OK"
+            },
+            {
+                "uri": "/rest/server-profiles/profile-2",
+                "name": "DB-Server-Profile",
+                "serverHardwareUri": "/rest/server-hardware/server02",
+                "status": "Warning"
+            }
+        ],
+        "count": 2
+    },
+    "post_rest_server_profiles": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_server_profiles": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_server_profiles_available_controllers": {},
+    "post_rest_server_profiles_available_logical_jbods": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_server_profiles_id": {},
+    "put_rest_server_profiles_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "patch_rest_server_profiles_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_server_profiles_id_compliance_preview": {},
+    "post_rest_server_profiles_id_followactivity": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_server_profiles_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_server_profiles_id_transformation": {},
+    "get_rest_ethernet_networks": {
+        "members": [
+            {
+                "uri": "/rest/ethernet-networks/eth-1",
+                "name": "Prod-VLAN-100",
+                "vlanId": 100,
+                "status": "OK"
+            },
+            {
+                "uri": "/rest/ethernet-networks/eth-2",
+                "name": "Dev-VLAN-200",
+                "vlanId": 200,
+                "status": "OK"
+            }
+        ],
+        "count": 2
+    },
+    "post_rest_ethernet_networks": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_ethernet_networks_bulk_schema": {},
+    "post_rest_ethernet_networks_bulk_delete": {
+        "networkUris": [
+            "/rest/ethernet-networks/e2f0031b-52bd-4223-9ac1-d91cb519d548",
+            "/rest/ethernet-networks/f2f0031b-52bd-4223-9ac1-d91cb519d549",
+            "/rest/ethernet-networks/02f0031b-52bd-4223-9ac1-d91cb519d54a"
+        ]
+    },
+    "post_rest_ethernet_networks_bulk_delete_validation": {
+        "networkUris": [
+            "/rest/ethernet-networks/e2f0031b-52bd-4223-9ac1-d91cb519d548",
+            "/rest/ethernet-networks/f2f0031b-52bd-4223-9ac1-d91cb519d549",
+            "/rest/ethernet-networks/02f0031b-52bd-4223-9ac1-d91cb519d54a"
+        ]
+    },
+    "get_rest_ethernet_networks_schema": {},
+    "get_rest_ethernet_networks_id": {},
+    "put_rest_ethernet_networks_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_ethernet_networks_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_fc_networks": {
+        "members": [
+            {
+                "uri": "/rest/fc-networks/fc-1",
+                "name": "SAN-Fabric-A",
+                "fabricType": "FabricAttach",
+                "status": "OK"
+            }
+        ],
+        "count": 1
+    },
+    "post_rest_fc_networks": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "post_rest_fc_networks_bulk_delete": {
+        "networkUris": [
+            "/rest/fc-networks/e2f0031b-52bd-4223-9ac1-d91cb519d548",
+            "/rest/fc-networks/f2f0031b-52bd-4223-9ac1-d91cb519d549",
+            "/rest/fc-networks/02f0031b-52bd-4223-9ac1-d91cb519d54a"
+        ]
+    },
+    "post_rest_fc_networks_bulk_delete_validation": {
+        "networkUris": [
+            "/rest/fc-networks/e2f0031b-52bd-4223-9ac1-d91cb519d548",
+            "/rest/fc-networks/f2f0031b-52bd-4223-9ac1-d91cb519d549",
+            "/rest/fc-networks/02f0031b-52bd-4223-9ac1-d91cb519d54a"
+        ]
+    },
+    "get_rest_fc_networks_schema": {},
+    "get_rest_fc_networks_id": {},
+    "put_rest_fc_networks_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_fc_networks_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_network_sets": {},
+    "post_rest_network_sets": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_network_sets_schema": {},
+    "get_rest_network_sets_withoutethernet": {},
+    "get_rest_network_sets_id": {},
+    "put_rest_network_sets_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_network_sets_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_network_sets_id_withoutethernet": {},
+    "get_rest_storage_pools": {
+        "members": [
+            {
+                "uri": "/rest/storage-pools/pool-1",
+                "name": "CPG-SSD-Tier",
+                "status": "OK",
+                "capacity": "10TB"
+            }
+        ],
+        "count": 1
+    },
+    "get_rest_storage_pools_reachable_storage_pools": {},
+    "get_rest_storage_pools_id": {},
+    "put_rest_storage_pools_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_storage_systems": {
+        "members": [
+            {
+                "uri": "/rest/storage-systems/sys-1",
+                "name": "3PAR-StoreServ-8400",
+                "status": "OK",
+                "model": "8400"
+            }
+        ],
+        "count": 1
+    },
+    "post_rest_storage_systems": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_storage_systems_host_types": {},
+    "get_rest_storage_systems_id": {},
+    "put_rest_storage_systems_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_storage_systems_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_storage_systems_id_reachable_ports": {},
+    "get_rest_storage_systems_id_storage_pools": {},
+    "get_rest_storage_systems_id_storage_volume_sets": {},
+    "get_rest_storage_systems_id_templates": {},
+    "get_rest_storage_volume_templates": {},
+    "post_rest_storage_volume_templates": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_storage_volume_templates_reachable_volume_templates": {},
+    "get_rest_storage_volume_templates_id": {},
+    "put_rest_storage_volume_templates_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_storage_volume_templates_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_storage_volume_templates_id_compatible_systems": {},
+    "get_rest_storage_volume_attachments": {},
+    "get_rest_storage_volume_attachments_repair": {},
+    "post_rest_storage_volume_attachments_repair": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_storage_volume_attachments_id": {},
+    "get_rest_storage_volume_sets": {},
+    "get_rest_storage_volume_sets_id": {},
+    "get_rest_storage_volumes": {
+        "members": [
+            {
+                "uri": "/rest/storage-volumes/vol-1",
+                "name": "OS-Volume-1",
+                "provisionedCapacity": "100GB",
+                "status": "OK"
+            },
+            {
+                "uri": "/rest/storage-volumes/vol-2",
+                "name": "Data-Volume-1",
+                "provisionedCapacity": "2TB",
+                "status": "OK"
+            }
+        ],
+        "count": 2
+    },
+    "post_rest_storage_volumes": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "post_rest_storage_volumes_from_existing": {
+        "storageSystemUri": "/rest/storage-systems/f3c97bd0-175d-425f-be46-a52300f2f428",
+        "deviceVolumeName": "TK-422",
+        "description": "A description of the volume",
+        "isShareable": true,
+        "initialScopeUris": [
+            "/rest/scopes/5c18287f-38cd-4835-868d-90ba117696a6"
+        ]
+    },
+    "post_rest_storage_volumes_from_snapshot": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_storage_volumes_repair": {},
+    "post_rest_storage_volumes_repair": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_storage_volumes_id": {},
+    "delete_rest_storage_volumes_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_storage_volumes_id_snapshots": {},
+    "post_rest_storage_volumes_id_snapshots": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_storage_volumes_id_snapshots_snapshotid": {},
+    "delete_rest_storage_volumes_id_snapshots_snapshotid": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_fc_sans_endpoints": {},
+    "get_rest_fc_sans_endpoints_id": {},
+    "get_rest_fc_sans_managed_sans": {},
+    "get_rest_fc_sans_managed_sans_id": {},
+    "put_rest_fc_sans_managed_sans_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_fc_sans_managed_sans_id_endpoints": {},
+    "post_rest_fc_sans_managed_sans_id_endpoints": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "post_rest_fc_sans_managed_sans_id_issues": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_fc_sans_providers": {},
+    "get_rest_fc_sans_providers_id": {},
+    "post_rest_fc_sans_providers_id_device_managers": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_fc_sans_device_managers": {},
+    "get_rest_fc_sans_device_managers_id": {},
+    "put_rest_fc_sans_device_managers_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_fc_sans_device_managers_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_datacenters": {
+        "members": [
+            {
+                "uri": "/rest/datacenters/dc-1",
+                "name": "Austin-DC",
+                "status": "OK",
+                "width": 10000,
+                "depth": 10000
+            },
+            {
+                "uri": "/rest/datacenters/dc-2",
+                "name": "London-DC",
+                "status": "Critical",
+                "width": 8000,
+                "depth": 8000
+            }
+        ],
+        "count": 2
+    },
+    "post_rest_datacenters": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_datacenters": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_datacenters_id": {},
+    "put_rest_datacenters_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_datacenters_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_datacenters_id_visualcontent": {},
+    "get_rest_power_devices": {},
+    "post_rest_power_devices": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_power_devices": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "post_rest_power_devices_discover": {
+        "hostname": "power-device.example.com",
+        "username": "admin",
+        "password": "admin"
+    },
+    "get_rest_power_devices_id": {},
+    "put_rest_power_devices_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_power_devices_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_power_devices_id_powerstate": {},
+    "put_rest_power_devices_id_powerstate": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "put_rest_power_devices_id_refreshstate": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_power_devices_id_synchronous": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_power_devices_id_uidstate": {},
+    "put_rest_power_devices_id_uidstate": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_power_devices_id_utilization": {},
+    "get_rest_racks": {},
+    "post_rest_racks": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_racks": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_racks_id": {},
+    "put_rest_racks_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_racks_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_racks_id_devicetopology": {},
+    "get_rest_unmanaged_devices": {},
+    "post_rest_unmanaged_devices": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_unmanaged_devices": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_unmanaged_devices_id": {},
+    "put_rest_unmanaged_devices_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_unmanaged_devices_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_unmanaged_devices_id_environmentalconfiguration": {},
+    "get_rest_hypervisor_managers": {
+        "members": [
+            {
+                "uri": "/rest/hypervisor-managers/hm-1",
+                "name": "vCenter-01",
+                "type": "VmwareVcenter"
+            }
+        ],
+        "count": 1
+    },
+    "post_rest_hypervisor_managers": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_hypervisor_managers_id": {},
+    "put_rest_hypervisor_managers_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_hypervisor_managers_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_hypervisor_cluster_profiles": {},
+    "post_rest_hypervisor_cluster_profiles": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "post_rest_hypervisor_cluster_profiles_virtualswitch_layout": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_hypervisor_cluster_profiles_id": {},
+    "put_rest_hypervisor_cluster_profiles_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_hypervisor_cluster_profiles_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_hypervisor_cluster_profiles_id_compliance_preview": {},
+    "get_rest_hypervisor_host_profiles": {},
+    "get_rest_hypervisor_host_profiles_id": {},
+    "put_rest_hypervisor_host_profiles_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_hypervisor_host_profiles_id_compliance_preview": {},
+    "get_rest_metrics_capability": {},
+    "put_rest_metrics_configuration": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_metrics_configuration": {},
+    "get_rest_remote_syslog_id": {},
+    "put_rest_remote_syslog_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "post_rest_firmware_bundles": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "post_rest_firmware_bundles_addcompsig": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "post_rest_firmware_bundles_resumable": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_firmware_drivers": {},
+    "post_rest_firmware_drivers": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_firmware_drivers_schema": {},
+    "get_rest_firmware_drivers_id": {},
+    "delete_rest_firmware_drivers_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_hardware_compliance": {},
+    "get_rest_hardware_compliance_save": {},
+    "get_rest_hardware_compliance_id": {},
+    "get_rest_repositories": {},
+    "post_rest_repositories": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "patch_rest_repositories_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_repositories_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_repositories_repositoryid": {},
+    "put_rest_repositories_repositoryid": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_alerts": {},
+    "delete_rest_alerts": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_alerts_alertchangelog_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_alerts_id": {},
+    "put_rest_alerts_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "delete_rest_alerts_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_fixme_logs_download": {},
+    "get_rest_audit_logs_settings": {},
+    "put_rest_audit_logs_settings": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "post_rest_audit_logs_test_forwarding": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_audit_logs": {},
+    "get_rest_audit_logs_download": {},
+    "get_rest_events": {},
+    "post_rest_events": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_events_id": {},
+    "get_rest_reports": {},
+    "get_rest_reports_save": {},
+    "get_rest_reports_id": {},
+    "get_rest_reports_id_save": {},
+    "get_rest_tasks": {},
+    "get_rest_tasks_id": {},
+    "patch_rest_tasks_id": {
+        "status": "Success",
+        "message": "Mock action completed successfully."
+    },
+    "get_rest_appliance_configuration_timeconfig_locales": {},
+    "get_rest_enclosures": {
+        "members": [
+            {
+                "uri": "/rest/enclosures/enc-1",
+                "name": "c7000-Enclosure-1",
+                "enclosureType": "c7000",
+                "status": "OK"
+            }
+        ],
+        "count": 1
+    },
+    "get_rest_scopes": {
+        "members": [
+            {
+                "uri": "/rest/scopes/scope-1",
+                "name": "London-Datacenter-Scope"
+            }
+        ],
+        "count": 1
+    },
+    "get_rest_firmware_bundles": {
+        "members": [
+            {
+                "uri": "/rest/firmware-bundles/fw-1",
+                "name": "SPP-2023.04.0",
+                "version": "2023.04.0"
+            }
+        ],
+        "count": 1
+    },
+    "get_rest_backups": {
+        "members": [
+            {
+                "uri": "/rest/backups/b-1",
+                "name": "Nightly-Backup-01",
+                "status": "Completed"
+            }
+        ],
+        "count": 1
+    }
+}
