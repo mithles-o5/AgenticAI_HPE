@@ -49,7 +49,7 @@ async def fetch_page_playwright(url, browser):
         print(f"    Playwright Error crawling {url}: {e}")
     return None
 
-async def crawl_documentation(start_url, max_pages=50):
+async def crawl_documentation(start_url, max_pages=75):
     if not start_url.startswith("http"):
         # Local HTML/Markdown doc file
         try:

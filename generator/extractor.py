@@ -1,5 +1,7 @@
 import os
 import json
+import asyncio
+import time
 
 # pyrefly: ignore [missing-import]
 from slugify import slugify
@@ -22,56 +24,104 @@ async def extract_api_details(crawled_pages):
     print(f"\n[LLM Extractor] Analyzing {len(crawled_pages)} pages in a single batch...")
 
     all_text = ""
+    seen_lengths = set()
     for page in crawled_pages:
         text = page.get("text", "")
         url = page.get("url", "Unknown")
-        if text and len(text) > 50:
+        
+        # Aggressive Deduplication: SPAs often change tiny parts of the DOM (like 'active' classes),
+        # causing exact text matches to fail and duplicating massive pages.
+        # If the text length is within 2% of a page we've already seen, discard it as a duplicate.
+        is_dup = False
+        for slen in seen_lengths:
+            if abs(len(text) - slen) / max(slen, 1) < 0.02:
+                is_dup = True
+                break
+                
+        if text and len(text) > 50 and not is_dup:
+            seen_lengths.add(len(text))
             all_text += f"\n--- Source: {url} ---\n{text}"
             
     if not all_text:
         return []
 
-    prompt = f"""
-    Extract all API endpoints explicitly mentioned in the following documentation text.
-    We want to create a mock server and generate MCP tool definitions for these APIs.
+    # Chunk the text to prevent the LLM from hitting its output token limit on massive docs
+    chunk_size = 150000
+    text_chunks = [all_text[i:i+chunk_size] for i in range(0, len(all_text), chunk_size)]
     
-    Return ONLY a valid JSON array of objects, where each object has:
-    - "method": "GET", "POST", "PUT", "PATCH", or "DELETE"
-    - "path": the API path (e.g., "/api/v1/resource")
-    - "request_body": a realistic JSON object for the request body (empty {{}} if none). DO NOT use string literal "string", use actual realistic mock values (e.g. "John Doe", "active").
-    - "response_body": a realistic JSON object for the response body (empty {{}} if none). MUST be a deep realistic object, not just "string".
-    - "tool_name": a snake_case name for the MCP tool
-    - "tool_description": a short description of what the API does
-    
-    If no explicit APIs are found, return []. Do not include markdown blocks like ```json.
-    
-    Documentation Text:
-    {all_text[:400000]}
-    """
-    
-    try:
-        response = client.models.generate_content(
-            model='gemini-2.5-flash',
-            contents=prompt,
-            config=types.GenerateContentConfig(response_mime_type="application/json")
-        )
+    print(f"  -> Split text into {len(text_chunks)} chunks to prevent extraction limits.")
+
+    def process_chunk_sync(idx, chunk):
+        print(f"  -> Sending chunk {idx + 1}/{len(text_chunks)} to LLM...")
+        local_results = []
+        prompt = f"""
+        Extract EVERY SINGLE API endpoint explicitly mentioned in the following documentation text.
+        Make absolutely sure to be exhaustive and do not skip, summarize, or omit any endpoints.
+        We want to create a mock server and generate MCP tool definitions for all of these APIs.
         
-        result_str = response.text.strip()
-        data = json.loads(result_str)
+        Return ONLY a valid JSON array of objects, where each object has:
+        - "method": "GET", "POST", "PUT", "PATCH", or "DELETE"
+        - "path": the API path (e.g., "/api/v1/resource")
+        - "request_body": a realistic JSON object for the request body (empty {{}} if none). DO NOT use string literal "string", use actual realistic mock values (e.g. "John Doe", "active").
+        - "response_body": a realistic JSON object for the response body (empty {{}} if none). MUST be a deep realistic object, not just "string".
+        - "tool_name": a snake_case name for the MCP tool
+        - "tool_description": a short description of what the API does
         
-        if isinstance(data, list):
-            for item in data:
-                if "method" in item and "path" in item:
-                    func_name = slugify(f"{item['method']}_{item['path']}").replace("-", "_")
-                    item["function_name"] = func_name
-                    item["source_url"] = "Batch Extracted"
-                    if not item.get("tool_name"):
-                        item["tool_name"] = func_name
-                    if not item.get("tool_description"):
-                        item["tool_description"] = f"Calls {item['method']} {item['path']}"
-                    api_results.append(item)
-    except Exception as e:
-        print(f"      [!] Error during LLM extraction: {e}")
+        If no explicit APIs are found, return []. Do not include markdown blocks like ```json.
+        
+        Documentation Text:
+        {chunk}
+        """
+        
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                response = client.models.generate_content(
+                    model='gemini-2.5-flash',
+                    contents=prompt,
+                    config=types.GenerateContentConfig(response_mime_type="application/json")
+                )
+                
+                result_str = response.text.strip()
+                data = json.loads(result_str)
+                
+                if isinstance(data, list):
+                    for item in data:
+                        if "method" in item and "path" in item:
+                            func_name = slugify(f"{item['method']}_{item['path']}").replace("-", "_")
+                            item["function_name"] = func_name
+                            item["source_url"] = "Batch Extracted"
+                            if not item.get("tool_name"):
+                                item["tool_name"] = func_name
+                            if not item.get("tool_description"):
+                                item["tool_description"] = f"Calls {item['method']} {item['path']}"
+                            local_results.append(item)
+                # Success, break out of retry loop
+                break
+            except Exception as e:
+                error_str = str(e)
+                if "429" in error_str or "RESOURCE_EXHAUSTED" in error_str:
+                    print(f"      [!] Rate limit hit on chunk {idx + 1}. Waiting 30s before retry (attempt {attempt+1}/{max_retries})...")
+                    time.sleep(30)
+                else:
+                    print(f"      [!] Error during LLM extraction on chunk {idx + 1}: {e}")
+                    break
+            
+        return local_results
+
+    # Run chunks in parallel but limit concurrency to 2 to avoid hitting the 5 RPM limit
+    sem = asyncio.Semaphore(2)
+    async def bound_process(idx, chunk):
+        async with sem:
+            # Small delay to stagger requests
+            await asyncio.sleep(2)
+            return await asyncio.to_thread(process_chunk_sync, idx, chunk)
+
+    tasks = [bound_process(idx, chunk) for idx, chunk in enumerate(text_chunks)]
+    results = await asyncio.gather(*tasks)
+    
+    for res in results:
+        api_results.extend(res)
 
     # Deduplicate by method and path
     unique_apis = []
