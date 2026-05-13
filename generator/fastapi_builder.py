@@ -137,4 +137,4 @@ def {api["function_name"]}('''
 
     requirements_path = os.path.join(base_path, "requirements.txt")
     with open(requirements_path, "w") as f:
-        f.write("fastapi\nuvicorn\npydantic\n")
+        f.write("fastapi\nuvicorn\npydantic\nmcp\nrequests\n")

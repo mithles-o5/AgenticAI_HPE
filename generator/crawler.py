@@ -7,8 +7,23 @@ from playwright.async_api import async_playwright
 
 visited = set()
 
-def is_same_domain(base_url, target_url):
-    return urlparse(base_url).netloc == urlparse(target_url).netloc
+def is_relevant_url(base_url, target_url):
+    base_parsed = urlparse(base_url)
+    target_parsed = urlparse(target_url)
+    if base_parsed.netloc != target_parsed.netloc:
+        return False
+        
+    # If it's an SPA (has fragment), only crawl links on the exact same path
+    if base_parsed.fragment:
+        return base_parsed.path == target_parsed.path
+        
+    base_path = base_parsed.path
+    if not base_path.endswith('/'):
+        if '/' in base_path:
+            base_path = base_path.rsplit('/', 1)[0] + '/'
+        else:
+            base_path = '/'
+    return target_parsed.path.startswith(base_path)
 
 async def fetch_page_httpx(client, url):
     """ Improve 4: Async Crawling """
@@ -25,7 +40,7 @@ async def fetch_page_playwright(url, browser):
     try:
         context = await browser.new_context()
         page = await context.new_page()
-        await page.goto(url, wait_until="networkidle", timeout=20000)
+        await page.goto(url, wait_until="domcontentloaded", timeout=20000)
         await asyncio.sleep(1.5) # Give extra time for JS frameworks to place content
         content = await page.content()
         await context.close()
@@ -104,7 +119,7 @@ async def crawl_documentation(start_url, max_pages=50):
                     href = link["href"]
                     full_url = urljoin(current_url, href)
 
-                    if is_same_domain(start_url, full_url) and full_url not in visited:
+                    if is_relevant_url(start_url, full_url) and full_url not in visited:
                         queue.append(full_url)
                         
                 await asyncio.sleep(0.05)

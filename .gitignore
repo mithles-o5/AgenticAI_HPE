@@ -8,5 +8,4 @@ env/
 venv/
 .env
 
-# Ignore generated mock servers directory
-servers/
+
