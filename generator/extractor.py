@@ -46,7 +46,7 @@ async def extract_api_details(crawled_pages):
         return []
 
     # Chunk the text to prevent the LLM from hitting its output token limit on massive docs
-    chunk_size = 150000
+    chunk_size = 300000
     text_chunks = [all_text[i:i+chunk_size] for i in range(0, len(all_text), chunk_size)]
     
     print(f"  -> Split text into {len(text_chunks)} chunks to prevent extraction limits.")
@@ -73,7 +73,7 @@ async def extract_api_details(crawled_pages):
         {chunk}
         """
         
-        max_retries = 3
+        max_retries = 5
         for attempt in range(max_retries):
             try:
                 response = client.models.generate_content(
@@ -101,16 +101,16 @@ async def extract_api_details(crawled_pages):
             except Exception as e:
                 error_str = str(e)
                 if "429" in error_str or "RESOURCE_EXHAUSTED" in error_str:
-                    print(f"      [!] Rate limit hit on chunk {idx + 1}. Waiting 30s before retry (attempt {attempt+1}/{max_retries})...")
-                    time.sleep(30)
+                    print(f"      [!] Rate limit hit on chunk {idx + 1}. Waiting 65s before retry (attempt {attempt+1}/{max_retries})...")
+                    time.sleep(65)
                 else:
                     print(f"      [!] Error during LLM extraction on chunk {idx + 1}: {e}")
                     break
             
         return local_results
 
-    # Run chunks in parallel but limit concurrency to 2 to avoid hitting the 5 RPM limit
-    sem = asyncio.Semaphore(2)
+    # Run chunks sequentially to strictly avoid hitting the 5 RPM limit on free tiers
+    sem = asyncio.Semaphore(1)
     async def bound_process(idx, chunk):
         async with sem:
             # Small delay to stagger requests
