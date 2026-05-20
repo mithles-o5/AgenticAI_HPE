@@ -11,7 +11,7 @@ from typing import Optional, Union
 from enums import (
     Vendor, Protocol, ActionCategory,
     PowerAction, ProvisionAction,
-    ResourceHealth, CacheStatus, DeploymentType,
+    ResourceHealth, CacheStatus, DeploymentType, ResourceType,
 )
 
 
@@ -61,6 +61,7 @@ class ResourceRecord:
     vendor:            Vendor            = Vendor.HPE
     deployment_type:   DeploymentType    = DeploymentType.ON_PREM
     supported_protocols: list[Protocol] = field(default_factory=list)
+    resource_type:     ResourceType      = ResourceType.SERVER_HARDWARE  # For endpoint routing
 
     # hardware metadata
     model:             str               = ""

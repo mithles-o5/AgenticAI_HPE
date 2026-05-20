@@ -15,19 +15,30 @@ Step 4 — Action Classification
 Step 5 — Protocol Selection Decision Logic
   Cloud Deployment       → COMS  (HPE Compute Ops API)
   On-Premises Deployment → OneView  (HPE OneView REST API)
+
+Endpoint Generation:
+  Uses route_mapper to dynamically construct API endpoints based on:
+  - Base host (management_host or ip_address)
+  - Resource type (default: SERVER_HARDWARE)
+  - UUID
+  - Protocol
 """
 
 from __future__ import annotations
 
 import logging
-from typing import Union
+from typing import Union, Optional
 
 from records import (
     Vendor, Protocol, ActionCategory,
     PowerAction, ProvisionAction,
     ResourceRecord, DeploymentType,
 )
+from enums import ResourceType
+import route_mapper
+from route_mapper import get_default_resource_type
 from errors import ActionClassificationError
+from protocol_discovery import discover_protocol_for_resource
 
 logger = logging.getLogger(__name__)
 
@@ -114,68 +125,102 @@ def select_protocol(
     category: ActionCategory,
 ) -> tuple[Protocol, str]:
     """
-    Step 5 — Protocol selection decision logic for HPE resources.
+    Step 5 — Database-driven protocol discovery.
     
-    Routes based on deployment type:
-    - Cloud (Compute Ops)       → COMS protocol
-    - On-Premises (OneView)     → ONEVIEW protocol
-
+    Protocol selection is now determined dynamically from infrastructure metadata
+    stored in PostgreSQL, not hardcoded based on deployment_type.
+    
+    Discovery order:
+    1. Query credential vault path for protocol indicators
+    2. Query database for protocols associated with IP + credentials
+    3. Select primary protocol from supported list
+    4. Return protocol with discovery reason
+    
+    This removes developer hardcoding and makes protocol ownership
+    infrastructure-driven (single source of truth: PostgreSQL).
+    
     Returns (selected_protocol, reason_string).
     """
     
-    # ── Cloud Deployment → COMS (Compute Ops API) ────────────────────────────
-    if resource.deployment_type == DeploymentType.CLOUD:
-        if Protocol.COMS in resource.supported_protocols:
-            return Protocol.COMS, (
-                f"Cloud deployment detected — COMS selected "
-                f"(HPE Compute Ops API for {category.value} actions)"
-            )
-        raise ActionClassificationError(
-            f"Cloud deployment requested for '{resource.name}' "
-            f"but COMS is not in its supported protocols: {[p.value for p in resource.supported_protocols]}"
-        )
-
-    # ── On-Premises Deployment → ONEVIEW (HPE OneView API) ──────────────────
-    if resource.deployment_type == DeploymentType.ON_PREM:
-        if Protocol.ONEVIEW in resource.supported_protocols:
-            return Protocol.ONEVIEW, (
-                f"On-Premises deployment detected — OneView selected "
-                f"(HPE OneView REST API for {category.value} actions)"
-            )
-        raise ActionClassificationError(
-            f"On-Premises deployment requested for '{resource.name}' "
-            f"but OneView is not in its supported protocols: {[p.value for p in resource.supported_protocols]}"
-        )
-
-    raise ActionClassificationError(
-        f"Unknown deployment type for '{resource.name}': {resource.deployment_type}"
+    logger.info(
+        f"[Selector] Step 5 — Protocol Selection for {resource.name} "
+        f"({resource.uuid[:8]}…)"
     )
+    
+    # Use database-driven protocol discovery
+    protocol, reason = discover_protocol_for_resource(resource)
+    
+    logger.info(
+        f"[Selector] Protocol selected: {protocol.value} — {reason}"
+    )
+    
+    return protocol, reason
 
 
-def build_endpoint(resource: ResourceRecord, protocol: Protocol) -> str:
+def build_endpoint(
+    resource: ResourceRecord,
+    protocol: Protocol,
+    resource_type: Optional[ResourceType] = None,
+) -> str:
     """
-    Construct the target URL using HPE API documentation endpoints.
+    Step 6 (partial) — Dynamically construct endpoint URL.
     
-    OneView REST API v1 (On-Premises):
-      https://support.hpe.com/docs/display/public/dp00003271en_us/
-      Endpoint: https://{management_host}/rest/v1/server-hardware/{uuid}
+    Uses route_mapper to generate endpoints based on:
+    - Protocol (OneView or COMS)
+    - Resource type (ServerHardware, Enclosure, etc.)
+    - Resource UUID
+    - Management host or IP
     
-    Compute Ops API (Cloud):
-      HPE Compute Ops cloud-hosted REST API
-      Endpoint: https://{compute-ops-host}/compute-ops/v1/servers/{uuid}
+    Parameters
+    ----------
+    resource : ResourceRecord
+        The resource with UUID, host, and metadata
+    protocol : Protocol
+        The selected protocol (OneView or COMS)
+    resource_type : ResourceType, optional
+        The resource type. If None, defaults based on protocol.
+        For backward compatibility, defaults to ServerHardware/Server.
+    
+    Returns
+    -------
+    str
+        Full API endpoint URL
+    
+    Examples
+    --------
+    OneView Server Hardware:
+        Base: https://oneview.example.com
+        Route: /rest/v1/server-hardware/{uuid}
+        Result: https://oneview.example.com/rest/v1/server-hardware/abc123
+    
+    COMS Server:
+        Base: https://compute-ops.cloud.com
+        Route: /compute-ops/v1/servers/{uuid}
+        Result: https://compute-ops.cloud.com/compute-ops/v1/servers/xyz789
     """
+    # Determine resource type if not specified
+    if resource_type is None:
+        resource_type = get_default_resource_type(protocol)
+        logger.debug(
+            f"[Selector] No resource type specified — "
+            f"using default: {resource_type.value} for {protocol.value}"
+        )
     
-    if protocol == Protocol.ONEVIEW:
-        # HPE OneView REST API v1 — On-Premises management host (iLO/management interface)
-        # Server hardware operations endpoint
-        h = resource.management_host or resource.ip_address
-        return f"https://{h}/rest/v1/server-hardware/{resource.uuid}"
+    # Get base URL from management_host or fallback to ip_address
+    base_host = resource.management_host or resource.ip_address
     
-    if protocol == Protocol.COMS:
-        # HPE Compute Ops API (Cloud) — cloud-hosted endpoint
-        # Server operations endpoint (derived from management_host which points to Compute Ops endpoint)
-        h = resource.management_host or resource.ip_address
-        return f"https://{h}/compute-ops/v1/servers/{resource.uuid}"
+    # Build endpoint using route_mapper
+    endpoint = route_mapper.build_endpoint(
+        base_url=f"https://{base_host}",
+        resource_type=resource_type,
+        uuid=resource.uuid,
+        protocol=protocol,
+    )
     
-    # Fallback (should not reach here for HPE-only)
-    return resource.management_host or resource.ip_address
+    logger.info(
+        f"[Selector] Built endpoint: {resource.name} [{resource.uuid[:8]}…] "
+        f"resource_type={resource_type.value} protocol={protocol.value} "
+        f"→ {endpoint[:80]}…"
+    )
+    
+    return endpoint

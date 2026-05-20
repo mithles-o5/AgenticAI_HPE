@@ -29,7 +29,7 @@ class ResourceRegistry:
 
     def __init__(self) -> None:
         self._by_uuid:  dict[str, ResourceRecord] = {}
-        self._by_alias: dict[str, str]            = {}   # alias_lower → uuid
+        self._by_alias: dict[str, str]            = {}   #dict[alias_lower, uuid]
 
     # ─────────────────────────────────────── write
     def register(self, record: ResourceRecord) -> None:

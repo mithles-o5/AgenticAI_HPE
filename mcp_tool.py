@@ -39,14 +39,31 @@ logger = logging.getLogger(__name__)
 from mcp.server.fastmcp import FastMCP
 
 from cache       import ResourceCache
-from sample_data import load_sample_registry
+from db_loader   import load_registry_from_db  # Load from PostgreSQL
 from resolver    import ResourceResolver
 from errors      import ResolverError
+from power_ops   import power_executor
+from enums       import PowerAction
+from sample_data import create_sample_registry  # Fallback data
 
 # ── singletons (built once at startup) ───────────────────────────────────────
-_registry = load_sample_registry()
-_cache    = ResourceCache(ttl=300)
+logger.info("Loading resource registry from PostgreSQL database...")
+
+try:
+    _registry = load_registry_from_db()
+    if len(_registry) == 0:
+        logger.warning("Database returned empty registry, loading sample data for testing...")
+        _registry = create_sample_registry()
+    registry_source = f"PostgreSQL ({len(_registry)} resources)"
+except Exception as e:
+    logger.error(f"Failed to load from database: {e}")
+    logger.info("Falling back to sample data...")
+    _registry = create_sample_registry()
+    registry_source = f"Sample Data (testing, {len(_registry)} resources)"
+
+_cache    = ResourceCache(ttl=300)  # 5 minutes
 _resolver = ResourceResolver(registry=_registry, cache=_cache)
+logger.info(f"Registry initialized from {registry_source}")
 
 # ── MCP server ────────────────────────────────────────────────────────────────
 mcp = FastMCP("resource-resolver")
@@ -56,7 +73,7 @@ mcp = FastMCP("resource-resolver")
 # Tool 1 — resolve_resource
 # ─────────────────────────────────────────────────────────────────────────────
 
-@mcp.tool()
+@mcp.tool() #tool registration 
 def resolve_resource(query: str, uuid_hint: str = "") -> str:
     """
     Resolve a natural language datacenter command into a full execution context.
@@ -132,6 +149,85 @@ def list_servers() -> str:
 
     logger.info(f"list_servers — returned {len(servers)} records")
     return json.dumps({"total": len(servers), "servers": servers}, indent=2)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Tool 3 — power_on_server (and other power operations)
+# ─────────────────────────────────────────────────────────────────────────────
+
+@mcp.tool()
+def power_on_server(query: str, uuid_hint: str = "", action: str = "On") -> str:
+    """
+    Execute a power operation on a server.
+
+    Supports OneView and COMS protocols using different MCP tools:
+    - OneView: HPE OneView API for on-premises servers
+    - COMS: HPE Compute Ops API for cloud-based servers
+
+    Examples:
+      "turn on rack-server-04"                 → power_on_server("turn on rack-server-04", action="On")
+      "power off synergy-compute-03"           → power_on_server("power off synergy-compute-03", action="Off")
+      "cold boot blade-enclosure-01"           → power_on_server("cold boot blade-enclosure-01", action="ColdBoot")
+      "reboot cloud-server-00042"              → power_on_server("reboot cloud-server-00042", action="Reset")
+
+    Parameters
+    ----------
+    query     : Natural language command describing the server and action
+    uuid_hint : Optional UUID to skip fuzzy matching
+    action    : Power action - "On", "Off", "Reset", "ColdBoot", or "Status"
+
+    Returns
+    -------
+    JSON containing:
+    - status: success | error
+    - protocol: OneView | COMS
+    - resource_uuid, resource_name
+    - action: the executed action
+    - operation_id (OneView) or job_id (COMS)
+    - deployment_type: On-Premises | Cloud
+    """
+    try:
+        # Step 1: Resolve the resource
+        ctx = _resolver.resolve(query, uuid_hint=uuid_hint)
+
+        # Step 2: Map string action to PowerAction enum
+        action_map = {
+            "On": PowerAction.ON,
+            "OFF": PowerAction.OFF,
+            "Off": PowerAction.OFF,
+            "Reset": PowerAction.RESET,
+            "ColdBoot": PowerAction.COLD,
+            "Cold": PowerAction.COLD,
+            "Status": PowerAction.STATUS,
+        }
+        power_action = action_map.get(action, PowerAction.STATUS)
+
+        # Step 3: Execute via appropriate MCP tool (OneView or COMS)
+        result = power_executor.execute_power_operation(ctx, power_action)
+
+        # Step 4: Merge execution result with full resolution payload
+        full_payload = _build_payload(ctx)
+        full_payload["status"] = result.get("status", "error")
+        full_payload["operation_id"] = result.get("operation_id")
+        full_payload["message"] = result.get("message")
+        full_payload["execution"] = result
+
+        logger.info(
+            f"power_on_server OK — {ctx.resource_name} | "
+            f"{power_action.value} | {ctx.selected_protocol.value}"
+        )
+        return json.dumps(full_payload, indent=2)
+
+    except ResolverError as exc:
+        logger.warning(f"power_on_server error: {exc}")
+        return json.dumps(
+            {"status": "error", "error": str(exc), "query": query}, indent=2
+        )
+    except Exception as exc:
+        logger.exception("power_on_server unexpected error")
+        return json.dumps(
+            {"status": "error", "error": str(exc), "query": query}, indent=2
+        )
 
 
 # ─────────────────────────────────────────────────────────────────────────────
