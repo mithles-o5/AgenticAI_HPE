@@ -29,7 +29,7 @@ _log_path = os.path.join(THIS_DIR, "resolver.log")
 _handler  = logging.FileHandler(_log_path, encoding="utf-8")
 _handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)-8s %(name)s: %(message)s"))
 logging.root.addHandler(_handler)
-logging.root.setLevel(logging.INFO)
+logging.root.setLevel(logging.DEBUG)  # Show cache operations
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("requests").setLevel(logging.WARNING)
 
@@ -44,26 +44,18 @@ from resolver    import ResourceResolver
 from errors      import ResolverError
 from power_ops   import power_executor
 from enums       import PowerAction
-from sample_data import create_sample_registry  # Fallback data
+  # Fallback data
 
 # ── singletons (built once at startup) ───────────────────────────────────────
 logger.info("Loading resource registry from PostgreSQL database...")
 
-try:
-    _registry = load_registry_from_db()
-    if len(_registry) == 0:
-        logger.warning("Database returned empty registry, loading sample data for testing...")
-        _registry = create_sample_registry()
-    registry_source = f"PostgreSQL ({len(_registry)} resources)"
-except Exception as e:
-    logger.error(f"Failed to load from database: {e}")
-    logger.info("Falling back to sample data...")
-    _registry = create_sample_registry()
-    registry_source = f"Sample Data (testing, {len(_registry)} resources)"
+_registry = load_registry_from_db()
+if len(_registry) == 0:
+    raise RuntimeError("Database returned empty registry. Ensure PostgreSQL is populated with server data.")
 
 _cache    = ResourceCache(ttl=300)  # 5 minutes
 _resolver = ResourceResolver(registry=_registry, cache=_cache)
-logger.info(f"Registry initialized from {registry_source}")
+logger.info(f"Registry initialized from PostgreSQL ({len(_registry)} resources)")
 
 # ── MCP server ────────────────────────────────────────────────────────────────
 mcp = FastMCP("resource-resolver")

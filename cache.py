@@ -94,12 +94,12 @@ class ResourceCache:
                 custom_key = f"{self._redis_prefix}alias:{alias.lower()}"
                 self._client.setex(custom_key, self._ttl, record.uuid)
             
-            logger.debug(
+            logger.info(
                 f"[Cache] PUT {record.name} [{record.uuid[:8]}…] "
-                f"ttl={self._ttl}s"
+                f"ttl={self._ttl}s aliases={len(record.aliases) + 2}"
             )
         except Exception as e:
-            logger.error(f"[Cache] Error storing record: {e}")
+            logger.error(f"[Cache] Error storing record: {e}", exc_info=True)
             raise
 
     def invalidate(self, uuid: str) -> None:

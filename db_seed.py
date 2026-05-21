@@ -184,20 +184,24 @@ def generate_server_batch(
         if parent_type == "oneview":
             server_name = f"server-{server_num:05d}"
             ip_addr = f"10.100.{parent_id}.{(server_num % 254) + 1}"
-            mgmt_host = f"ilo-{server_num:05d}.mgmt.local"
+            # Management through OneView appliance, NOT direct iLO
+            mgmt_host = f"oneview-{parent_id:02d}.mgmt.local"
             model = "ProLiant DL380 Gen10" if server_num % 2 == 0 else "ProLiant DL360 Gen10"
             location = f"DC-{parent_id}/Row-{(server_num % 10)}/Rack-{(server_num % 42)}"
             enclosure = f"RACK-{(server_num % 10):02d}"
-            vault_path = f"secret/datacenter/rack-{server_num:05d}/ilo"
+            # Vault path aligned with OneView protocol discovery
+            vault_path = f"secret/oneview/datacenter/rack-{server_num:05d}"
             bay = None
         else:  # com
             server_name = f"cloud-server-{server_num:05d}"
             ip_addr = f"10.200.1.{(server_num % 254) + 1}"
-            mgmt_host = f"compute-{server_num:05d}.cloud.local"
+            # Management through COMS appliance
+            mgmt_host = f"com-01.cloud.local"
             model = "Synergy 480 Gen10"
             location = f"Cloud-Region-1/Zone-{(server_num % 5)}"
             enclosure = f"FRAME-{(server_num % 20):02d}"
-            vault_path = f"secret/cloud/compute-{server_num:05d}/api"
+            # Vault path aligned with COMS protocol discovery
+            vault_path = f"secret/coms/cloud/server-{server_num:05d}"
             bay = (server_num % 20) + 1
 
         yield (
@@ -211,7 +215,7 @@ def generate_server_batch(
             parent_id,
             model,
             f"SERIAL-{server_num:06d}",
-            "iLO5 2.71" if parent_type == "oneview" else "Compute API v1.0",
+            "OneView 7.4" if parent_type == "oneview" else "COMS API v1.0",
             enclosure,
             bay,
             location,

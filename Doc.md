@@ -33,7 +33,6 @@ It does not directly power on, power off, or reboot real hardware yet.
 mcp_tool.py       MCP server entry point for Claude
 resolver.py       Main resolver pipeline
 selector.py       Action classification and protocol selection
-sample_data.py    Sample HPE server inventory
 registry.py       Resource lookup by name, alias, UUID, serial, or fuzzy match
 cache.py          In-memory TTL cache
 records.py        Data models used across the project
@@ -138,7 +137,7 @@ Example important response fields:
 
 ### list_servers
 
-Lists all HPE servers currently registered in `sample_data.py`.
+Lists all HPE servers currently registered in the PostgreSQL database.
 
 ## 7. Routing Logic
 
@@ -184,7 +183,7 @@ Status
 
 ## 9. Sample Resources
 
-Current sample resources are defined in `sample_data.py`.
+Server resources are dynamically loaded from the PostgreSQL database at startup.
 
 Common resource names:
 
