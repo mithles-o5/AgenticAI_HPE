@@ -53,7 +53,7 @@ class ResourceResolver:
             if record is None:
                 raise ResourceNotFoundError(
                     f"Resource not found for query '{query}'. "
-                    f"Registry has {len(self.registry)} entries. "
+                    "Checked database, aliases, and fuzzy search. "
                     "Check the resource name, alias, or UUID."
                 )
             self.cache.put(record)   # populate cache for next call

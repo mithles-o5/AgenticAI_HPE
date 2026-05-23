@@ -10,7 +10,7 @@ Usage:
 from __future__ import annotations
 
 import logging
-from typing import Optional, list
+from typing import Optional
 
 from db import db_manager
 
@@ -81,17 +81,22 @@ class ServerQueries:
 
     @staticmethod
     def get_by_alias(alias: str) -> Optional[dict]:
-        """Get server by alias."""
+        """Get server by alias with all details."""
         query = """
             SELECT 
-                s.id, s.uuid, s.name, s.ip_address,
+                s.id, s.uuid, s.name, s.ip_address, s.management_host,
+                s.model, s.serial, s.firmware, s.location, s.owner,
+                s.power_state, s.health_id, s.vault_path, s.auth_type,
                 v.name as vendor_name,
-                string_agg(DISTINCT p.name, ', ') as protocols
+                string_agg(DISTINCT p.name, ', ') as protocols,
+                string_agg(DISTINCT sa.alias, ', ') as aliases,
+                string_agg(DISTINCT st.tag, ', ') as tags
             FROM servers s
             LEFT JOIN vendors v ON s.vendor_id = v.id
             LEFT JOIN server_protocols sp ON s.id = sp.server_id
             LEFT JOIN protocols p ON sp.protocol_id = p.id
-            JOIN server_aliases sa ON s.id = sa.server_id
+            LEFT JOIN server_aliases sa ON s.id = sa.server_id
+            LEFT JOIN server_tags st ON s.id = st.server_id
             WHERE sa.alias ILIKE %s
             GROUP BY s.id, v.name
             LIMIT 1
@@ -238,6 +243,57 @@ class ServerQueries:
             fetch_one=True
         )
         return result["count"] if result else 0
+
+    @staticmethod
+    def fuzzy_search(query: str, limit: int = 10) -> list[dict]:
+        """
+        Fuzzy search across name, model, serial, location, owner, tags.
+        Returns servers ranked by relevance.
+        """
+        search_term = f"%{query}%"
+        
+        query_sql = """
+            SELECT 
+                s.id, s.uuid, s.name, s.ip_address, s.management_host,
+                s.model, s.serial, s.firmware, s.location, s.owner,
+                s.power_state, s.health_id, s.vault_path, s.auth_type,
+                v.name as vendor_name,
+                string_agg(DISTINCT p.name, ', ') as protocols,
+                string_agg(DISTINCT sa.alias, ', ') as aliases,
+                string_agg(DISTINCT st.tag, ', ') as tags,
+                -- Relevance scoring
+                CASE 
+                    WHEN s.name ILIKE %s THEN 3
+                    WHEN s.serial ILIKE %s THEN 2
+                    WHEN s.model ILIKE %s OR s.location ILIKE %s THEN 1
+                    WHEN string_agg(DISTINCT st.tag, ', ') ILIKE %s THEN 0.5
+                    ELSE 0
+                END as relevance_score
+            FROM servers s
+            LEFT JOIN vendors v ON s.vendor_id = v.id
+            LEFT JOIN server_protocols sp ON s.id = sp.server_id
+            LEFT JOIN protocols p ON sp.protocol_id = p.id
+            LEFT JOIN server_aliases sa ON s.id = sa.server_id
+            LEFT JOIN server_tags st ON s.id = st.server_id
+            WHERE s.name ILIKE %s 
+                OR s.serial ILIKE %s 
+                OR s.model ILIKE %s 
+                OR s.location ILIKE %s 
+                OR s.owner ILIKE %s
+                OR string_agg(DISTINCT sa.alias, ', ') ILIKE %s
+                OR string_agg(DISTINCT st.tag, ', ') ILIKE %s
+            GROUP BY s.id, v.name
+            ORDER BY relevance_score DESC, s.name ASC
+            LIMIT %s
+        """
+        
+        params = (
+            search_term, search_term, search_term, search_term, search_term,  # relevance scores
+            search_term, search_term, search_term, search_term, search_term,   # WHERE clause
+            search_term, search_term, limit
+        )
+        
+        return db_manager.execute_query(query_sql, params, fetch_all=True) or []
 
 
 class StatisticsQueries:

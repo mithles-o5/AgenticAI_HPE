@@ -94,9 +94,11 @@ class ResourceCache:
                 custom_key = f"{self._redis_prefix}alias:{alias.lower()}"
                 self._client.setex(custom_key, self._ttl, record.uuid)
             
+            # Count actual aliases stored (name + serial if present + custom)
+            alias_count = 1 + (1 if record.serial else 0) + len(record.aliases)
             logger.info(
                 f"[Cache] PUT {record.name} [{record.uuid[:8]}…] "
-                f"ttl={self._ttl}s aliases={len(record.aliases) + 2}"
+                f"ttl={self._ttl}s aliases={alias_count}"
             )
         except Exception as e:
             logger.error(f"[Cache] Error storing record: {e}", exc_info=True)

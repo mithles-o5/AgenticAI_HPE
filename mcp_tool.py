@@ -50,12 +50,16 @@ from enums       import PowerAction
 logger.info("Loading resource registry from PostgreSQL database...")
 
 _registry = load_registry_from_db()
-if len(_registry) == 0:
-    raise RuntimeError("Database returned empty registry. Ensure PostgreSQL is populated with server data.")
+
+# Count servers in database
+from db_queries import ServerQueries
+server_count = ServerQueries.count_total()
+if server_count == 0:
+    raise RuntimeError("Database returned no servers. Ensure PostgreSQL is populated with server data.")
 
 _cache    = ResourceCache(ttl=300)  # 5 minutes
 _resolver = ResourceResolver(registry=_registry, cache=_cache)
-logger.info(f"Registry initialized from PostgreSQL ({len(_registry)} resources)")
+logger.info(f"Registry initialized from PostgreSQL ({server_count} resources)")
 
 # ── MCP server ────────────────────────────────────────────────────────────────
 mcp = FastMCP("resource-resolver")
@@ -110,37 +114,85 @@ def resolve_resource(query: str, uuid_hint: str = "") -> str:
 # ─────────────────────────────────────────────────────────────────────────────
 
 @mcp.tool()
-def list_servers() -> str:
+def list_servers(page: int = 1, page_size: int = 50, detailed: bool = False) -> str:
     """
-    List all servers registered in the Resource Resolver.
+    List servers with pagination.
+    
+    Parameters:
+    - page: Page number (1-indexed, default: 1)
+    - page_size: Number of servers per page (default: 50, max: 500)
+    - detailed: Show full details (name, UUID, IP, location, power_state, model, owner, protocols)
+               or summary only (name, UUID, IP, power_state)
 
-    Returns name, UUID, vendor, protocols, model, location,
-    power state, health, owner, and aliases for every server.
+    Returns paginated server list with metadata.
     """
+    from db_queries import ServerQueries
+    
+    # Validate inputs
+    if page < 1:
+        page = 1
+    if page_size < 1 or page_size > 500:
+        page_size = 50
+    
+    # Calculate offset
+    offset = (page - 1) * page_size
+    
+    # Get total count
+    total_count = ServerQueries.count_total()
+    
+    # Fetch paginated results
     servers = []
-    for r in _registry.all_records():
-        servers.append({
-            "name":                r.name,
-            "uuid":                r.uuid,
-            "aliases":             r.aliases,
-            "vendor":              r.vendor.value,
-            "supported_protocols": [p.value for p in r.supported_protocols],
-            "model":               r.model,
-            "serial":              r.serial,
-            "location":            r.location,
-            "enclosure":           r.enclosure,
-            "bay":                 r.bay,
-            "owner":               r.owner,
-            "tags":                r.tags,
-            "power_state":         r.power_state,
-            "health":              r.health.value,
-            "ip_address":          r.ip_address,
-            "management_host":     r.management_host,
-            "firmware":            r.firmware,
-        })
+    rows = ServerQueries.list_all(limit=page_size, offset=offset)
+    
+    for row in rows:
+        # Parse protocols
+        protocols = []
+        if row.get("protocols"):
+            protocols = [p.strip().upper() for p in row["protocols"].split(", ") if p.strip()]
+        
+        if detailed:
+            # Full information
+            servers.append({
+                "name":                row.get("name", ""),
+                "uuid":                row.get("uuid", ""),
+                "vendor":              row.get("vendor_name", "HPE"),
+                "supported_protocols": protocols,
+                "model":               row.get("model", ""),
+                "location":            row.get("location", ""),
+                "owner":               row.get("owner", ""),
+                "power_state":         row.get("power_state", "Unknown"),
+                "ip_address":          row.get("ip_address", ""),
+            })
+        else:
+            # Summary view (lightweight)
+            servers.append({
+                "name":        row.get("name", ""),
+                "uuid":        row.get("uuid", ""),
+                "ip_address":  row.get("ip_address", ""),
+                "power_state": row.get("power_state", "Unknown"),
+                "location":    row.get("location", ""),
+            })
 
-    logger.info(f"list_servers — returned {len(servers)} records")
-    return json.dumps({"total": len(servers), "servers": servers}, indent=2)
+    # Calculate pagination metadata
+    total_pages = (total_count + page_size - 1) // page_size
+    has_next = page < total_pages
+    has_prev = page > 1
+    
+    logger.info(f"list_servers — page {page}/{total_pages}, returned {len(servers)} of {total_count} records (mode: {'detailed' if detailed else 'summary'})")
+    
+    return json.dumps({
+        "pagination": {
+            "page": page,
+            "page_size": page_size,
+            "total": total_count,
+            "total_pages": total_pages,
+            "has_next": has_next,
+            "has_prev": has_prev,
+            "showing": f"{(page-1)*page_size + 1}-{min(page*page_size, total_count)} of {total_count}"
+        },
+        "view_mode": "detailed" if detailed else "summary",
+        "servers": servers
+    }, indent=2)
 
 
 # ─────────────────────────────────────────────────────────────────────────────

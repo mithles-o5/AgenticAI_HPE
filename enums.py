@@ -16,7 +16,6 @@ class Protocol(str, Enum):
 
 
 class ActionCategory(str, Enum):
-    PROVISIONING = "Provisioning"   # Create / Allocate
     OPERATIONAL  = "Operational"    # Power, Reboot, Status, etc.
 
 
@@ -26,13 +25,6 @@ class PowerAction(str, Enum):
     RESET  = "Reset"
     COLD   = "ColdBoot"
     STATUS = "Status"
-
-
-class ProvisionAction(str, Enum):
-    CREATE     = "Create"
-    ALLOCATE   = "Allocate"
-    DEALLOCATE = "Deallocate"
-    DELETE     = "Delete"
 
 
 class ResourceHealth(str, Enum):

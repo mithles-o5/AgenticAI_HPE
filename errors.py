@@ -14,4 +14,4 @@ class CredentialError(ResolverError):
     """Credential reference missing or vault lookup failed."""
 
 class ActionClassificationError(ResolverError):
-    """Unable to classify the requested action as Provisioning or Operational."""
+    """Unable to classify the requested action as Operational."""

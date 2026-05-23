@@ -6,12 +6,11 @@ from __future__ import annotations
 
 import uuid as _uuid
 from dataclasses import dataclass, field
-from typing import Optional, Union
+from typing import Optional
 
 from enums import (
     Vendor, Protocol, ActionCategory,
-    PowerAction, ProvisionAction,
-    ResourceHealth, CacheStatus, DeploymentType, ResourceType,
+    PowerAction, ResourceHealth, CacheStatus, DeploymentType, ResourceType,
 )
 
 
@@ -127,7 +126,7 @@ class ExecutionContext:
 
     # action classification
     action_category:  ActionCategory    = ActionCategory.OPERATIONAL
-    action:           Union[PowerAction, ProvisionAction, str] = PowerAction.STATUS
+    action:           PowerAction = PowerAction.STATUS
 
     # protocol decision
     selected_protocol:Protocol          = Protocol.ONEVIEW

@@ -229,8 +229,20 @@ def generate_server_batch(
         )
 
 
-def insert_oneview_servers(oneview_id: int, base_data: dict, count: int = 1000):
-    """Insert servers for a specific OneView."""
+def insert_oneview_servers(oneview_id: int, base_data: dict, count: int = 1000, start_idx: int = 0):
+    """Insert servers for a specific OneView.
+    
+    Parameters:
+    -----------
+    oneview_id : int
+        Database ID of the OneView
+    base_data : dict
+        Base configuration data
+    count : int
+        Number of servers to create (default 1000)
+    start_idx : int
+        Starting server index (ensures unique names across all OneViews)
+    """
     query = """
         INSERT INTO servers (
             uuid, name, ip_address, management_host,
@@ -244,12 +256,12 @@ def insert_oneview_servers(oneview_id: int, base_data: dict, count: int = 1000):
 
     batch_params = list(
         generate_server_batch(
-            start_idx=0, count=count, base_data=base_data, parent_id=oneview_id, parent_type="oneview"
+            start_idx=start_idx, count=count, base_data=base_data, parent_id=oneview_id, parent_type="oneview"
         )
     )
 
     db_manager.execute_many(query, batch_params)
-    logger.info(f"[Seed] Inserted {count} servers for OneView ID {oneview_id}")
+    logger.info(f"[Seed] Inserted {count} servers for OneView ID {oneview_id} (names: server-{start_idx:05d} to server-{start_idx+count-1:05d})")
 
 
 def insert_com_servers(com_id: int, base_data: dict, count: int = 500):
@@ -303,25 +315,40 @@ def add_server_protocols(base_data: dict):
 
 
 def add_server_aliases(base_data: dict):
-    """Add aliases for servers."""
-    # Get all servers and add aliases
-    servers = db_manager.execute_query("SELECT id, name FROM servers")
+    """Add aliases for all servers to enable flexible lookup."""
+    # Get all OneView servers and add aliases
+    servers = db_manager.execute_query("SELECT id, name, serial FROM servers")
     if servers:
-        alias_params = [(s["id"], f"{s['name']}-alias") for s in servers]
+        alias_params = []
+        for s in servers:
+            # Create both name-based and serial-based aliases
+            alias_params.append((s["id"], s["name"]))
+            if s["serial"]:
+                alias_params.append((s["id"], s["serial"]))
+        
         db_manager.execute_many(
-            "INSERT INTO server_aliases (server_id, alias) VALUES (%s, %s)",
-            alias_params[:1000],  # Limit for performance
+            "INSERT INTO server_aliases (server_id, alias) VALUES (%s, %s) ON CONFLICT DO NOTHING",
+            alias_params,
         )
+        logger.info(f"[Seed] Added {len(alias_params)} aliases for {len(servers)} OneView servers")
 
-    com_servers = db_manager.execute_query("SELECT id, name FROM com_servers")
+    # Get all CoM servers and add aliases
+    com_servers = db_manager.execute_query("SELECT id, name, serial FROM com_servers")
     if com_servers:
-        com_alias_params = [(s["id"], f"{s['name']}-alias") for s in com_servers]
+        com_alias_params = []
+        for s in com_servers:
+            # Create both name-based and serial-based aliases
+            com_alias_params.append((s["id"], s["name"]))
+            if s["serial"]:
+                com_alias_params.append((s["id"], s["serial"]))
+        
         db_manager.execute_many(
-            "INSERT INTO com_server_aliases (com_server_id, alias) VALUES (%s, %s)",
-            com_alias_params[:500],  # Limit for performance
+            "INSERT INTO com_server_aliases (com_server_id, alias) VALUES (%s, %s) ON CONFLICT DO NOTHING",
+            com_alias_params,
         )
+        logger.info(f"[Seed] Added {len(com_alias_params)} aliases for {len(com_servers)} CoM servers")
 
-    logger.info("[Seed] Added aliases for servers")
+    logger.info("[Seed] ✓ Alias generation complete")
 
 
 def add_server_tags(base_data: dict):
@@ -338,26 +365,26 @@ def add_server_tags(base_data: dict):
     servers = db_manager.execute_query("SELECT id FROM servers")
     if servers:
         server_tag_params = []
-        for i, s in enumerate(servers[:1000]):  # Tag subset for performance
+        for i, s in enumerate(servers):  # Tag ALL servers
             tag = tag_params[i % len(tag_params)][0]
             server_tag_params.append((s["id"], tag))
         db_manager.execute_many(
             "INSERT INTO server_tags (server_id, tag) VALUES (%s, %s)",
             server_tag_params,
         )
+        logger.info(f"[Seed] Added {len(server_tag_params)} tags for {len(servers)} OneView servers")
 
     com_servers = db_manager.execute_query("SELECT id FROM com_servers")
     if com_servers:
         com_server_tag_params = []
-        for i, s in enumerate(com_servers[:500]):
+        for i, s in enumerate(com_servers):
             tag = tag_params[i % len(tag_params)][0]
             com_server_tag_params.append((s["id"], tag))
         db_manager.execute_many(
             "INSERT INTO com_server_tags (com_server_id, tag) VALUES (%s, %s)",
             com_server_tag_params,
         )
-
-    logger.info("[Seed] Added tags for servers")
+        logger.info(f"[Seed] Added {len(com_server_tag_params)} tags for {len(com_servers)} CoM servers")
 
 
 def main():
@@ -376,11 +403,10 @@ def main():
         # Seed base data
         base_data = seed_base_data()
 
-        # Create 10 OneViews with 1000 servers each
-        logger.info("[Seed] Creating OneViews...")
-        for ov_num in range(1, 11):
-            ov_id = create_oneview(ov_num, base_data)
-            insert_oneview_servers(ov_id, base_data, count=1000)
+        # Create 1 OneView with servers
+        logger.info("[Seed] Creating OneView...")
+        ov_id = create_oneview(1, base_data)
+        insert_oneview_servers(ov_id, base_data, count=1000, start_idx=0)
 
         # Create CoM with 500 servers
         logger.info("[Seed] Creating Center of Management...")
@@ -394,8 +420,8 @@ def main():
 
         logger.info("[Seed] ✓ Database population complete!")
         logger.info("[Seed] Summary:")
-        logger.info("[Seed]   - 10 OneViews")
-        logger.info("[Seed]   - 10,000 OneView servers")
+        logger.info("[Seed]   - 1 OneView")
+        logger.info("[Seed]   - 1,000 OneView servers")
         logger.info("[Seed]   - 1 Center of Management")
         logger.info("[Seed]   - 500 CoM servers")
 

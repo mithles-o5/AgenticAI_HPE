@@ -352,3 +352,59 @@ def discover_protocol_for_resource(
     logger.info(f"[Protocol Discovery] {reason}")
     
     return selected_protocol, reason
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Protocol Metadata Retrieval
+# ─────────────────────────────────────────────────────────────────────────────
+
+def get_protocol_metadata(
+    protocol: Protocol,
+    resource: Optional[ResourceRecord] = None,
+) -> dict:
+    """
+    Retrieve protocol configuration metadata from database.
+    
+    Returns base URL, API version, authentication headers, and other
+    protocol-specific configuration needed for API calls.
+    
+    Parameters
+    ----------
+    protocol : Protocol
+        The protocol (ONEVIEW or COMS)
+    resource : ResourceRecord, optional
+        Resource record for context (can help select region/endpoint)
+    
+    Returns
+    -------
+    dict with keys: base_url, api_version, headers, timeout, verify_ssl, etc.
+    
+    Raises
+    ------
+    ActionClassificationError
+        If protocol metadata not found in database
+    """
+    try:
+        # Query database for protocol metadata
+        metadata = db_manager.fetch_protocol_metadata(protocol.value)
+        
+        if not metadata:
+            raise ActionClassificationError(
+                f"Protocol metadata not found for {protocol.value} in database. "
+                f"Ensure protocol is registered in infrastructure_protocols table."
+            )
+        
+        logger.info(
+            f"[Protocol Discovery] Retrieved metadata for {protocol.value}: "
+            f"base_url={metadata.get('base_url')}, "
+            f"api_version={metadata.get('api_version')}"
+        )
+        return metadata
+        
+    except Exception as e:
+        logger.error(
+            f"[Protocol Discovery] Failed to retrieve metadata for {protocol.value}: {e}"
+        )
+        raise ActionClassificationError(
+            f"Cannot retrieve protocol metadata for {protocol.value}: {e}"
+        )

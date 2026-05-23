@@ -8,8 +8,7 @@ Step 3 — Vendor & Capability Detection
   (HPE only)
 
 Step 4 — Action Classification
-  Maps the NL query intent to either:
-    • ActionCategory.PROVISIONING  (Create / Allocate)
+  Maps the NL query intent to:
     • ActionCategory.OPERATIONAL   (Power / Reboot / Status / …)
 
 Step 5 — Protocol Selection Decision Logic
@@ -27,12 +26,11 @@ Endpoint Generation:
 from __future__ import annotations
 
 import logging
-from typing import Union, Optional
+from typing import Optional
 
 from records import (
     Vendor, Protocol, ActionCategory,
-    PowerAction, ProvisionAction,
-    ResourceRecord, DeploymentType,
+    PowerAction, ResourceRecord, DeploymentType,
 )
 from enums import ResourceType
 import route_mapper
@@ -71,18 +69,6 @@ _OPERATIONAL_PHRASES: dict[str, PowerAction] = {
     "state":     PowerAction.STATUS,
 }
 
-_PROVISIONING_PHRASES: dict[str, ProvisionAction] = {
-    "create":     ProvisionAction.CREATE,
-    "provision":  ProvisionAction.CREATE,
-    "allocate":   ProvisionAction.ALLOCATE,
-    "deploy":     ProvisionAction.ALLOCATE,
-    "deallocate": ProvisionAction.DEALLOCATE,
-    "release":    ProvisionAction.DEALLOCATE,
-    "delete":     ProvisionAction.DELETE,
-    "destroy":    ProvisionAction.DELETE,
-    "deprovision":ProvisionAction.DELETE,
-}
-
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Public helpers
@@ -90,21 +76,12 @@ _PROVISIONING_PHRASES: dict[str, ProvisionAction] = {
 
 def classify_action(
     query: str,
-) -> tuple[ActionCategory, Union[PowerAction, ProvisionAction]]:
+) -> tuple[ActionCategory, PowerAction]:
     """
-    Step 4 — Classify query into Provisioning or Operational and return
-    the specific action.  Raises ActionClassificationError if unrecognised.
+    Step 4 — Classify query as Operational and return the specific action.
+    Raises ActionClassificationError if unrecognised.
     """
     q = query.lower()
-
-    for phrase, action in sorted(
-        _PROVISIONING_PHRASES.items(),
-        key=lambda item: len(item[0]),
-        reverse=True,
-    ):
-        if phrase in q:
-            logger.debug(f"[Selector] Provisioning action: {action.value}")
-            return ActionCategory.PROVISIONING, action
 
     for phrase, action in sorted(
         _OPERATIONAL_PHRASES.items(),
@@ -115,9 +92,13 @@ def classify_action(
             logger.debug(f"[Selector] Operational action: {action.value}")
             return ActionCategory.OPERATIONAL, action
 
-    # Default: treat unknown queries as a status check
-    logger.warning(f"[Selector] Could not classify query '{query}' — defaulting to Status")
-    return ActionCategory.OPERATIONAL, PowerAction.STATUS
+    # Unrecognized query — raise error instead of silently defaulting
+    error_msg = (
+        f"Could not classify query '{query}' into any action. "
+        f"Recognized operational actions: {', '.join(_OPERATIONAL_PHRASES.keys())}"
+    )
+    logger.error(f"[Selector] {error_msg}")
+    raise ActionClassificationError(error_msg)
 
 
 def select_protocol(
