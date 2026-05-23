@@ -21,6 +21,7 @@ TO ADD A NEW PROVIDER:
 from auth0_provider import Auth0Provider
 from okta_provider  import OktaProvider
 from azure_provider import AzureADProvider
+from local_provider import LocalProvider
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Active Provider Selection
@@ -34,6 +35,7 @@ PROVIDER = "okta"
 # ─────────────────────────────────────────────────────────────────────────────
 
 PROVIDER_REGISTRY = {
+    "local" : LocalProvider,
     "auth0" : Auth0Provider,
     "okta"  : OktaProvider,
     "azure" : AzureADProvider,

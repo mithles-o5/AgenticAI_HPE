@@ -122,8 +122,15 @@ class Auth0Provider(SSOProvider):
             })
         )
 
-        # Start local callback server
-        httpd = HTTPServer(("127.0.0.1", CALLBACK_PORT), _CallbackHandler)
+        # Start local callback server (fail fast if port is already in use)
+        try:
+            httpd = HTTPServer(("127.0.0.1", CALLBACK_PORT), _CallbackHandler)
+        except OSError as e:
+            return None, (
+                f"Cannot start Auth0 callback server on port {CALLBACK_PORT}: {e}\n"
+                f"Another process is using that port. "
+                f"Stop it or change CALLBACK_PORT in auth0_provider.py."
+            )
         server_thread = threading.Thread(target=httpd.serve_forever)
         server_thread.daemon = True
         server_thread.start()
@@ -131,8 +138,8 @@ class Auth0Provider(SSOProvider):
         # Open browser for user login
         webbrowser.open(auth_url)
 
-        # Wait for the callback (5-minute timeout)
-        server_thread.join(timeout=300)
+        # Wait for the callback (2-minute timeout — reduced from 5 min)
+        server_thread.join(timeout=120)
 
         if not _CallbackHandler.captured_code:
             return None, "Login timed out or was cancelled by the user."

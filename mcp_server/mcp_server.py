@@ -30,6 +30,7 @@ import json
 from datetime import datetime
 
 import httpx
+import time
 from mcp.server.fastmcp import FastMCP
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -60,9 +61,15 @@ from registry    import ResourceRegistry  # noqa: E402
 from cache       import ResourceCache     # noqa: E402
 from sample_data import load_sample_registry  # noqa: E402
 from errors      import ResolverError     # noqa: E402
+from records     import Protocol          # noqa: E402
 
 # Path to roles.json (the role mapping file you can freely edit)
 ROLES_FILE = os.path.join(AUTHZ_DIR, "roles.json")
+
+# ── In-memory token claims cache (avoids repeated /userinfo network calls) ────
+# Structure: {token_hash: {"claims": {...}, "expires_at": float}}
+_CLAIMS_CACHE: dict = {}
+_CLAIMS_CACHE_TTL = 300  # seconds — re-verify every 5 minutes max
 
 # Mock server — mirrors the real HPE OneView REST API
 HARDWARE_BACKEND_URL = "http://127.0.0.1:8000"
@@ -78,6 +85,7 @@ _resolver = ResourceResolver(registry=_registry, cache=_cache)
 
 # Available SSO providers — ALL use browser-based PKCE (no credentials in chat).
 AVAILABLE_PROVIDERS = {
+    "local" : "Local Dev  ✅ Ready         (automated demo)",
     "auth0" : "Auth0      ✅ Ready         (browser login via Auth0)",
     "okta"  : "Okta       🔲 Needs config  (fill in OKTA_DOMAIN + OKTA_CLIENT_ID in okta_provider.py)",
     "azure" : "Azure AD   🔲 Needs config  (fill in AZURE_TENANT_ID + AZURE_CLIENT_ID in azure_provider.py)",
@@ -88,25 +96,25 @@ PROVIDER_LIST = "\n".join(
 )
 
 mcp = FastMCP(
-    "HPE-OneView-MCP",
+    "HPE-Integrated-MCP",
     instructions=f"""
     You are managing HPE physical servers via MCP.
 
-    ── PRIMARY TOOL ────────────────────────────────────────────────────────────
-    For ALL hardware commands, use: resolve_and_execute(query="<user request>")
-    This single tool handles the full pipeline automatically:
+    ── PRIMARY TOOLS ────────────────────────────────────────────────────────────
+    For hardware commands on OneView servers, use: manage_oneview_server(query="<user request>")
+    For hardware commands on Compute Ops (CoM) servers, use: manage_comops_server(query="<user request>")
+    
+    Both tools handle the full pipeline automatically:
       1. Authenticates the user
       2. Resolves the natural language command to the correct server + API
       3. Checks role-based permissions (RBAC + ABAC)
-      4. Executes on the HPE OneView mock server
+      4. Executes on the respective mock server (OneView or CoM)
       5. Returns the result
 
-    Examples of what to pass as 'query':
-      resolve_and_execute(query="turn on rack-server-04")
-      resolve_and_execute(query="reboot blade-enclosure-01")
-      resolve_and_execute(query="status synergy-compute-03")
-      resolve_and_execute(query="power off synergy-compute-01")
-      resolve_and_execute(query="list all servers")
+    Examples:
+      manage_oneview_server(query="turn on OV1-RackServer-001")
+      manage_comops_server(query="power on CoM-CloudNode-005")
+      manage_oneview_server(query="list all servers")
 
     ── AUTHENTICATION (BROWSER ONLY — no credentials in chat) ──────────────────
     All login flows open a secure browser window. Credentials NEVER pass through chat.
@@ -123,6 +131,9 @@ mcp = FastMCP(
     3. Once the user replies, call `sso_login(provider="<their choice>")`.
     4. NEVER ask for a username or password in the chat.
     5. NEVER auto-select a provider.
+
+    CRITICAL LOGOUT RULES:
+    If the user asks to logout or end the session, you MUST execute the `logout()` tool. Do not just say you logged out without executing the tool.
 
     ── OTHER TOOLS ─────────────────────────────────────────────────────────────
     • sso_login(provider)      — Login via browser SSO
@@ -169,8 +180,8 @@ def _get_token_and_claims() -> tuple[str, dict]:
     Load the existing token and verify it using the provider that originally
     issued it (saved in the session file alongside the token).
 
-    This ensures an Okta token is verified via Okta's /userinfo, an Auth0
-    token via Auth0's /userinfo, etc. — never the wrong endpoint.
+    Uses an in-memory cache to avoid repeated /userinfo network calls.
+    The cache TTL is 5 minutes; after that, the token is re-verified once.
 
     Returns (token, claims) or raises ValueError if no active session.
     """
@@ -183,10 +194,24 @@ def _get_token_and_claims() -> tuple[str, dict]:
             "Please log out and log in again."
         )
 
+    # ── Fast path: serve from in-memory cache ────────────────────────────────
+    cache_key = hash(token)
+    cached    = _CLAIMS_CACHE.get(cache_key)
+    if cached and time.time() < cached["expires_at"]:
+        return token, cached["claims"]
+
+    # ── Slow path: verify via SSO provider /userinfo (network call) ──────────
     provider = get_provider(provider_name)
     claims   = provider.verify_token(token)
     if not claims:
+        _CLAIMS_CACHE.pop(cache_key, None)   # evict stale entry if present
         raise ValueError("Token expired or invalid. Please log in again.")
+
+    # Store result in cache
+    _CLAIMS_CACHE[cache_key] = {
+        "claims":     claims,
+        "expires_at": time.time() + _CLAIMS_CACHE_TTL,
+    }
     return token, claims
 
 
@@ -378,6 +403,7 @@ def logout() -> str:
     You will need to login again to use server management tools.
     """
     clear_token()
+    _CLAIMS_CACHE.clear()   # ← also evict in-memory claims cache on logout
     return f"✅ Logged out. Session cleared."
 
 
@@ -386,26 +412,22 @@ def logout() -> str:
 # ─────────────────────────────────────────────────────────────────────────────
 
 @mcp.tool()
-async def resolve_and_execute(query: str, env: str = "dev") -> str:
+async def manage_oneview_resource(query: str, resource_category: str = "server-hardware", env: str = "dev") -> str:
     """
-    THE PRIMARY TOOL — Full pipeline: Auth → RBAC → Resolve → Execute.
-
-    Takes a natural language command from Claude, resolves it to the correct
-    HPE server and API endpoint, checks permissions, then executes against
-    the mock OneView server and returns the result.
-
-    Examples:
-      "turn on rack-server-04"
-      "reboot blade-enclosure-01"
-      "status synergy-compute-03"
-      "power off synergy-compute-01"
-      "list all servers"
-
-    Args:
-        query : Natural language command (what to do and on which server).
-        env   : Deployment environment for ABAC check. Default: 'dev'.
+    Manage ANY OneView on-premises resource (servers, storage, networks, enclosures, profiles).
+    Set resource_category to the REST API path (e.g., 'server-hardware', 'storage-volumes', 'ethernet-networks', 'enclosures').
     """
+    return await _execute_hardware_command(query, env, expected_protocol=Protocol.ONEVIEW, backend_url="http://127.0.0.1:8000", resource_category=resource_category)
 
+@mcp.tool()
+async def manage_comops_resource(query: str, resource_category: str = "servers", env: str = "dev") -> str:
+    """
+    Manage ANY Compute Ops Management cloud resource (servers, policies, firmware).
+    Set resource_category to the REST API path (e.g., 'servers', 'policies', 'jobs').
+    """
+    return await _execute_hardware_command(query, env, expected_protocol=Protocol.COMS, backend_url="http://127.0.0.1:8001", resource_category=resource_category)
+
+async def _execute_hardware_command(query: str, env: str, expected_protocol: Protocol, backend_url: str, resource_category: str = "server-hardware") -> str:
     # ── Step 1: Authentication ────────────────────────────────────────────────
     try:
         token, claims = _get_token_and_claims()
@@ -417,125 +439,107 @@ async def resolve_and_execute(query: str, env: str = "dev") -> str:
         )
 
     # ── Step 2: Resource Resolution ───────────────────────────────────────────
-    # Handle 'list servers' shortcut before running the full resolver
     if any(w in query.lower() for w in ["list", "all servers", "show servers"]):
-        servers = []
-        for r in _registry.all_records():
-            servers.append({
-                "name":         r.name,
-                "uuid":         r.uuid,
-                "model":        r.model,
-                "location":     r.location,
-                "power_state":  r.power_state,
-                "health":       r.health.value,
-                "protocols":    [p.value for p in r.supported_protocols],
+        ov_records = [r for r in _registry.all_records() if Protocol.ONEVIEW in r.supported_protocols]
+        com_records = [r for r in _registry.all_records() if Protocol.COMS in r.supported_protocols]
+        
+        ov_on = sum(1 for r in ov_records if r.power_state == "On")
+        com_on = sum(1 for r in com_records if r.power_state == "On")
+        
+        # Grab top 5 for sample individual data
+        sample_data = []
+        for r in (ov_records[:3] + com_records[:2]):
+            sample_data.append({
+                "uuid": r.uuid,
+                "name": r.name,
+                "protocol": "OneView" if Protocol.ONEVIEW in r.supported_protocols else "Compute Ops",
+                "powerState": r.power_state,
+                "ip_address": r.ip_address
             })
+            
         return (
             f"✅ Authenticated as {email} (Role: {role})\n"
-            f"📋 Registered servers ({len(servers)} total):\n"
-            + json.dumps(servers, indent=2)
+            f"📋 Infrastructure Summary (Total: {len(ov_records) + len(com_records)}):\n"
+            f"  • OneView Physical Nodes : {len(ov_records)} ({ov_on} Powered On)\n"
+            f"  • Compute Ops Cloud Nodes: {len(com_records)} ({com_on} Powered On)\n\n"
+            f"🔍 Sample Individual Data (First 5 records):\n"
+            f"{json.dumps(sample_data, indent=2)}\n\n"
+            f"💡 Note: Displaying 5 of 1500 to prevent chat overflow. "
+            f"To check a specific resource, ask for its status directly."
         )
 
     try:
         ctx = _resolver.resolve(query)
     except ResolverError as e:
-        return (
-            f"❌ Resource not found.\n"
-            f"Query: '{query}'\n"
-            f"Reason: {e}\n\n"
-            f"Tip: Try 'list all servers' to see what's available."
-        )
+        return f"❌ Resource not found or query unclear.\nReason: {e}"
+
+    if expected_protocol != ctx.selected_protocol:
+        return f"❌ Wrong tool used! Server {ctx.resource_name} uses protocol {ctx.selected_protocol.value}, but you used the tool for {expected_protocol.value}."
 
     # ── Step 3: Authorization (RBAC + ABAC) ───────────────────────────────────
-    # Map resolver action → RBAC action verb
     action_verb_map = {
-        "On":         "execute",
-        "Off":        "execute",
-        "Reset":      "execute",
-        "ColdBoot":   "execute",
-        "Status":     "read",
-        "Create":     "create",
-        "Allocate":   "create",
-        "Deallocate": "delete",
-        "Delete":     "delete",
+        "On": "execute", "Off": "execute", "Reset": "execute", "ColdBoot": "execute",
+        "Status": "read", "Create": "create", "Allocate": "create",
+        "Deallocate": "delete", "Delete": "delete",
     }
-    action_val  = ctx.action.value if hasattr(ctx.action, "value") else str(ctx.action)
+    action_val = ctx.action.value if hasattr(ctx.action, "value") else str(ctx.action)
     rbac_action = action_verb_map.get(action_val, "execute")
-    resource_category = "server-hardware"   # resolver only handles server-hardware
-
+    
     try:
         allowed, reason, identity = _authorize(
-            rbac_action, ctx.resource_uuid, resource_category, env, ctx.vendor.value
+            rbac_action, ctx.resource_uuid, "server-hardware", env, ctx.vendor.value
         )
     except (RuntimeError, ValueError) as e:
         return f"❌ Authorization error: {e}"
 
     if not allowed:
-        return (
-            f"❌ Access Denied for {email} (Role: {role})\n"
-            f"Attempted: {rbac_action} on {ctx.resource_name}\n"
-            f"Reason: {reason}"
-        )
+        return f"❌ Access Denied for {email} (Role: {role})\nReason: {reason}"
 
     # ── Step 4: Execute on Mock Server ────────────────────────────────────────
-    # Choose the correct mock endpoint based on the resolved action
-    action_endpoint_map = {
-        "On":         ("PUT",  f"/rest/server-hardware/{ctx.resource_uuid}/powerState",  {"powerState": "On"}),
-        "Off":        ("PUT",  f"/rest/server-hardware/{ctx.resource_uuid}/powerState",  {"powerState": "Off"}),
-        "Reset":      ("PUT",  f"/rest/server-hardware/{ctx.resource_uuid}/powerState",  {"powerState": "Reset"}),
-        "ColdBoot":   ("PUT",  f"/rest/server-hardware/{ctx.resource_uuid}/powerState",  {"powerState": "ColdBoot"}),
-        "Status":     ("GET",  f"/rest/server-hardware/{ctx.resource_uuid}",             None),
-        "Create":     ("POST", f"/rest/server-hardware",                                 {}),
-        "Allocate":   ("POST", f"/rest/server-hardware",                                 {}),
-        "Deallocate": ("PUT",  f"/rest/server-hardware/{ctx.resource_uuid}/refreshState", {}),
-        "Delete":     ("DELETE",f"/rest/server-hardware/{ctx.resource_uuid}",            None),
-    }
+    if expected_protocol == Protocol.ONEVIEW:
+        action_endpoint_map = {
+            "On":         ("PUT",  f"/rest/{resource_category}/{ctx.resource_uuid}/powerState",  {"powerState": "On"}),
+            "Off":        ("PUT",  f"/rest/{resource_category}/{ctx.resource_uuid}/powerState",  {"powerState": "Off"}),
+            "Status":     ("GET",  f"/rest/{resource_category}/{ctx.resource_uuid}",             None),
+            "Create":     ("POST", f"/rest/{resource_category}", {"name": ctx.resource_name}),
+            "Delete":     ("DELETE", f"/rest/{resource_category}/{ctx.resource_uuid}", None),
+        }
+    else:
+        # CoM Endpoints
+        action_endpoint_map = {
+            "On":         ("POST", f"/compute-ops-mgmt/v1/{resource_category}/{ctx.resource_uuid}/power-on", {}),
+            "Off":        ("POST", f"/compute-ops-mgmt/v1/{resource_category}/{ctx.resource_uuid}/power-off", {}),
+            "Status":     ("GET",  f"/compute-ops-mgmt/v1/{resource_category}/{ctx.resource_uuid}", None),
+            "Create":     ("POST", f"/compute-ops-mgmt/v1/{resource_category}", {"name": ctx.resource_name}),
+            "Delete":     ("DELETE", f"/compute-ops-mgmt/v1/{resource_category}/{ctx.resource_uuid}", None),
+        }
 
     http_method, endpoint, body = action_endpoint_map.get(
         action_val,
-        ("GET", f"/rest/server-hardware/{ctx.resource_uuid}", None)  # fallback to status
+        ("GET", f"/rest/{resource_category}/{ctx.resource_uuid}" if expected_protocol == Protocol.ONEVIEW else f"/compute-ops-mgmt/v1/{resource_category}/{ctx.resource_uuid}", None)
     )
 
     async with httpx.AsyncClient() as client:
         try:
-            url = f"{HARDWARE_BACKEND_URL}{endpoint}"
-            if http_method == "GET":
-                resp = await client.get(url)
-            elif http_method == "POST":
-                resp = await client.post(url, json=body or {})
-            elif http_method == "PUT":
-                resp = await client.put(url, json=body or {})
-            elif http_method == "DELETE":
-                resp = await client.delete(url)
-            else:
-                resp = await client.get(url)
-
-            response_data = resp.json() if resp.content else {}
+            url = f"{backend_url}{endpoint}"
+            if http_method == "GET": resp = await client.get(url)
+            elif http_method == "POST": resp = await client.post(url, json=body or {})
+            elif http_method == "PUT": resp = await client.put(url, json=body or {})
+            elif http_method == "DELETE": resp = await client.delete(url)
+            
+            response_data = resp.json() if resp.content else {"status": resp.status_code}
 
             return (
-                f"✅ Executed Successfully\n"
-                f"─────────────────────────────────\n"
-                f"User      : {email}\n"
-                f"Role      : {role}\n"
-                f"Query     : {query}\n"
+                f"✅ Executed Successfully via {expected_protocol.value}\n"
+                f"User      : {email} (Role: {role})\n"
                 f"Resource  : {ctx.resource_name}\n"
                 f"Action    : {action_val}\n"
-                f"Protocol  : {ctx.selected_protocol.value}\n"
-                f"Endpoint  : {endpoint}\n"
-                f"HTTP      : {http_method} → {resp.status_code}\n"
+                f"Endpoint  : {endpoint} ({http_method} → {resp.status_code})\n"
                 f"─────────────────────────────────\n"
                 + json.dumps(response_data, indent=2)
             )
-
         except Exception as e:
-            return (
-                f"⚠️ Auth & Resolution passed but mock server call failed.\n"
-                f"User      : {email} (Role: {role})\n"
-                f"Resource  : {ctx.resource_name}\n"
-                f"Endpoint  : {endpoint}\n"
-                f"Error     : {e}\n\n"
-                f"Ensure the mock server is running: cd mock_server(oneview) && uvicorn main:app --port 8000"
-            )
+            return f"⚠️ Mock server call failed: {e}\nEnsure backend {expected_protocol.value} is running at {backend_url}"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
