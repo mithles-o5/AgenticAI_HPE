@@ -1,4 +1,4 @@
-# Stratum : Vendor-Agnostic AIOps-as-Conversation via Agentic AI and MCP
+# Stratum : Agentic AIOps for Hyperscale Infrastructure
 
 
 Stratum is a vendor-agnostic Agentic AI platform that transforms enterprise infrastructure operations into a conversational experience. Using MCP orchestration, semantic operational agents, and adaptive capability intelligence, Stratum enables users to manage servers, storage, networking, and hybrid infrastructure through natural language interactions. The platform dynamically discovers and normalizes heterogeneous vendor APIs into standardized operational capabilities, allowing seamless execution across cloud and on-prem environments. Stratum introduces morphing agents and semantic operational meshes that continuously adapt execution behavior based on topology, runtime state, operational risk, and infrastructure context. The system evolves operational intelligence over time through autonomous capability synthesis, topology-aware reasoning, and self-optimizing infrastructure cognition
