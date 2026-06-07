@@ -1,191 +1,101 @@
-"""
-Data models used across the entire resolver pipeline.
-"""
+"""Data models for the resource resolver routing pipeline."""
 
 from __future__ import annotations
 
-import uuid as _uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from datetime import datetime
 from typing import Optional
 
-from enums import (
-    Vendor, Protocol, ActionCategory,
-    PowerAction, ResourceHealth, CacheStatus, DeploymentType, ResourceType,
-)
+from enums import CacheStatus, IdentifierType
 
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Credentials  (vault reference — never store plain text in production)
-# ─────────────────────────────────────────────────────────────────────────────
 
 @dataclass
-class CredentialRef:
-    """
-    Reference to credentials stored in a secure vault (e.g. HashiCorp Vault,
-    AWS Secrets Manager).  The resolver returns the *reference*, not the secret.
-    The execution agent resolves the actual secret at call time.
-    """
-    vault_path:   str                    # e.g. "secret/datacenter/rack-04/ilo"
-    auth_type:    str = "basic"          # basic | token | certificate
-    username:     Optional[str] = None   # pre-resolved username (non-secret)
-    certificate:  Optional[str] = None   # PEM path for cert auth
+class DeviceRecord:
+    """Authoritative device-routing record stored in PostgreSQL and Redis."""
+
+    id: str
+    serial_number: str
+    management_source: str
+    ip_address: Optional[str] = None
+    fqdn: Optional[str] = None
+    source_host: Optional[str] = None
+    source_device_id: Optional[str] = None
+    device_type: Optional[str] = None
+    last_seen: Optional[datetime] = None
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+
+    @classmethod
+    def from_row(cls, row: dict) -> "DeviceRecord":
+        return cls(
+            id=str(row.get("id") or row.get("uuid") or ""),
+            serial_number=str(row.get("serial_number") or ""),
+            management_source=str(row.get("management_source") or ""),
+            ip_address=str(row["ip_address"]) if row.get("ip_address") else None,
+            fqdn=str(row["fqdn"]) if row.get("fqdn") else None,
+            source_host=str(row["source_host"]) if row.get("source_host") else None,
+            source_device_id=(
+                str(row["source_device_id"]) if row.get("source_device_id") else None
+            ),
+            device_type=row.get("device_type"),
+            last_seen=row.get("last_seen"),
+            created_at=row.get("created_at"),
+            updated_at=row.get("updated_at"),
+        )
+
+    @staticmethod
+    def _serialize_datetime(value: object) -> Optional[str]:
+        if not value:
+            return None
+        if hasattr(value, "isoformat"):
+            return value.isoformat()
+        return str(value)
 
     def to_dict(self) -> dict:
         return {
-            "vault_path":  self.vault_path,
-            "auth_type":   self.auth_type,
-            "username":    self.username,
-            "certificate": self.certificate,
-            "password":    "***VAULT_REF***",   # never serialised
+            "id": self.id,
+            "serial_number": self.serial_number,
+            "ip_address": self.ip_address,
+            "fqdn": self.fqdn,
+            "management_source": self.management_source,
+            "source_host": self.source_host,
+            "source_device_id": self.source_device_id,
+            "device_type": self.device_type,
+            "last_seen": self._serialize_datetime(self.last_seen),
+            "created_at": self._serialize_datetime(self.created_at),
+            "updated_at": self._serialize_datetime(self.updated_at),
         }
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Resource Record  (what the registry stores and the cache caches)
-# ─────────────────────────────────────────────────────────────────────────────
-
 @dataclass
-class ResourceRecord:
-    """Full descriptor for a managed server resource."""
-    # identity
-    name:              str
-    uuid:              str
-    aliases:           list[str]         = field(default_factory=list)
+class RouteResolution:
+    """Resolver API result consumed by the MCP orchestrator."""
 
-    # network
-    ip_address:        str               = ""
-    management_host:   str               = ""    # HPE iLO / OneView / Compute Ops host
-
-    # vendor & protocol capabilities
-    vendor:            Vendor            = Vendor.HPE
-    deployment_type:   DeploymentType    = DeploymentType.ON_PREM
-    supported_protocols: list[Protocol] = field(default_factory=list)
-    resource_type:     ResourceType      = ResourceType.SERVER_HARDWARE  # For endpoint routing
-
-    # hardware metadata
-    model:             str               = ""
-    serial:            str               = ""
-    firmware:          str               = ""
-    enclosure:         str               = ""
-    bay:               Optional[int]     = None
-    location:          Optional[str]     = None
-    asset_tag:         Optional[str]     = None
-    owner:             Optional[str]     = None
-    tags:              list[str]         = field(default_factory=list)
-
-    # live state
-    power_state:       str               = "Unknown"
-    health:            ResourceHealth    = ResourceHealth.UNKNOWN
-    etag:              Optional[str]     = None
-
-    # credentials
-    credential_ref:    Optional[CredentialRef] = None
+    identifier: str
+    identifier_type: IdentifierType
+    device: DeviceRecord
+    mcp_tool: str
+    credential_ref: Optional[str]
+    cache_status: CacheStatus
+    resolution_ms: int
+    api_endpoint: str
+    management_source: str
+    resource: dict
+    action: dict
 
     def to_dict(self) -> dict:
         return {
-            "name":               self.name,
-            "uuid":               self.uuid,
-            "aliases":            self.aliases,
-            "ip_address":         self.ip_address,
-            "management_host":    self.management_host,
-            "vendor":             self.vendor.value,
-            "supported_protocols":[p.value for p in self.supported_protocols],
-            "model":              self.model,
-            "serial":             self.serial,
-            "firmware":           self.firmware,
-            "enclosure":          self.enclosure,
-            "bay":                self.bay,
-            "location":           self.location,
-            "asset_tag":          self.asset_tag,
-            "owner":              self.owner,
-            "tags":               self.tags,
-            "power_state":        self.power_state,
-            "health":             self.health.value,
-            "etag":               self.etag,
-            "credential_ref":     self.credential_ref.to_dict()
-                                  if self.credential_ref else None,
+            "identifier": self.identifier,
+            "identifier_type": self.identifier_type.value,
+            "management_source": self.management_source,
+            "source_host": self.device.source_host,
+            "mcp_tool": self.mcp_tool,
+            "credential_ref": self.credential_ref,
+            "cache_status": self.cache_status.value,
+            "resolution_ms": self.resolution_ms,
+            "api_endpoint": self.api_endpoint,
+            "resource": self.resource,
+            "action": self.action,
+            "device": self.device.to_dict(),
         }
 
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Execution Context  — output of the resolver, input to the execution agent
-# ─────────────────────────────────────────────────────────────────────────────
-
-@dataclass
-class ExecutionContext:
-    """
-    Structured payload returned by the resolver to the Execution Agent.
-    Contains everything the agent needs to invoke the correct handler.
-    """
-    request_id:       str = field(default_factory=lambda: str(_uuid.uuid4()))
-
-    # resolved resource
-    resource_uuid:    str               = ""
-    resource_name:    str               = ""
-    vendor:           Vendor            = Vendor.HPE
-
-    # action classification
-    action_category:  ActionCategory    = ActionCategory.OPERATIONAL
-    action:           PowerAction = PowerAction.STATUS
-
-    # protocol decision
-    selected_protocol:Protocol          = Protocol.ONEVIEW
-    protocol_reason:  str               = ""      # why this protocol was chosen
-
-    # endpoint
-    endpoint:         str               = ""      # full URL or IP for the handler
-
-    # credential reference (not the secret itself)
-    credential_ref:   Optional[CredentialRef] = None
-
-    # resolver diagnostics
-    resolved_by:      str               = ""      # uuid | alias | fuzzy | cmdb
-    cache_status:     CacheStatus       = CacheStatus.MISS
-    query:            str               = ""
-
-    def to_dict(self) -> dict:
-        action_val = self.action.value if hasattr(self.action, "value") else str(self.action)
-        return {
-            "request_id":        self.request_id,
-            "resource_uuid":     self.resource_uuid,
-            "resource_name":     self.resource_name,
-            "vendor":            self.vendor.value,
-            "action_category":   self.action_category.value,
-            "action":            action_val,
-            "selected_protocol": self.selected_protocol.value,
-            "protocol_reason":   self.protocol_reason,
-            "endpoint":          self.endpoint,
-            "credential_ref":    self.credential_ref.to_dict()
-                                 if self.credential_ref else None,
-            "resolved_by":       self.resolved_by,
-            "cache_status":      self.cache_status.value,
-            "query":             self.query,
-        }
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Action Result  — returned from the execution agent back to the MCP tool
-# ─────────────────────────────────────────────────────────────────────────────
-
-@dataclass
-class ActionResult:
-    success:        bool
-    request_id:     str
-    resource_name:  str
-    action:         str
-    final_state:    str
-    task_uri:       Optional[str] = None
-    error:          Optional[str] = None
-    duration_ms:    int           = 0
-
-    def to_dict(self) -> dict:
-        return {
-            "success":       self.success,
-            "request_id":    self.request_id,
-            "resource_name": self.resource_name,
-            "action":        self.action,
-            "final_state":   self.final_state,
-            "task_uri":      self.task_uri,
-            "error":         self.error,
-            "duration_ms":   self.duration_ms,
-        }

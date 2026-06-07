@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import Optional, Generator
+from typing import Optional
 
 import psycopg2
 from psycopg2 import pool, extras
@@ -126,6 +126,7 @@ class DatabaseManager:
         Query results or None
         """
         conn = None
+        cur = None
         try:
             conn = self.get_connection()
             cur = conn.cursor(cursor_factory=extras.RealDictCursor)
@@ -149,7 +150,8 @@ class DatabaseManager:
             logger.error(f"[DB] Query error: {e}")
             raise
         finally:
-            cur.close() if 'cur' in locals() else None
+            if cur:
+                cur.close()
             if conn:
                 self.return_connection(conn)
 
@@ -163,6 +165,7 @@ class DatabaseManager:
         params_list : List of parameter tuples
         """
         conn = None
+        cur = None
         try:
             conn = self.get_connection()
             cur = conn.cursor()
@@ -176,217 +179,35 @@ class DatabaseManager:
             logger.error(f"[DB] Batch execute error: {e}")
             raise
         finally:
-            cur.close() if 'cur' in locals() else None
+            if cur:
+                cur.close()
             if conn:
                 self.return_connection(conn)
 
     def test_connection(self) -> bool:
         """Test database connectivity."""
+        conn = None
+        cur = None
         try:
             conn = self.get_connection()
             cur = conn.cursor()
             cur.execute("SELECT 1")
             cur.close()
+            cur = None
             self.return_connection(conn)
+            conn = None
             logger.info("[DB] Connection test successful")
             return True
         except Exception as e:
             logger.error(f"[DB] Connection test failed: {e}")
             return False
+        finally:
+            if cur:
+                cur.close()
+            if conn:
+                self.return_connection(conn)
 
-    def fetch_protocols_by_credentials(
-        self, 
-        ip_address: str, 
-        vault_path: str, 
-        auth_type: str
-    ) -> list[str]:
-        """
-        Fetch supported protocols from the database using IP address and credentials.
-        
-        Parameters
-        ----------
-        ip_address  : IP address of the server (e.g. "10.10.1.104")
-        vault_path  : Vault path for credentials (e.g. "secret/datacenter/rack-04/ilo")
-        auth_type   : Authentication type (e.g. "basic", "token", "certificate")
-        
-        Returns
-        -------
-        List of protocol names (e.g. ["ONEVIEW", "COMS"])
-        """
-        try:
-            # Query OneView servers first
-            query_oneview = """
-                SELECT DISTINCT p.name as protocol_name
-                FROM servers s
-                LEFT JOIN server_protocols sp ON s.id = sp.server_id
-                LEFT JOIN protocols p ON sp.protocol_id = p.id
-                WHERE s.ip_address = %s 
-                  AND s.vault_path = %s
-                  AND s.auth_type = %s
-                  AND p.name IS NOT NULL
-                ORDER BY p.name
-            """
-            
-            rows = self.execute_query(
-                query_oneview,
-                params=(ip_address, vault_path, auth_type),
-                fetch_all=True
-            )
-            
-            if rows:
-                protocols = [row["protocol_name"] for row in rows]
-                logger.debug(
-                    f"[DB] Fetched {len(protocols)} protocols for {ip_address} "
-                    f"(vault: {vault_path[:30]}..., auth: {auth_type}): {protocols}"
-                )
-                return protocols
-            
-            # Query CoM servers if not found in OneView
-            query_com = """
-                SELECT DISTINCT p.name as protocol_name
-                FROM com_servers cs
-                LEFT JOIN com_server_protocols csp ON cs.id = csp.com_server_id
-                LEFT JOIN protocols p ON csp.protocol_id = p.id
-                WHERE cs.ip_address = %s 
-                  AND cs.vault_path = %s
-                  AND cs.auth_type = %s
-                  AND p.name IS NOT NULL
-                ORDER BY p.name
-            """
-            
-            rows = self.execute_query(
-                query_com,
-                params=(ip_address, vault_path, auth_type),
-                fetch_all=True
-            )
-            
-            if rows:
-                protocols = [row["protocol_name"] for row in rows]
-                logger.debug(
-                    f"[DB] Fetched {len(protocols)} protocols for CoM {ip_address} "
-                    f"(vault: {vault_path[:30]}..., auth: {auth_type}): {protocols}"
-                )
-                return protocols
-            
-            logger.warning(
-                f"[DB] No protocols found for {ip_address} "
-                f"with vault_path={vault_path}, auth_type={auth_type}"
-            )
-            return []
-            
-        except psycopg2.Error as e:
-            logger.error(
-                f"[DB] Error fetching protocols for {ip_address}: {e}"
-            )
-            return []
 
-    def fetch_server_by_ip_and_credentials(
-        self,
-        ip_address: str,
-        vault_path: str,
-        auth_type: str
-    ) -> Optional[dict]:
-        """
-        Fetch a complete server record by IP address and credentials.
-        
-        Parameters
-        ----------
-        ip_address  : IP address of the server
-        vault_path  : Vault path for credentials
-        auth_type   : Authentication type
-        
-        Returns
-        -------
-        Server record as dictionary or None if not found
-        """
-        try:
-            # Try OneView servers first
-            query_oneview = """
-                SELECT
-                    s.uuid, s.name, s.ip_address, s.management_host,
-                    s.model, s.serial, s.firmware, s.enclosure, s.bay,
-                    s.location, s.asset_tag, s.owner, s.power_state, s.etag,
-                    s.vault_path, s.auth_type, s.vault_username,
-                    v.name as vendor_name,
-                    dt.name as deployment_type,
-                    rh.status as health_status,
-                    array_agg(DISTINCT p.name) FILTER (WHERE p.name IS NOT NULL) as protocols,
-                    array_agg(DISTINCT sa.alias) FILTER (WHERE sa.alias IS NOT NULL) as aliases,
-                    array_agg(DISTINCT st.tag) FILTER (WHERE st.tag IS NOT NULL) as tags
-                FROM servers s
-                LEFT JOIN vendors v ON s.vendor_id = v.id
-                LEFT JOIN deployment_types dt ON s.deployment_type_id = dt.id
-                LEFT JOIN resource_health rh ON s.health_id = rh.id
-                LEFT JOIN server_protocols sp ON s.id = sp.server_id
-                LEFT JOIN protocols p ON sp.protocol_id = p.id
-                LEFT JOIN server_aliases sa ON s.id = sa.server_id
-                LEFT JOIN server_tags st ON s.id = st.server_id
-                WHERE s.ip_address = %s 
-                  AND s.vault_path = %s
-                  AND s.auth_type = %s
-                GROUP BY s.id, v.name, dt.name, rh.status
-                LIMIT 1
-            """
-            
-            record = self.execute_query(
-                query_oneview,
-                params=(ip_address, vault_path, auth_type),
-                fetch_one=True
-            )
-            
-            if record:
-                logger.debug(f"[DB] Found OneView server: {record['name']}")
-                return dict(record)
-            
-            # Try CoM servers
-            query_com = """
-                SELECT
-                    cs.uuid, cs.name, cs.ip_address, cs.management_host,
-                    cs.model, cs.serial, cs.firmware, cs.enclosure, cs.bay,
-                    cs.location, cs.asset_tag, cs.owner, cs.power_state, cs.etag,
-                    cs.vault_path, cs.auth_type, cs.vault_username,
-                    v.name as vendor_name,
-                    dt.name as deployment_type,
-                    rh.status as health_status,
-                    array_agg(DISTINCT p.name) FILTER (WHERE p.name IS NOT NULL) as protocols,
-                    array_agg(DISTINCT csa.alias) FILTER (WHERE csa.alias IS NOT NULL) as aliases,
-                    array_agg(DISTINCT cst.tag) FILTER (WHERE cst.tag IS NOT NULL) as tags
-                FROM com_servers cs
-                LEFT JOIN vendors v ON cs.vendor_id = v.id
-                LEFT JOIN deployment_types dt ON cs.deployment_type_id = dt.id
-                LEFT JOIN resource_health rh ON cs.health_id = rh.id
-                LEFT JOIN com_server_protocols csp ON cs.id = csp.com_server_id
-                LEFT JOIN protocols p ON csp.protocol_id = p.id
-                LEFT JOIN com_server_aliases csa ON cs.id = csa.com_server_id
-                LEFT JOIN com_server_tags cst ON cs.id = cst.com_server_id
-                WHERE cs.ip_address = %s 
-                  AND cs.vault_path = %s
-                  AND cs.auth_type = %s
-                GROUP BY cs.id, v.name, dt.name, rh.status
-                LIMIT 1
-            """
-            
-            record = self.execute_query(
-                query_com,
-                params=(ip_address, vault_path, auth_type),
-                fetch_one=True
-            )
-            
-            if record:
-                logger.debug(f"[DB] Found CoM server: {record['name']}")
-                return dict(record)
-            
-            logger.warning(
-                f"[DB] No server found for {ip_address} "
-                f"with vault_path={vault_path}, auth_type={auth_type}"
-            )
-            return None
-            
-        except psycopg2.Error as e:
-            logger.error(
-                f"[DB] Error fetching server for {ip_address}: {e}"
-            )
-            return None
 
 
 # Singleton instance

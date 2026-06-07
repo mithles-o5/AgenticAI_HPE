@@ -1,12 +1,10 @@
 """
-Database Seeder — Resource Initialization
-===========================================
-Populates PostgreSQL with:
-- 10 OneViews with 1000 servers each (10,000 servers)
-- 1 CoM (Center of Management) with 500 servers
-
-Run this script once to initialize the database:
-    python db_seed.py
+Database Seeder — Current Schema
+=================================
+Populates PostgreSQL with the current device registry schema:
+- devices
+- routing_audit
+- poll_history
 """
 
 from __future__ import annotations
@@ -17,14 +15,9 @@ import sys
 import uuid as _uuid
 from typing import Generator
 
-import psycopg2
-from psycopg2 import Error as PsycopgError
-
-# ── Add parent dir to path ────────────────────────────────────────────────────
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, THIS_DIR)
 
-# ── logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(levelname)-8s %(name)s: %(message)s",
@@ -39,32 +32,20 @@ from db import db_manager
 # ─────────────────────────────────────────────────────────────────────────────
 
 def clear_database():
-    """Clear all existing data from the database."""
+    """Clear all existing data from the current schema."""
     logger.info("[Seed] Clearing existing database tables...")
-    
-    # Tables in order of dependency (respect foreign keys)
+
     tables_to_clear = [
-        "com_server_tags",
-        "com_server_aliases",
-        "com_server_protocols",
-        "com_servers",
-        "coms",
-        "server_tags",
-        "server_aliases",
-        "server_protocols",
-        "servers",
-        "oneviews",
-        "protocols",
-        "deployment_types",
-        "resource_health",
-        "vendors",
+        "poll_history",
+        "routing_audit",
+        "devices",
     ]
-    
+
     try:
         for table in tables_to_clear:
             db_manager.execute_query(
-                f"TRUNCATE TABLE {table} CASCADE",
-                fetch_all=False
+                f"TRUNCATE TABLE {table} RESTART IDENTITY CASCADE",
+                fetch_all=False,
             )
         logger.info("[Seed] ✓ All tables cleared")
     except Exception as e:
@@ -72,362 +53,210 @@ def clear_database():
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Seed Functions
+# Source-system seed helpers
 # ─────────────────────────────────────────────────────────────────────────────
 
-def seed_base_data() -> dict:
-    """Seed base enumeration data."""
-    logger.info("[Seed] Inserting base data...")
-
-    vendors = [("HPE",)]
-    deployment_types = [("On-Premises",), ("Cloud",)]
-    protocols = [("OneView",), ("COMS",)]
-    health_statuses = [("OK",), ("Warning",), ("Critical",), ("Unknown",)]
-
-    db_manager.execute_many(
-        "INSERT INTO vendors (name) VALUES (%s) ON CONFLICT DO NOTHING",
-        vendors,
-    )
-    db_manager.execute_many(
-        "INSERT INTO deployment_types (name) VALUES (%s) ON CONFLICT DO NOTHING",
-        deployment_types,
-    )
-    db_manager.execute_many(
-        "INSERT INTO protocols (name) VALUES (%s) ON CONFLICT DO NOTHING",
-        protocols,
-    )
-    db_manager.execute_many(
-        "INSERT INTO resource_health (status) VALUES (%s) ON CONFLICT DO NOTHING",
-        health_statuses,
-    )
-
-    logger.info("[Seed] Base data inserted")
-
-    # Fetch IDs for use in server creation
-    base_data = {}
-    for row in db_manager.execute_query("SELECT id, name FROM vendors"):
-        base_data[f"vendor_{row['name']}"] = row["id"]
-    for row in db_manager.execute_query("SELECT id, name FROM deployment_types"):
-        base_data[f"deployment_{row['name']}"] = row["id"]
-    for row in db_manager.execute_query("SELECT id, name FROM protocols"):
-        base_data[f"protocol_{row['name']}"] = row["id"]
-    for row in db_manager.execute_query("SELECT id, status FROM resource_health"):
-        base_data[f"health_{row['status']}"] = row["id"]
-
-    return base_data
-
-
-def create_oneview(ov_num: int, base_data: dict) -> int:
-    """Create a OneView and return its database ID."""
-    ov_uuid = str(_uuid.uuid4())
-    ov_name = f"oneview-{ov_num:02d}"
-    ov_ip = f"10.100.{ov_num}.1"
+def create_oneview(ov_num: int) -> int:
+    """Return a configured OneView source number for sample inventory."""
     ov_host = f"oneview-{ov_num:02d}.mgmt.local"
-
-    query = """
-        INSERT INTO oneviews (name, uuid, ip_address, management_host, owner, location)
-        VALUES (%s, %s, %s, %s, %s, %s)
-        RETURNING id
-    """
-    result = db_manager.execute_query(
-        query,
-        (ov_name, ov_uuid, ov_ip, ov_host, "platform-team", f"DC-{ov_num}"),
-        fetch_one=True,
-    )
-    ov_id = result["id"] if result else None
-    logger.info(f"[Seed] Created OneView: {ov_name} (ID: {ov_id})")
-    return ov_id
+    logger.info(f"[Seed] Configured OneView source: {ov_host}")
+    return ov_num
 
 
-def create_com(base_data: dict) -> int:
-    """Create a CoM (Center of Management) and return its database ID."""
-    com_uuid = str(_uuid.uuid4())
-    com_name = "center-of-management-01"
-    com_ip = "10.200.1.1"
-    com_host = "com-01.cloud.local"
-
-    query = """
-        INSERT INTO coms (name, uuid, ip_address, management_host, owner, location)
-        VALUES (%s, %s, %s, %s, %s, %s)
-        RETURNING id
-    """
-    result = db_manager.execute_query(
-        query,
-        (com_name, com_uuid, com_ip, com_host, "cloud-team", "Cloud-Region-1"),
-        fetch_one=True,
-    )
-    com_id = result["id"] if result else None
-    logger.info(f"[Seed] Created CoM: {com_name} (ID: {com_id})")
-    return com_id
+def create_coms_source() -> int:
+    """Return a configured COMS source marker for sample inventory."""
+    coms_host = "coms-01.cloud.local"
+    logger.info(f"[Seed] Configured COMS source: {coms_host}")
+    return 1
 
 
-def generate_server_batch(
+def get_enterprise_name(device_type: str, index: int, parent_type: str) -> tuple[str, str]:
+    """Generate a unique, realistic enterprise infrastructure name."""
+    domain = "datacenter.local" if parent_type == "oneview" else "cloud.local"
+    t = (device_type or "server").lower()
+    
+    if t == "server":
+        rack = (index % 50) + 1
+        node = (index % 10) + 1
+        name = f"rack{rack}-compute-{node}-{index}"
+    elif t == "switch":
+        sw_type = "leaf" if index % 2 == 0 else "agg"
+        num = (index % 20) + 1
+        name = f"{sw_type}-sw{num:02d}-{index}"
+    elif t == "router":
+        r_type = "edge" if index % 2 == 0 else "wan"
+        num = (index % 10) + 1
+        name = f"{r_type}-r{num:02d}-{index}"
+    elif t == "firewall":
+        fw_type = "west" if index % 2 == 0 else "east"
+        num = (index % 5) + 1
+        name = f"fw-{fw_type}-{num:02d}-{index}"
+    elif t == "storage":
+        stg_type = "array" if index % 2 == 0 else "nas"
+        name = f"stg-{stg_type}-{index}"
+    else:
+        name = f"infra-node-{index}"
+        
+    return name, f"{name}.{domain}"
+
+
+def generate_device_batch(
     start_idx: int,
     count: int,
-    base_data: dict,
     parent_id: int,
-    parent_type: str,  # "oneview" or "com"
+    parent_type: str,
 ) -> Generator[tuple, None, None]:
-    """Generate server data for batch insertion."""
-    vendor_id = base_data.get("vendor_HPE")
-    deployment_id = (
-        base_data.get("deployment_On-Premises")
-        if parent_type == "oneview"
-        else base_data.get("deployment_Cloud")
-    )
-    health_id = base_data.get("health_OK")
-
+    """Generate device data for batch insertion."""
+    types = ["server", "switch", "router", "firewall", "storage"]
     for i in range(count):
-        server_num = start_idx + i
-        server_uuid = str(_uuid.uuid4())
+        device_num = start_idx + i
+        device_uuid = str(_uuid.uuid4())
+        device_type = types[device_num % len(types)]
         
+        serial_number, fqdn = get_enterprise_name(device_type, device_num, parent_type)
+
         if parent_type == "oneview":
-            server_name = f"server-{server_num:05d}"
-            ip_addr = f"10.100.{parent_id}.{(server_num % 254) + 1}"
-            # Management through OneView appliance, NOT direct iLO
-            mgmt_host = f"oneview-{parent_id:02d}.mgmt.local"
-            model = "ProLiant DL380 Gen10" if server_num % 2 == 0 else "ProLiant DL360 Gen10"
-            location = f"DC-{parent_id}/Row-{(server_num % 10)}/Rack-{(server_num % 42)}"
-            enclosure = f"RACK-{(server_num % 10):02d}"
-            # Vault path aligned with OneView protocol discovery
-            vault_path = f"secret/oneview/datacenter/rack-{server_num:05d}"
-            bay = None
-        else:  # com
-            server_name = f"cloud-server-{server_num:05d}"
-            ip_addr = f"10.200.1.{(server_num % 254) + 1}"
-            # Management through COMS appliance
-            mgmt_host = f"com-01.cloud.local"
-            model = "Synergy 480 Gen10"
-            location = f"Cloud-Region-1/Zone-{(server_num % 5)}"
-            enclosure = f"FRAME-{(server_num % 20):02d}"
-            # Vault path aligned with COMS protocol discovery
-            vault_path = f"secret/coms/cloud/server-{server_num:05d}"
-            bay = (server_num % 20) + 1
+            management_source = "oneview"
+            source_host = f"oneview-{parent_id:02d}.mgmt.local"
+            ip_addr = f"10.100.{parent_id}.{(device_num % 254) + 1}"
+        else:
+            management_source = "coms"
+            source_host = "coms-01.cloud.local"
+            ip_addr = f"10.200.1.{(device_num % 254) + 1}"
 
         yield (
-            server_uuid,
-            server_name,
+            serial_number,
             ip_addr,
-            mgmt_host,
-            vendor_id,
-            deployment_id,
-            health_id,
-            parent_id,
-            model,
-            f"SERIAL-{server_num:06d}",
-            "OneView 7.4" if parent_type == "oneview" else "COMS API v1.0",
-            enclosure,
-            bay,
-            location,
-            f"ASSET-{server_num:06d}",
-            "platform-team" if parent_type == "oneview" else "cloud-team",
-            "Off",
-            vault_path,
-            "basic",
-            "administrator" if parent_type == "oneview" else "api-user",
-            f'W/"{server_num:x}"',
+            fqdn,
+            management_source,
+            source_host,
+            device_uuid,
+            device_type,
         )
 
 
-def insert_oneview_servers(oneview_id: int, base_data: dict, count: int = 1000, start_idx: int = 0):
-    """Insert servers for a specific OneView.
-    
-    Parameters:
-    -----------
-    oneview_id : int
-        Database ID of the OneView
-    base_data : dict
-        Base configuration data
-    count : int
-        Number of servers to create (default 1000)
-    start_idx : int
-        Starting server index (ensures unique names across all OneViews)
-    """
+def insert_oneview_devices(oneview_id: int, count: int = 1000, start_idx: int = 0):
+    """Insert OneView-managed devices."""
     query = """
-        INSERT INTO servers (
-            uuid, name, ip_address, management_host,
-            vendor_id, deployment_type_id, health_id, oneview_id,
-            model, serial, firmware, enclosure, bay, location,
-            asset_tag, owner, power_state, vault_path, auth_type,
-            vault_username, etag
+        INSERT INTO devices (
+            serial_number, ip_address, fqdn,
+            management_source, source_host, source_device_id,
+            device_type, last_seen, created_at, updated_at
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), NOW(), NOW())
     """
 
     batch_params = list(
-        generate_server_batch(
-            start_idx=start_idx, count=count, base_data=base_data, parent_id=oneview_id, parent_type="oneview"
+        generate_device_batch(
+            start_idx=start_idx,
+            count=count,
+            parent_id=oneview_id,
+            parent_type="oneview",
         )
     )
 
     db_manager.execute_many(query, batch_params)
-    logger.info(f"[Seed] Inserted {count} servers for OneView ID {oneview_id} (names: server-{start_idx:05d} to server-{start_idx+count-1:05d})")
+    logger.info(
+        f"[Seed] Inserted {count} OneView-managed devices for source ID {oneview_id}"
+    )
 
 
-def insert_com_servers(com_id: int, base_data: dict, count: int = 500):
-    """Insert servers for CoM."""
+def insert_coms_devices(coms_id: int, count: int = 500):
+    """Insert COMS-managed devices."""
     query = """
-        INSERT INTO com_servers (
-            uuid, name, ip_address, management_host,
-            vendor_id, deployment_type_id, health_id, com_id,
-            model, serial, firmware, enclosure, bay, location,
-            asset_tag, owner, power_state, vault_path, auth_type,
-            vault_username, etag
+        INSERT INTO devices (
+            serial_number, ip_address, fqdn,
+            management_source, source_host, source_device_id,
+            device_type, last_seen, created_at, updated_at
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), NOW(), NOW())
     """
 
     batch_params = list(
-        generate_server_batch(
-            start_idx=10000, count=count, base_data=base_data, parent_id=com_id, parent_type="com"
+        generate_device_batch(
+            start_idx=10000,
+            count=count,
+            parent_id=coms_id,
+            parent_type="coms",
         )
     )
 
     db_manager.execute_many(query, batch_params)
-    logger.info(f"[Seed] Inserted {count} servers for CoM ID {com_id}")
+    logger.info(f"[Seed] Inserted {count} COMS-managed devices for source ID {coms_id}")
 
 
-def add_server_protocols(base_data: dict):
-    """Associate protocols with servers."""
-    oneview_protocol_id = base_data.get("protocol_OneView")
-    coms_protocol_id = base_data.get("protocol_COMS")
+# ─────────────────────────────────────────────────────────────────────────────
+# Additional current-schema seed helpers
+# ─────────────────────────────────────────────────────────────────────────────
 
-    # All OneView servers support OneView protocol
-    db_manager.execute_query(
-        f"""
-        INSERT INTO server_protocols (server_id, protocol_id)
-        SELECT id, {oneview_protocol_id} FROM servers
-        ON CONFLICT DO NOTHING
-        """,
-        fetch_all=False
-    )
+def seed_current_schema(seed_oneview_count: int = 1000, seed_com_count: int = 500) -> None:
+    """Populate the current schema with sample device rows."""
+    clear_database()
+    oneview_id = create_oneview(1)
+    insert_oneview_devices(oneview_id, count=seed_oneview_count, start_idx=0)
+    coms_id = create_coms_source()
+    insert_coms_devices(coms_id, count=seed_com_count)
 
-    # All CoM servers support COMS protocol
-    db_manager.execute_query(
-        f"""
-        INSERT INTO com_server_protocols (com_server_id, protocol_id)
-        SELECT id, {coms_protocol_id} FROM com_servers
-        ON CONFLICT DO NOTHING
-        """,
-        fetch_all=False
-    )
-    logger.info("[Seed] Associated protocols with servers")
+    # Insert explicit testing devices matching exact enterprise naming guidelines
+    testing_devices = [
+        # OneView devices (management_source='oneview', source_host='oneview-01.mgmt.local')
+        ("dc1-a7", "10.100.1.10", "dc1-a7.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-dc1a7", "server"),
+        ("compute-22", "10.100.1.11", "compute-22.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-c22", "server"),
+        ("rack42-n3", "10.100.1.20", "rack42-n3.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-rack42n3", "server"),
+        ("edge-r1", "10.100.1.12", "edge-r1.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-edger1", "router"),
+        ("wan-r2", "10.100.1.21", "wan-r2.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-wanr2", "router"),
+        ("core-sw01", "10.100.1.13", "core-sw01.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-coresw01", "switch"),
+        ("leaf-sw12", "10.100.1.22", "leaf-sw12.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-leafsw12", "switch"),
+        ("fw-core-01", "10.100.1.14", "fw-core-01.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-fc01", "firewall"),
+        ("fw-edge-02", "10.100.1.23", "fw-edge-02.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-fwedge02", "firewall"),
 
-
-def add_server_aliases(base_data: dict):
-    """Add aliases for all servers to enable flexible lookup."""
-    # Get all OneView servers and add aliases
-    servers = db_manager.execute_query("SELECT id, name, serial FROM servers")
-    if servers:
-        alias_params = []
-        for s in servers:
-            # Create both name-based and serial-based aliases
-            alias_params.append((s["id"], s["name"]))
-            if s["serial"]:
-                alias_params.append((s["id"], s["serial"]))
-        
-        db_manager.execute_many(
-            "INSERT INTO server_aliases (server_id, alias) VALUES (%s, %s) ON CONFLICT DO NOTHING",
-            alias_params,
-        )
-        logger.info(f"[Seed] Added {len(alias_params)} aliases for {len(servers)} OneView servers")
-
-    # Get all CoM servers and add aliases
-    com_servers = db_manager.execute_query("SELECT id, name, serial FROM com_servers")
-    if com_servers:
-        com_alias_params = []
-        for s in com_servers:
-            # Create both name-based and serial-based aliases
-            com_alias_params.append((s["id"], s["name"]))
-            if s["serial"]:
-                com_alias_params.append((s["id"], s["serial"]))
-        
-        db_manager.execute_many(
-            "INSERT INTO com_server_aliases (com_server_id, alias) VALUES (%s, %s) ON CONFLICT DO NOTHING",
-            com_alias_params,
-        )
-        logger.info(f"[Seed] Added {len(com_alias_params)} aliases for {len(com_servers)} CoM servers")
-
-    logger.info("[Seed] ✓ Alias generation complete")
-
-
-def add_server_tags(base_data: dict):
-    """Add tags for servers."""
-    tag_params = [
-        ("production",),
-        ("tier-1",),
-        ("tier-2",),
-        ("web-tier",),
-        ("db-tier",),
-        ("gpu",),
+        # COMS devices (management_source='coms', source_host='coms-01.cloud.local')
+        ("prod-x1", "10.200.1.13", "prod-x1.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-prodx1", "server"),
+        ("core-r3", "10.200.1.20", "core-r3.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-corer3", "router"),
+        ("agg-sw05", "10.200.1.21", "agg-sw05.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-aggsw05", "switch"),
+        ("fw-west-01", "10.200.1.12", "fw-west-01.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-fwwest01", "firewall"),
+        ("stg-array-02", "10.200.1.11", "stg-array-02.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-stgarray02", "storage"),
+        ("nas-prod-01", "10.200.1.10", "nas-prod-01.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-np01", "storage"),
+        ("backup-san-01", "10.200.1.22", "backup-san-01.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-backupsan01", "storage"),
     ]
 
-    servers = db_manager.execute_query("SELECT id FROM servers")
-    if servers:
-        server_tag_params = []
-        for i, s in enumerate(servers):  # Tag ALL servers
-            tag = tag_params[i % len(tag_params)][0]
-            server_tag_params.append((s["id"], tag))
-        db_manager.execute_many(
-            "INSERT INTO server_tags (server_id, tag) VALUES (%s, %s)",
-            server_tag_params,
+    db_manager.execute_many(
+        """
+        INSERT INTO devices (
+            serial_number, ip_address, fqdn,
+            management_source, source_host, source_device_id,
+            device_type, last_seen, created_at, updated_at
         )
-        logger.info(f"[Seed] Added {len(server_tag_params)} tags for {len(servers)} OneView servers")
+        VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), NOW(), NOW())
+        ON CONFLICT (serial_number) DO NOTHING
+        """,
+        testing_devices,
+    )
 
-    com_servers = db_manager.execute_query("SELECT id FROM com_servers")
-    if com_servers:
-        com_server_tag_params = []
-        for i, s in enumerate(com_servers):
-            tag = tag_params[i % len(tag_params)][0]
-            com_server_tag_params.append((s["id"], tag))
-        db_manager.execute_many(
-            "INSERT INTO com_server_tags (com_server_id, tag) VALUES (%s, %s)",
-            com_server_tag_params,
-        )
-        logger.info(f"[Seed] Added {len(com_server_tag_params)} tags for {len(com_servers)} CoM servers")
 
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Main
+# ─────────────────────────────────────────────────────────────────────────────
 
 def main():
     """Main seeding function."""
-    logger.info("[Seed] Starting database population...")
+    logger.info("[Seed] Starting database population for the current schema...")
 
     try:
-        # Test connection
         if not db_manager.test_connection():
             logger.error("[Seed] Database connection failed")
             sys.exit(1)
 
-        # Clear existing data
-        clear_database()
-
-        # Seed base data
-        base_data = seed_base_data()
-
-        # Create 1 OneView with servers
-        logger.info("[Seed] Creating OneView...")
-        ov_id = create_oneview(1, base_data)
-        insert_oneview_servers(ov_id, base_data, count=1000, start_idx=0)
-
-        # Create CoM with 500 servers
-        logger.info("[Seed] Creating Center of Management...")
-        com_id = create_com(base_data)
-        insert_com_servers(com_id, base_data, count=500)
-
-        # Add protocols, aliases, and tags
-        add_server_protocols(base_data)
-        add_server_aliases(base_data)
-        add_server_tags(base_data)
+        seed_current_schema()
 
         logger.info("[Seed] ✓ Database population complete!")
         logger.info("[Seed] Summary:")
-        logger.info("[Seed]   - 1 OneView")
-        logger.info("[Seed]   - 1,000 OneView servers")
-        logger.info("[Seed]   - 1 Center of Management")
-        logger.info("[Seed]   - 500 CoM servers")
+        logger.info("[Seed]   - Devices: 1,516 sample rows")
+        logger.info("[Seed]   - routing_audit: populated by runtime resolver only")
+        logger.info("[Seed]   - poll_history:  populated by runtime polling engine only")
 
-    except PsycopgError as e:
-        logger.error(f"[Seed] Database error: {e}")
-        sys.exit(1)
     except Exception as e:
         logger.error(f"[Seed] Unexpected error: {e}")
         sys.exit(1)

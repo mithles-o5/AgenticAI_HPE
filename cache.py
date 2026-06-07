@@ -1,263 +1,268 @@
-"""
-Cache Layer
-============
-Step 2 of the resolver pipeline.
-
-The resolver checks this cache before hitting the registry or any external
-source (CMDB / HPE OneView).  On a miss the registry populates the cache
-so subsequent lookups are fast.
-
-Design:
-  - Redis-backed distributed TTL cache
-  - Keyed by UUID (primary) and alias (secondary → UUID pointer)
-  - TTL default: 300 seconds
-  - Supports multi-process deployments
-"""
+"""Memurai hot cache for resource resolver routing."""
 
 from __future__ import annotations
 
 import json
 import logging
 import os
+from datetime import datetime
+from collections.abc import Iterable
 from typing import Optional
 
 import redis
 
-from records import ResourceRecord, CacheStatus
+from enums import CacheStatus, IdentifierType
+from records import DeviceRecord
+from protocol_discovery import normalize_management_source
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_TTL = 300   # seconds
+DEFAULT_TTL = 900
 
 
 class ResourceCache:
-    """
-    Redis-backed TTL cache for distributed caching across multiple MCP servers.
-    Stores serialized ResourceRecords with automatic expiration.
-    """
+    """Memurai cache using the architecture-defined resolver keyspace."""
 
     def __init__(
         self,
-        ttl: int = DEFAULT_TTL,
-        host: str = os.getenv("REDIS_HOST", "localhost"),
-        port: int = int(os.getenv("REDIS_PORT", "6379")),
-        db: int = int(os.getenv("REDIS_DB", "0")),
-        password: str = os.getenv("REDIS_PASSWORD", None),
+        ttl: int = int(os.getenv("CACHE_TTL", str(DEFAULT_TTL))),
+        host: str = os.getenv("MEMURAI_HOST", os.getenv("REDIS_HOST", "localhost")),
+        port: int = int(os.getenv("MEMURAI_PORT", os.getenv("REDIS_PORT", "6379"))),
+        db: int = int(os.getenv("MEMURAI_DB", os.getenv("REDIS_DB", "0"))),
+        password: str | None = os.getenv("MEMURAI_PASSWORD", os.getenv("REDIS_PASSWORD")),
     ) -> None:
         self._ttl = ttl
-        self._redis_prefix = "resource_resolver:"
+        self._client = redis.Redis(
+            host=host,
+            port=port,
+            db=db,
+            password=password,
+            decode_responses=True,
+            socket_connect_timeout=5,
+            socket_keepalive=True,
+            health_check_interval=30,
+        )
+        self._client.ping()
+        logger.info("[Cache] Memurai connected at %s:%s/db=%s ttl=%ss", host, port, db, ttl)
+
+    @staticmethod
+    def key(identifier_type: IdentifierType, identifier: str) -> str:
+        return f"resolver:{identifier_type.value}:{identifier.lower()}"
+
+    @staticmethod
+    def source_key(device: DeviceRecord) -> str:
+        source = normalize_management_source(device.management_source)
+        if source == "coms":
+            device_id = device.source_device_id or device.id or "unknown"
+            return f"resolver:source:coms:{device_id}"
+        host = device.source_host or "unknown"
+        return f"resolver:source:{host}"
+
+    @staticmethod
+    def poll_key(source_type: str, source_host: str, source_device_id: str | None = None) -> str:
+        source = normalize_management_source(source_type)
+        if source == "coms":
+            device_id = source_device_id or source_host or "unknown"
+            return f"resolver:poll:coms:{device_id}"
+        return f"resolver:poll:{source_host}"
+
+    def put_device(self, device: DeviceRecord) -> None:
+        """Store lookup keys and source membership for one device in Memurai using pipelines."""
+        payload_data = {
+            "management_source": normalize_management_source(device.management_source),
+            "source_host": device.source_host,
+            "serial_number": device.serial_number,
+            "fqdn": device.fqdn,
+            "ip_address": device.ip_address,
+            "id": device.id,
+            "source_device_id": device.source_device_id,
+            "device_type": device.device_type,
+            "last_seen": device._serialize_datetime(device.last_seen) if device.last_seen else None,
+            "created_at": device._serialize_datetime(device.created_at) if device.created_at else None,
+            "updated_at": device._serialize_datetime(device.updated_at) if device.updated_at else None,
+        }
+        payload = json.dumps(payload_data)
+
+        # Pipeline write optimization to reduce round-trips
+        pipe = self._client.pipeline()
+        if device.ip_address:
+            pipe.setex(self.key(IdentifierType.IP, device.ip_address), self._ttl, payload)
+        if device.serial_number:
+            pipe.setex(
+                self.key(IdentifierType.SERIAL_NUMBER, device.serial_number),
+                self._ttl,
+                payload,
+            )
+        if device.fqdn:
+            pipe.setex(self.key(IdentifierType.FQDN, device.fqdn), self._ttl, payload)
+        if device.serial_number:
+            source_key = self.source_key(device)
+            pipe.sadd(source_key, device.serial_number)
+            pipe.expire(source_key, self._ttl)
+        pipe.execute()
+
+    def get_by_identifier(
+        self,
+        identifier: str,
+        identifier_type: IdentifierType,
+    ) -> tuple[Optional[DeviceRecord], CacheStatus]:
+        try:
+            raw = self._client.get(self.key(identifier_type, identifier))
+            if not raw:
+                return None, CacheStatus.MISS
+            return self._deserialize_device(raw), CacheStatus.HIT
+        except Exception as exc:
+            logger.warning("[Cache] Lookup failed for %s:%s: %s", identifier_type.value, identifier, exc)
+            return None, CacheStatus.MISS
+
+    def warm_from_devices(self, devices: Iterable[DeviceRecord]) -> int:
+        """Warm Memurai cache using pipelines to reduce RTT overhead."""
+        count = 0
+        pipe = self._client.pipeline()
+        for device in devices:
+            payload_data = {
+                "management_source": normalize_management_source(device.management_source),
+                "source_host": device.source_host,
+                "serial_number": device.serial_number,
+                "fqdn": device.fqdn,
+                "ip_address": device.ip_address,
+                "id": device.id,
+                "source_device_id": device.source_device_id,
+                "device_type": device.device_type,
+                "last_seen": device._serialize_datetime(device.last_seen) if device.last_seen else None,
+                "created_at": device._serialize_datetime(device.created_at) if device.created_at else None,
+                "updated_at": device._serialize_datetime(device.updated_at) if device.updated_at else None,
+            }
+            payload = json.dumps(payload_data)
+
+            if device.ip_address:
+                pipe.setex(self.key(IdentifierType.IP, device.ip_address), self._ttl, payload)
+            if device.serial_number:
+                pipe.setex(
+                    self.key(IdentifierType.SERIAL_NUMBER, device.serial_number),
+                    self._ttl,
+                    payload,
+                )
+            if device.fqdn:
+                pipe.setex(self.key(IdentifierType.FQDN, device.fqdn), self._ttl, payload)
+            if device.serial_number:
+                source_key = self.source_key(device)
+                pipe.sadd(source_key, device.serial_number)
+                pipe.expire(source_key, self._ttl)
+            
+            count += 1
+            if count % 100 == 0:
+                pipe.execute()
+                pipe = self._client.pipeline()
         
-        try:
-            self._client = redis.Redis(
-                host=host,
-                port=port,
-                db=db,
-                password=password,
-                decode_responses=True,
-                socket_connect_timeout=5,
-                socket_keepalive=True,
-                health_check_interval=30,
-            )
-            # Test connection
-            self._client.ping()
-            logger.info(
-                f"[Cache] Redis connected: {host}:{port}/db={db} "
-                f"(ttl={ttl}s)"
-            )
-        except redis.ConnectionError as e:
-            logger.error(f"[Cache] Redis connection failed: {e}")
-            raise
+        pipe.execute()
+        return count
 
-    # ─────────────────────────────────────── write
+    def warm_devices(self, devices: Iterable[DeviceRecord]) -> int:
+        """Warm cache with specified devices (incremental)."""
+        return self.warm_from_devices(devices)
 
-    def put(self, record: ResourceRecord) -> None:
-        """Store resource record in Redis with TTL."""
-        try:
-            # Serialize record to JSON
-            record_json = json.dumps(record.to_dict())
-            
-            # Store by UUID
-            uuid_key = f"{self._redis_prefix}uuid:{record.uuid}"
-            self._client.setex(uuid_key, self._ttl, record_json)
-            
-            # Store UUID→name alias mapping
-            alias_key = f"{self._redis_prefix}alias:{record.name.lower()}"
-            self._client.setex(alias_key, self._ttl, record.uuid)
-            
-            # Store UUID→serial alias mapping
-            if record.serial:
-                serial_key = f"{self._redis_prefix}alias:{record.serial.lower()}"
-                self._client.setex(serial_key, self._ttl, record.uuid)
-            
-            # Store UUID→custom alias mappings
-            for alias in record.aliases:
-                custom_key = f"{self._redis_prefix}alias:{alias.lower()}"
-                self._client.setex(custom_key, self._ttl, record.uuid)
-            
-            # Count actual aliases stored (name + serial if present + custom)
-            alias_count = 1 + (1 if record.serial else 0) + len(record.aliases)
-            logger.info(
-                f"[Cache] PUT {record.name} [{record.uuid[:8]}…] "
-                f"ttl={self._ttl}s aliases={alias_count}"
-            )
-        except Exception as e:
-            logger.error(f"[Cache] Error storing record: {e}", exc_info=True)
-            raise
+    def warm_recent_devices(self, limit: int = 100) -> int:
+        """Incremental cache warming using recently resolved/seen devices from audit logs."""
+        from db import db_manager
+        rows = db_manager.execute_query(
+            "SELECT identifier, MAX(timestamp) as max_ts FROM routing_audit GROUP BY identifier ORDER BY max_ts DESC LIMIT %s",
+            (limit,),
+            fetch_all=True
+        ) or []
+        identifiers = [row["identifier"] for row in rows]
 
-    def invalidate(self, uuid: str) -> None:
-        """Remove resource record from cache."""
-        try:
-            uuid_key = f"{self._redis_prefix}uuid:{uuid}"
-            self._client.delete(uuid_key)
-            logger.debug(f"[Cache] INVALIDATE uuid={uuid[:8]}…")
-        except Exception as e:
-            logger.error(f"[Cache] Error invalidating record: {e}")
+        from db_queries import DeviceQueries
+        devices_to_warm = []
+        for ident in identifiers:
+            row = DeviceQueries.get_by_serial(ident) or DeviceQueries.get_by_ip(ident) or DeviceQueries.get_by_fqdn(ident)
+            if row:
+                devices_to_warm.append(DeviceRecord.from_row(row))
+        return self.warm_from_devices(devices_to_warm)
 
-    # ─────────────────────────────────────── read
+    def warm_updated_devices(self, limit: int = 100) -> int:
+        """Incremental cache warming using recently updated devices from PostgreSQL."""
+        from db import db_manager
+        rows = db_manager.execute_query(
+            "SELECT * FROM devices ORDER BY updated_at DESC LIMIT %s",
+            (limit,),
+            fetch_all=True
+        ) or []
+        devices = [DeviceRecord.from_row(row) for row in rows]
+        return self.warm_from_devices(devices)
 
-    def get_by_uuid(self, uid: str) -> tuple[Optional[ResourceRecord], CacheStatus]:
-        """Retrieve resource by UUID."""
-        try:
-            uuid_key = f"{self._redis_prefix}uuid:{uid}"
-            record_json = self._client.get(uuid_key)
-            
-            if record_json:
-                logger.debug(f"[Cache] HIT uuid={uid[:8]}…")
-                # Deserialize and reconstruct ResourceRecord
-                record = self._deserialize_record(record_json)
-                return record, CacheStatus.HIT
-            else:
-                logger.debug(f"[Cache] MISS uuid={uid[:8]}…")
-                return None, CacheStatus.MISS
-        except Exception as e:
-            logger.error(f"[Cache] Error retrieving by UUID: {e}")
-            return None, CacheStatus.MISS
+    def put_poll_metadata(
+        self,
+        source_type: str,
+        source_host: str,
+        metadata: dict,
+        source_device_id: str | None = None,
+    ) -> None:
+        pkey = self.poll_key(source_type, source_host, source_device_id)
+        pipe = self._client.pipeline()
+        pipe.hset(pkey, mapping={
+            key: "" if value is None else str(value)
+            for key, value in metadata.items()
+        })
+        pipe.expire(pkey, self._ttl)
+        pipe.execute()
 
-    def get_by_alias(self, alias: str) -> tuple[Optional[ResourceRecord], CacheStatus]:
-        """Retrieve resource by alias (name/serial/custom)."""
-        try:
-            alias_key = f"{self._redis_prefix}alias:{alias.lower()}"
-            uid = self._client.get(alias_key)
-            
-            if not uid:
-                logger.debug(f"[Cache] MISS alias={alias}")
-                return None, CacheStatus.MISS
-            
-            logger.debug(f"[Cache] Alias '{alias}' → UUID {uid[:8]}…, fetching record...")
-            record, status = self.get_by_uuid(uid)
-            logger.debug(f"[Cache] get_by_uuid returned: record={record is not None}, status={status}")
-            return record, status
-        except Exception as e:
-            logger.error(f"[Cache] Error retrieving by alias: {e}", exc_info=True)
-            return None, CacheStatus.MISS
+    def invalidate_device(self, device: DeviceRecord) -> None:
+        keys = []
+        if device.ip_address:
+            keys.append(self.key(IdentifierType.IP, device.ip_address))
+        if device.serial_number:
+            keys.append(self.key(IdentifierType.SERIAL_NUMBER, device.serial_number))
+        if device.fqdn:
+            keys.append(self.key(IdentifierType.FQDN, device.fqdn))
+        if keys:
+            self._client.delete(*keys)
 
-    # ─────────────────────────────────────── housekeeping
-
-    def evict_expired(self) -> int:
-        """Remove expired entries (Redis handles this automatically)."""
-        # Redis automatically removes expired keys, but we can report stats
-        return 0
-
-    def __len__(self) -> int:
-        """Get approximate number of cached records."""
-        try:
-            pattern = f"{self._redis_prefix}uuid:*"
-            count = self._client.keys(pattern).__len__()
-            return count
-        except Exception as e:
-            logger.error(f"[Cache] Error getting cache size: {e}")
-            return 0
+    def _count_pattern(self, pattern: str) -> int:
+        """Non-blocking scan_iter helper for large keyspaces."""
+        count = 0
+        for _ in self._client.scan_iter(match=pattern, count=1000):
+            count += 1
+        return count
 
     def stats(self) -> dict:
-        """Get cache statistics."""
-        try:
-            uuid_pattern = f"{self._redis_prefix}uuid:*"
-            alias_pattern = f"{self._redis_prefix}alias:*"
-            
-            uuid_count = self._client.keys(uuid_pattern).__len__()
-            alias_count = self._client.keys(alias_pattern).__len__()
-            
-            return {
-                "live_records": uuid_count,
-                "alias_mappings": alias_count,
-                "redis_host": self._client.connection_pool.connection_kwargs.get("host"),
-                "redis_port": self._client.connection_pool.connection_kwargs.get("port"),
-                "ttl": self._ttl,
-            }
-        except Exception as e:
-            logger.error(f"[Cache] Error getting stats: {e}")
-            return {"error": str(e)}
+        """Non-blocking stats lookup using SCAN."""
+        return {
+            "ip_keys": self._count_pattern("resolver:ip:*"),
+            "serial_keys": self._count_pattern("resolver:sn:*"),
+            "fqdn_keys": self._count_pattern("resolver:fqdn:*"),
+            "source_indexes": self._count_pattern("resolver:source:*"),
+            "poll_metadata": self._count_pattern("resolver:poll:*"),
+            "ttl": self._ttl,
+        }
 
-    # ─────────────────────────────────────── private
 
-    def _deserialize_record(self, json_str: str) -> Optional[ResourceRecord]:
-        """Reconstruct ResourceRecord from JSON."""
-        try:
-            from enums import Vendor, Protocol, ResourceHealth, DeploymentType, ResourceType
-            
-            data = json.loads(json_str)
-            
-            # Reconstruct credential ref if present
-            cred_dict = data.get("credential_ref")
-            cred_ref = None
-            if cred_dict:
-                from records import CredentialRef
-                cred_ref = CredentialRef(
-                    vault_path=cred_dict.get("vault_path", ""),
-                    auth_type=cred_dict.get("auth_type", "basic"),
-                    username=cred_dict.get("username"),
-                    certificate=cred_dict.get("certificate"),
-                )
-            
-            # Parse deployment type with fallback
-            deployment_type_str = data.get("deployment_type", "On-Premises")
-            try:
-                deployment_type = DeploymentType(deployment_type_str)
-            except ValueError:
-                logger.warning(
-                    f"[Cache] Unknown deployment type '{deployment_type_str}', defaulting to ON_PREM"
-                )
-                deployment_type = DeploymentType.ON_PREM
-            
-            # Parse resource type with fallback
-            resource_type_str = data.get("resource_type", "ServerHardware")
-            try:
-                resource_type = ResourceType(resource_type_str)
-            except ValueError:
-                logger.warning(
-                    f"[Cache] Unknown resource type '{resource_type_str}', defaulting to SERVER_HARDWARE"
-                )
-                resource_type = ResourceType.SERVER_HARDWARE
-            
-            # Reconstruct ResourceRecord
-            record = ResourceRecord(
-                name=data["name"],
-                uuid=data["uuid"],
-                aliases=data.get("aliases", []),
-                ip_address=data.get("ip_address", ""),
-                management_host=data.get("management_host", ""),
-                vendor=Vendor(data.get("vendor", "HPE")),
-                deployment_type=deployment_type,
-                supported_protocols=[Protocol(p) for p in data.get("supported_protocols", [])],
-                resource_type=resource_type,
-                model=data.get("model", ""),
-                serial=data.get("serial", ""),
-                firmware=data.get("firmware", ""),
-                enclosure=data.get("enclosure", ""),
-                bay=data.get("bay"),
-                location=data.get("location"),
-                asset_tag=data.get("asset_tag"),
-                owner=data.get("owner"),
-                tags=data.get("tags", []),
-                power_state=data.get("power_state", "Unknown"),
-                health=ResourceHealth(data.get("health", "UNKNOWN")),
-                etag=data.get("etag"),
-                credential_ref=cred_ref,
-            )
-            logger.debug(
-                f"[Cache] Successfully deserialized record: {record.name} [{record.uuid[:8]}…]"
-            )
-            return record
-        except Exception as e:
-            logger.error(f"[Cache] Error deserializing record: {e}", exc_info=True)
+
+    @staticmethod
+    def _parse_datetime(value: object) -> Optional[datetime]:
+        if not value:
             return None
+        if isinstance(value, datetime):
+            return value
+        try:
+            return datetime.fromisoformat(str(value))
+        except ValueError:
+            return None
+
+    @classmethod
+    def _deserialize_device(cls, raw: str) -> DeviceRecord:
+        """Standardized OASF deserialization without legacy compatibility fallbacks."""
+        data = json.loads(raw)
+        return DeviceRecord(
+            id=str(data.get("id") or ""),
+            serial_number=str(data.get("serial_number") or ""),
+            ip_address=data.get("ip_address"),
+            fqdn=data.get("fqdn"),
+            management_source=str(data.get("management_source") or ""),
+            source_host=data.get("source_host"),
+            source_device_id=data.get("source_device_id"),
+            device_type=data.get("device_type"),
+            last_seen=cls._parse_datetime(data.get("last_seen")),
+            created_at=cls._parse_datetime(data.get("created_at")),
+            updated_at=cls._parse_datetime(data.get("updated_at")),
+        )

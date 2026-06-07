@@ -1,229 +1,127 @@
-"""
-Power Operation Executor
-=========================
-Handles power-on operations for both OneView and CoM managed servers.
-Uses different MCP tools based on protocol type.
-"""
-
-from __future__ import annotations
-
 import logging
-from typing import Optional
-
-from enums import Protocol, PowerAction
-from records import ExecutionContext
+import os
+from records import DeviceRecord, RouteResolution
+from protocol_discovery import normalize_management_source
 
 logger = logging.getLogger(__name__)
 
 
-class PowerOperationExecutor:
-    """
-    Orchestrates power operations using protocol-specific handlers.
-    """
+class OneViewHandler:
+    """Handler for HPE OneView operations on generalized infrastructure."""
 
-    def __init__(self):
-        self.oneview_handler = OneViewPowerHandler()
-        self.coms_handler = COMSPowerHandler()
-
-    def execute_power_operation(
-        self,
-        ctx: ExecutionContext,
-        action: PowerAction = PowerAction.ON,
-    ) -> dict:
-        """
-        Execute power operation based on selected protocol.
-
-        Parameters
-        ----------
-        ctx    : ExecutionContext from resolver
-        action : PowerAction (ON, OFF, RESET, COLD, STATUS)
-
-        Returns
-        -------
-        Operation result
-        """
-        protocol = ctx.selected_protocol
-
+    def execute(self, context: dict) -> dict:
         logger.info(
-            f"[PowerOps] Executing {action.value} on {ctx.resource_name} "
-            f"via {protocol.value} protocol"
+            "[Execution] OneView Handler invoking endpoint %s for action %s",
+            context["api_endpoint"],
+            context["action"],
         )
+        return {
+            "status": "success",
+            "handler": "ONEVIEW",
+            "action": context["action"],
+            "api_endpoint": context["api_endpoint"],
+        }
 
-        if protocol == Protocol.ONEVIEW:
-            return self.oneview_handler.execute(ctx, action)
-        elif protocol == Protocol.COMS:
-            return self.coms_handler.execute(ctx, action)
+
+class ComsHandler:
+    """Handler for HPE COMS operations on generalized infrastructure."""
+
+    def execute(self, context: dict) -> dict:
+        logger.info(
+            "[Execution] COMS Handler invoking endpoint %s for action %s",
+            context["api_endpoint"],
+            context["action"],
+        )
+        return {
+            "status": "success",
+            "handler": "COMS",
+            "action": context["action"],
+            "api_endpoint": context["api_endpoint"],
+        }
+
+
+class ExecutionOrchestrator:
+    """
+    Modular, extensible execution orchestrator for infrastructure routing.
+    Handles operational execution by dispatching to registered handlers.
+    """
+
+    def __init__(self) -> None:
+        self._handlers = {}
+        # Register default OASF management source handlers
+        self.register_handler("oneview", OneViewHandler())
+        self.register_handler("coms", ComsHandler())
+
+    def register_handler(self, name: str, handler: object) -> None:
+        self._handlers[name.lower()] = handler
+
+    def build_execution_context(self, route: RouteResolution, action: str, category: str) -> dict:
+        """Construct the execution context payload, resolving endpoints dynamically."""
+        device = route.device
+        source = normalize_management_source(device.management_source)
+
+        # Build API endpoint base on mock port
+        mock_port = os.getenv("MOCK_AGENT_PORT")
+        mock_host = os.getenv("MOCK_AGENT_HOST", "localhost")
+
+        if mock_port:
+            host = f"{mock_host}:{mock_port}"
+            scheme = "http"
         else:
-            return {
-                "status": "error",
-                "error": f"Unsupported protocol: {protocol.value}",
-                "resource_uuid": ctx.resource_uuid,
-            }
+            host = device.source_host or "localhost"
+            scheme = "https"
 
+        uuid = device.source_device_id or device.id
+        device_type = (device.device_type or "").strip().lower()
 
-class OneViewPowerHandler:
-    """
-    OneView-specific power operation handler.
-    Uses HPE OneView API for on-premises servers.
-    """
+        if source == "oneview":
+            if device_type == "switch":
+                endpoint = f"{scheme}://{host}/rest/v1/switches/{uuid}"
+            elif device_type == "router":
+                endpoint = f"{scheme}://{host}/rest/v1/routers/{uuid}"
+            elif device_type == "firewall":
+                endpoint = f"{scheme}://{host}/rest/v1/firewalls/{uuid}"
+            elif device_type == "storage":
+                endpoint = f"{scheme}://{host}/rest/v1/storage-systems/{uuid}"
+            elif device_type == "server":
+                endpoint = f"{scheme}://{host}/rest/v1/server-hardware/{uuid}"
+            else:
+                endpoint = f"{scheme}://{host}/rest/v1/devices/{uuid}"
+        elif source == "coms":
+            if device_type == "switch":
+                endpoint = f"{scheme}://{host}/compute-ops/v1/switches/{uuid}"
+            elif device_type == "router":
+                endpoint = f"{scheme}://{host}/compute-ops/v1/routers/{uuid}"
+            elif device_type == "firewall":
+                endpoint = f"{scheme}://{host}/compute-ops/v1/firewalls/{uuid}"
+            elif device_type == "storage":
+                endpoint = f"{scheme}://{host}/compute-ops/v1/storage-systems/{uuid}"
+            elif device_type == "server":
+                endpoint = f"{scheme}://{host}/compute-ops/v1/servers/{uuid}"
+            else:
+                endpoint = f"{scheme}://{host}/compute-ops/v1/devices/{uuid}"
+        else:
+            endpoint = f"{scheme}://{host}/rest/v1/devices/{uuid}"
 
-    def execute(self, ctx: ExecutionContext, action: PowerAction) -> dict:
-        """
-        Execute power operation via OneView API.
-
-        Simulates:
-        - Authentication to OneView appliance
-        - Server lookup by UUID
-        - Power state transition
-        - Status verification
-        """
-        logger.info(
-            f"[OneView] Power {action.value}: {ctx.resource_name} "
-            f"at {ctx.endpoint}"
-        )
-
-        try:
-            # Simulate OneView API call
-            operation_id = self._simulate_oneview_api(ctx, action)
-
-            result = {
-                "status": "success",
-                "protocol": "OneView",
-                "resource_uuid": ctx.resource_uuid,
-                "resource_name": ctx.resource_name,
-                "action": action.value,
-                "operation_id": operation_id,
-                "endpoint": ctx.endpoint,
-                "message": f"Power {action.value} initiated on {ctx.resource_name} via OneView",
-                "deployment_type": "On-Premises",
-            }
-
-            logger.info(
-                f"[OneView] ✓ Power {action.value} succeeded: {ctx.resource_name} "
-                f"(Op ID: {operation_id})"
-            )
-            return result
-
-        except Exception as e:
-            logger.error(f"[OneView] ✗ Power operation failed: {e}")
-            return {
-                "status": "error",
-                "protocol": "OneView",
-                "resource_uuid": ctx.resource_uuid,
-                "resource_name": ctx.resource_name,
-                "error": str(e),
-                "endpoint": ctx.endpoint,
-            }
-
-    def _simulate_oneview_api(self, ctx: ExecutionContext, action: PowerAction) -> str:
-        """
-        Simulate OneView API call.
-        In production: Use OneView SDK or REST API
-        """
-        import uuid as _uuid
-
-        # Map action to OneView API call
-        action_map = {
-            PowerAction.ON: "On",
-            PowerAction.OFF: "Off",
-            PowerAction.RESET: "Reset",
-            PowerAction.COLD: "ColdBoot",
-            PowerAction.STATUS: "NoOp",
+        return {
+            "management_source": source.upper(),
+            "source_host": device.source_host,
+            "api_endpoint": endpoint,
+            "action": action,
+            "category": category,
+            "serial_number": device.serial_number,
+            "credential_ref": route.credential_ref,
+            "device_type": device_type or None,
         }
 
-        api_action = action_map.get(action, "NoOp")
-        operation_id = str(_uuid.uuid4())
-
-        logger.debug(
-            f"[OneView.API] POST /rest/server-profiles/{ctx.resource_uuid}/powerState "
-            f"action={api_action}"
-        )
-
-        # Simulated API response time
-        return operation_id
+    def execute_operation(self, context: dict) -> dict:
+        """Route the operation to the correct registered management source handler."""
+        source = context["management_source"].lower()
+        handler = self._handlers.get(source)
+        if handler is not None:
+            return handler.execute(context)
+        else:
+            raise ValueError(f"Unsupported management source for execution: {context['management_source']}")
 
 
-class COMSPowerHandler:
-    """
-    COMS (Compute Ops) Power handler.
-    Uses HPE Compute Ops Management Service (cloud-based).
-    """
 
-    def execute(self, ctx: ExecutionContext, action: PowerAction) -> dict:
-        """
-        Execute power operation via COMS API.
-
-        Simulates:
-        - Authentication to COMS cloud service
-        - Server lookup by resource ID
-        - Power state transition
-        - Async job tracking
-        """
-        logger.info(
-            f"[COMS] Power {action.value}: {ctx.resource_name} "
-            f"via cloud endpoint {ctx.endpoint}"
-        )
-
-        try:
-            # Simulate COMS API call
-            job_id = self._simulate_coms_api(ctx, action)
-
-            result = {
-                "status": "success",
-                "protocol": "COMS",
-                "resource_uuid": ctx.resource_uuid,
-                "resource_name": ctx.resource_name,
-                "action": action.value,
-                "job_id": job_id,
-                "endpoint": ctx.endpoint,
-                "message": f"Power {action.value} job submitted for {ctx.resource_name} via COMS",
-                "deployment_type": "Cloud",
-                "async": True,
-            }
-
-            logger.info(
-                f"[COMS] ✓ Power {action.value} job submitted: {ctx.resource_name} "
-                f"(Job ID: {job_id})"
-            )
-            return result
-
-        except Exception as e:
-            logger.error(f"[COMS] ✗ Power operation failed: {e}")
-            return {
-                "status": "error",
-                "protocol": "COMS",
-                "resource_uuid": ctx.resource_uuid,
-                "resource_name": ctx.resource_name,
-                "error": str(e),
-                "endpoint": ctx.endpoint,
-            }
-
-    def _simulate_coms_api(self, ctx: ExecutionContext, action: PowerAction) -> str:
-        """
-        Simulate COMS API call.
-        In production: Use COMS REST API or SDK
-        """
-        import uuid as _uuid
-
-        # Map action to COMS API call
-        action_map = {
-            PowerAction.ON: "powerOn",
-            PowerAction.OFF: "powerOff",
-            PowerAction.RESET: "powerReset",
-            PowerAction.COLD: "hardReset",
-            PowerAction.STATUS: "getStatus",
-        }
-
-        api_action = action_map.get(action, "getStatus")
-        job_id = str(_uuid.uuid4())
-
-        logger.debug(
-            f"[COMS.API] POST /api/v1/jobs "
-            f"resource={ctx.resource_uuid} action={api_action}"
-        )
-
-        return job_id
-
-
-# Singleton instance
-power_executor = PowerOperationExecutor()

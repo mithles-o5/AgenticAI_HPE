@@ -1,113 +1,182 @@
-"""
-Resource Resolver — Core Orchestrator
-=======================================
-Implements all 6 steps of the resolver spec:
-
-  Step 1  Resource Identification  — map name/alias/UUID → ResourceRecord
-  Step 2  Cache Utilization        — check cache first, fallback to registry/CMDB
-  Step 3  Vendor & Capability      — read vendor + supported_protocols from record
-  Step 4  Action Classification    — Provisioning vs Operational
-  Step 5  Protocol Selection       — COMS / OneView decision tree
-  Step 6  Execution Context        — assemble and return ExecutionContext to agent
-
-Output → ExecutionContext (passed to Execution Agent / MCP tool)
-"""
+"""Resource resolver API: identifier to MCP routing context."""
 
 from __future__ import annotations
 
+import ipaddress
 import logging
+import time
+from typing import Optional
 
-from records import ExecutionContext, CacheStatus
-from registry import ResourceRegistry
 from cache import ResourceCache
-from selector import classify_action, select_protocol, build_endpoint
-from errors import ResourceNotFoundError
+from enums import CacheStatus, IdentifierType
+from errors import InvalidIdentifierError, ResourceNotFoundError
+from records import RouteResolution
+from registry import ResourceRegistry
+from protocol_discovery import discover_route
 
 logger = logging.getLogger(__name__)
 
 
 class ResourceResolver:
+    """Resolve IP, serial number, or FQDN to the owning management source."""
 
-    def __init__(
-        self,
-        registry: ResourceRegistry,
-        cache:    ResourceCache,
-    ) -> None:
+    def __init__(self, registry: ResourceRegistry, cache: ResourceCache) -> None:
         self.registry = registry
-        self.cache    = cache
+        self.cache = cache
 
-    # ─────────────────────────────────────────────────────────── public
+    def resolve(
+        self,
+        parsed_payload: dict,
+        identifier_type: str | IdentifierType | None = None,
+        requested_by: Optional[str] = None,
+    ) -> RouteResolution:
+        start = time.perf_counter()
+        identifier = parsed_payload.get("identifier", "").strip()
+        action = parsed_payload.get("action", "STATUS")
+        category = parsed_payload.get("category", "Operational")
 
-    def resolve(self, query: str, uuid_hint: str = "") -> ExecutionContext:
-        """
-        Full resolver pipeline — Steps 1-6.
-        Returns an ExecutionContext ready for the Execution Agent.
-        """
+        normalized_identifier = self._normalize_identifier(identifier)
+        normalized_type = self._normalize_identifier_type(
+            identifier_type,
+            normalized_identifier,
+        )
 
-        # ── Step 2: Cache check ───────────────────────────────────────────────
-        record, cache_status = self._cache_lookup(query, uuid_hint)
+        device, cache_status = self.cache.get_by_identifier(
+            normalized_identifier,
+            normalized_type,
+        )
+        cache_hit = cache_status == CacheStatus.HIT
 
-        # ── Steps 1 + 2 miss: query registry / CMDB ──────────────────────────
-        if record is None:
-            record, method = self.registry.lookup(query, uuid_hint)
-            if record is None:
-                raise ResourceNotFoundError(
-                    f"Resource not found for query '{query}'. "
-                    "Checked database, aliases, and fuzzy search. "
-                    "Check the resource name, alias, or UUID."
+        if device is None:
+            device = self.registry.lookup(normalized_identifier, normalized_type)
+            if device is not None:
+                logger.info(
+                    "[Resolver] Warming Memurai cache | sn=%s",
+                    device.serial_number,
                 )
-            self.cache.put(record)   # populate cache for next call
-            resolved_by = method
-        else:
-            resolved_by = "cache"
+                self.cache.put_device(device)
+                logger.info(
+                    "[Resolver] Memurai cache warm complete | sn=%s",
+                    device.serial_number,
+                )
 
-        # ── Step 3: Vendor & capability already on the record ─────────────────
+        resolution_ms = int((time.perf_counter() - start) * 1000)
+
+        if device is None:
+            self.registry.log_routing_audit(
+                identifier=normalized_identifier,
+                identifier_type=normalized_type,
+                resolved_source=None,
+                resolved_host=None,
+                cache_hit=cache_hit,
+                resolution_ms=resolution_ms,
+                requested_by=requested_by,
+            )
+            raise ResourceNotFoundError(
+                f"No device found for {normalized_type.value} '{normalized_identifier}'"
+            )
+
+        mcp_tool, credential_ref = discover_route(device.management_source, device.source_host)
+
+        # Build execution/routing context using ExecutionOrchestrator
+        from power_ops import ExecutionOrchestrator
+        executor = ExecutionOrchestrator()
+        
+        # Build temp resolution for context builder
+        temp_resolution = RouteResolution(
+            identifier=normalized_identifier,
+            identifier_type=normalized_type,
+            device=device,
+            mcp_tool=mcp_tool,
+            credential_ref=credential_ref,
+            cache_status=cache_status,
+            resolution_ms=resolution_ms,
+            api_endpoint="",
+            management_source=device.management_source,
+            resource={},
+            action={}
+        )
+        exec_ctx = executor.build_execution_context(temp_resolution, action, category)
+
+        result = RouteResolution(
+            identifier=normalized_identifier,
+            identifier_type=normalized_type,
+            device=device,
+            mcp_tool=mcp_tool,
+            credential_ref=credential_ref,
+            cache_status=cache_status,
+            resolution_ms=resolution_ms,
+            api_endpoint=exec_ctx["api_endpoint"],
+            management_source=device.management_source,
+            resource={
+                "name": device.fqdn or device.serial_number,
+                "vendor": "HPE"
+            },
+            action={
+                "category": exec_ctx["category"],
+                "action": exec_ctx["action"]
+            }
+        )
+
+        self.registry.log_routing_audit(
+            identifier=normalized_identifier,
+            identifier_type=normalized_type,
+            resolved_source=device.management_source,
+            resolved_host=device.source_host,
+            cache_hit=cache_hit,
+            resolution_ms=resolution_ms,
+            requested_by=requested_by,
+        )
         logger.info(
-            f"[Resolver] Identified: {record.name} [{record.uuid[:8]}…] "
-            f"vendor={record.vendor.value} "
-            f"protocols={[p.value for p in record.supported_protocols]}"
+            "[Resolver] %s:%s -> %s/%s cache=%s %sms",
+            normalized_type.value,
+            normalized_identifier,
+            device.management_source,
+            device.source_host,
+            cache_status.value,
+            resolution_ms,
         )
+        return result
 
-        # ── Step 4: Action classification ─────────────────────────────────────
-        category, action = classify_action(query)
 
-        # ── Step 5: Protocol selection ────────────────────────────────────────
-        protocol, reason = select_protocol(record, category)
+    @staticmethod
+    def _normalize_identifier(identifier: str) -> str:
+        value = (identifier or "").strip()
+        if not value:
+            raise InvalidIdentifierError("identifier is required")
+        return value
 
-        # ── Step 6: Assemble execution context ────────────────────────────────
-        ctx = ExecutionContext(
-            resource_uuid     = record.uuid,
-            resource_name     = record.name,
-            vendor            = record.vendor,
-            action_category   = category,
-            action            = action,
-            selected_protocol = protocol,
-            protocol_reason   = reason,
-            endpoint          = build_endpoint(record, protocol),
-            credential_ref    = record.credential_ref,
-            resolved_by       = resolved_by,
-            cache_status      = cache_status,
-            query             = query,
-        )
+    @classmethod
+    def _normalize_identifier_type(
+        cls,
+        identifier_type: str | IdentifierType | None,
+        identifier: str,
+    ) -> IdentifierType:
+        if isinstance(identifier_type, IdentifierType):
+            return identifier_type
+        if identifier_type:
+            value = identifier_type.strip().lower()
+            aliases = {
+                "ip": IdentifierType.IP,
+                "ip_address": IdentifierType.IP,
+                "serial": IdentifierType.SERIAL_NUMBER,
+                "serial_number": IdentifierType.SERIAL_NUMBER,
+                "sn": IdentifierType.SERIAL_NUMBER,
+                "fqdn": IdentifierType.FQDN,
+                "hostname": IdentifierType.FQDN,
+            }
+            if value in aliases:
+                return aliases[value]
+            raise InvalidIdentifierError(f"unsupported identifier_type '{identifier_type}'")
+        return cls._infer_identifier_type(identifier)
 
-        logger.info(
-            f"[Resolver] ExecutionContext ready — "
-            f"action={action.value} protocol={protocol.value} "
-            f"endpoint={ctx.endpoint} cache={cache_status.value}"
-        )
-        return ctx
-
-    # ─────────────────────────────────────────────────────────── private
-
-    def _cache_lookup(self, query: str, uuid_hint: str):
-        if uuid_hint:
-            record, status = self.cache.get_by_uuid(uuid_hint)
-            if record:
-                return record, status
-
-        for token in query.split():
-            record, status = self.cache.get_by_alias(token)
-            if record:
-                return record, status
-
-        return None, CacheStatus.MISS
+    @staticmethod
+    def _infer_identifier_type(identifier: str) -> IdentifierType:
+        try:
+            ipaddress.ip_address(identifier)
+            return IdentifierType.IP
+        except ValueError:
+            pass
+        if "." in identifier:
+            return IdentifierType.FQDN
+        return IdentifierType.SERIAL_NUMBER
