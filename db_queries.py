@@ -8,6 +8,7 @@ from psycopg2 import extras
 
 from db import db_manager
 from enums import IdentifierType
+from errors import EndpointNotFoundError
 from protocol_discovery import normalize_management_source
 
 
@@ -95,8 +96,6 @@ class DeviceQueries:
     ) -> list[dict]:
         source = normalize_management_source(management_source)
         source_aliases = [source]
-        if source == "CoM":
-            source_aliases.extend(["com", "coms"])
         if source_host:
             query = (
                 _device_select()
@@ -171,47 +170,39 @@ class DeviceQueries:
     ) -> dict:
         """Upsert one source's inventory and remove devices no longer reported.
 
-        NOTE: The polling collectors (poll_oneview / poll_coms) read from the
-        same PostgreSQL database that this method writes to.  That means the
-        incoming ``devices`` list already reflects the current DB state, so a
-        naïve upsert+rowcount approach always reports added=0 and removed=0.
-
-        Fix: snapshot the serial numbers that exist for this (source, host)
-        pair *before* the upsert loop, then compute the diff manually:
-          - added   = serial numbers in the incoming list but NOT in the snapshot
-          - removed = serial numbers in the snapshot but NOT in the incoming list
-                      (these rows are also physically deleted below)
+        Returns:
+            dict containing:
+                "source_type": source
+                "source_host": source_host
+                "devices_found": total incoming count
+                "devices_added": number of newly added devices
+                "devices_removed": number of removed devices
         """
         source = normalize_management_source(management_source)
         device_rows = list(devices)
-        incoming_sns: set[str] = {
-            str(d["serial_number"]).strip() for d in device_rows
-        }
+        incoming_sns = {str(d["serial_number"]).strip() for d in device_rows}
         conn = db_manager.get_connection()
 
         try:
-            with conn.cursor(cursor_factory=extras.RealDictCursor) as cur:
-                # ── Step 1: snapshot existing SNs for this source/host ──────
+            with conn.cursor() as cur:
+                # 1. Fetch existing serial numbers for this source to compute accurate added/removed counts
                 cur.execute(
                     """
                     SELECT serial_number
                     FROM devices
                     WHERE lower(management_source) = lower(%s)
-                      AND lower(source_host)       = lower(%s)
+                      AND lower(source_host) = lower(%s)
                     """,
                     (source, source_host),
                 )
-                existing_sns: set[str] = {row["serial_number"] for row in cur.fetchall()}
+                existing_sns = {str(row[0]).strip() for row in cur.fetchall()}
+                
+                devices_added = len(incoming_sns - existing_sns)
+                devices_removed = len(existing_sns - incoming_sns)
 
-                # ── Step 2: diff ─────────────────────────────────────────────
-                added_sns   = incoming_sns - existing_sns   # new arrivals
-                removed_sns = existing_sns - incoming_sns   # departed devices
-
-                # ── Step 3: upsert incoming devices ──────────────────────────
-                serial_numbers: list[str] = []
+                # 2. Upsert incoming devices
                 for device in device_rows:
                     serial_number = str(device["serial_number"]).strip()
-                    serial_numbers.append(serial_number)
                     cur.execute(
                         """
                         INSERT INTO devices (
@@ -242,8 +233,8 @@ class DeviceQueries:
                         ),
                     )
 
-                # ── Step 4: delete devices no longer reported ─────────────────
-                if serial_numbers:
+                # 3. Delete old devices
+                if incoming_sns:
                     cur.execute(
                         """
                         DELETE FROM devices
@@ -251,7 +242,7 @@ class DeviceQueries:
                           AND lower(source_host) = lower(%s)
                           AND NOT (serial_number = ANY(%s))
                         """,
-                        (source, source_host, serial_numbers),
+                        (source, source_host, list(incoming_sns)),
                     )
                 else:
                     cur.execute(
@@ -262,7 +253,6 @@ class DeviceQueries:
                         """,
                         (source, source_host),
                     )
-
             conn.commit()
         except Exception:
             conn.rollback()
@@ -274,9 +264,10 @@ class DeviceQueries:
             "source_type": source,
             "source_host": source_host,
             "devices_found": len(device_rows),
-            "devices_added": len(added_sns),
-            "devices_removed": len(removed_sns),
+            "devices_added": devices_added,
+            "devices_removed": devices_removed,
         }
+
 
 
 class RoutingAuditQueries:
@@ -380,3 +371,142 @@ def get_statistics() -> dict:
         "routing_audit_by_source": StatisticsQueries.routing_audit_by_source(),
         "poll_history_by_source": StatisticsQueries.poll_history_by_source(),
     }
+
+
+# ---------------------------------------------------------------------------
+# Endpoint Registry Queries
+# ---------------------------------------------------------------------------
+
+logger_ep = __import__("logging").getLogger(__name__)
+
+
+class EndpointRegistryQueries:
+    """
+    Thread-safe lookup helper for the endpoint_registry table.
+
+    Each call acquires a pooled connection, runs the SELECT, and releases it.
+    No connection is held between calls.
+
+    Lookup priority
+    ---------------
+    1. Exact match on (vendor, device_type, action_key)
+    2. Fallback to (vendor, 'server', action_key)  — covers the case where
+       device_type in the devices table is NULL / unmapped.
+    3. Raise EndpointNotFoundError if neither resolves.
+    """
+
+    @staticmethod
+    def get_endpoint(
+        vendor: str,
+        device_type: str,
+        action_key: str,
+    ) -> dict:
+        """
+        Resolve a (vendor, device_type, action_key) triple to its exact
+        HTTP method and API path as stored in the registry.
+
+        Parameters
+        ----------
+        vendor      : normalised management source  ("oneview" / "coms")
+        device_type : device classification         ("server", "storage", …)
+        action_key  : action key as stored in the registry
+                      ("On", "Status", "get_rest_server_hardware_id", …)
+
+        Returns
+        -------
+        dict with keys:
+            ``http_method`` (str)  — e.g. "PUT"
+            ``api_path``    (str)  — e.g. "/rest/server-hardware/{id}/powerState"
+            ``device_type`` (str)  — matched device_type (may differ if fallback used)
+
+        Raises
+        ------
+        EndpointNotFoundError
+            When no row matches via exact or fallback lookup.
+        """
+        # ── Pass 1: exact match ───────────────────────────────────────────────
+        row = db_manager.execute_query(
+            """
+            SELECT http_method, api_path, device_type
+            FROM   endpoint_registry
+            WHERE  lower(vendor)      = lower(%s)
+              AND  lower(device_type) = lower(%s)
+              AND  lower(action_key)  = lower(%s)
+            LIMIT 1
+            """,
+            (vendor, device_type or "server", action_key),
+            fetch_one=True,
+        )
+
+        if row is None and (device_type or "server").lower() != "server":
+            # ── Pass 2: fallback to 'server' (most common operational type) ───
+            logger_ep.debug(
+                "[EndpointRegistry] No exact match for device_type=%r — trying 'server' fallback",
+                device_type,
+            )
+            row = db_manager.execute_query(
+                """
+                SELECT http_method, api_path, device_type
+                FROM   endpoint_registry
+                WHERE  lower(vendor)      = lower(%s)
+                  AND  lower(device_type) = 'server'
+                  AND  lower(action_key)  = lower(%s)
+                LIMIT 1
+                """,
+                (vendor, action_key),
+                fetch_one=True,
+            )
+
+        if row is None:
+            logger_ep.warning(
+                "[EndpointRegistry] No endpoint found | vendor=%r "
+                "device_type=%r action_key=%r",
+                vendor, device_type, action_key,
+            )
+            raise EndpointNotFoundError(
+                f"No endpoint registered for vendor={vendor!r} "
+                f"device_type={device_type!r} action_key={action_key!r}"
+            )
+
+        logger_ep.debug(
+            "[EndpointRegistry] Resolved | vendor=%s device_type=%s "
+            "action_key=%s → %s %s",
+            vendor, row["device_type"], action_key,
+            row["http_method"], row["api_path"],
+        )
+        return {
+            "http_method": row["http_method"],
+            "api_path":    row["api_path"],
+            "device_type": row["device_type"],
+        }
+
+    @staticmethod
+    def list_by_vendor(vendor: str) -> list[dict]:
+        """Return all registered endpoints for a vendor (useful for debugging)."""
+        rows = db_manager.execute_query(
+            """
+            SELECT device_type, action_key, http_method, api_path
+            FROM   endpoint_registry
+            WHERE  lower(vendor) = lower(%s)
+            ORDER  BY device_type, action_key
+            """,
+            (vendor,),
+            fetch_all=True,
+        )
+        return [dict(r) for r in rows] if rows else []
+
+    @staticmethod
+    def list_by_vendor_and_type(vendor: str, device_type: str) -> list[dict]:
+        """Return all endpoints for a specific (vendor, device_type) pair."""
+        rows = db_manager.execute_query(
+            """
+            SELECT action_key, http_method, api_path
+            FROM   endpoint_registry
+            WHERE  lower(vendor)      = lower(%s)
+              AND  lower(device_type) = lower(%s)
+            ORDER  BY action_key
+            """,
+            (vendor, device_type),
+            fetch_all=True,
+        )
+        return [dict(r) for r in rows] if rows else []

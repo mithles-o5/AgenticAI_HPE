@@ -47,3 +47,29 @@ CREATE TABLE IF NOT EXISTS poll_history (
 
 -- Used for faster retrieval of recently used devices and logs
 CREATE INDEX IF NOT EXISTS idx_poll_history_timestamp on poll_history(timestamp);
+
+-- ---------------------------------------------------------------------------
+-- Endpoint Registry — vendor-agnostic, DB-driven API endpoint catalogue
+-- ---------------------------------------------------------------------------
+-- Seeded from oneview_api_prompts.txt and comops_api_prompts.txt via
+-- seed_endpoint_registry.py. Replaces hardcoded if/elif endpoint trees.
+--
+-- device_type  : inferred from api_path resource segment ("server", "storage"…)
+-- action_key   : short semantic key ("On", "Status") or verbose API key
+-- api_path     : EXACT vendor API path — no generic {resource_category} allowed
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS endpoint_registry (
+    id          UUID         PRIMARY KEY DEFAULT gen_random_uuid(),
+    vendor      VARCHAR(64)  NOT NULL,
+    device_type VARCHAR(64)  NOT NULL DEFAULT 'generic',
+    action_key  VARCHAR(128) NOT NULL,
+    http_method VARCHAR(16)  NOT NULL,
+    api_path    TEXT         NOT NULL,
+    created_at  TIMESTAMPTZ  DEFAULT NOW(),
+    UNIQUE (vendor, device_type, action_key, api_path, http_method)
+);
+
+-- Covers the primary lookup pattern: vendor + device_type + action_key
+CREATE INDEX IF NOT EXISTS idx_endpoint_registry_lookup
+    ON endpoint_registry (lower(vendor), lower(device_type), lower(action_key));
+

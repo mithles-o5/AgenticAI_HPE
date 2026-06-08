@@ -23,15 +23,9 @@ def normalize_management_source(source: str) -> str:
 def get_mcp_tool_target(management_source: str) -> str:
     """Map a management source to the MCP tool the orchestrator should invoke."""
     source = normalize_management_source(management_source)
-    if source == "oneview":
-        return os.getenv("ONEVIEW_MCP_TOOL", "oneview")
-    if source == "coms":
-        return os.getenv("COMS_MCP_TOOL", "compute_ops")
-    if source == "manual":
-        return os.getenv("MANUAL_MCP_TOOL", "manual_resource")
-    if source == "static":
-        return os.getenv("STATIC_MCP_TOOL", "static_resource")
-    return os.getenv("DEFAULT_MCP_TOOL", source)
+    env_key = f"{source.upper()}_MCP_TOOL"
+    default_tool = "compute_ops" if source == "coms" else source
+    return os.getenv(env_key, default_tool)
 
 
 def get_credential_ref(
@@ -40,14 +34,8 @@ def get_credential_ref(
 ) -> Optional[str]:
     """Return a vault reference without exposing any credential material."""
     source = normalize_management_source(management_source)
-    if source == "oneview":
-        configured = os.getenv("ONEVIEW_CREDENTIAL_REF")
-    elif source == "coms":
-        configured = os.getenv("COMS_CREDENTIAL_REF")
-    elif source == "manual":
-        configured = os.getenv("MANUAL_CREDENTIAL_REF")
-    else:
-        configured = os.getenv("DEFAULT_CREDENTIAL_REF")
+    env_key = f"{source.upper()}_CREDENTIAL_REF"
+    configured = os.getenv(env_key) or os.getenv("DEFAULT_CREDENTIAL_REF")
 
     if configured:
         return configured.format(source_host=source_host or "")

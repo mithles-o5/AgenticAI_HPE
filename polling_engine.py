@@ -52,6 +52,10 @@ class PollingEngine:
         self.cache = cache
         self.dscc_client = MockDSCCClient()
         self._max_workers = max_workers
+        # Tracks the set of serial numbers seen in the PREVIOUS poll cycle per
+        # (source_type, source_host) key.  Used to compute accurate added/removed
+        # counts even when the poll collectors read from the same DB they write to.
+        self._last_known_sns: dict[tuple[str, str], set[str]] = {}
 
     # ------------------------------------------------------------------
     # Source collectors
@@ -101,12 +105,11 @@ class PollingEngine:
         """
         t0 = time.perf_counter()
         try:
-            if source_type == "oneview":
-                devices = self.poll_oneview(source_host)
-            elif source_type == "coms":
-                devices = self.poll_coms(source_host)
-            else:
-                raise ValueError(f"Unknown source_type: {source_type!r}")
+            collector_name = f"poll_{source_type.lower()}"
+            collector = getattr(self, collector_name, None)
+            if collector is None:
+                raise ValueError(f"No collector defined for source type {source_type!r}")
+            devices = collector(source_host)
 
             logger.info(
                 "[Polling][%s] Collection succeeded | host=%s devices=%d cycle=%s",
@@ -147,6 +150,7 @@ class PollingEngine:
         """
         source_type = item["source_type"]
         source_host = item["source_host"]
+        source_key  = (source_type, source_host)
         duration_ms = int((time.perf_counter() - cycle_start) * 1000)
 
         if item["status"] == "success":
@@ -169,7 +173,7 @@ class PollingEngine:
                         dev_dict.get("serial_number"), warm_exc,
                     )
 
-            # 5. Poll history
+            # 5. Poll history — use DB-computed diff counts
             PollHistoryQueries.log({
                 "source_type": source_type,
                 "source_host": source_host,

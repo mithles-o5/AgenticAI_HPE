@@ -7,4 +7,5 @@ class ResourceNotFoundError(ResolverError):
 class InvalidIdentifierError(ResolverError):
     """The supplied identifier or identifier type is invalid."""
 
-
+class EndpointNotFoundError(ResolverError):
+    """No endpoint_registry row matches the requested (vendor, action_key) pair."""
