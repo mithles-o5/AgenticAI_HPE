@@ -169,15 +169,46 @@ class DeviceQueries:
         source_host: str,
         devices: Iterable[dict],
     ) -> dict:
-        """Upsert one source's inventory and remove devices no longer reported."""
+        """Upsert one source's inventory and remove devices no longer reported.
+
+        NOTE: The polling collectors (poll_oneview / poll_coms) read from the
+        same PostgreSQL database that this method writes to.  That means the
+        incoming ``devices`` list already reflects the current DB state, so a
+        naïve upsert+rowcount approach always reports added=0 and removed=0.
+
+        Fix: snapshot the serial numbers that exist for this (source, host)
+        pair *before* the upsert loop, then compute the diff manually:
+          - added   = serial numbers in the incoming list but NOT in the snapshot
+          - removed = serial numbers in the snapshot but NOT in the incoming list
+                      (these rows are also physically deleted below)
+        """
         source = normalize_management_source(management_source)
         device_rows = list(devices)
-        serial_numbers: list[str] = []
-        added = 0
+        incoming_sns: set[str] = {
+            str(d["serial_number"]).strip() for d in device_rows
+        }
         conn = db_manager.get_connection()
 
         try:
             with conn.cursor(cursor_factory=extras.RealDictCursor) as cur:
+                # ── Step 1: snapshot existing SNs for this source/host ──────
+                cur.execute(
+                    """
+                    SELECT serial_number
+                    FROM devices
+                    WHERE lower(management_source) = lower(%s)
+                      AND lower(source_host)       = lower(%s)
+                    """,
+                    (source, source_host),
+                )
+                existing_sns: set[str] = {row["serial_number"] for row in cur.fetchall()}
+
+                # ── Step 2: diff ─────────────────────────────────────────────
+                added_sns   = incoming_sns - existing_sns   # new arrivals
+                removed_sns = existing_sns - incoming_sns   # departed devices
+
+                # ── Step 3: upsert incoming devices ──────────────────────────
+                serial_numbers: list[str] = []
                 for device in device_rows:
                     serial_number = str(device["serial_number"]).strip()
                     serial_numbers.append(serial_number)
@@ -198,7 +229,6 @@ class DeviceQueries:
                             device_type = EXCLUDED.device_type,
                             last_seen = EXCLUDED.last_seen,
                             updated_at = NOW()
-                        RETURNING (xmax = 0) AS inserted
                         """,
                         (
                             serial_number,
@@ -211,8 +241,8 @@ class DeviceQueries:
                             device.get("last_seen"),
                         ),
                     )
-                    added += int(bool(cur.fetchone()["inserted"]))
 
+                # ── Step 4: delete devices no longer reported ─────────────────
                 if serial_numbers:
                     cur.execute(
                         """
@@ -232,7 +262,7 @@ class DeviceQueries:
                         """,
                         (source, source_host),
                     )
-                removed = cur.rowcount
+
             conn.commit()
         except Exception:
             conn.rollback()
@@ -244,8 +274,8 @@ class DeviceQueries:
             "source_type": source,
             "source_host": source_host,
             "devices_found": len(device_rows),
-            "devices_added": added,
-            "devices_removed": removed,
+            "devices_added": len(added_sns),
+            "devices_removed": len(removed_sns),
         }
 
 

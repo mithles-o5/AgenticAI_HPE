@@ -166,7 +166,20 @@ class ResourceResolver:
                 "hostname": IdentifierType.FQDN,
             }
             if value in aliases:
-                return aliases[value]
+                resolved = aliases[value]
+                # Cross-validate: FQDN requires at least one dot in the identifier.
+                # If the caller (e.g. an LLM) passes identifier_type="fqdn" for a
+                # dotless token like "sge-vm-1000" or "rack41-compute-1-10140",
+                # that hint is wrong — fall back to inference so the lookup
+                # runs as serial-number instead of failing silently as FQDN.
+                if resolved is IdentifierType.FQDN and "." not in identifier:
+                    logger.debug(
+                        "[Resolver] identifier_type='fqdn' overridden → inferred type "
+                        "because identifier %r has no dot",
+                        identifier,
+                    )
+                    return cls._infer_identifier_type(identifier)
+                return resolved
             raise InvalidIdentifierError(f"unsupported identifier_type '{identifier_type}'")
         return cls._infer_identifier_type(identifier)
 
