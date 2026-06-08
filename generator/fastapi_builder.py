@@ -138,3 +138,85 @@ def {api["function_name"]}('''
     requirements_path = os.path.join(base_path, "requirements.txt")
     with open(requirements_path, "w") as f:
         f.write("fastapi\nuvicorn\npydantic\nmcp\nrequests\n")
+
+    # Generate routes.json mapping path templates to action/function names
+    routes_data = {
+        "protocol": server_name,
+        "base_url": "http://localhost:8000",
+        "endpoints": {}
+    }
+    for api in api_data:
+        routes_data["endpoints"][api["function_name"]] = {
+            "method": api["method"].upper(),
+            "path_template": api["path"],
+            "triggers": [
+                api["function_name"],
+                api["path"]
+            ],
+            "body_template": api.get("request_body")
+        }
+    routes_path = os.path.join(base_path, "routes.json")
+    with open(routes_path, "w", encoding="utf-8") as f:
+        json.dump(routes_data, f, indent=4)
+        
+    print(f"  [OK] Generated Routes Config: {routes_path}")
+
+    # Generate human prompts reference guide
+    def get_prompt_text(method, path):
+        parts = [p for p in path.split("/") if p and not p.startswith("{") and p not in ("rest", "compute-ops-mgmt")]
+        resource_desc = " ".join(parts).replace("-", " ").replace("_", " ") if parts else "resource"
+        import re
+        path_vars = re.findall(r'\{([^}]+)\}', path)
+        vars_str = " ".join(f"with {v} '<value>'" for v in path_vars)
+        if method == "GET":
+            if not path_vars: return f"List all {resource_desc}."
+            elif path.endswith("thermal"): return f"Get thermal information of server {vars_str.replace('id', 'server_id')}."
+            elif path.endswith("processors"): return f"Get processor details of server {vars_str.replace('id', 'server_id')}."
+            elif path.endswith("networkAdapters"): return f"Get network adapters of server {vars_str.replace('id', 'server_id')}."
+            elif path.endswith("powerSupplies"): return f"Get power supplies of server {vars_str.replace('id', 'server_id')}."
+            elif path.endswith("firmwareInventory"): return f"Get firmware inventory of server {vars_str.replace('id', 'server_id')}."
+            elif path.endswith("softwareInventory"): return f"Get software inventory of server {vars_str.replace('id', 'server_id')}."
+            elif path.endswith("chassis"): return f"Get chassis details of {resource_desc} {vars_str}."
+            elif path.endswith("alerts"): return f"Get alerts details for {resource_desc} {vars_str}."
+            else: return f"Get details of {resource_desc} {vars_str}."
+        elif method == "POST":
+            if "power-on" in path or "power_on" in path or path.endswith("power-on") or path.endswith("power_on"):
+                return f"Power on server {vars_str.replace('id', 'server_id')}."
+            elif "power-off" in path or "power_off" in path or path.endswith("power-off") or path.endswith("power_off"):
+                return f"Power off server {vars_str.replace('id', 'server_id')}."
+            elif "approve" in path: return f"Approve request {vars_str} with remarks 'approved'."
+            elif "test" in path: return f"Run test on {resource_desc} {vars_str}."
+            else: return f"Create a new {resource_desc} {vars_str}."
+        elif method == "DELETE": return f"Delete {resource_desc} {vars_str}."
+        elif method in ["PUT", "PATCH"]:
+            if "powerState" in path: return f"Set power state of server {vars_str.replace('id', 'server_id')} to 'On' (or 'Off' / 'Reset')."
+            else: return f"Update {resource_desc} {vars_str}."
+        return f"Execute {method} on {path}."
+
+    human_prompt_lines = [
+        "=" * 80,
+        f"  HUMAN PROMPTS REFERENCE GUIDE FOR {server_name.upper()} APIS",
+        "=" * 80,
+        "Copy and paste any of the prompts below directly into your chat with Claude.",
+        "Replace '<value>' with the actual UUID, ID, or payload values you want to target.",
+        "=" * 80 + "\n\n"
+    ]
+    for api in sorted(api_data, key=lambda x: x["function_name"]):
+        method = api["method"].upper()
+        path = api["path"]
+        func_name = api["function_name"]
+        
+        parts = [p for p in path.split("/") if p and not p.startswith("{") and p not in ("rest", "compute-ops-mgmt")]
+        resource_desc = " ".join(parts).replace("-", " ").replace("_", " ") if parts else "resource"
+        human_prompt = get_prompt_text(method, path)
+        
+        human_prompt_lines.append("=" * 80)
+        human_prompt_lines.append(f"API Goal: {resource_desc.upper()} ({method})")
+        human_prompt_lines.append(f"Prompt  : {human_prompt}")
+        human_prompt_lines.append(f"Action  : action:{func_name}")
+        human_prompt_lines.append("=" * 80 + "\n")
+        
+    human_prompts_path = os.path.join(base_path, "human_prompts.txt")
+    with open(human_prompts_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(human_prompt_lines))
+    print(f"  [OK] Generated Human Prompts Guide: {human_prompts_path}")

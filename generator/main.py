@@ -50,17 +50,18 @@ async def main():
         print("\n[ERROR] No APIs found. Exiting.")
         return
 
+    servers_dir = os.path.join(script_dir, "servers")
     # 4. Generate Server + Pydantic Models + Routes + MCP Tools
     print("\n[4/4] Generating FastAPI server and MCP Tools...")
     generate_fastapi_server(
         server_name=server_name,
         api_data=extracted_apis,
-        output_folder="servers"
+        output_folder=servers_dir
     )
     generate_mcp_tools(
         server_name=server_name,
         api_data=extracted_apis,
-        output_folder="servers"
+        output_folder=servers_dir
     )
 
     print(f"\n[DONE] Server generated successfully in servers/{server_name}")

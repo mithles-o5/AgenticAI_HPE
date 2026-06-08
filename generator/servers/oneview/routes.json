@@ -1,0 +1,334 @@
+{
+    "protocol": "oneview",
+    "base_url": "http://localhost:8000",
+    "endpoints": {
+        "post_rest_login_sessions": {
+            "method": "POST",
+            "path_template": "/rest/login-sessions",
+            "triggers": [
+                "post_rest_login_sessions",
+                "/rest/login-sessions"
+            ]
+        },
+        "post_rest_login_sessions_auth_token": {
+            "method": "POST",
+            "path_template": "/rest/login-sessions/auth-token",
+            "triggers": [
+                "post_rest_login_sessions_auth_token",
+                "/rest/login-sessions/auth-token"
+            ]
+        },
+        "post_rest_certificates_client_rabbitmq": {
+            "method": "POST",
+            "path_template": "/rest/certificates/client/rabbitmq",
+            "triggers": [
+                "post_rest_certificates_client_rabbitmq",
+                "/rest/certificates/client/rabbitmq"
+            ]
+        },
+        "get_rest_certificates_client_rabbitmq_keypair_default": {
+            "method": "GET",
+            "path_template": "/rest/certificates/client/rabbitmq/keypair/default",
+            "triggers": [
+                "get_rest_certificates_client_rabbitmq_keypair_default",
+                "/rest/certificates/client/rabbitmq/keypair/default"
+            ]
+        },
+        "get_rest_certificates_ca": {
+            "method": "GET",
+            "path_template": "/rest/certificates/ca",
+            "triggers": [
+                "get_rest_certificates_ca",
+                "/rest/certificates/ca"
+            ]
+        },
+        "delete_rest_certificates_ca_rabbitmq_readonly": {
+            "method": "DELETE",
+            "path_template": "/rest/certificates/ca/rabbitmq_readonly",
+            "triggers": [
+                "delete_rest_certificates_ca_rabbitmq_readonly",
+                "/rest/certificates/ca/rabbitmq_readonly"
+            ]
+        },
+        "get_rest_server_hardware_id_chassis": {
+            "method": "GET",
+            "path_template": "/rest/server-hardware/{id}/chassis",
+            "triggers": [
+                "get_rest_server_hardware_id_chassis",
+                "/rest/server-hardware/{id}/chassis"
+            ]
+        },
+        "get_rest_server_hardware_id_firmwareinventory": {
+            "method": "GET",
+            "path_template": "/rest/server-hardware/{id}/firmwareInventory",
+            "triggers": [
+                "get_rest_server_hardware_id_firmwareinventory",
+                "/rest/server-hardware/{id}/firmwareInventory"
+            ]
+        },
+        "get_rest_server_hardware_id_networkadapters": {
+            "method": "GET",
+            "path_template": "/rest/server-hardware/{id}/networkAdapters",
+            "triggers": [
+                "get_rest_server_hardware_id_networkadapters",
+                "/rest/server-hardware/{id}/networkAdapters"
+            ]
+        },
+        "get_rest_server_hardware_id_powersupplies": {
+            "method": "GET",
+            "path_template": "/rest/server-hardware/{id}/powerSupplies",
+            "triggers": [
+                "get_rest_server_hardware_id_powersupplies",
+                "/rest/server-hardware/{id}/powerSupplies"
+            ]
+        },
+        "get_rest_server_hardware_id_processors": {
+            "method": "GET",
+            "path_template": "/rest/server-hardware/{id}/processors",
+            "triggers": [
+                "get_rest_server_hardware_id_processors",
+                "/rest/server-hardware/{id}/processors"
+            ]
+        },
+        "get_rest_server_hardware_id_softwareinventory": {
+            "method": "GET",
+            "path_template": "/rest/server-hardware/{id}/softwareInventory",
+            "triggers": [
+                "get_rest_server_hardware_id_softwareinventory",
+                "/rest/server-hardware/{id}/softwareInventory"
+            ]
+        },
+        "get_rest_server_hardware_id_thermal": {
+            "method": "GET",
+            "path_template": "/rest/server-hardware/{id}/thermal",
+            "triggers": [
+                "get_rest_server_hardware_id_thermal",
+                "/rest/server-hardware/{id}/thermal"
+            ]
+        },
+        "get_rest_rack_managers_id_chassis_uuid": {
+            "method": "GET",
+            "path_template": "/rest/rack-managers/{id}/chassis/{uuid}",
+            "triggers": [
+                "get_rest_rack_managers_id_chassis_uuid",
+                "/rest/rack-managers/{id}/chassis/{uuid}"
+            ]
+        },
+        "post_rest_ethernet_networks_bulk": {
+            "method": "POST",
+            "path_template": "/rest/ethernet-networks/bulk",
+            "triggers": [
+                "post_rest_ethernet_networks_bulk",
+                "/rest/ethernet-networks/bulk"
+            ]
+        },
+        "put_rest_storage_volumes_id": {
+            "method": "PUT",
+            "path_template": "/rest/storage-volumes/{id}",
+            "triggers": [
+                "put_rest_storage_volumes_id",
+                "/rest/storage-volumes/{id}"
+            ]
+        },
+        "get_rest_updates": {
+            "method": "GET",
+            "path_template": "/rest/updates",
+            "triggers": [
+                "get_rest_updates",
+                "/rest/updates"
+            ]
+        },
+        "get_rest_updates_id": {
+            "method": "GET",
+            "path_template": "/rest/updates/{id}",
+            "triggers": [
+                "get_rest_updates_id",
+                "/rest/updates/{id}"
+            ]
+        },
+        "get_rest_rack_managers": {
+            "method": "GET",
+            "path_template": "/rest/rack-managers",
+            "triggers": [
+                "get_rest_rack_managers",
+                "/rest/rack-managers"
+            ]
+        },
+        "post_rest_rack_managers": {
+            "method": "POST",
+            "path_template": "/rest/rack-managers",
+            "triggers": [
+                "post_rest_rack_managers",
+                "/rest/rack-managers"
+            ]
+        },
+        "get_rest_rack_managers_chassis": {
+            "method": "GET",
+            "path_template": "/rest/rack-managers/chassis",
+            "triggers": [
+                "get_rest_rack_managers_chassis",
+                "/rest/rack-managers/chassis"
+            ]
+        },
+        "get_rest_rack_managers_managers": {
+            "method": "GET",
+            "path_template": "/rest/rack-managers/managers",
+            "triggers": [
+                "get_rest_rack_managers_managers",
+                "/rest/rack-managers/managers"
+            ]
+        },
+        "get_rest_rack_managers_partitions": {
+            "method": "GET",
+            "path_template": "/rest/rack-managers/partitions",
+            "triggers": [
+                "get_rest_rack_managers_partitions",
+                "/rest/rack-managers/partitions"
+            ]
+        },
+        "get_rest_rack_managers_id": {
+            "method": "GET",
+            "path_template": "/rest/rack-managers/{id}",
+            "triggers": [
+                "get_rest_rack_managers_id",
+                "/rest/rack-managers/{id}"
+            ]
+        },
+        "patch_rest_rack_managers_id": {
+            "method": "PATCH",
+            "path_template": "/rest/rack-managers/{id}",
+            "triggers": [
+                "patch_rest_rack_managers_id",
+                "/rest/rack-managers/{id}"
+            ]
+        },
+        "delete_rest_rack_managers_id": {
+            "method": "DELETE",
+            "path_template": "/rest/rack-managers/{id}",
+            "triggers": [
+                "delete_rest_rack_managers_id",
+                "/rest/rack-managers/{id}"
+            ]
+        },
+        "get_rest_rack_managers_id_chassis": {
+            "method": "GET",
+            "path_template": "/rest/rack-managers/{id}/chassis",
+            "triggers": [
+                "get_rest_rack_managers_id_chassis",
+                "/rest/rack-managers/{id}/chassis"
+            ]
+        },
+        "get_rest_rack_managers_id_chassis_utilization": {
+            "method": "GET",
+            "path_template": "/rest/rack-managers/{id}/chassis/utilization",
+            "triggers": [
+                "get_rest_rack_managers_id_chassis_utilization",
+                "/rest/rack-managers/{id}/chassis/utilization"
+            ]
+        },
+        "get_rest_rack_managers_id_environmentalconfiguration": {
+            "method": "GET",
+            "path_template": "/rest/rack-managers/{id}/environmentalConfiguration",
+            "triggers": [
+                "get_rest_rack_managers_id_environmentalconfiguration",
+                "/rest/rack-managers/{id}/environmentalConfiguration"
+            ]
+        },
+        "get_rest_rack_managers_id_managers": {
+            "method": "GET",
+            "path_template": "/rest/rack-managers/{id}/managers",
+            "triggers": [
+                "get_rest_rack_managers_id_managers",
+                "/rest/rack-managers/{id}/managers"
+            ]
+        },
+        "get_rest_rack_managers_id_managers_managerid": {
+            "method": "GET",
+            "path_template": "/rest/rack-managers/{id}/managers/{managerid}",
+            "triggers": [
+                "get_rest_rack_managers_id_managers_managerid",
+                "/rest/rack-managers/{id}/managers/{managerid}"
+            ]
+        },
+        "get_rest_rack_managers_id_partitions": {
+            "method": "GET",
+            "path_template": "/rest/rack-managers/{id}/partitions",
+            "triggers": [
+                "get_rest_rack_managers_id_partitions",
+                "/rest/rack-managers/{id}/partitions"
+            ]
+        },
+        "get_rest_rack_managers_id_partitions_uuid": {
+            "method": "GET",
+            "path_template": "/rest/rack-managers/{id}/partitions/{uuid}",
+            "triggers": [
+                "get_rest_rack_managers_id_partitions_uuid",
+                "/rest/rack-managers/{id}/partitions/{uuid}"
+            ]
+        },
+        "get_rest_rack_managers_id_remotesupportsettings": {
+            "method": "GET",
+            "path_template": "/rest/rack-managers/{id}/remoteSupportSettings",
+            "triggers": [
+                "get_rest_rack_managers_id_remotesupportsettings",
+                "/rest/rack-managers/{id}/remoteSupportSettings"
+            ]
+        },
+        "get_rest_server_hardware": {
+            "method": "GET",
+            "path_template": "/rest/server-hardware",
+            "triggers": [
+                "get_rest_server_hardware",
+                "/rest/server-hardware"
+            ]
+        },
+        "post_rest_server_hardware": {
+            "method": "POST",
+            "path_template": "/rest/server-hardware",
+            "triggers": [
+                "post_rest_server_hardware",
+                "/rest/server-hardware"
+            ]
+        },
+        "get_rest_server_hardware_firmware": {
+            "method": "GET",
+            "path_template": "/rest/server-hardware/*/firmware",
+            "triggers": [
+                "get_rest_server_hardware_firmware",
+                "/rest/server-hardware/*/firmware"
+            ]
+        },
+        "post_rest_server_hardware_discovery": {
+            "method": "POST",
+            "path_template": "/rest/server-hardware/discovery",
+            "triggers": [
+                "post_rest_server_hardware_discovery",
+                "/rest/server-hardware/discovery"
+            ]
+        },
+        "post_rest_server_hardware_firmware_compliance": {
+            "method": "POST",
+            "path_template": "/rest/server-hardware/firmware-compliance",
+            "triggers": [
+                "post_rest_server_hardware_firmware_compliance",
+                "/rest/server-hardware/firmware-compliance"
+            ]
+        },
+        "get_rest_server_hardware_schema": {
+            "method": "GET",
+            "path_template": "/rest/server-hardware/schema",
+            "triggers": [
+                "get_rest_server_hardware_schema",
+                "/rest/server-hardware/schema"
+            ]
+        },
+        "get_rest_server_hardware_id": {
+            "method": "GET",
+            "path_template": "/rest/server-hardware/{id}",
+            "triggers": [
+                "get_rest_server_hardware_id",
+                "/rest/server-hardware/{id}"
+            ]
+        }
+    }
+}
