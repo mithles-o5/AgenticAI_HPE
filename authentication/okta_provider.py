@@ -167,7 +167,7 @@ class OktaProvider(SSOProvider):
             headers={"Content-Type": "application/x-www-form-urlencoded"}
         )
         try:
-            with urllib.request.urlopen(req) as resp:
+            with urllib.request.urlopen(req, timeout=5) as resp:
                 data = json.loads(resp.read().decode("utf-8"))
                 # Prefer access_token; fall back to id_token for userinfo calls
                 return data.get("access_token") or data.get("id_token"), "Login successful."
@@ -183,7 +183,7 @@ class OktaProvider(SSOProvider):
         url = f"https://{OKTA_DOMAIN}/oauth2/default/v1/userinfo"
         req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}"})
         try:
-            with urllib.request.urlopen(req) as resp:
+            with urllib.request.urlopen(req, timeout=5) as resp:
                 return json.loads(resp.read().decode())
         except Exception:
             return None

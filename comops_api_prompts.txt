@@ -1,0 +1,1702 @@
+================================================================================
+  PROMPT REFERENCE FOR COMOPS APIS
+================================================================================
+Status values: 'OK' (always worked), 'WAS BROKEN - FIXED' (patched parameters)
+================================================================================
+
+
+================================================================================
+Action Key  : Allocate
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1/{resource_category}
+Prompt      : action:Allocate
+Parameters  : {"resource_category": "<resource_category>"}
+Request Body: {"name": "{resource_name}"}
+================================================================================
+
+================================================================================
+Action Key  : Create
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1/{resource_category}
+Prompt      : action:Create
+Parameters  : {"resource_category": "<resource_category>"}
+Request Body: {"name": "{resource_name}"}
+================================================================================
+
+================================================================================
+Action Key  : Deallocate
+Status      : OK
+Method      : DELETE
+API Path    : /compute-ops-mgmt/v1/{resource_category}/{uuid}
+Prompt      : action:Deallocate
+Parameters  : {"resource_category": "<resource_category>", "uuid": "<uuid>"}
+================================================================================
+
+================================================================================
+Action Key  : Delete
+Status      : OK
+Method      : DELETE
+API Path    : /compute-ops-mgmt/v1/{resource_category}/{uuid}
+Prompt      : action:Delete
+Parameters  : {"resource_category": "<resource_category>", "uuid": "<uuid>"}
+================================================================================
+
+================================================================================
+Action Key  : List
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/{resource_category}
+Prompt      : action:List
+Parameters  : {"resource_category": "<resource_category>"}
+================================================================================
+
+================================================================================
+Action Key  : Off
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1/{resource_category}/{uuid}/power-off
+Prompt      : action:Off
+Parameters  : {"resource_category": "<resource_category>", "uuid": "<uuid>"}
+Request Body: {}
+================================================================================
+
+================================================================================
+Action Key  : On
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1/{resource_category}/{uuid}/power-on
+Prompt      : action:On
+Parameters  : {"resource_category": "<resource_category>", "uuid": "<uuid>"}
+Request Body: {}
+================================================================================
+
+================================================================================
+Action Key  : Status
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/{resource_category}/{uuid}
+Prompt      : action:Status
+Parameters  : {"resource_category": "<resource_category>", "uuid": "<uuid>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_compute_ops_mgmt_v1_groups_group_id
+Status      : WAS BROKEN - FIXED
+Method      : DELETE
+API Path    : /compute-ops-mgmt/v1/groups/{group_id}
+Prompt      : action:delete_compute_ops_mgmt_v1_groups_group_id
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_compute_ops_mgmt_v1_metrics_configurations_id
+Status      : OK
+Method      : DELETE
+API Path    : /compute-ops-mgmt/v1/metrics-configurations/{id}
+Prompt      : action:delete_compute_ops_mgmt_v1_metrics_configurations_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_compute_ops_mgmt_v1_servers_id
+Status      : OK
+Method      : DELETE
+API Path    : /compute-ops-mgmt/v1/servers/{id}
+Prompt      : action:delete_compute_ops_mgmt_v1_servers_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_compute_ops_mgmt_v1_settings_id
+Status      : OK
+Method      : DELETE
+API Path    : /compute-ops-mgmt/v1/settings/{id}
+Prompt      : action:delete_compute_ops_mgmt_v1_settings_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_compute_ops_mgmt_v1beta1_activation_keys_activation_key
+Status      : OK
+Method      : DELETE
+API Path    : /compute-ops-mgmt/v1beta1/activation-keys/{activation_key}
+Prompt      : action:delete_compute_ops_mgmt_v1beta1_activation_keys_activation_key
+Parameters  : {"activation_key": "<activation_key>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_compute_ops_mgmt_v1beta1_external_services_id
+Status      : OK
+Method      : DELETE
+API Path    : /compute-ops-mgmt/v1beta1/external-services/{id}
+Prompt      : action:delete_compute_ops_mgmt_v1beta1_external_services_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_compute_ops_mgmt_v1beta1_filters_id
+Status      : OK
+Method      : DELETE
+API Path    : /compute-ops-mgmt/v1beta1/filters/{id}
+Prompt      : action:delete_compute_ops_mgmt_v1beta1_filters_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_compute_ops_mgmt_v1beta1_oneview_appliances_device_id
+Status      : WAS BROKEN - FIXED
+Method      : DELETE
+API Path    : /compute-ops-mgmt/v1beta1/oneview-appliances/{device_id}
+Prompt      : action:delete_compute_ops_mgmt_v1beta1_oneview_appliances_device_id
+Parameters  : {"device_id": "<device_id>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_compute_ops_mgmt_v1beta1_server_locations_location_id_servers
+Status      : OK
+Method      : DELETE
+API Path    : /compute-ops-mgmt/v1beta1/server-locations/{location_id}/servers
+Prompt      : action:delete_compute_ops_mgmt_v1beta1_server_locations_location_id_servers
+Parameters  : {"location_id": "<location_id>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_compute_ops_mgmt_v1beta1_settings_id
+Status      : OK
+Method      : DELETE
+API Path    : /compute-ops-mgmt/v1beta1/settings/{id}
+Prompt      : action:delete_compute_ops_mgmt_v1beta1_settings_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_compute_ops_mgmt_v1beta1_webhooks_webhook_id
+Status      : OK
+Method      : DELETE
+API Path    : /compute-ops-mgmt/v1beta1/webhooks/{webhook_id}
+Prompt      : action:delete_compute_ops_mgmt_v1beta1_webhooks_webhook_id
+Parameters  : {"webhook_id": "<webhook_id>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_compute_ops_mgmt_v1beta2_appliances_device_id
+Status      : WAS BROKEN - FIXED
+Method      : DELETE
+API Path    : /compute-ops-mgmt/v1beta2/appliances/{device_id}
+Prompt      : action:delete_compute_ops_mgmt_v1beta2_appliances_device_id
+Parameters  : {"device_id": "<device_id>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_compute_ops_mgmt_v1beta2_approval_policies_policy_id
+Status      : OK
+Method      : DELETE
+API Path    : /compute-ops-mgmt/v1beta2/approval-policies/{policy_id}
+Prompt      : action:delete_compute_ops_mgmt_v1beta2_approval_policies_policy_id
+Parameters  : {"policy_id": "<policy_id>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_compute_ops_mgmt_v1beta2_schedules_id
+Status      : OK
+Method      : DELETE
+API Path    : /compute-ops-mgmt/v1beta2/schedules/{id}
+Prompt      : action:delete_compute_ops_mgmt_v1beta2_schedules_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_compute_ops_mgmt_v1beta2_servers_id
+Status      : OK
+Method      : DELETE
+API Path    : /compute-ops-mgmt/v1beta2/servers/{id}
+Prompt      : action:delete_compute_ops_mgmt_v1beta2_servers_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_compute_ops_mgmt_v1beta3_groups_group_id
+Status      : WAS BROKEN - FIXED
+Method      : DELETE
+API Path    : /compute-ops-mgmt/v1beta3/groups/{group_id}
+Prompt      : action:delete_compute_ops_mgmt_v1beta3_groups_group_id
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_compute_ops_v1beta1_server_settings_id
+Status      : OK
+Method      : DELETE
+API Path    : /compute-ops/v1beta1/server-settings/{id}
+Prompt      : action:delete_compute_ops_v1beta1_server_settings_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_compute_ops_v1beta2_groups_group_id
+Status      : WAS BROKEN - FIXED
+Method      : DELETE
+API Path    : /compute-ops/v1beta2/groups/{group_id}
+Prompt      : action:delete_compute_ops_v1beta2_groups_group_id
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_appliance_firmware_bundles
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/appliance-firmware-bundles
+Prompt      : action:get_compute_ops_mgmt_v1_appliance_firmware_bundles
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_appliance_firmware_bundles_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/appliance-firmware-bundles/{id}
+Prompt      : action:get_compute_ops_mgmt_v1_appliance_firmware_bundles_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_async_operations
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/async-operations
+Prompt      : action:get_compute_ops_mgmt_v1_async_operations
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_async_operations_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/async-operations/{id}
+Prompt      : action:get_compute_ops_mgmt_v1_async_operations_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_firmware_bundles
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/firmware-bundles
+Prompt      : action:get_compute_ops_mgmt_v1_firmware_bundles
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_firmware_bundles_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/firmware-bundles/{id}
+Prompt      : action:get_compute_ops_mgmt_v1_firmware_bundles_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_firmware_bundles_id_bundle_details
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/firmware-bundles/{id}/bundle-details
+Prompt      : action:get_compute_ops_mgmt_v1_firmware_bundles_id_bundle_details
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_groups
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/groups
+Prompt      : action:get_compute_ops_mgmt_v1_groups
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_groups_group_id
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/groups/{group_id}
+Prompt      : action:get_compute_ops_mgmt_v1_groups_group_id
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_groups_group_id_compliance
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/groups/{group_id}/compliance
+Prompt      : action:get_compute_ops_mgmt_v1_groups_group_id_compliance
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_groups_group_id_compliance_compliance_id
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/groups/{group_id}/compliance/{compliance_id}
+Prompt      : action:get_compute_ops_mgmt_v1_groups_group_id_compliance_compliance_id
+Parameters  : {"group_id": "<group_id>", "compliance_id": "<compliance_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_groups_group_id_devices
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/groups/{group_id}/devices
+Prompt      : action:get_compute_ops_mgmt_v1_groups_group_id_devices
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_groups_group_id_external_storage_compliance
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/groups/{group_id}/external-storage-compliance
+Prompt      : action:get_compute_ops_mgmt_v1_groups_group_id_external_storage_compliance
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_jobs
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/jobs
+Prompt      : action:get_compute_ops_mgmt_v1_jobs
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_jobs_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/jobs/{id}
+Prompt      : action:get_compute_ops_mgmt_v1_jobs_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_metrics_configurations
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/metrics-configurations
+Prompt      : action:get_compute_ops_mgmt_v1_metrics_configurations
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_metrics_configurations_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/metrics-configurations/{id}
+Prompt      : action:get_compute_ops_mgmt_v1_metrics_configurations_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_servers
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/servers
+Prompt      : action:get_compute_ops_mgmt_v1_servers
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_servers_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/servers/{id}
+Prompt      : action:get_compute_ops_mgmt_v1_servers_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_servers_id_alerts
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/servers/{id}/alerts
+Prompt      : action:get_compute_ops_mgmt_v1_servers_id_alerts
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_settings
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/settings
+Prompt      : action:get_compute_ops_mgmt_v1_settings
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_settings_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/settings/{id}
+Prompt      : action:get_compute_ops_mgmt_v1_settings_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_user_preferences
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/user-preferences
+Prompt      : action:get_compute_ops_mgmt_v1_user_preferences
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1_user_preferences_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1/user-preferences/{id}
+Prompt      : action:get_compute_ops_mgmt_v1_user_preferences_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_accounts_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/accounts/{id}
+Prompt      : action:get_compute_ops_mgmt_v1beta1_accounts_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_accounts_id_tenants
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/accounts/{id}/tenants
+Prompt      : action:get_compute_ops_mgmt_v1beta1_accounts_id_tenants
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_activation_keys
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/activation-keys
+Prompt      : action:get_compute_ops_mgmt_v1beta1_activation_keys
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_ahs_files
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/ahs-files
+Prompt      : action:get_compute_ops_mgmt_v1beta1_ahs_files
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_ahs_files_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/ahs-files/{id}
+Prompt      : action:get_compute_ops_mgmt_v1beta1_ahs_files_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_ahs_files_id_download
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/ahs-files/{id}/download
+Prompt      : action:get_compute_ops_mgmt_v1beta1_ahs_files_id_download
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_appliance_firmware_bundles
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/appliance-firmware-bundles
+Prompt      : action:get_compute_ops_mgmt_v1beta1_appliance_firmware_bundles
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_appliance_firmware_bundles_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/appliance-firmware-bundles/{id}
+Prompt      : action:get_compute_ops_mgmt_v1beta1_appliance_firmware_bundles_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_async_operations
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/async-operations
+Prompt      : action:get_compute_ops_mgmt_v1beta1_async_operations
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_async_operations_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/async-operations/{id}
+Prompt      : action:get_compute_ops_mgmt_v1beta1_async_operations_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_energy_by_entity
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/energy-by-entity
+Prompt      : action:get_compute_ops_mgmt_v1beta1_energy_by_entity
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_energy_over_time
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/energy-over-time
+Prompt      : action:get_compute_ops_mgmt_v1beta1_energy_over_time
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_external_services
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/external-services
+Prompt      : action:get_compute_ops_mgmt_v1beta1_external_services
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_external_services_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/external-services/{id}
+Prompt      : action:get_compute_ops_mgmt_v1beta1_external_services_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_filters
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/filters
+Prompt      : action:get_compute_ops_mgmt_v1beta1_filters
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_filters_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/filters/{id}
+Prompt      : action:get_compute_ops_mgmt_v1beta1_filters_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_filters_id_matches
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/filters/{id}/matches
+Prompt      : action:get_compute_ops_mgmt_v1beta1_filters_id_matches
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_filters_properties
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/filters/properties
+Prompt      : action:get_compute_ops_mgmt_v1beta1_filters_properties
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_oneview_appliances
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/oneview-appliances
+Prompt      : action:get_compute_ops_mgmt_v1beta1_oneview_appliances
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_oneview_appliances_device_id
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/oneview-appliances/{device_id}
+Prompt      : action:get_compute_ops_mgmt_v1beta1_oneview_appliances_device_id
+Parameters  : {"device_id": "<device_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_oneview_server_templates
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/oneview-server-templates
+Prompt      : action:get_compute_ops_mgmt_v1beta1_oneview_server_templates
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_oneview_server_templates_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/oneview-server-templates/{id}
+Prompt      : action:get_compute_ops_mgmt_v1beta1_oneview_server_templates_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_oneview_settings
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/oneview-settings
+Prompt      : action:get_compute_ops_mgmt_v1beta1_oneview_settings
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_server_locations_location_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/server-locations/{location_id}
+Prompt      : action:get_compute_ops_mgmt_v1beta1_server_locations_location_id
+Parameters  : {"location_id": "<location_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_settings
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/settings
+Prompt      : action:get_compute_ops_mgmt_v1beta1_settings
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_settings_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/settings/{id}
+Prompt      : action:get_compute_ops_mgmt_v1beta1_settings_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_user_preferences
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/user-preferences
+Prompt      : action:get_compute_ops_mgmt_v1beta1_user_preferences
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_user_preferences_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/user-preferences/{id}
+Prompt      : action:get_compute_ops_mgmt_v1beta1_user_preferences_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_utilization_by_entity
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/utilization-by-entity
+Prompt      : action:get_compute_ops_mgmt_v1beta1_utilization_by_entity
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_utilization_over_time
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/utilization-over-time
+Prompt      : action:get_compute_ops_mgmt_v1beta1_utilization_over_time
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_webhooks
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/webhooks
+Prompt      : action:get_compute_ops_mgmt_v1beta1_webhooks
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_webhooks_webhook_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/webhooks/{webhook_id}
+Prompt      : action:get_compute_ops_mgmt_v1beta1_webhooks_webhook_id
+Parameters  : {"webhook_id": "<webhook_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/webhooks/{webhook_id}/deliveries
+Prompt      : action:get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries
+Parameters  : {"webhook_id": "<webhook_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries_delivery_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta1/webhooks/{webhook_id}/deliveries/{delivery_id}
+Prompt      : action:get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries_delivery_id
+Parameters  : {"webhook_id": "<webhook_id>", "delivery_id": "<delivery_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_activities
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/activities
+Prompt      : action:get_compute_ops_mgmt_v1beta2_activities
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_appliances
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/appliances
+Prompt      : action:get_compute_ops_mgmt_v1beta2_appliances
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_appliances_device_id
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/appliances/{device_id}
+Prompt      : action:get_compute_ops_mgmt_v1beta2_appliances_device_id
+Parameters  : {"device_id": "<device_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_appliances_device_id_certificate
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/appliances/{device_id}/certificate
+Prompt      : action:get_compute_ops_mgmt_v1beta2_appliances_device_id_certificate
+Parameters  : {"device_id": "<device_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_approval_policies
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/approval-policies
+Prompt      : action:get_compute_ops_mgmt_v1beta2_approval_policies
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_approval_policies_policy_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/approval-policies/{policy_id}
+Prompt      : action:get_compute_ops_mgmt_v1beta2_approval_policies_policy_id
+Parameters  : {"policy_id": "<policy_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_approval_requests
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/approval-requests
+Prompt      : action:get_compute_ops_mgmt_v1beta2_approval_requests
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_approval_requests_request_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/approval-requests/{request_id}
+Prompt      : action:get_compute_ops_mgmt_v1beta2_approval_requests_request_id
+Parameters  : {"request_id": "<request_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_firmware_bundles
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/firmware-bundles
+Prompt      : action:get_compute_ops_mgmt_v1beta2_firmware_bundles
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_firmware_bundles_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/firmware-bundles/{id}
+Prompt      : action:get_compute_ops_mgmt_v1beta2_firmware_bundles_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_job_templates
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/job-templates
+Prompt      : action:get_compute_ops_mgmt_v1beta2_job_templates
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_job_templates_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/job-templates/{id}
+Prompt      : action:get_compute_ops_mgmt_v1beta2_job_templates_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_jobs
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/jobs
+Prompt      : action:get_compute_ops_mgmt_v1beta2_jobs
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_jobs_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/jobs/{id}
+Prompt      : action:get_compute_ops_mgmt_v1beta2_jobs_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_reports
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/reports
+Prompt      : action:get_compute_ops_mgmt_v1beta2_reports
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_reports_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/reports/{id}
+Prompt      : action:get_compute_ops_mgmt_v1beta2_reports_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_reports_id_data
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/reports/{id}/data
+Prompt      : action:get_compute_ops_mgmt_v1beta2_reports_id_data
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_schedules
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/schedules
+Prompt      : action:get_compute_ops_mgmt_v1beta2_schedules
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_schedules_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/schedules/{id}
+Prompt      : action:get_compute_ops_mgmt_v1beta2_schedules_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_schedules_id_history
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/schedules/{id}/history
+Prompt      : action:get_compute_ops_mgmt_v1beta2_schedules_id_history
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_schedules_id_history_history_id
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/schedules/{id}/history/{history_id}
+Prompt      : action:get_compute_ops_mgmt_v1beta2_schedules_id_history_history_id
+Parameters  : {"id": "<id>", "history_id": "<history_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_server_warranty
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/server-warranty
+Prompt      : action:get_compute_ops_mgmt_v1beta2_server_warranty
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_server_warranty_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/server-warranty/{id}
+Prompt      : action:get_compute_ops_mgmt_v1beta2_server_warranty_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_servers
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/servers
+Prompt      : action:get_compute_ops_mgmt_v1beta2_servers
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_servers_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/servers/{id}
+Prompt      : action:get_compute_ops_mgmt_v1beta2_servers_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta2_servers_id_alerts
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta2/servers/{id}/alerts
+Prompt      : action:get_compute_ops_mgmt_v1beta2_servers_id_alerts
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta3_groups
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta3/groups
+Prompt      : action:get_compute_ops_mgmt_v1beta3_groups
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta3_groups_group_id
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta3/groups/{group_id}
+Prompt      : action:get_compute_ops_mgmt_v1beta3_groups_group_id
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta3_groups_group_id_compliance
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta3/groups/{group_id}/compliance
+Prompt      : action:get_compute_ops_mgmt_v1beta3_groups_group_id_compliance
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta3_groups_group_id_compliance_compliance_id
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta3/groups/{group_id}/compliance/{compliance_id}
+Prompt      : action:get_compute_ops_mgmt_v1beta3_groups_group_id_compliance_compliance_id
+Parameters  : {"group_id": "<group_id>", "compliance_id": "<compliance_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta3_groups_group_id_devices
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta3/groups/{group_id}/devices
+Prompt      : action:get_compute_ops_mgmt_v1beta3_groups_group_id_devices
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta3_groups_group_id_external_storage_compliance
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta3/groups/{group_id}/external-storage-compliance
+Prompt      : action:get_compute_ops_mgmt_v1beta3_groups_group_id_external_storage_compliance
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta3/groups/{group_id}/ilo-settings-compliance
+Prompt      : action:get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance_ilo_settings_compliance_id
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta3/groups/{group_id}/ilo-settings-compliance/{ilo_settings_compliance_id}
+Prompt      : action:get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance_ilo_settings_compliance_id
+Parameters  : {"group_id": "<group_id>", "ilo_settings_compliance_id": "<ilo_settings_compliance_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta3_jobs
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta3/jobs
+Prompt      : action:get_compute_ops_mgmt_v1beta3_jobs
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_mgmt_v1beta3_jobs_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops-mgmt/v1beta3/jobs/{id}
+Prompt      : action:get_compute_ops_mgmt_v1beta3_jobs_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_v1beta1_server_settings
+Status      : OK
+Method      : GET
+API Path    : /compute-ops/v1beta1/server-settings
+Prompt      : action:get_compute_ops_v1beta1_server_settings
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_v1beta1_server_settings_id
+Status      : OK
+Method      : GET
+API Path    : /compute-ops/v1beta1/server-settings/{id}
+Prompt      : action:get_compute_ops_v1beta1_server_settings_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_v1beta2_groups
+Status      : OK
+Method      : GET
+API Path    : /compute-ops/v1beta2/groups
+Prompt      : action:get_compute_ops_v1beta2_groups
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_v1beta2_groups_group_id
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops/v1beta2/groups/{group_id}
+Prompt      : action:get_compute_ops_v1beta2_groups_group_id
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_v1beta2_groups_group_id_compliance
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops/v1beta2/groups/{group_id}/compliance
+Prompt      : action:get_compute_ops_v1beta2_groups_group_id_compliance
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_v1beta2_groups_group_id_compliance_compliance_id
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops/v1beta2/groups/{group_id}/compliance/{compliance_id}
+Prompt      : action:get_compute_ops_v1beta2_groups_group_id_compliance_compliance_id
+Parameters  : {"group_id": "<group_id>", "compliance_id": "<compliance_id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_compute_ops_v1beta2_groups_group_id_devices
+Status      : WAS BROKEN - FIXED
+Method      : GET
+API Path    : /compute-ops/v1beta2/groups/{group_id}/devices
+Prompt      : action:get_compute_ops_v1beta2_groups_group_id_devices
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1_groups_group_id
+Status      : WAS BROKEN - FIXED
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1/groups/{group_id}
+Prompt      : action:patch_compute_ops_mgmt_v1_groups_group_id
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1_jobs_id
+Status      : OK
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1/jobs/{id}
+Prompt      : action:patch_compute_ops_mgmt_v1_jobs_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1_metrics_configurations_id
+Status      : OK
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1/metrics-configurations/{id}
+Prompt      : action:patch_compute_ops_mgmt_v1_metrics_configurations_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1_servers
+Status      : OK
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1/servers
+Prompt      : action:patch_compute_ops_mgmt_v1_servers
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1_servers_id
+Status      : OK
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1/servers/{id}
+Prompt      : action:patch_compute_ops_mgmt_v1_servers_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1_settings_id
+Status      : OK
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1/settings/{id}
+Prompt      : action:patch_compute_ops_mgmt_v1_settings_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1beta1_ahs_files_id
+Status      : OK
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1beta1/ahs-files/{id}
+Prompt      : action:patch_compute_ops_mgmt_v1beta1_ahs_files_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1beta1_external_services_id
+Status      : OK
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1beta1/external-services/{id}
+Prompt      : action:patch_compute_ops_mgmt_v1beta1_external_services_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1beta1_filters_id
+Status      : OK
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1beta1/filters/{id}
+Prompt      : action:patch_compute_ops_mgmt_v1beta1_filters_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1beta1_settings_id
+Status      : OK
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1beta1/settings/{id}
+Prompt      : action:patch_compute_ops_mgmt_v1beta1_settings_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1beta1_webhooks_webhook_id
+Status      : OK
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1beta1/webhooks/{webhook_id}
+Prompt      : action:patch_compute_ops_mgmt_v1beta1_webhooks_webhook_id
+Parameters  : {"webhook_id": "<webhook_id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1beta2_approval_policies_policy_id
+Status      : OK
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1beta2/approval-policies/{policy_id}
+Prompt      : action:patch_compute_ops_mgmt_v1beta2_approval_policies_policy_id
+Parameters  : {"policy_id": "<policy_id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1beta2_approval_requests_request_id
+Status      : OK
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1beta2/approval-requests/{request_id}
+Prompt      : action:patch_compute_ops_mgmt_v1beta2_approval_requests_request_id
+Parameters  : {"request_id": "<request_id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1beta2_jobs_id
+Status      : OK
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1beta2/jobs/{id}
+Prompt      : action:patch_compute_ops_mgmt_v1beta2_jobs_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1beta2_schedules_id
+Status      : OK
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1beta2/schedules/{id}
+Prompt      : action:patch_compute_ops_mgmt_v1beta2_schedules_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1beta2_servers
+Status      : OK
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1beta2/servers
+Prompt      : action:patch_compute_ops_mgmt_v1beta2_servers
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1beta2_servers_id
+Status      : OK
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1beta2/servers/{id}
+Prompt      : action:patch_compute_ops_mgmt_v1beta2_servers_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1beta3_groups_group_id
+Status      : WAS BROKEN - FIXED
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1beta3/groups/{group_id}
+Prompt      : action:patch_compute_ops_mgmt_v1beta3_groups_group_id
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_mgmt_v1beta3_jobs_id
+Status      : OK
+Method      : PATCH
+API Path    : /compute-ops-mgmt/v1beta3/jobs/{id}
+Prompt      : action:patch_compute_ops_mgmt_v1beta3_jobs_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_v1beta1_server_settings_id
+Status      : OK
+Method      : PATCH
+API Path    : /compute-ops/v1beta1/server-settings/{id}
+Prompt      : action:patch_compute_ops_v1beta1_server_settings_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_compute_ops_v1beta2_groups_group_id
+Status      : WAS BROKEN - FIXED
+Method      : PATCH
+API Path    : /compute-ops/v1beta2/groups/{group_id}
+Prompt      : action:patch_compute_ops_v1beta2_groups_group_id
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1_groups
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1/groups
+Prompt      : action:post_compute_ops_mgmt_v1_groups
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1_groups_group_id_devices
+Status      : WAS BROKEN - FIXED
+Method      : POST
+API Path    : /compute-ops-mgmt/v1/groups/{group_id}/devices
+Prompt      : action:post_compute_ops_mgmt_v1_groups_group_id_devices
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1_groups_group_id_devices_unassign
+Status      : WAS BROKEN - FIXED
+Method      : POST
+API Path    : /compute-ops-mgmt/v1/groups/{group_id}/devices/unassign
+Prompt      : action:post_compute_ops_mgmt_v1_groups_group_id_devices_unassign
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1_jobs
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1/jobs
+Prompt      : action:post_compute_ops_mgmt_v1_jobs
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1_metrics_configurations
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1/metrics-configurations
+Prompt      : action:post_compute_ops_mgmt_v1_metrics_configurations
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1_servers
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1/servers
+Prompt      : action:post_compute_ops_mgmt_v1_servers
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1_servers_id_clear_alert
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1/servers/{id}/clear-alert
+Prompt      : action:post_compute_ops_mgmt_v1_servers_id_clear_alert
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1_servers_id_power_off
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1/servers/{id}/power-off
+Prompt      : action:post_compute_ops_mgmt_v1_servers_id_power_off
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1_servers_id_power_on
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1/servers/{id}/power-on
+Prompt      : action:post_compute_ops_mgmt_v1_servers_id_power_on
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1_settings
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1/settings
+Prompt      : action:post_compute_ops_mgmt_v1_settings
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1_user_preferences
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1/user-preferences
+Prompt      : action:post_compute_ops_mgmt_v1_user_preferences
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1_user_preferences_subscribe
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1/user-preferences/subscribe
+Prompt      : action:post_compute_ops_mgmt_v1_user_preferences_subscribe
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1_user_preferences_unsubscribe
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1/user-preferences/unsubscribe
+Prompt      : action:post_compute_ops_mgmt_v1_user_preferences_unsubscribe
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta1_activation_keys
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta1/activation-keys
+Prompt      : action:post_compute_ops_mgmt_v1beta1_activation_keys
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta1_activation_tokens
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta1/activation-tokens
+Prompt      : action:post_compute_ops_mgmt_v1beta1_activation_tokens
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta1_ahs_files
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta1/ahs-files
+Prompt      : action:post_compute_ops_mgmt_v1beta1_ahs_files
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta1_ahs_files_id_parse
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta1/ahs-files/{id}/parse
+Prompt      : action:post_compute_ops_mgmt_v1beta1_ahs_files_id_parse
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta1_external_services
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta1/external-services
+Prompt      : action:post_compute_ops_mgmt_v1beta1_external_services
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta1_external_services_id_test
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta1/external-services/{id}/test
+Prompt      : action:post_compute_ops_mgmt_v1beta1_external_services_id_test
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta1_filters
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta1/filters
+Prompt      : action:post_compute_ops_mgmt_v1beta1_filters
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta1_oneview_appliances
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta1/oneview-appliances
+Prompt      : action:post_compute_ops_mgmt_v1beta1_oneview_appliances
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta1_server_locations_location_id_servers
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta1/server-locations/{location_id}/servers
+Prompt      : action:post_compute_ops_mgmt_v1beta1_server_locations_location_id_servers
+Parameters  : {"location_id": "<location_id>"}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta1_settings
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta1/settings
+Prompt      : action:post_compute_ops_mgmt_v1beta1_settings
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta1_user_preferences
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta1/user-preferences
+Prompt      : action:post_compute_ops_mgmt_v1beta1_user_preferences
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta1_webhooks
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta1/webhooks
+Prompt      : action:post_compute_ops_mgmt_v1beta1_webhooks
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta2_approval_policies
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta2/approval-policies
+Prompt      : action:post_compute_ops_mgmt_v1beta2_approval_policies
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta2_approval_requests_request_id_approve
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta2/approval-requests/{request_id}/approve
+Prompt      : action:post_compute_ops_mgmt_v1beta2_approval_requests_request_id_approve
+Parameters  : {"request_id": "<request_id>"}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta2_jobs
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta2/jobs
+Prompt      : action:post_compute_ops_mgmt_v1beta2_jobs
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta2_reports
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta2/reports
+Prompt      : action:post_compute_ops_mgmt_v1beta2_reports
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta2_schedules
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta2/schedules
+Prompt      : action:post_compute_ops_mgmt_v1beta2_schedules
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta2_servers
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta2/servers
+Prompt      : action:post_compute_ops_mgmt_v1beta2_servers
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta2_servers_id_clear_alert
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta2/servers/{id}/clear-alert
+Prompt      : action:post_compute_ops_mgmt_v1beta2_servers_id_clear_alert
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta3_groups
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta3/groups
+Prompt      : action:post_compute_ops_mgmt_v1beta3_groups
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta3_groups_group_id_devices
+Status      : WAS BROKEN - FIXED
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta3/groups/{group_id}/devices
+Prompt      : action:post_compute_ops_mgmt_v1beta3_groups_group_id_devices
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta3_groups_group_id_devices_unassign
+Status      : WAS BROKEN - FIXED
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta3/groups/{group_id}/devices/unassign
+Prompt      : action:post_compute_ops_mgmt_v1beta3_groups_group_id_devices_unassign
+Parameters  : {"group_id": "<group_id>"}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_mgmt_v1beta3_jobs
+Status      : OK
+Method      : POST
+API Path    : /compute-ops-mgmt/v1beta3/jobs
+Prompt      : action:post_compute_ops_mgmt_v1beta3_jobs
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_v1beta1_server_settings
+Status      : OK
+Method      : POST
+API Path    : /compute-ops/v1beta1/server-settings
+Prompt      : action:post_compute_ops_v1beta1_server_settings
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_compute_ops_v1beta2_groups
+Status      : OK
+Method      : POST
+API Path    : /compute-ops/v1beta2/groups
+Prompt      : action:post_compute_ops_v1beta2_groups
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : put_compute_ops_mgmt_v1_user_preferences_id
+Status      : OK
+Method      : PUT
+API Path    : /compute-ops-mgmt/v1/user-preferences/{id}
+Prompt      : action:put_compute_ops_mgmt_v1_user_preferences_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : put_compute_ops_mgmt_v1beta1_user_preferences_id
+Status      : OK
+Method      : PUT
+API Path    : /compute-ops-mgmt/v1beta1/user-preferences/{id}
+Prompt      : action:put_compute_ops_mgmt_v1beta1_user_preferences_id
+Parameters  : {"id": "<id>"}
+================================================================================

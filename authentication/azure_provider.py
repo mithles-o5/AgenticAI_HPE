@@ -172,7 +172,7 @@ class AzureADProvider(SSOProvider):
             headers={"Content-Type": "application/x-www-form-urlencoded"}
         )
         try:
-            with urllib.request.urlopen(req) as resp:
+            with urllib.request.urlopen(req, timeout=5) as resp:
                 data = json.loads(resp.read().decode("utf-8"))
                 # access_token is for Graph API; id_token contains user claims
                 return data.get("access_token"), "Login successful."
@@ -188,7 +188,7 @@ class AzureADProvider(SSOProvider):
         url = "https://graph.microsoft.com/oidc/userinfo"
         req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}"})
         try:
-            with urllib.request.urlopen(req) as resp:
+            with urllib.request.urlopen(req, timeout=5) as resp:
                 return json.loads(resp.read().decode())
         except Exception:
             return None

@@ -4,11 +4,10 @@ import asyncio
 import subprocess
 import time
 
-sys.path.insert(0, os.path.abspath('mcp_server'))
+sys.path.insert(0, os.path.abspath('.'))
 from mcp_server.mcp_server import (
     manage_oneview_resource,
     manage_comops_resource,
-    list_servers,
     _trigger_login,
     logout,
     check_access
@@ -34,7 +33,7 @@ async def main():
         print("STEP 1: NON-AUTHORIZED USER ACTION (EXPECT FAILURE)")
         print("="*50)
         logout()
-        res1 = await manage_oneview_server("turn on OV1-RackServer-001")
+        res1 = await manage_oneview_resource("turn on OV1-RackServer-001")
         print(f"Action: 'turn on OV1-RackServer-001'")
         print(f"Result:\n{res1}")
         
@@ -51,7 +50,7 @@ async def main():
         print("\n" + "="*50)
         print("STEP 3: SHOW REGISTRY (1000 OneView + 500 CoM)")
         print("="*50)
-        res3 = await manage_oneview_server("list all servers")
+        res3 = await manage_oneview_resource("list all servers")
         print(f"Result:\n{res3}")
         
         # Step 4: Invoke power on, on both type of servers using different mcp tools
@@ -64,10 +63,15 @@ async def main():
         ov_res = await manage_oneview_resource("power on OV1-RackServer-045")
         print(f"Result:\n{ov_res}")
 
-        print("\n--- Tool 2: manage_comops_resource ---")
+        print("\n--- Tool: manage_comops_resource ---")
         print("Query: 'power on CoM-CloudNode-128'")
         com_res = await manage_comops_resource("power on CoM-CloudNode-128")
         print(f"Result:\n{com_res}")
+
+        print("\n--- Tool: manage_comops_resource (list firmware-bundles) ---")
+        print("Query: 'list all' with resource_category='firmware-bundles'")
+        fw_res = await manage_comops_resource("list all", resource_category="firmware-bundles")
+        print(f"Result:\n{fw_res}")
 
     finally:
         print("\n[+] Shutting down mock servers...")

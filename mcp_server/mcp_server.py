@@ -411,23 +411,67 @@ def logout() -> str:
 # Tool 4 — Resolve & Execute  (THE MAIN FLOW TOOL)
 # ─────────────────────────────────────────────────────────────────────────────
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Tool 4 — Resolve & Execute  (THE MAIN FLOW TOOL)
+# ─────────────────────────────────────────────────────────────────────────────
+
 @mcp.tool()
-async def manage_oneview_resource(query: str, resource_category: str = "server-hardware", env: str = "dev") -> str:
+async def manage_oneview_resource(query: str, resource_category: str = "server-hardware", env: str = "dev", request_body: dict = None, parameters: dict = None) -> str:
     """
     Manage ANY OneView on-premises resource (servers, storage, networks, enclosures, profiles).
     Set resource_category to the REST API path (e.g., 'server-hardware', 'storage-volumes', 'ethernet-networks', 'enclosures').
     """
-    return await _execute_hardware_command(query, env, expected_protocol=Protocol.ONEVIEW, backend_url="http://127.0.0.1:8000", resource_category=resource_category)
+    return await _execute_hardware_command(query, env, expected_protocol=Protocol.ONEVIEW, resource_category=resource_category, request_body=request_body, parameters=parameters)
 
 @mcp.tool()
-async def manage_comops_resource(query: str, resource_category: str = "servers", env: str = "dev") -> str:
+async def manage_comops_resource(query: str, resource_category: str = "servers", env: str = "dev", request_body: dict = None, parameters: dict = None) -> str:
     """
     Manage ANY Compute Ops Management cloud resource (servers, policies, firmware).
     Set resource_category to the REST API path (e.g., 'servers', 'policies', 'jobs').
     """
-    return await _execute_hardware_command(query, env, expected_protocol=Protocol.COMS, backend_url="http://127.0.0.1:8001", resource_category=resource_category)
+    return await _execute_hardware_command(query, env, expected_protocol=Protocol.COMS, resource_category=resource_category, request_body=request_body, parameters=parameters)
 
-async def _execute_hardware_command(query: str, env: str, expected_protocol: Protocol, backend_url: str, resource_category: str = "server-hardware") -> str:
+def _extract_category_from_query(query: str, current_category: str, protocol: Protocol) -> str:
+    q = query.lower()
+    
+    # Mapping of keywords in query -> category name
+    mappings = {
+        "firmware-bundles": "firmware-bundles",
+        "firmware-bundle": "firmware-bundles",
+        "firmware bundles": "firmware-bundles",
+        "firmware bundle": "firmware-bundles",
+        "firmware": "firmware-bundles" if protocol == Protocol.COMS else "server-hardware/*/firmware",
+        "storage-volumes": "storage-volumes",
+        "storage-volume": "storage-volumes",
+        "storage volumes": "storage-volumes",
+        "storage volume": "storage-volumes",
+        "storage": "storage-volumes",
+        "volumes": "storage-volumes",
+        "volume": "storage-volumes",
+        "ethernet-networks": "ethernet-networks",
+        "ethernet-network": "ethernet-networks",
+        "ethernet networks": "ethernet-networks",
+        "ethernet network": "ethernet-networks",
+        "networks": "ethernet-networks",
+        "network": "ethernet-networks",
+        "enclosures": "enclosures",
+        "enclosure": "enclosures",
+        "servers": "servers" if protocol == Protocol.COMS else "server-hardware",
+        "server": "servers" if protocol == Protocol.COMS else "server-hardware",
+    }
+    
+    for keyword, mapped in mappings.items():
+        if keyword in q:
+            return mapped
+            
+    return current_category
+
+async def _execute_hardware_command(query: str, env: str, expected_protocol: Protocol, resource_category: str = "server-hardware", request_body: dict = None, parameters: dict = None) -> str:
+    # Auto-extract correct resource category from query to avoid default collisions
+    default_categories = ["server-hardware", "servers"]
+    if resource_category in default_categories:
+        resource_category = _extract_category_from_query(query, resource_category, expected_protocol)
+
     # ── Step 1: Authentication ────────────────────────────────────────────────
     try:
         token, claims = _get_token_and_claims()
@@ -439,7 +483,9 @@ async def _execute_hardware_command(query: str, env: str, expected_protocol: Pro
         )
 
     # ── Step 2: Resource Resolution ───────────────────────────────────────────
-    if any(w in query.lower() for w in ["list", "all servers", "show servers"]):
+    is_list_query = any(w in query.lower() for w in ["list", "show all", "all servers", "show servers"])
+    is_servers_category = resource_category in ["server-hardware", "servers"]
+    if is_list_query and is_servers_category:
         ov_records = [r for r in _registry.all_records() if Protocol.ONEVIEW in r.supported_protocols]
         com_records = [r for r in _registry.all_records() if Protocol.COMS in r.supported_protocols]
         
@@ -469,7 +515,7 @@ async def _execute_hardware_command(query: str, env: str, expected_protocol: Pro
         )
 
     try:
-        ctx = _resolver.resolve(query)
+        ctx = _resolver.resolve(query, resource_category=resource_category, expected_protocol=expected_protocol, parameters=parameters)
     except ResolverError as e:
         return f"❌ Resource not found or query unclear.\nReason: {e}"
 
@@ -496,32 +542,12 @@ async def _execute_hardware_command(query: str, env: str, expected_protocol: Pro
         return f"❌ Access Denied for {email} (Role: {role})\nReason: {reason}"
 
     # ── Step 4: Execute on Mock Server ────────────────────────────────────────
-    if expected_protocol == Protocol.ONEVIEW:
-        action_endpoint_map = {
-            "On":         ("PUT",  f"/rest/{resource_category}/{ctx.resource_uuid}/powerState",  {"powerState": "On"}),
-            "Off":        ("PUT",  f"/rest/{resource_category}/{ctx.resource_uuid}/powerState",  {"powerState": "Off"}),
-            "Status":     ("GET",  f"/rest/{resource_category}/{ctx.resource_uuid}",             None),
-            "Create":     ("POST", f"/rest/{resource_category}", {"name": ctx.resource_name}),
-            "Delete":     ("DELETE", f"/rest/{resource_category}/{ctx.resource_uuid}", None),
-        }
-    else:
-        # CoM Endpoints
-        action_endpoint_map = {
-            "On":         ("POST", f"/compute-ops-mgmt/v1/{resource_category}/{ctx.resource_uuid}/power-on", {}),
-            "Off":        ("POST", f"/compute-ops-mgmt/v1/{resource_category}/{ctx.resource_uuid}/power-off", {}),
-            "Status":     ("GET",  f"/compute-ops-mgmt/v1/{resource_category}/{ctx.resource_uuid}", None),
-            "Create":     ("POST", f"/compute-ops-mgmt/v1/{resource_category}", {"name": ctx.resource_name}),
-            "Delete":     ("DELETE", f"/compute-ops-mgmt/v1/{resource_category}/{ctx.resource_uuid}", None),
-        }
+    http_method = ctx.http_method
+    url = ctx.endpoint
+    body = request_body if request_body is not None else ctx.request_body
 
-    http_method, endpoint, body = action_endpoint_map.get(
-        action_val,
-        ("GET", f"/rest/{resource_category}/{ctx.resource_uuid}" if expected_protocol == Protocol.ONEVIEW else f"/compute-ops-mgmt/v1/{resource_category}/{ctx.resource_uuid}", None)
-    )
-
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=3.0) as client:
         try:
-            url = f"{backend_url}{endpoint}"
             if http_method == "GET": resp = await client.get(url)
             elif http_method == "POST": resp = await client.post(url, json=body or {})
             elif http_method == "PUT": resp = await client.put(url, json=body or {})
@@ -534,12 +560,12 @@ async def _execute_hardware_command(query: str, env: str, expected_protocol: Pro
                 f"User      : {email} (Role: {role})\n"
                 f"Resource  : {ctx.resource_name}\n"
                 f"Action    : {action_val}\n"
-                f"Endpoint  : {endpoint} ({http_method} → {resp.status_code})\n"
+                f"Endpoint  : {url} ({http_method} → {resp.status_code})\n"
                 f"─────────────────────────────────\n"
                 + json.dumps(response_data, indent=2)
             )
         except Exception as e:
-            return f"⚠️ Mock server call failed: {e}\nEnsure backend {expected_protocol.value} is running at {backend_url}"
+            return f"⚠️ Mock server call failed: {e}\nEnsure backend {expected_protocol.value} is running."
 
 
 # ─────────────────────────────────────────────────────────────────────────────

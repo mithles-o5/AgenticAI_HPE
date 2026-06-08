@@ -134,6 +134,8 @@ class ExecutionContext:
 
     # endpoint
     endpoint:         str               = ""      # full URL or IP for the handler
+    http_method:      str               = "GET"
+    request_body:     Optional[dict]    = None
 
     # credential reference (not the secret itself)
     credential_ref:   Optional[CredentialRef] = None
@@ -155,6 +157,8 @@ class ExecutionContext:
             "selected_protocol": self.selected_protocol.value,
             "protocol_reason":   self.protocol_reason,
             "endpoint":          self.endpoint,
+            "http_method":       self.http_method,
+            "request_body":      self.request_body,
             "credential_ref":    self.credential_ref.to_dict()
                                  if self.credential_ref else None,
             "resolved_by":       self.resolved_by,

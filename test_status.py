@@ -1,5 +1,5 @@
 import asyncio
-from mcp_server.mcp_server import manage_oneview_server, manage_comops_server
+from mcp_server.mcp_server import manage_oneview_resource, manage_comops_resource
 from authentication.token_store import save_token
 
 async def main():
@@ -7,11 +7,11 @@ async def main():
     save_token("test-token", "local")
 
     print("\n--- Getting Status for OneView Server ---")
-    res1 = await manage_oneview_server("status of OV1-RackServer-001")
+    res1 = await manage_oneview_resource("status of OV1-RackServer-001")
     print(res1)
     
     print("\n--- Getting Status for ComOps Server ---")
-    res2 = await manage_comops_server("status of CoM-CloudNode-001")
+    res2 = await manage_comops_resource("status of CoM-CloudNode-001")
     print(res2)
 
 if __name__ == "__main__":

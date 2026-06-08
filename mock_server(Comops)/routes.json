@@ -1,0 +1,1532 @@
+{
+  "protocol": "COMS",
+  "base_url": "http://localhost:8001",
+  "endpoints": {
+    "On": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1/{resource_category}/{uuid}/power-on",
+      "body_template": {},
+      "triggers": [
+        "turn on",
+        "power on",
+        "start",
+        "boot",
+        "bring up",
+        "enable"
+      ]
+    },
+    "Off": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1/{resource_category}/{uuid}/power-off",
+      "body_template": {},
+      "triggers": [
+        "turn off",
+        "power off",
+        "shutdown",
+        "shut down",
+        "stop",
+        "halt"
+      ]
+    },
+    "Status": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/{resource_category}/{uuid}",
+      "triggers": [
+        "status",
+        "check",
+        "ping",
+        "state"
+      ]
+    },
+    "List": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/{resource_category}",
+      "triggers": [
+        "list",
+        "show all",
+        "get all",
+        "fetch all",
+        "all"
+      ]
+    },
+    "Create": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1/{resource_category}",
+      "body_template": {
+        "name": "{resource_name}"
+      },
+      "triggers": [
+        "create",
+        "provision"
+      ]
+    },
+    "Allocate": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1/{resource_category}",
+      "body_template": {
+        "name": "{resource_name}"
+      },
+      "triggers": [
+        "allocate",
+        "deploy"
+      ]
+    },
+    "Deallocate": {
+      "method": "DELETE",
+      "path_template": "/compute-ops-mgmt/v1/{resource_category}/{uuid}",
+      "triggers": [
+        "deallocate",
+        "release"
+      ]
+    },
+    "Delete": {
+      "method": "DELETE",
+      "path_template": "/compute-ops-mgmt/v1/{resource_category}/{uuid}",
+      "triggers": [
+        "delete",
+        "destroy",
+        "deprovision"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_appliances_device_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/appliances/{device_id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_appliances_device_id",
+        "/compute-ops-mgmt/v1beta2/appliances/{device_id}"
+      ]
+    },
+    "delete_compute_ops_mgmt_v1beta2_appliances_device_id": {
+      "method": "DELETE",
+      "path_template": "/compute-ops-mgmt/v1beta2/appliances/{device_id}",
+      "triggers": [
+        "delete_compute_ops_mgmt_v1beta2_appliances_device_id",
+        "/compute-ops-mgmt/v1beta2/appliances/{device_id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_appliances_device_id_certificate": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/appliances/{device_id}/certificate",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_appliances_device_id_certificate",
+        "/compute-ops-mgmt/v1beta2/appliances/{device_id}/certificate"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_appliance_firmware_bundles": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/appliance-firmware-bundles",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_appliance_firmware_bundles",
+        "/compute-ops-mgmt/v1/appliance-firmware-bundles"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_appliance_firmware_bundles_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/appliance-firmware-bundles/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_appliance_firmware_bundles_id",
+        "/compute-ops-mgmt/v1/appliance-firmware-bundles/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_appliance_firmware_bundles": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/appliance-firmware-bundles",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_appliance_firmware_bundles",
+        "/compute-ops-mgmt/v1beta1/appliance-firmware-bundles"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_appliance_firmware_bundles_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/appliance-firmware-bundles/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_appliance_firmware_bundles_id",
+        "/compute-ops-mgmt/v1beta1/appliance-firmware-bundles/{id}"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta2_approval_policies": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta2/approval-policies",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta2_approval_policies",
+        "/compute-ops-mgmt/v1beta2/approval-policies"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_approval_policies": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/approval-policies",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_approval_policies",
+        "/compute-ops-mgmt/v1beta2/approval-policies"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_approval_policies_policy_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/approval-policies/{policy_id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_approval_policies_policy_id",
+        "/compute-ops-mgmt/v1beta2/approval-policies/{policy_id}"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1beta2_approval_policies_policy_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1beta2/approval-policies/{policy_id}",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1beta2_approval_policies_policy_id",
+        "/compute-ops-mgmt/v1beta2/approval-policies/{policy_id}"
+      ]
+    },
+    "delete_compute_ops_mgmt_v1beta2_approval_policies_policy_id": {
+      "method": "DELETE",
+      "path_template": "/compute-ops-mgmt/v1beta2/approval-policies/{policy_id}",
+      "triggers": [
+        "delete_compute_ops_mgmt_v1beta2_approval_policies_policy_id",
+        "/compute-ops-mgmt/v1beta2/approval-policies/{policy_id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_approval_requests": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/approval-requests",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_approval_requests",
+        "/compute-ops-mgmt/v1beta2/approval-requests"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_approval_requests_request_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/approval-requests/{request_id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_approval_requests_request_id",
+        "/compute-ops-mgmt/v1beta2/approval-requests/{request_id}"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1beta2_approval_requests_request_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1beta2/approval-requests/{request_id}",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1beta2_approval_requests_request_id",
+        "/compute-ops-mgmt/v1beta2/approval-requests/{request_id}"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta2_approval_requests_request_id_approve": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta2/approval-requests/{request_id}/approve",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta2_approval_requests_request_id_approve",
+        "/compute-ops-mgmt/v1beta2/approval-requests/{request_id}/approve"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_async_operations": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/async-operations",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_async_operations",
+        "/compute-ops-mgmt/v1/async-operations"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_async_operations_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/async-operations/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_async_operations_id",
+        "/compute-ops-mgmt/v1/async-operations/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_async_operations": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/async-operations",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_async_operations",
+        "/compute-ops-mgmt/v1beta1/async-operations"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_async_operations_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/async-operations/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_async_operations_id",
+        "/compute-ops-mgmt/v1beta1/async-operations/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_accounts_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/accounts/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_accounts_id",
+        "/compute-ops-mgmt/v1beta1/accounts/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_accounts_id_tenants": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/accounts/{id}/tenants",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_accounts_id_tenants",
+        "/compute-ops-mgmt/v1beta1/accounts/{id}/tenants"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta1_activation_keys": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta1/activation-keys",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta1_activation_keys",
+        "/compute-ops-mgmt/v1beta1/activation-keys"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_activation_keys": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/activation-keys",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_activation_keys",
+        "/compute-ops-mgmt/v1beta1/activation-keys"
+      ]
+    },
+    "delete_compute_ops_mgmt_v1beta1_activation_keys_activation_key": {
+      "method": "DELETE",
+      "path_template": "/compute-ops-mgmt/v1beta1/activation-keys/{activation_key}",
+      "triggers": [
+        "delete_compute_ops_mgmt_v1beta1_activation_keys_activation_key",
+        "/compute-ops-mgmt/v1beta1/activation-keys/{activation_key}"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta1_activation_tokens": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta1/activation-tokens",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta1_activation_tokens",
+        "/compute-ops-mgmt/v1beta1/activation-tokens"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_activities": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/activities",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_activities",
+        "/compute-ops-mgmt/v1beta2/activities"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta1_ahs_files": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta1/ahs-files",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta1_ahs_files",
+        "/compute-ops-mgmt/v1beta1/ahs-files"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_ahs_files": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/ahs-files",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_ahs_files",
+        "/compute-ops-mgmt/v1beta1/ahs-files"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_ahs_files_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/ahs-files/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_ahs_files_id",
+        "/compute-ops-mgmt/v1beta1/ahs-files/{id}"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1beta1_ahs_files_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1beta1/ahs-files/{id}",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1beta1_ahs_files_id",
+        "/compute-ops-mgmt/v1beta1/ahs-files/{id}"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta1_ahs_files_id_parse": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta1/ahs-files/{id}/parse",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta1_ahs_files_id_parse",
+        "/compute-ops-mgmt/v1beta1/ahs-files/{id}/parse"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_ahs_files_id_download": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/ahs-files/{id}/download",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_ahs_files_id_download",
+        "/compute-ops-mgmt/v1beta1/ahs-files/{id}/download"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_appliances": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/appliances",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_appliances",
+        "/compute-ops-mgmt/v1beta2/appliances"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_energy_over_time": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/energy-over-time",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_energy_over_time",
+        "/compute-ops-mgmt/v1beta1/energy-over-time"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_energy_by_entity": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/energy-by-entity",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_energy_by_entity",
+        "/compute-ops-mgmt/v1beta1/energy-by-entity"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_external_services": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/external-services",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_external_services",
+        "/compute-ops-mgmt/v1beta1/external-services"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta1_external_services": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta1/external-services",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta1_external_services",
+        "/compute-ops-mgmt/v1beta1/external-services"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_external_services_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/external-services/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_external_services_id",
+        "/compute-ops-mgmt/v1beta1/external-services/{id}"
+      ]
+    },
+    "delete_compute_ops_mgmt_v1beta1_external_services_id": {
+      "method": "DELETE",
+      "path_template": "/compute-ops-mgmt/v1beta1/external-services/{id}",
+      "triggers": [
+        "delete_compute_ops_mgmt_v1beta1_external_services_id",
+        "/compute-ops-mgmt/v1beta1/external-services/{id}"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1beta1_external_services_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1beta1/external-services/{id}",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1beta1_external_services_id",
+        "/compute-ops-mgmt/v1beta1/external-services/{id}"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta1_external_services_id_test": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta1/external-services/{id}/test",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta1_external_services_id_test",
+        "/compute-ops-mgmt/v1beta1/external-services/{id}/test"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_filters": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/filters",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_filters",
+        "/compute-ops-mgmt/v1beta1/filters"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta1_filters": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta1/filters",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta1_filters",
+        "/compute-ops-mgmt/v1beta1/filters"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_filters_properties": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/filters/properties",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_filters_properties",
+        "/compute-ops-mgmt/v1beta1/filters/properties"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_filters_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/filters/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_filters_id",
+        "/compute-ops-mgmt/v1beta1/filters/{id}"
+      ]
+    },
+    "delete_compute_ops_mgmt_v1beta1_filters_id": {
+      "method": "DELETE",
+      "path_template": "/compute-ops-mgmt/v1beta1/filters/{id}",
+      "triggers": [
+        "delete_compute_ops_mgmt_v1beta1_filters_id",
+        "/compute-ops-mgmt/v1beta1/filters/{id}"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1beta1_filters_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1beta1/filters/{id}",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1beta1_filters_id",
+        "/compute-ops-mgmt/v1beta1/filters/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_filters_id_matches": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/filters/{id}/matches",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_filters_id_matches",
+        "/compute-ops-mgmt/v1beta1/filters/{id}/matches"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_firmware_bundles": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/firmware-bundles",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_firmware_bundles",
+        "/compute-ops-mgmt/v1/firmware-bundles"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_firmware_bundles_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/firmware-bundles/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_firmware_bundles_id",
+        "/compute-ops-mgmt/v1/firmware-bundles/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_firmware_bundles_id_bundle_details": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/firmware-bundles/{id}/bundle-details",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_firmware_bundles_id_bundle_details",
+        "/compute-ops-mgmt/v1/firmware-bundles/{id}/bundle-details"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_firmware_bundles": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/firmware-bundles",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_firmware_bundles",
+        "/compute-ops-mgmt/v1beta2/firmware-bundles"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_firmware_bundles_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/firmware-bundles/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_firmware_bundles_id",
+        "/compute-ops-mgmt/v1beta2/firmware-bundles/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_groups": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/groups",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_groups",
+        "/compute-ops-mgmt/v1/groups"
+      ]
+    },
+    "post_compute_ops_mgmt_v1_groups": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1/groups",
+      "triggers": [
+        "post_compute_ops_mgmt_v1_groups",
+        "/compute-ops-mgmt/v1/groups"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_groups_group_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/groups/{group_id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_groups_group_id",
+        "/compute-ops-mgmt/v1/groups/{group_id}"
+      ]
+    },
+    "delete_compute_ops_mgmt_v1_groups_group_id": {
+      "method": "DELETE",
+      "path_template": "/compute-ops-mgmt/v1/groups/{group_id}",
+      "triggers": [
+        "delete_compute_ops_mgmt_v1_groups_group_id",
+        "/compute-ops-mgmt/v1/groups/{group_id}"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1_groups_group_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1/groups/{group_id}",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1_groups_group_id",
+        "/compute-ops-mgmt/v1/groups/{group_id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_groups_group_id_compliance": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/groups/{group_id}/compliance",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_groups_group_id_compliance",
+        "/compute-ops-mgmt/v1/groups/{group_id}/compliance"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_groups_group_id_compliance_compliance_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/groups/{group_id}/compliance/{compliance_id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_groups_group_id_compliance_compliance_id",
+        "/compute-ops-mgmt/v1/groups/{group_id}/compliance/{compliance_id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_groups_group_id_devices": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/groups/{group_id}/devices",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_groups_group_id_devices",
+        "/compute-ops-mgmt/v1/groups/{group_id}/devices"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta3_groups": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta3/groups",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta3_groups",
+        "/compute-ops-mgmt/v1beta3/groups"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta3_groups": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta3/groups",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta3_groups",
+        "/compute-ops-mgmt/v1beta3/groups"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta3_groups_group_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta3/groups/{group_id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta3_groups_group_id",
+        "/compute-ops-mgmt/v1beta3/groups/{group_id}"
+      ]
+    },
+    "delete_compute_ops_mgmt_v1beta3_groups_group_id": {
+      "method": "DELETE",
+      "path_template": "/compute-ops-mgmt/v1beta3/groups/{group_id}",
+      "triggers": [
+        "delete_compute_ops_mgmt_v1beta3_groups_group_id",
+        "/compute-ops-mgmt/v1beta3/groups/{group_id}"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1beta3_groups_group_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1beta3/groups/{group_id}",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1beta3_groups_group_id",
+        "/compute-ops-mgmt/v1beta3/groups/{group_id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta3_groups_group_id_compliance": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta3/groups/{group_id}/compliance",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta3_groups_group_id_compliance",
+        "/compute-ops-mgmt/v1beta3/groups/{group_id}/compliance"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta3_groups_group_id_compliance_compliance_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta3/groups/{group_id}/compliance/{compliance_id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta3_groups_group_id_compliance_compliance_id",
+        "/compute-ops-mgmt/v1beta3/groups/{group_id}/compliance/{compliance_id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta3_groups_group_id_devices": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta3/groups/{group_id}/devices",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta3_groups_group_id_devices",
+        "/compute-ops-mgmt/v1beta3/groups/{group_id}/devices"
+      ]
+    },
+    "get_compute_ops_v1beta2_groups": {
+      "method": "GET",
+      "path_template": "/compute-ops/v1beta2/groups",
+      "triggers": [
+        "get_compute_ops_v1beta2_groups",
+        "/compute-ops/v1beta2/groups"
+      ]
+    },
+    "post_compute_ops_v1beta2_groups": {
+      "method": "POST",
+      "path_template": "/compute-ops/v1beta2/groups",
+      "triggers": [
+        "post_compute_ops_v1beta2_groups",
+        "/compute-ops/v1beta2/groups"
+      ]
+    },
+    "get_compute_ops_v1beta2_groups_group_id": {
+      "method": "GET",
+      "path_template": "/compute-ops/v1beta2/groups/{group_id}",
+      "triggers": [
+        "get_compute_ops_v1beta2_groups_group_id",
+        "/compute-ops/v1beta2/groups/{group_id}"
+      ]
+    },
+    "delete_compute_ops_v1beta2_groups_group_id": {
+      "method": "DELETE",
+      "path_template": "/compute-ops/v1beta2/groups/{group_id}",
+      "triggers": [
+        "delete_compute_ops_v1beta2_groups_group_id",
+        "/compute-ops/v1beta2/groups/{group_id}"
+      ]
+    },
+    "patch_compute_ops_v1beta2_groups_group_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops/v1beta2/groups/{group_id}",
+      "triggers": [
+        "patch_compute_ops_v1beta2_groups_group_id",
+        "/compute-ops/v1beta2/groups/{group_id}"
+      ]
+    },
+    "get_compute_ops_v1beta2_groups_group_id_compliance": {
+      "method": "GET",
+      "path_template": "/compute-ops/v1beta2/groups/{group_id}/compliance",
+      "triggers": [
+        "get_compute_ops_v1beta2_groups_group_id_compliance",
+        "/compute-ops/v1beta2/groups/{group_id}/compliance"
+      ]
+    },
+    "get_compute_ops_v1beta2_groups_group_id_compliance_compliance_id": {
+      "method": "GET",
+      "path_template": "/compute-ops/v1beta2/groups/{group_id}/compliance/{compliance_id}",
+      "triggers": [
+        "get_compute_ops_v1beta2_groups_group_id_compliance_compliance_id",
+        "/compute-ops/v1beta2/groups/{group_id}/compliance/{compliance_id}"
+      ]
+    },
+    "get_compute_ops_v1beta2_groups_group_id_devices": {
+      "method": "GET",
+      "path_template": "/compute-ops/v1beta2/groups/{group_id}/devices",
+      "triggers": [
+        "get_compute_ops_v1beta2_groups_group_id_devices",
+        "/compute-ops/v1beta2/groups/{group_id}/devices"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_job_templates": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/job-templates",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_job_templates",
+        "/compute-ops-mgmt/v1beta2/job-templates"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_job_templates_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/job-templates/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_job_templates_id",
+        "/compute-ops-mgmt/v1beta2/job-templates/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_jobs": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/jobs",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_jobs",
+        "/compute-ops-mgmt/v1/jobs"
+      ]
+    },
+    "post_compute_ops_mgmt_v1_jobs": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1/jobs",
+      "triggers": [
+        "post_compute_ops_mgmt_v1_jobs",
+        "/compute-ops-mgmt/v1/jobs"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_jobs_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/jobs/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_jobs_id",
+        "/compute-ops-mgmt/v1/jobs/{id}"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1_jobs_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1/jobs/{id}",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1_jobs_id",
+        "/compute-ops-mgmt/v1/jobs/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta3_jobs": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta3/jobs",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta3_jobs",
+        "/compute-ops-mgmt/v1beta3/jobs"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta3_jobs": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta3/jobs",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta3_jobs",
+        "/compute-ops-mgmt/v1beta3/jobs"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta3_jobs_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta3/jobs/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta3_jobs_id",
+        "/compute-ops-mgmt/v1beta3/jobs/{id}"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1beta3_jobs_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1beta3/jobs/{id}",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1beta3_jobs_id",
+        "/compute-ops-mgmt/v1beta3/jobs/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_jobs": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/jobs",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_jobs",
+        "/compute-ops-mgmt/v1beta2/jobs"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta2_jobs": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta2/jobs",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta2_jobs",
+        "/compute-ops-mgmt/v1beta2/jobs"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_jobs_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/jobs/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_jobs_id",
+        "/compute-ops-mgmt/v1beta2/jobs/{id}"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1beta2_jobs_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1beta2/jobs/{id}",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1beta2_jobs_id",
+        "/compute-ops-mgmt/v1beta2/jobs/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_metrics_configurations": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/metrics-configurations",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_metrics_configurations",
+        "/compute-ops-mgmt/v1/metrics-configurations"
+      ]
+    },
+    "post_compute_ops_mgmt_v1_metrics_configurations": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1/metrics-configurations",
+      "triggers": [
+        "post_compute_ops_mgmt_v1_metrics_configurations",
+        "/compute-ops-mgmt/v1/metrics-configurations"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_metrics_configurations_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/metrics-configurations/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_metrics_configurations_id",
+        "/compute-ops-mgmt/v1/metrics-configurations/{id}"
+      ]
+    },
+    "delete_compute_ops_mgmt_v1_metrics_configurations_id": {
+      "method": "DELETE",
+      "path_template": "/compute-ops-mgmt/v1/metrics-configurations/{id}",
+      "triggers": [
+        "delete_compute_ops_mgmt_v1_metrics_configurations_id",
+        "/compute-ops-mgmt/v1/metrics-configurations/{id}"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1_metrics_configurations_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1/metrics-configurations/{id}",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1_metrics_configurations_id",
+        "/compute-ops-mgmt/v1/metrics-configurations/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_oneview_appliances": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/oneview-appliances",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_oneview_appliances",
+        "/compute-ops-mgmt/v1beta1/oneview-appliances"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta1_oneview_appliances": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta1/oneview-appliances",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta1_oneview_appliances",
+        "/compute-ops-mgmt/v1beta1/oneview-appliances"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_oneview_appliances_device_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/oneview-appliances/{device_id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_oneview_appliances_device_id",
+        "/compute-ops-mgmt/v1beta1/oneview-appliances/{device_id}"
+      ]
+    },
+    "delete_compute_ops_mgmt_v1beta1_oneview_appliances_device_id": {
+      "method": "DELETE",
+      "path_template": "/compute-ops-mgmt/v1beta1/oneview-appliances/{device_id}",
+      "triggers": [
+        "delete_compute_ops_mgmt_v1beta1_oneview_appliances_device_id",
+        "/compute-ops-mgmt/v1beta1/oneview-appliances/{device_id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_oneview_settings": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/oneview-settings",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_oneview_settings",
+        "/compute-ops-mgmt/v1beta1/oneview-settings"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_oneview_server_templates": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/oneview-server-templates",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_oneview_server_templates",
+        "/compute-ops-mgmt/v1beta1/oneview-server-templates"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_oneview_server_templates_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/oneview-server-templates/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_oneview_server_templates_id",
+        "/compute-ops-mgmt/v1beta1/oneview-server-templates/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_reports": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/reports",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_reports",
+        "/compute-ops-mgmt/v1beta2/reports"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta2_reports": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta2/reports",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta2_reports",
+        "/compute-ops-mgmt/v1beta2/reports"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_reports_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/reports/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_reports_id",
+        "/compute-ops-mgmt/v1beta2/reports/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_reports_id_data": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/reports/{id}/data",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_reports_id_data",
+        "/compute-ops-mgmt/v1beta2/reports/{id}/data"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_schedules": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/schedules",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_schedules",
+        "/compute-ops-mgmt/v1beta2/schedules"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta2_schedules": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta2/schedules",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta2_schedules",
+        "/compute-ops-mgmt/v1beta2/schedules"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_schedules_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/schedules/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_schedules_id",
+        "/compute-ops-mgmt/v1beta2/schedules/{id}"
+      ]
+    },
+    "delete_compute_ops_mgmt_v1beta2_schedules_id": {
+      "method": "DELETE",
+      "path_template": "/compute-ops-mgmt/v1beta2/schedules/{id}",
+      "triggers": [
+        "delete_compute_ops_mgmt_v1beta2_schedules_id",
+        "/compute-ops-mgmt/v1beta2/schedules/{id}"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1beta2_schedules_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1beta2/schedules/{id}",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1beta2_schedules_id",
+        "/compute-ops-mgmt/v1beta2/schedules/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_schedules_id_history": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/schedules/{id}/history",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_schedules_id_history",
+        "/compute-ops-mgmt/v1beta2/schedules/{id}/history"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_schedules_id_history_history_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/schedules/{id}/history/{history_id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_schedules_id_history_history_id",
+        "/compute-ops-mgmt/v1beta2/schedules/{id}/history/{history_id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_server_locations_location_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/server-locations/{location_id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_server_locations_location_id",
+        "/compute-ops-mgmt/v1beta1/server-locations/{location_id}"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta1_server_locations_location_id_servers": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta1/server-locations/{location_id}/servers",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta1_server_locations_location_id_servers",
+        "/compute-ops-mgmt/v1beta1/server-locations/{location_id}/servers"
+      ]
+    },
+    "delete_compute_ops_mgmt_v1beta1_server_locations_location_id_servers": {
+      "method": "DELETE",
+      "path_template": "/compute-ops-mgmt/v1beta1/server-locations/{location_id}/servers",
+      "triggers": [
+        "delete_compute_ops_mgmt_v1beta1_server_locations_location_id_servers",
+        "/compute-ops-mgmt/v1beta1/server-locations/{location_id}/servers"
+      ]
+    },
+    "get_compute_ops_v1beta1_server_settings": {
+      "method": "GET",
+      "path_template": "/compute-ops/v1beta1/server-settings",
+      "triggers": [
+        "get_compute_ops_v1beta1_server_settings",
+        "/compute-ops/v1beta1/server-settings"
+      ]
+    },
+    "post_compute_ops_v1beta1_server_settings": {
+      "method": "POST",
+      "path_template": "/compute-ops/v1beta1/server-settings",
+      "triggers": [
+        "post_compute_ops_v1beta1_server_settings",
+        "/compute-ops/v1beta1/server-settings"
+      ]
+    },
+    "get_compute_ops_v1beta1_server_settings_id": {
+      "method": "GET",
+      "path_template": "/compute-ops/v1beta1/server-settings/{id}",
+      "triggers": [
+        "get_compute_ops_v1beta1_server_settings_id",
+        "/compute-ops/v1beta1/server-settings/{id}"
+      ]
+    },
+    "delete_compute_ops_v1beta1_server_settings_id": {
+      "method": "DELETE",
+      "path_template": "/compute-ops/v1beta1/server-settings/{id}",
+      "triggers": [
+        "delete_compute_ops_v1beta1_server_settings_id",
+        "/compute-ops/v1beta1/server-settings/{id}"
+      ]
+    },
+    "patch_compute_ops_v1beta1_server_settings_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops/v1beta1/server-settings/{id}",
+      "triggers": [
+        "patch_compute_ops_v1beta1_server_settings_id",
+        "/compute-ops/v1beta1/server-settings/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_servers_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/servers/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_servers_id",
+        "/compute-ops-mgmt/v1/servers/{id}"
+      ]
+    },
+    "post_compute_ops_mgmt_v1_servers_id_power_on": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1/servers/{id}/power-on",
+      "triggers": [
+        "post_compute_ops_mgmt_v1_servers_id_power_on",
+        "/compute-ops-mgmt/v1/servers/{id}/power-on"
+      ]
+    },
+    "post_compute_ops_mgmt_v1_servers_id_power_off": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1/servers/{id}/power-off",
+      "triggers": [
+        "post_compute_ops_mgmt_v1_servers_id_power_off",
+        "/compute-ops-mgmt/v1/servers/{id}/power-off"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_settings": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/settings",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_settings",
+        "/compute-ops-mgmt/v1/settings"
+      ]
+    },
+    "post_compute_ops_mgmt_v1_settings": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1/settings",
+      "triggers": [
+        "post_compute_ops_mgmt_v1_settings",
+        "/compute-ops-mgmt/v1/settings"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_settings_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/settings/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_settings_id",
+        "/compute-ops-mgmt/v1/settings/{id}"
+      ]
+    },
+    "delete_compute_ops_mgmt_v1_settings_id": {
+      "method": "DELETE",
+      "path_template": "/compute-ops-mgmt/v1/settings/{id}",
+      "triggers": [
+        "delete_compute_ops_mgmt_v1_settings_id",
+        "/compute-ops-mgmt/v1/settings/{id}"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1_settings_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1/settings/{id}",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1_settings_id",
+        "/compute-ops-mgmt/v1/settings/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_settings": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/settings",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_settings",
+        "/compute-ops-mgmt/v1beta1/settings"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta1_settings": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta1/settings",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta1_settings",
+        "/compute-ops-mgmt/v1beta1/settings"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_settings_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/settings/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_settings_id",
+        "/compute-ops-mgmt/v1beta1/settings/{id}"
+      ]
+    },
+    "delete_compute_ops_mgmt_v1beta1_settings_id": {
+      "method": "DELETE",
+      "path_template": "/compute-ops-mgmt/v1beta1/settings/{id}",
+      "triggers": [
+        "delete_compute_ops_mgmt_v1beta1_settings_id",
+        "/compute-ops-mgmt/v1beta1/settings/{id}"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1beta1_settings_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1beta1/settings/{id}",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1beta1_settings_id",
+        "/compute-ops-mgmt/v1beta1/settings/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_servers": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/servers",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_servers",
+        "/compute-ops-mgmt/v1/servers"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1_servers": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1/servers",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1_servers",
+        "/compute-ops-mgmt/v1/servers"
+      ]
+    },
+    "post_compute_ops_mgmt_v1_servers": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1/servers",
+      "triggers": [
+        "post_compute_ops_mgmt_v1_servers",
+        "/compute-ops-mgmt/v1/servers"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1_servers_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1/servers/{id}",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1_servers_id",
+        "/compute-ops-mgmt/v1/servers/{id}"
+      ]
+    },
+    "delete_compute_ops_mgmt_v1_servers_id": {
+      "method": "DELETE",
+      "path_template": "/compute-ops-mgmt/v1/servers/{id}",
+      "triggers": [
+        "delete_compute_ops_mgmt_v1_servers_id",
+        "/compute-ops-mgmt/v1/servers/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_servers_id_alerts": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/servers/{id}/alerts",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_servers_id_alerts",
+        "/compute-ops-mgmt/v1/servers/{id}/alerts"
+      ]
+    },
+    "post_compute_ops_mgmt_v1_servers_id_clear_alert": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1/servers/{id}/clear-alert",
+      "triggers": [
+        "post_compute_ops_mgmt_v1_servers_id_clear_alert",
+        "/compute-ops-mgmt/v1/servers/{id}/clear-alert"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_servers": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/servers",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_servers",
+        "/compute-ops-mgmt/v1beta2/servers"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1beta2_servers": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1beta2/servers",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1beta2_servers",
+        "/compute-ops-mgmt/v1beta2/servers"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta2_servers": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta2/servers",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta2_servers",
+        "/compute-ops-mgmt/v1beta2/servers"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_servers_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/servers/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_servers_id",
+        "/compute-ops-mgmt/v1beta2/servers/{id}"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1beta2_servers_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1beta2/servers/{id}",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1beta2_servers_id",
+        "/compute-ops-mgmt/v1beta2/servers/{id}"
+      ]
+    },
+    "delete_compute_ops_mgmt_v1beta2_servers_id": {
+      "method": "DELETE",
+      "path_template": "/compute-ops-mgmt/v1beta2/servers/{id}",
+      "triggers": [
+        "delete_compute_ops_mgmt_v1beta2_servers_id",
+        "/compute-ops-mgmt/v1beta2/servers/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_servers_id_alerts": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/servers/{id}/alerts",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_servers_id_alerts",
+        "/compute-ops-mgmt/v1beta2/servers/{id}/alerts"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta2_servers_id_clear_alert": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta2/servers/{id}/clear-alert",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta2_servers_id_clear_alert",
+        "/compute-ops-mgmt/v1beta2/servers/{id}/clear-alert"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_server_warranty": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/server-warranty",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_server_warranty",
+        "/compute-ops-mgmt/v1beta2/server-warranty"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta2_server_warranty_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta2/server-warranty/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta2_server_warranty_id",
+        "/compute-ops-mgmt/v1beta2/server-warranty/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_user_preferences": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/user-preferences",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_user_preferences",
+        "/compute-ops-mgmt/v1/user-preferences"
+      ]
+    },
+    "post_compute_ops_mgmt_v1_user_preferences": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1/user-preferences",
+      "triggers": [
+        "post_compute_ops_mgmt_v1_user_preferences",
+        "/compute-ops-mgmt/v1/user-preferences"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_user_preferences_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/user-preferences/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_user_preferences_id",
+        "/compute-ops-mgmt/v1/user-preferences/{id}"
+      ]
+    },
+    "put_compute_ops_mgmt_v1_user_preferences_id": {
+      "method": "PUT",
+      "path_template": "/compute-ops-mgmt/v1/user-preferences/{id}",
+      "triggers": [
+        "put_compute_ops_mgmt_v1_user_preferences_id",
+        "/compute-ops-mgmt/v1/user-preferences/{id}"
+      ]
+    },
+    "post_compute_ops_mgmt_v1_user_preferences_subscribe": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1/user-preferences/subscribe",
+      "triggers": [
+        "post_compute_ops_mgmt_v1_user_preferences_subscribe",
+        "/compute-ops-mgmt/v1/user-preferences/subscribe"
+      ]
+    },
+    "post_compute_ops_mgmt_v1_user_preferences_unsubscribe": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1/user-preferences/unsubscribe",
+      "triggers": [
+        "post_compute_ops_mgmt_v1_user_preferences_unsubscribe",
+        "/compute-ops-mgmt/v1/user-preferences/unsubscribe"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_user_preferences": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/user-preferences",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_user_preferences",
+        "/compute-ops-mgmt/v1beta1/user-preferences"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta1_user_preferences": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta1/user-preferences",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta1_user_preferences",
+        "/compute-ops-mgmt/v1beta1/user-preferences"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_user_preferences_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/user-preferences/{id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_user_preferences_id",
+        "/compute-ops-mgmt/v1beta1/user-preferences/{id}"
+      ]
+    },
+    "put_compute_ops_mgmt_v1beta1_user_preferences_id": {
+      "method": "PUT",
+      "path_template": "/compute-ops-mgmt/v1beta1/user-preferences/{id}",
+      "triggers": [
+        "put_compute_ops_mgmt_v1beta1_user_preferences_id",
+        "/compute-ops-mgmt/v1beta1/user-preferences/{id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_utilization_over_time": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/utilization-over-time",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_utilization_over_time",
+        "/compute-ops-mgmt/v1beta1/utilization-over-time"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_utilization_by_entity": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/utilization-by-entity",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_utilization_by_entity",
+        "/compute-ops-mgmt/v1beta1/utilization-by-entity"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_webhooks": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/webhooks",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_webhooks",
+        "/compute-ops-mgmt/v1beta1/webhooks"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta1_webhooks": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta1/webhooks",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta1_webhooks",
+        "/compute-ops-mgmt/v1beta1/webhooks"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_webhooks_webhook_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/webhooks/{webhook_id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_webhooks_webhook_id",
+        "/compute-ops-mgmt/v1beta1/webhooks/{webhook_id}"
+      ]
+    },
+    "patch_compute_ops_mgmt_v1beta1_webhooks_webhook_id": {
+      "method": "PATCH",
+      "path_template": "/compute-ops-mgmt/v1beta1/webhooks/{webhook_id}",
+      "triggers": [
+        "patch_compute_ops_mgmt_v1beta1_webhooks_webhook_id",
+        "/compute-ops-mgmt/v1beta1/webhooks/{webhook_id}"
+      ]
+    },
+    "delete_compute_ops_mgmt_v1beta1_webhooks_webhook_id": {
+      "method": "DELETE",
+      "path_template": "/compute-ops-mgmt/v1beta1/webhooks/{webhook_id}",
+      "triggers": [
+        "delete_compute_ops_mgmt_v1beta1_webhooks_webhook_id",
+        "/compute-ops-mgmt/v1beta1/webhooks/{webhook_id}"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/webhooks/{webhook_id}/deliveries",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries",
+        "/compute-ops-mgmt/v1beta1/webhooks/{webhook_id}/deliveries"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries_delivery_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta1/webhooks/{webhook_id}/deliveries/{delivery_id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries_delivery_id",
+        "/compute-ops-mgmt/v1beta1/webhooks/{webhook_id}/deliveries/{delivery_id}"
+      ]
+    },
+    "post_compute_ops_mgmt_v1_groups_group_id_devices": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1/groups/{group_id}/devices",
+      "triggers": [
+        "post_compute_ops_mgmt_v1_groups_group_id_devices",
+        "/compute-ops-mgmt/v1/groups/{group_id}/devices"
+      ]
+    },
+    "post_compute_ops_mgmt_v1_groups_group_id_devices_unassign": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1/groups/{group_id}/devices/unassign",
+      "triggers": [
+        "post_compute_ops_mgmt_v1_groups_group_id_devices_unassign",
+        "/compute-ops-mgmt/v1/groups/{group_id}/devices/unassign"
+      ]
+    },
+    "get_compute_ops_mgmt_v1_groups_group_id_external_storage_compliance": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1/groups/{group_id}/external-storage-compliance",
+      "triggers": [
+        "get_compute_ops_mgmt_v1_groups_group_id_external_storage_compliance",
+        "/compute-ops-mgmt/v1/groups/{group_id}/external-storage-compliance"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta3_groups_group_id_devices": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta3/groups/{group_id}/devices",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta3_groups_group_id_devices",
+        "/compute-ops-mgmt/v1beta3/groups/{group_id}/devices"
+      ]
+    },
+    "post_compute_ops_mgmt_v1beta3_groups_group_id_devices_unassign": {
+      "method": "POST",
+      "path_template": "/compute-ops-mgmt/v1beta3/groups/{group_id}/devices/unassign",
+      "triggers": [
+        "post_compute_ops_mgmt_v1beta3_groups_group_id_devices_unassign",
+        "/compute-ops-mgmt/v1beta3/groups/{group_id}/devices/unassign"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta3_groups_group_id_external_storage_compliance": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta3/groups/{group_id}/external-storage-compliance",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta3_groups_group_id_external_storage_compliance",
+        "/compute-ops-mgmt/v1beta3/groups/{group_id}/external-storage-compliance"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta3/groups/{group_id}/ilo-settings-compliance",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance",
+        "/compute-ops-mgmt/v1beta3/groups/{group_id}/ilo-settings-compliance"
+      ]
+    },
+    "get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance_ilo_settings_compliance_id": {
+      "method": "GET",
+      "path_template": "/compute-ops-mgmt/v1beta3/groups/{group_id}/ilo-settings-compliance/{ilo_settings_compliance_id}",
+      "triggers": [
+        "get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance_ilo_settings_compliance_id",
+        "/compute-ops-mgmt/v1beta3/groups/{group_id}/ilo-settings-compliance/{ilo_settings_compliance_id}"
+      ]
+    }
+  }
+}
