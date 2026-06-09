@@ -61,6 +61,16 @@ app.add_middleware(
 """
 
     for index, api in enumerate(api_data):
+        # Ensure entry is a dict
+        if not isinstance(api, dict):
+            print(f"[WARN] Skipping non-dict API entry at index {index}: {api}")
+            continue
+        # Ensure we have a function_name; fall back to generated name if missing
+        if "function_name" not in api:
+            # Generate a deterministic name based on method and path
+            from slugify import slugify
+            generated_name = slugify(f"{api.get('method','GET')}_{api.get('path','')}").replace("-", "_")
+            api["function_name"] = generated_name
         clean_name = "".join(x.capitalize() or "_" for x in api["function_name"].split("_"))
         model_name = f"{clean_name}Request"
         has_model = False
