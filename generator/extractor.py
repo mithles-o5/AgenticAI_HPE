@@ -2,6 +2,7 @@ import os
 import json
 import asyncio
 import time
+import random
 
 # pyrefly: ignore [missing-import]
 from slugify import slugify
@@ -100,12 +101,32 @@ async def extract_api_details(crawled_pages):
                 break
             except Exception as e:
                 error_str = str(e)
-                if "429" in error_str or "RESOURCE_EXHAUSTED" in error_str:
-                    print(f"      [!] Rate limit hit on chunk {idx + 1}. Waiting 65s before retry (attempt {attempt+1}/{max_retries})...")
-                    time.sleep(65)
-                else:
-                    print(f"      [!] Error during LLM extraction on chunk {idx + 1}: {e}")
+                
+                # Check for non-retryable client errors (e.g. 400, 403, 404)
+                is_non_retryable = any(
+                    code in error_str for code in ["400", "INVALID_ARGUMENT", "403", "PERMISSION_DENIED", "404", "NOT_FOUND"]
+                ) or "API key not valid" in error_str
+                
+                if is_non_retryable:
+                    print(f"      [!] Non-retryable error during LLM extraction on chunk {idx + 1}: {error_str}")
                     break
+                
+                if attempt == max_retries - 1:
+                    print(f"      [!] Max retries reached. Error on chunk {idx + 1}: {e}")
+                    break
+                
+                is_rate_limit = "429" in error_str or "RESOURCE_EXHAUSTED" in error_str or "rate limit" in error_str.lower()
+                
+                if is_rate_limit:
+                    wait_time = 65
+                    print(f"      [!] Rate limit hit on chunk {idx + 1}. Waiting {wait_time}s before retry (attempt {attempt+1}/{max_retries})...")
+                    time.sleep(wait_time)
+                else:
+                    # Transient error (503, 500, json decode errors, network issues, etc.)
+                    wait_time = 5 * (2 ** attempt) + random.uniform(0, 2)
+                    wait_time = min(wait_time, 30)
+                    print(f"      [!] Transient error during LLM extraction on chunk {idx + 1}: {e}. Waiting {wait_time:.1f}s before retry (attempt {attempt+1}/{max_retries})...")
+                    time.sleep(wait_time)
             
         return local_results
 
@@ -162,22 +183,51 @@ async def llm_enhance_apis(extracted_apis, server_name):
     {json.dumps(extracted_apis, indent=2)}
     """
     
-    try:
-        response = client.models.generate_content(
-            model='gemini-2.5-flash',
-            contents=prompt,
-            config=types.GenerateContentConfig(response_mime_type="application/json")
-        )
-        
-        enhanced_apis = json.loads(response.text.strip())
-        if isinstance(enhanced_apis, list) and len(enhanced_apis) > 0:
-            # Re-ensure some required fields are still there just in case the LLM dropped them
-            for api in enhanced_apis:
-                if "function_name" not in api and "method" in api and "path" in api:
-                    api["function_name"] = slugify(f"{api['method']}_{api['path']}").replace("-", "_")
-            print("  [OK] Successfully enhanced API payloads.")
-            return enhanced_apis
-    except Exception as e:
-        print(f"  [!] Error during LLM enhancement: {e}")
+    max_retries = 5
+    for attempt in range(max_retries):
+        try:
+            response = client.models.generate_content(
+                model='gemini-2.5-flash',
+                contents=prompt,
+                config=types.GenerateContentConfig(response_mime_type="application/json")
+            )
+            
+            enhanced_apis = json.loads(response.text.strip())
+            if isinstance(enhanced_apis, list) and len(enhanced_apis) > 0:
+                # Re-ensure some required fields are still there just in case the LLM dropped them
+                for api in enhanced_apis:
+                    if "function_name" not in api and "method" in api and "path" in api:
+                        api["function_name"] = slugify(f"{api['method']}_{api['path']}").replace("-", "_")
+                print("  [OK] Successfully enhanced API payloads.")
+                return enhanced_apis
+            break
+        except Exception as e:
+            error_str = str(e)
+            
+            # Check for non-retryable client errors (e.g. 400, 403, 404)
+            is_non_retryable = any(
+                code in error_str for code in ["400", "INVALID_ARGUMENT", "403", "PERMISSION_DENIED", "404", "NOT_FOUND"]
+            ) or "API key not valid" in error_str
+            
+            if is_non_retryable:
+                print(f"  [!] Non-retryable error during LLM enhancement: {error_str}")
+                break
+            
+            if attempt == max_retries - 1:
+                print(f"  [!] Max retries reached. Error during LLM enhancement: {e}")
+                break
+            
+            is_rate_limit = "429" in error_str or "RESOURCE_EXHAUSTED" in error_str or "rate limit" in error_str.lower()
+            
+            if is_rate_limit:
+                wait_time = 65
+                print(f"  [!] Rate limit hit during LLM enhancement. Waiting {wait_time}s before retry (attempt {attempt+1}/{max_retries})...")
+                time.sleep(wait_time)
+            else:
+                # Transient error
+                wait_time = 5 * (2 ** attempt) + random.uniform(0, 2)
+                wait_time = min(wait_time, 30)
+                print(f"  [!] Transient error during LLM enhancement: {e}. Waiting {wait_time:.1f}s before retry (attempt {attempt+1}/{max_retries})...")
+                time.sleep(wait_time)
         
     return extracted_apis
