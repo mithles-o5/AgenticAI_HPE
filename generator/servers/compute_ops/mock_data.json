@@ -1,0 +1,1579 @@
+{
+    "get_compute_ops_mgmt_v1beta2_appliances_device_id": {
+        "id": "3abc1b2c-4a5d-4e6f-9c7b-2a1d8e7f6abc",
+        "type": "compute-ops-mgmt/appliance",
+        "ipAddress": "192.168.0.1",
+        "deviceId": "gateway+3abc1b2c-4a5d-4e6f-9c7b-2a1d8e7f6abc",
+        "name": "secure-gateway-appliance-01.net",
+        "createdAt": "2025-03-01T10:50:33.736935+00:00",
+        "generation": 2450,
+        "hostname": "secure-gateway-appliance-01.net",
+        "modelNumber": "HPE Compute Ops Management secure gateway",
+        "productId": "gateway",
+        "state": "CONNECTED",
+        "updatedAt": "2025-03-01T11:05:00.554140+00:00",
+        "lastDisconnectedAt": "2025-03-01T11:05:00.554140+00:00",
+        "applianceType": "GATEWAY",
+        "applianceCert": "-----BEGIN CERTIFICATE-----\nMIIDdzCCAl+gAwIBAgIUQW\n-----END CERTIFICATE-----\n",
+        "applianceMode": "NORMAL",
+        "resource": {
+            "id": "gateway+3abc1b2c-4a5d-4e6f-9c7b-2a1d8e7f6abc",
+            "type": "compute-ops-mgmt/appliance",
+            "resourceUri": "/compute-ops-mgmt/v1beta2/appliances/gateway+3abc1b2c-4a5d-4e6f-9c7b-2a1d8e7f6abc"
+        },
+        "version": "1.0.2+506412",
+        "subscription": "active"
+    },
+    "delete_compute_ops_mgmt_v1beta2_appliances_device_id": {},
+    "get_compute_ops_mgmt_v1beta2_appliances_device_id_certificate": {
+        "certificate": "-----BEGIN CERTIFICATE-----\nMIIDdzCCAl+gAwIBAgIUQW\n-----END CERTIFICATE-----\n"
+    },
+    "get_compute_ops_mgmt_v1_appliance_firmware_bundles": {
+        "offset": 0,
+        "count": 1,
+        "total": 12,
+        "items": [
+            {
+                "id": "427275fcefef11ebaeaea25b204e9317",
+                "type": "compute-ops-mgmt/appliance-firmware-bundle",
+                "rdaBundlePath": "/depot/volume/pub/OliveComputeUpdate/Ov8_50",
+                "ovaFileName": "Update.bin",
+                "resourceUri": "/compute-ops-mgmt/v1/appliance-firmware-bundles/427275fcefef11ebaeaea25b204e9317",
+                "applianceVersion": "8.70.00",
+                "applianceType": "VM",
+                "releaseDate": "2025-03-01",
+                "milestone": true,
+                "name": "HPE Composable Infrastructure",
+                "state": "AVAILABLE",
+                "releaseNotes": "https://example.com/release-notes",
+                "size": 1024000,
+                "languages": [
+                    "en_US",
+                    "es_ES"
+                ],
+                "synergyReleaseInfo": "https://example.com/synergy-info",
+                "features": [
+                    "Firmware Update",
+                    "Diagnostics"
+                ],
+                "supportedUpgrades": [
+                    "8.50.00",
+                    "8.60.00"
+                ],
+                "applicableAppliances": [
+                    {
+                        "id": "appliance-1",
+                        "name": "Appliance A"
+                    }
+                ],
+                "createdAt": "2019-08-24T14:15:22Z",
+                "updatedAt": "2019-08-24T14:15:22Z"
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1_appliance_firmware_bundles_id": {
+        "id": "427275fcefef11ebaeaea25b204e9317",
+        "type": "compute-ops-mgmt/appliance-firmware-bundle",
+        "rdaBundlePath": "/depot/volume/pub/OliveComputeUpdate/Ov8_50",
+        "ovaFileName": "Update.bin",
+        "resourceUri": "/compute-ops-mgmt/v1/appliance-firmware-bundles/427275fcefef11ebaeaea25b204e9317",
+        "applianceVersion": "8.70.00",
+        "applianceType": "VM",
+        "releaseDate": "2025-03-01",
+        "milestone": true,
+        "name": "HPE Composable Infrastructure",
+        "state": "AVAILABLE",
+        "releaseNotes": "https://example.com/release-notes",
+        "size": 1024000,
+        "languages": [
+            "en_US",
+            "es_ES"
+        ],
+        "synergyReleaseInfo": "https://example.com/synergy-info",
+        "features": [
+            "Firmware Update",
+            "Diagnostics"
+        ],
+        "supportedUpgrades": [
+            "8.50.00",
+            "8.60.00"
+        ],
+        "applicableAppliances": [
+            {
+                "id": "appliance-1",
+                "name": "Appliance A"
+            }
+        ],
+        "createdAt": "2019-08-24T14:15:22Z",
+        "updatedAt": "2019-08-24T14:15:22Z"
+    },
+    "get_compute_ops_mgmt_v1beta1_appliance_firmware_bundles": {
+        "offset": 0,
+        "count": 1,
+        "total": 12,
+        "items": [
+            {
+                "id": "427275fcefef11ebaeaea25b204e9317",
+                "type": "compute-ops-mgmt/appliance-firmware-bundle",
+                "applianceVersion": "8.70.00",
+                "applianceType": "VM",
+                "supportedUpgrades": [
+                    "8.50.00",
+                    "8.60.00"
+                ],
+                "createdAt": "2019-08-24T14:15:22Z",
+                "updatedAt": "2019-08-24T14:15:22Z",
+                "rdaBundlePath": "/depot/volume/pub/OliveComputeUpdate/Ov8_50",
+                "ovaFileName": "Update.bin",
+                "resourceUri": "/compute-ops-mgmt/v1beta1/appliance-firmware-bundles/427275fcefef11ebaeaea25b204e9317",
+                "releaseDate": "2025-03-01",
+                "milestone": true,
+                "name": "HPE Composable Infrastructure Beta",
+                "state": "AVAILABLE",
+                "releaseNotes": "https://example.com/release-notes-beta",
+                "size": 1024000,
+                "languages": [
+                    "en_US"
+                ],
+                "synergyReleaseInfo": "https://example.com/synergy-info-beta",
+                "features": [
+                    "Firmware Update"
+                ],
+                "applicableAppliances": [
+                    {
+                        "id": "appliance-beta-1",
+                        "name": "Appliance Beta A"
+                    }
+                ]
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1beta1_appliance_firmware_bundles_id": {
+        "id": "427275fcefef11ebaeaea25b204e9317",
+        "type": "compute-ops-mgmt/appliance-firmware-bundle",
+        "applianceVersion": "8.70.00",
+        "applianceType": "VM",
+        "supportedUpgrades": [
+            "8.50.00",
+            "8.60.00"
+        ],
+        "createdAt": "2019-08-24T14:15:22Z",
+        "updatedAt": "2019-08-24T14:15:22Z",
+        "rdaBundlePath": "/depot/volume/pub/OliveComputeUpdate/Ov8_50",
+        "ovaFileName": "Update.bin",
+        "resourceUri": "/compute-ops-mgmt/v1beta1/appliance-firmware-bundles/427275fcefef11ebaeaea25b204e9317",
+        "releaseDate": "2025-03-01",
+        "milestone": true,
+        "name": "HPE Composable Infrastructure Beta",
+        "state": "AVAILABLE",
+        "releaseNotes": "https://example.com/release-notes-beta",
+        "size": 1024000,
+        "languages": [
+            "en_US"
+        ],
+        "synergyReleaseInfo": "https://example.com/synergy-info-beta",
+        "features": [
+            "Firmware Update"
+        ],
+        "applicableAppliances": [
+            {
+                "id": "appliance-beta-1",
+                "name": "Appliance Beta A"
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1beta2_approval_policies": {
+        "name": "demo-policy",
+        "type": "compute-ops-mgmt/approval-policy",
+        "id": "4c102e14-87cd-4c00-8f5a-73073f85c9az",
+        "resourceUri": "/compute-ops-mgmt/v1beta2/approval-policies/4c102e14-87cd-4c00-8f5a-73073f85c9az",
+        "description": "Example policy",
+        "state": "ACTIVE",
+        "remarks": "This is a demo policy",
+        "createdAt": "2025-03-01T10:50:33.736935+00:00",
+        "updatedAt": "2025-03-01T11:05:00.554140+00:00",
+        "generation": 8450,
+        "policyData": {
+            "approvables": [
+                {
+                    "id": "update_firmware",
+                    "name": "Update firmware"
+                }
+            ],
+            "resources": [
+                {
+                    "id": "group-id-123",
+                    "type": "compute-ops-mgmt/group"
+                }
+            ]
+        }
+    },
+    "get_compute_ops_mgmt_v1beta2_approval_policies": {
+        "offset": 0,
+        "count": 1,
+        "total": 12,
+        "items": [
+            {
+                "id": "4c102e14-87cd-4c00-8f5a-73073f85c9az",
+                "type": "compute-ops-mgmt/approval-policy",
+                "createdAt": "2025-03-01T10:50:33.736935+00:00",
+                "updatedAt": "2025-03-01T11:05:00.554140+00:00",
+                "generation": 8450,
+                "name": "demo-policy",
+                "resourceUri": "/compute-ops-mgmt/v1beta2/approval-policies/4c102e14-87cd-4c00-8f5a-73073f85c9az",
+                "description": "Example policy",
+                "state": "ACTIVE",
+                "remarks": "This is a demo policy",
+                "policyData": {
+                    "approvables": [
+                        {
+                            "id": "update_firmware",
+                            "name": "Update firmware"
+                        }
+                    ],
+                    "resources": [
+                        {
+                            "id": "group-id-123",
+                            "type": "compute-ops-mgmt/group"
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1beta2_approval_policies_policy_id": {
+        "name": "demo-policy",
+        "type": "compute-ops-mgmt/approval-policy",
+        "id": "4c102e14-87cd-4c00-8f5a-73073f85c9az",
+        "resourceUri": "/compute-ops-mgmt/v1beta2/approval-policies/4c102e14-87cd-4c00-8f5a-73073f85c9az",
+        "description": "Example policy",
+        "state": "ACTIVE",
+        "remarks": "This is a demo policy",
+        "createdAt": "2025-03-01T10:50:33.736935+00:00",
+        "updatedAt": "2025-03-01T11:05:00.554140+00:00",
+        "generation": 8450,
+        "policyData": {
+            "approvables": [
+                {
+                    "id": "update_firmware",
+                    "name": "Update firmware"
+                }
+            ],
+            "resources": [
+                {
+                    "id": "group-id-123",
+                    "type": "compute-ops-mgmt/group"
+                }
+            ]
+        }
+    },
+    "patch_compute_ops_mgmt_v1beta2_approval_policies_policy_id": {
+        "name": "updated-demo-policy",
+        "type": "compute-ops-mgmt/approval-policy",
+        "id": "4c102e14-87cd-4c00-8f5a-73073f85c9az",
+        "resourceUri": "/compute-ops-mgmt/v1beta2/approval-policies/4c102e14-87cd-4c00-8f5a-73073f85c9az",
+        "description": "Updated example policy description",
+        "state": "ACTIVE",
+        "remarks": "This is a demo policy",
+        "createdAt": "2025-03-01T10:50:33.736935+00:00",
+        "updatedAt": "2025-03-01T11:05:00.554140+00:00",
+        "generation": 8450,
+        "policyData": {
+            "approvables": [
+                {
+                    "id": "power_on",
+                    "name": "Power on"
+                }
+            ],
+            "resources": [
+                {
+                    "id": "group-id-123",
+                    "type": "compute-ops-mgmt/group"
+                }
+            ]
+        }
+    },
+    "delete_compute_ops_mgmt_v1beta2_approval_policies_policy_id": {},
+    "get_compute_ops_mgmt_v1beta2_approval_requests": {
+        "offset": 0,
+        "count": 1,
+        "total": 12,
+        "items": [
+            {
+                "id": "30fa7c27-64a0-4331-9462-73b0e004d4b9",
+                "type": "compute-ops-mgmt/approval-request",
+                "createdAt": "2025-03-01T10:50:33.736935+00:00",
+                "updatedAt": "2025-03-01T11:05:00.554140+00:00",
+                "generation": 8450,
+                "resourceUri": "/compute-ops-mgmt/v1beta2/approval-requests/30fa7c27-64a0-4331-9462-73b0e004d4b9",
+                "policy": {
+                    "id": "f196db43-b56b-441c-a60e-73ca3bb53c5d",
+                    "resourceUri": "/compute-ops-mgmt/v1beta2/approval-policies/f196db43-b56b-441c-a60e-73ca3bb53c5d",
+                    "type": "compute-ops-mgmt/approval-policy"
+                },
+                "approvableName": "Reset",
+                "approvableResource": {
+                    "id": "215881-H98+8899215881198831",
+                    "resourceUri": "/compute-ops-mgmt/v1/servers/215881-H98+8899215881198831",
+                    "type": "compute-ops-mgmt/server"
+                },
+                "operation": {
+                    "id": "e0f1ac57-9fab-468f-afab-67d6746267ee",
+                    "resourceUri": "/compute-ops-mgmt/v1/jobs/e0f1ac57-9fab-468f-afab-67d6746267ee",
+                    "type": "compute-ops-mgmt/job"
+                },
+                "requester": {
+                    "firstName": "Test",
+                    "lastName": "User1",
+                    "email": "anybody@example.com"
+                },
+                "approvalState": "APPROVED",
+                "requestRemarks": "Approved for testing.",
+                "cancelledBy": "N/A",
+                "minApprovers": 2,
+                "requestData": {
+                    "approvals": {
+                        "user1": "APPROVED"
+                    }
+                }
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1beta2_approval_requests_request_id": {
+        "type": "compute-ops-mgmt/approval-request",
+        "resourceUri": "/compute-ops-mgmt/v1beta2/approval-requests/30fa7c27-64a0-4331-9462-73b0e004d4b9",
+        "id": "30fa7c27-64a0-4331-9462-73b0e004d4b9",
+        "policy": {
+            "id": "f196db43-b56b-441c-a60e-73ca3bb53c5d",
+            "resourceUri": "/compute-ops-mgmt/v1beta2/approval-policies/f196db43-b56b-441c-a60e-73ca3bb53c5d",
+            "type": "compute-ops-mgmt/approval-policy"
+        },
+        "approvableName": "Reset",
+        "approvableResource": {
+            "id": "215881-H98+8899215881198831",
+            "resourceUri": "/compute-ops-mgmt/v1/servers/215881-H98+8899215881198831",
+            "type": "compute-ops-mgmt/server"
+        },
+        "operation": {
+            "id": "e0f1ac57-9fab-468f-afab-67d6746267ee",
+            "resourceUri": "/compute-ops-mgmt/v1/jobs/e0f1ac57-9fab-468f-afab-67d6746267ee",
+            "type": "compute-ops-mgmt/job"
+        },
+        "requester": {
+            "firstName": "Test",
+            "lastName": "User1",
+            "email": "anybody@example.com"
+        },
+        "approvalState": "APPROVED",
+        "createdAt": "2025-03-01T10:50:33.736935+00:00",
+        "updatedAt": "2025-03-01T11:05:00.554140+00:00",
+        "generation": 8450,
+        "requestRemarks": "Approved for testing.",
+        "cancelledBy": "N/A",
+        "minApprovers": 2,
+        "requestData": {
+            "approvals": {
+                "user1": "APPROVED"
+            }
+        }
+    },
+    "patch_compute_ops_mgmt_v1beta2_approval_requests_request_id": {
+        "type": "compute-ops-mgmt/approval-request",
+        "resourceUri": "/compute-ops-mgmt/v1beta2/approval-requests/30fa7c27-64a0-4331-9462-73b0e004d4b9",
+        "id": "30fa7c27-64a0-4331-9462-73b0e004d4b9",
+        "policy": {
+            "id": "f196db43-b56b-441c-a60e-73ca3bb53c5d",
+            "resourceUri": "/compute-ops-mgmt/v1beta2/approval-policies/f196db43-b56b-441c-a60e-73ca3bb53c5d",
+            "type": "compute-ops-mgmt/approval-policy"
+        },
+        "approvableName": "Reset",
+        "approvableResource": {
+            "id": "215881-H98+88992158811198831",
+            "resourceUri": "/compute-ops-mgmt/v1/servers/215881-H98+88992158811198831",
+            "type": "compute-ops-mgmt/server"
+        },
+        "operation": {
+            "id": "e0f1ac57-9fab-468f-afab-67d6746267ee",
+            "resourceUri": "/compute-ops-mgmt/v1/jobs/e0f1ac57-9fab-468f-afab-67d6746267ee",
+            "type": "compute-ops-mgmt/job"
+        },
+        "requester": {
+            "firstName": "Test",
+            "lastName": "User1",
+            "email": "anybody@example.com"
+        },
+        "approvalState": "CANCELLED",
+        "createdAt": "2025-03-01T10:50:33.736935+00:00",
+        "updatedAt": "2025-03-01T11:05:00.554140+00:00",
+        "generation": 8450,
+        "requestRemarks": "Cancelled by requester.",
+        "cancelledBy": "User1",
+        "minApprovers": 2,
+        "requestData": {
+            "approvals": {
+                "user1": "PENDING"
+            }
+        }
+    },
+    "post_compute_ops_mgmt_v1beta2_approval_requests_request_id_approve": {
+        "approvalState": "APPROVED",
+        "remarks": "The requested operation is approved."
+    },
+    "get_compute_ops_mgmt_v1_async_operations": {
+        "count": 1,
+        "next": "b4cf1a6f-1a1f-11ef-9856-20155d97c234",
+        "total": 12,
+        "items": [
+            {
+                "id": "22602690-193a-11ef-b56a-20155d97c234",
+                "type": "compute-ops-mgmt/async-operation",
+                "generation": 1,
+                "createdAt": "2019-08-24T14:15:22Z",
+                "updatedAt": "2019-08-24T14:15:22Z",
+                "resourceUri": "/compute-ops-mgmt/v1/async-operations/22602690-193a-11ef-b56a-20155d97c234",
+                "sourceResourceUri": "/compute-ops-mgmt/v1/groups/9ac30e2e-0241-4fd2-aa73-8b1a6f3f5faf/devices",
+                "state": "RUNNING",
+                "startedAt": "2019-08-24T14:15:22Z",
+                "endedAt": "2019-08-24T14:15:22Z",
+                "logMessages": [
+                    {
+                        "timestamp": "2019-08-24T14:15:22Z",
+                        "message": "Operation started."
+                    }
+                ],
+                "progressPercent": 50,
+                "error": {},
+                "recommendations": [
+                    "Examine the error field for information and retry the operation."
+                ],
+                "results": [
+                    {
+                        "id": "resource-id-1",
+                        "type": "compute-ops-mgmt/resource",
+                        "action": "CREATED"
+                    }
+                ]
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1_async_operations_id": {
+        "id": "22602690-193a-11ef-b56a-20155d97c234",
+        "type": "compute-ops-mgmt/async-operation",
+        "generation": 1,
+        "createdAt": "2019-08-24T14:15:22Z",
+        "updatedAt": "2019-08-24T14:15:22Z",
+        "resourceUri": "/compute-ops-mgmt/v1/async-operations/22602690-193a-11ef-b56a-20155d97c234",
+        "sourceResourceUri": "/compute-ops-mgmt/v1/groups/9ac30e2e-0241-4fd2-aa73-8b1a6f3f5faf/devices",
+        "state": "RUNNING",
+        "startedAt": "2019-08-24T14:15:22Z",
+        "endedAt": "2019-08-24T14:15:22Z",
+        "logMessages": [
+            {
+                "timestamp": "2019-08-24T14:15:22Z",
+                "message": "Operation started."
+            }
+        ],
+        "progressPercent": 50,
+        "error": {},
+        "recommendations": [
+            "Examine the error field for information and retry the operation."
+        ],
+        "results": [
+            {
+                "id": "resource-id-1",
+                "type": "compute-ops-mgmt/resource",
+                "action": "UPDATED"
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1beta1_async_operations": {
+        "count": 1,
+        "next": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+        "total": 5,
+        "items": [
+            {
+                "id": "f1a2b3c4-d5e6-7890-1234-567890abcdef",
+                "type": "compute-ops-mgmt/async-operation-beta",
+                "generation": 2,
+                "createdAt": "2020-01-01T10:00:00Z",
+                "updatedAt": "2020-01-01T10:05:00Z",
+                "resourceUri": "/compute-ops-mgmt/v1beta1/async-operations/f1a2b3c4-d5e6-7890-1234-567890abcdef",
+                "sourceResourceUri": "/compute-ops-mgmt/v1beta1/servers/server-abc",
+                "state": "SUCCEEDED",
+                "startedAt": "2020-01-01T09:55:00Z",
+                "endedAt": "2020-01-01T10:05:00Z",
+                "logMessages": [],
+                "progressPercent": 100,
+                "error": null,
+                "recommendations": [],
+                "results": []
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1beta1_async_operations_id": {
+        "id": "f1a2b3c4-d5e6-7890-1234-567890abcdef",
+        "type": "compute-ops-mgmt/async-operation-beta",
+        "generation": 2,
+        "createdAt": "2020-01-01T10:00:00Z",
+        "updatedAt": "2020-01-01T10:05:00Z",
+        "resourceUri": "/compute-ops-mgmt/v1beta1/async-operations/f1a2b3c4-d5e6-7890-1234-567890abcdef",
+        "sourceResourceUri": "/compute-ops-mgmt/v1beta1/servers/server-abc",
+        "state": "SUCCEEDED",
+        "startedAt": "2020-01-01T09:55:00Z",
+        "endedAt": "2020-01-01T10:05:00Z",
+        "logMessages": [],
+        "progressPercent": 100,
+        "error": null,
+        "recommendations": [],
+        "results": []
+    },
+    "get_compute_ops_mgmt_v1beta1_accounts_id": {
+        "id": "tenant-account-id-1",
+        "name": "Tenant Account One",
+        "type": "compute-ops-mgmt/account"
+    },
+    "get_compute_ops_mgmt_v1beta1_accounts_id_tenants": {
+        "count": 1,
+        "items": [
+            {
+                "id": "tenant-id-1",
+                "name": "Tenant One",
+                "type": "compute-ops-mgmt/tenant"
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1beta1_activation_keys": {
+        "activationKey": "ACTIVATION-KEY-123",
+        "id": "uuid-key-123",
+        "createdAt": "2024-01-01T12:00:00Z",
+        "type": "compute-ops-mgmt/activation-key"
+    },
+    "get_compute_ops_mgmt_v1beta1_activation_keys": {
+        "count": 1,
+        "items": [
+            {
+                "activationKey": "ACTIVATION-KEY-123",
+                "id": "uuid-key-123",
+                "createdAt": "2024-01-01T12:00:00Z",
+                "type": "compute-ops-mgmt/activation-key"
+            }
+        ]
+    },
+    "delete_compute_ops_mgmt_v1beta1_activation_keys_activation_key": {},
+    "post_compute_ops_mgmt_v1beta1_activation_tokens": {
+        "activationToken": "TOKEN-XYZ",
+        "expiresAt": "2024-01-01T13:00:00Z",
+        "type": "compute-ops-mgmt/activation-token"
+    },
+    "get_compute_ops_mgmt_v1beta2_activities": {
+        "count": 1,
+        "items": [
+            {
+                "id": "activity-1",
+                "type": "compute-ops-mgmt/activity",
+                "description": "Server firmware updated",
+                "timestamp": "2024-01-01T12:00:00Z"
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1beta1_ahs_files": {
+        "id": "ahs-uuid-1",
+        "type": "compute-ops-mgmt/ahs-file",
+        "filename": "ahs-log-1.ahs",
+        "uploadStatus": "PENDING"
+    },
+    "get_compute_ops_mgmt_v1beta1_ahs_files": {
+        "count": 1,
+        "items": [
+            {
+                "id": "ahs-uuid-1",
+                "type": "compute-ops-mgmt/ahs-file",
+                "filename": "ahs-log-1.ahs",
+                "uploadStatus": "COMPLETED",
+                "createdAt": "2024-01-01T12:00:00Z"
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1beta1_ahs_files_id": {
+        "id": "ahs-uuid-1",
+        "type": "compute-ops-mgmt/ahs-file",
+        "filename": "ahs-log-1.ahs",
+        "uploadStatus": "COMPLETED",
+        "createdAt": "2024-01-01T12:00:00Z"
+    },
+    "patch_compute_ops_mgmt_v1beta1_ahs_files_id": {
+        "id": "ahs-uuid-1",
+        "type": "compute-ops-mgmt/ahs-file",
+        "filename": "ahs-log-1.ahs",
+        "description": "Updated description for AHS log",
+        "uploadStatus": "COMPLETED"
+    },
+    "post_compute_ops_mgmt_v1beta1_ahs_files_id_parse": {
+        "id": "ahs-uuid-1",
+        "type": "compute-ops-mgmt/ahs-file",
+        "parseStatus": "PROCESSING",
+        "message": "AHS file parsing initiated."
+    },
+    "get_compute_ops_mgmt_v1beta1_ahs_files_id_download": {
+        "file_content": "binary_ahs_file_content_here"
+    },
+    "get_compute_ops_mgmt_v1beta2_appliances": {
+        "count": 1,
+        "items": [
+            {
+                "id": "3abc1b2c-4a5d-4e6f-9c7b-2a1d8e7f6abc",
+                "name": "secure-gateway-appliance-01.net",
+                "type": "compute-ops-mgmt/appliance"
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1beta1_energy_over_time": {
+        "items": [
+            {
+                "timestamp": "2024-01-01T00:00:00Z",
+                "energyConsumptionWatts": 1500,
+                "metricType": "ENERGY_CONSUMPTION"
+            }
+        ],
+        "unit": "Watts"
+    },
+    "get_compute_ops_mgmt_v1beta1_energy_by_entity": {
+        "items": [
+            {
+                "entityId": "server-1",
+                "entityType": "Server",
+                "totalEnergyWatts": 50000,
+                "metricType": "TOTAL_ENERGY"
+            }
+        ],
+        "unit": "Watts"
+    },
+    "get_compute_ops_mgmt_v1beta1_external_services": {
+        "count": 1,
+        "items": [
+            {
+                "id": "ext-service-1",
+                "type": "compute-ops-mgmt/external-service",
+                "name": "Monitoring Service",
+                "status": "ACTIVE"
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1beta1_external_services": {
+        "id": "ext-service-2",
+        "type": "compute-ops-mgmt/external-service",
+        "name": "New External Service",
+        "status": "PENDING_CONFIGURATION"
+    },
+    "get_compute_ops_mgmt_v1beta1_external_services_id": {
+        "id": "ext-service-1",
+        "type": "compute-ops-mgmt/external-service",
+        "name": "Monitoring Service",
+        "status": "ACTIVE"
+    },
+    "delete_compute_ops_mgmt_v1beta1_external_services_id": {},
+    "patch_compute_ops_mgmt_v1beta1_external_services_id": {
+        "id": "ext-service-1",
+        "type": "compute-ops-mgmt/external-service",
+        "name": "Monitoring Service",
+        "status": "INACTIVE"
+    },
+    "post_compute_ops_mgmt_v1beta1_external_services_id_test": {
+        "id": "ext-service-1",
+        "type": "compute-ops-mgmt/external-service-test",
+        "result": "SUCCESS",
+        "message": "Connection successful."
+    },
+    "get_compute_ops_mgmt_v1beta1_filters": {
+        "count": 1,
+        "items": [
+            {
+                "id": "filter-1",
+                "type": "compute-ops-mgmt/filter",
+                "name": "High CPU Servers",
+                "criteria": {
+                    "cpuUsage": {
+                        "gt": 80
+                    }
+                }
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1beta1_filters": {
+        "id": "filter-2",
+        "type": "compute-ops-mgmt/filter",
+        "name": "Low Disk Space",
+        "createdAt": "2024-01-01T12:00:00Z"
+    },
+    "get_compute_ops_mgmt_v1beta1_filters_properties": {
+        "properties": [
+            {
+                "name": "cpuUsage",
+                "type": "integer"
+            },
+            {
+                "name": "diskUsage",
+                "type": "integer"
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1beta1_filters_id": {
+        "id": "filter-1",
+        "type": "compute-ops-mgmt/filter",
+        "name": "High CPU Servers",
+        "criteria": {
+            "cpuUsage": {
+                "gt": 80
+            }
+        },
+        "createdAt": "2024-01-01T12:00:00Z"
+    },
+    "delete_compute_ops_mgmt_v1beta1_filters_id": {},
+    "patch_compute_ops_mgmt_v1beta1_filters_id": {
+        "id": "filter-1",
+        "type": "compute-ops-mgmt/filter",
+        "name": "Very High CPU Servers",
+        "criteria": {
+            "cpuUsage": {
+                "gt": 80
+            }
+        }
+    },
+    "get_compute_ops_mgmt_v1beta1_filters_id_matches": {
+        "count": 1,
+        "items": [
+            {
+                "id": "server-A",
+                "type": "compute-ops-mgmt/server",
+                "name": "Server A",
+                "cpuUsage": 95
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1_firmware_bundles": {
+        "count": 1,
+        "items": [
+            {
+                "id": "fw-bundle-1",
+                "type": "compute-ops-mgmt/firmware-bundle",
+                "name": "Server Firmware v1.0",
+                "version": "1.0"
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1_firmware_bundles_id": {
+        "id": "fw-bundle-1",
+        "type": "compute-ops-mgmt/firmware-bundle",
+        "name": "Server Firmware v1.0",
+        "version": "1.0"
+    },
+    "get_compute_ops_mgmt_v1_firmware_bundles_id_bundle_details": {
+        "id": "fw-bundle-1",
+        "details": {
+            "components": [
+                {
+                    "name": "BIOS",
+                    "version": "1.0.1"
+                },
+                {
+                    "name": "iLO",
+                    "version": "2.10"
+                }
+            ]
+        }
+    },
+    "get_compute_ops_mgmt_v1beta2_firmware_bundles": {
+        "count": 1,
+        "items": [
+            {
+                "id": "fw-bundle-beta-1",
+                "type": "compute-ops-mgmt/firmware-bundle",
+                "name": "Server Firmware v2.0-beta",
+                "version": "2.0-beta"
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1beta2_firmware_bundles_id": {
+        "id": "fw-bundle-beta-1",
+        "type": "compute-ops-mgmt/firmware-bundle",
+        "name": "Server Firmware v2.0-beta",
+        "version": "2.0-beta"
+    },
+    "get_compute_ops_mgmt_v1_groups": {
+        "count": 1,
+        "items": [
+            {
+                "id": "group-1",
+                "type": "compute-ops-mgmt/group",
+                "name": "Development Servers"
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1_groups": {
+        "id": "group-2",
+        "type": "compute-ops-mgmt/group",
+        "name": "Production Servers",
+        "createdAt": "2024-01-01T12:00:00Z"
+    },
+    "get_compute_ops_mgmt_v1_groups_group_id": {
+        "id": "group-1",
+        "type": "compute-ops-mgmt/group",
+        "name": "Development Servers"
+    },
+    "delete_compute_ops_mgmt_v1_groups_group_id": {},
+    "patch_compute_ops_mgmt_v1_groups_group_id": {
+        "id": "group-1",
+        "type": "compute-ops-mgmt/group",
+        "name": "Staging Servers"
+    },
+    "get_compute_ops_mgmt_v1_groups_group_id_compliance": {
+        "groupComplianceStatus": "COMPLIANT",
+        "complianceScore": 95
+    },
+    "get_compute_ops_mgmt_v1_groups_group_id_compliance_compliance_id": {
+        "id": "compliance-report-1",
+        "status": "COMPLIANT",
+        "details": {
+            "firmware": "latest"
+        }
+    },
+    "get_compute_ops_mgmt_v1_groups_group_id_devices": {
+        "count": 1,
+        "items": [
+            {
+                "id": "server-X",
+                "type": "compute-ops-mgmt/server",
+                "name": "Server X"
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1beta3_groups": {
+        "count": 1,
+        "items": [
+            {
+                "id": "group-v3-1",
+                "type": "compute-ops-mgmt/group",
+                "name": "Dev Group v3"
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1beta3_groups": {
+        "id": "group-v3-2",
+        "type": "compute-ops-mgmt/group",
+        "name": "Prod Group v3",
+        "createdAt": "2024-01-01T12:00:00Z"
+    },
+    "get_compute_ops_mgmt_v1beta3_groups_group_id": {
+        "id": "group-v3-1",
+        "type": "compute-ops-mgmt/group",
+        "name": "Dev Group v3"
+    },
+    "delete_compute_ops_mgmt_v1beta3_groups_group_id": {},
+    "patch_compute_ops_mgmt_v1beta3_groups_group_id": {
+        "id": "group-v3-1",
+        "type": "compute-ops-mgmt/group",
+        "name": "Test Group v3"
+    },
+    "get_compute_ops_mgmt_v1beta3_groups_group_id_compliance": {
+        "groupComplianceStatus": "NON_COMPLIANT",
+        "complianceScore": 80
+    },
+    "get_compute_ops_mgmt_v1beta3_groups_group_id_compliance_compliance_id": {
+        "id": "compliance-report-v3-1",
+        "status": "NON_COMPLIANT",
+        "details": {
+            "firmware": "outdated"
+        }
+    },
+    "get_compute_ops_mgmt_v1beta3_groups_group_id_devices": {
+        "count": 1,
+        "items": [
+            {
+                "id": "server-Y",
+                "type": "compute-ops-mgmt/server",
+                "name": "Server Y"
+            }
+        ]
+    },
+    "get_compute_ops_v1beta2_groups": {
+        "count": 1,
+        "items": [
+            {
+                "id": "group-v2-1",
+                "type": "compute-ops/group",
+                "name": "Dev Group v2"
+            }
+        ]
+    },
+    "post_compute_ops_v1beta2_groups": {
+        "id": "group-v2-2",
+        "type": "compute-ops/group",
+        "name": "Prod Group v2",
+        "createdAt": "2024-01-01T12:00:00Z"
+    },
+    "get_compute_ops_v1beta2_groups_group_id": {
+        "id": "group-v2-1",
+        "type": "compute-ops/group",
+        "name": "Dev Group v2"
+    },
+    "delete_compute_ops_v1beta2_groups_group_id": {},
+    "patch_compute_ops_v1beta2_groups_group_id": {
+        "id": "group-v2-1",
+        "type": "compute-ops/group",
+        "name": "Test Group v2"
+    },
+    "get_compute_ops_v1beta2_groups_group_id_compliance": {
+        "groupComplianceStatus": "COMPLIANT",
+        "complianceScore": 90
+    },
+    "get_compute_ops_v1beta2_groups_group_id_compliance_compliance_id": {
+        "id": "compliance-report-v2-1",
+        "status": "COMPLIANT",
+        "details": {
+            "firmware": "latest"
+        }
+    },
+    "get_compute_ops_v1beta2_groups_group_id_devices": {
+        "count": 1,
+        "items": [
+            {
+                "id": "server-Z",
+                "type": "compute-ops/server",
+                "name": "Server Z"
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1beta2_job_templates": {
+        "count": 1,
+        "items": [
+            {
+                "id": "template-1",
+                "type": "compute-ops-mgmt/job-template",
+                "name": "Firmware Update Template"
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1beta2_job_templates_id": {
+        "id": "template-1",
+        "type": "compute-ops-mgmt/job-template",
+        "name": "Firmware Update Template",
+        "description": "Template for updating server firmware."
+    },
+    "get_compute_ops_mgmt_v1_jobs": {
+        "count": 1,
+        "items": [
+            {
+                "id": "job-1",
+                "type": "compute-ops-mgmt/job",
+                "name": "Update Firmware Job",
+                "status": "COMPLETED"
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1_jobs": {
+        "id": "job-2",
+        "type": "compute-ops-mgmt/job",
+        "name": "New Job",
+        "status": "PENDING",
+        "createdAt": "2024-01-01T12:00:00Z"
+    },
+    "get_compute_ops_mgmt_v1_jobs_id": {
+        "id": "job-1",
+        "type": "compute-ops-mgmt/job",
+        "name": "Update Firmware Job",
+        "status": "COMPLETED"
+    },
+    "patch_compute_ops_mgmt_v1_jobs_id": {
+        "id": "job-1",
+        "type": "compute-ops-mgmt/job",
+        "name": "Update Firmware Job",
+        "status": "CANCELLED"
+    },
+    "get_compute_ops_mgmt_v1beta3_jobs": {
+        "count": 1,
+        "items": [
+            {
+                "id": "job-v3-1",
+                "type": "compute-ops-mgmt/job",
+                "name": "Deprecated Job",
+                "status": "FAILED"
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1beta3_jobs": {
+        "id": "job-v3-2",
+        "type": "compute-ops-mgmt/job",
+        "name": "Deprecated New Job",
+        "status": "PENDING"
+    },
+    "get_compute_ops_mgmt_v1beta3_jobs_id": {
+        "id": "job-v3-1",
+        "type": "compute-ops-mgmt/job",
+        "name": "Deprecated Job",
+        "status": "FAILED"
+    },
+    "patch_compute_ops_mgmt_v1beta3_jobs_id": {
+        "id": "job-v3-1",
+        "type": "compute-ops-mgmt/job",
+        "name": "Deprecated Job",
+        "status": "RETRYING"
+    },
+    "get_compute_ops_mgmt_v1beta2_jobs": {
+        "count": 1,
+        "items": [
+            {
+                "id": "job-v2-1",
+                "type": "compute-ops-mgmt/job",
+                "name": "Deprecated Job v2",
+                "status": "COMPLETED"
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1beta2_jobs": {
+        "id": "job-v2-2",
+        "type": "compute-ops-mgmt/job",
+        "name": "Deprecated New Job v2",
+        "status": "PENDING"
+    },
+    "get_compute_ops_mgmt_v1beta2_jobs_id": {
+        "id": "job-v2-1",
+        "type": "compute-ops-mgmt/job",
+        "name": "Deprecated Job v2",
+        "status": "COMPLETED"
+    },
+    "patch_compute_ops_mgmt_v1beta2_jobs_id": {
+        "id": "job-v2-1",
+        "type": "compute-ops-mgmt/job",
+        "name": "Deprecated Job v2",
+        "status": "COMPLETED"
+    },
+    "get_compute_ops_mgmt_v1_metrics_configurations": {
+        "count": 1,
+        "items": [
+            {
+                "id": "metrics-config-1",
+                "type": "compute-ops-mgmt/metrics-configuration",
+                "name": "Default Metrics",
+                "enabled": true
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1_metrics_configurations": {
+        "id": "metrics-config-2",
+        "type": "compute-ops-mgmt/metrics-configuration",
+        "name": "Custom Metrics",
+        "enabled": true
+    },
+    "get_compute_ops_mgmt_v1_metrics_configurations_id": {
+        "id": "metrics-config-1",
+        "type": "compute-ops-mgmt/metrics-configuration",
+        "name": "Default Metrics",
+        "enabled": true
+    },
+    "delete_compute_ops_mgmt_v1_metrics_configurations_id": {},
+    "patch_compute_ops_mgmt_v1_metrics_configurations_id": {
+        "id": "metrics-config-1",
+        "type": "compute-ops-mgmt/metrics-configuration",
+        "name": "Default Metrics",
+        "enabled": false
+    },
+    "get_compute_ops_mgmt_v1beta1_oneview_appliances": {
+        "count": 1,
+        "items": [
+            {
+                "id": "oneview-appliance-1",
+                "type": "compute-ops-mgmt/oneview-appliance",
+                "name": "OneView 1",
+                "ipAddress": "10.0.0.1"
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1beta1_oneview_appliances": {
+        "id": "oneview-appliance-2",
+        "type": "compute-ops-mgmt/oneview-appliance",
+        "name": "New OneView",
+        "ipAddress": "10.0.0.2",
+        "status": "DISCOVERING"
+    },
+    "get_compute_ops_mgmt_v1beta1_oneview_appliances_device_id": {
+        "id": "oneview-appliance-1",
+        "type": "compute-ops-mgmt/oneview-appliance",
+        "name": "OneView 1",
+        "ipAddress": "10.0.0.1"
+    },
+    "delete_compute_ops_mgmt_v1beta1_oneview_appliances_device_id": {},
+    "get_compute_ops_mgmt_v1beta1_oneview_settings": {
+        "globalSetting": {
+            "enableOneViewIntegration": true
+        }
+    },
+    "get_compute_ops_mgmt_v1beta1_oneview_server_templates": {
+        "count": 1,
+        "items": [
+            {
+                "id": "template-ov-1",
+                "type": "compute-ops-mgmt/oneview-server-template",
+                "name": "VMware ESXi Template"
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1beta1_oneview_server_templates_id": {
+        "id": "template-ov-1",
+        "type": "compute-ops-mgmt/oneview-server-template",
+        "name": "VMware ESXi Template",
+        "details": {
+            "osType": "ESXi"
+        }
+    },
+    "get_compute_ops_mgmt_v1beta2_reports": {
+        "count": 1,
+        "items": [
+            {
+                "id": "report-1",
+                "type": "compute-ops-mgmt/report",
+                "name": "Monthly Health Report",
+                "status": "GENERATED"
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1beta2_reports": {
+        "id": "report-2",
+        "type": "compute-ops-mgmt/report",
+        "name": "Daily Compliance Report",
+        "status": "PENDING_GENERATION"
+    },
+    "get_compute_ops_mgmt_v1beta2_reports_id": {
+        "id": "report-1",
+        "type": "compute-ops-mgmt/report",
+        "name": "Monthly Health Report",
+        "status": "GENERATED"
+    },
+    "get_compute_ops_mgmt_v1beta2_reports_id_data": {
+        "reportContent": "Report data in CSV or JSON format."
+    },
+    "get_compute_ops_mgmt_v1beta2_schedules": {
+        "count": 1,
+        "items": [
+            {
+                "id": "schedule-1",
+                "type": "compute-ops-mgmt/schedule",
+                "name": "Weekly Firmware Scan",
+                "status": "ACTIVE"
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1beta2_schedules": {
+        "id": "schedule-2",
+        "type": "compute-ops-mgmt/schedule",
+        "name": "Daily OS Patching",
+        "status": "ACTIVE",
+        "createdAt": "2024-01-01T12:00:00Z"
+    },
+    "get_compute_ops_mgmt_v1beta2_schedules_id": {
+        "id": "schedule-1",
+        "type": "compute-ops-mgmt/schedule",
+        "name": "Weekly Firmware Scan",
+        "status": "ACTIVE"
+    },
+    "delete_compute_ops_mgmt_v1beta2_schedules_id": {},
+    "patch_compute_ops_mgmt_v1beta2_schedules_id": {
+        "id": "schedule-1",
+        "type": "compute-ops-mgmt/schedule",
+        "name": "Weekly Firmware Scan",
+        "status": "INACTIVE"
+    },
+    "get_compute_ops_mgmt_v1beta2_schedules_id_history": {
+        "count": 1,
+        "items": [
+            {
+                "id": "history-1",
+                "status": "SUCCESS",
+                "timestamp": "2024-01-01T12:00:00Z"
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1beta2_schedules_id_history_history_id": {
+        "id": "history-1",
+        "status": "SUCCESS",
+        "timestamp": "2024-01-01T12:00:00Z",
+        "log": "Execution log details."
+    },
+    "get_compute_ops_mgmt_v1beta1_server_locations_location_id": {
+        "id": "location-1",
+        "type": "compute-ops-mgmt/server-location",
+        "name": "Data Center A",
+        "address": "123 Main St"
+    },
+    "post_compute_ops_mgmt_v1beta1_server_locations_location_id_servers": {
+        "message": "Server added to location."
+    },
+    "delete_compute_ops_mgmt_v1beta1_server_locations_location_id_servers": {
+        "message": "Server removed from location."
+    },
+    "get_compute_ops_v1beta1_server_settings": {
+        "count": 1,
+        "items": [
+            {
+                "id": "setting-1",
+                "type": "compute-ops/server-setting",
+                "name": "BIOS Profile A",
+                "targetType": "SERVER"
+            }
+        ]
+    },
+    "post_compute_ops_v1beta1_server_settings": {
+        "id": "setting-2",
+        "type": "compute-ops/server-setting",
+        "name": "BIOS Profile B",
+        "createdAt": "2024-01-01T12:00:00Z"
+    },
+    "get_compute_ops_v1beta1_server_settings_id": {
+        "id": "setting-1",
+        "type": "compute-ops/server-setting",
+        "name": "BIOS Profile A",
+        "settings": {
+            "bootMode": "Legacy"
+        }
+    },
+    "delete_compute_ops_v1beta1_server_settings_id": {},
+    "patch_compute_ops_v1beta1_server_settings_id": {
+        "id": "setting-1",
+        "type": "compute-ops/server-setting",
+        "name": "BIOS Profile A",
+        "settings": {
+            "bootMode": "UEFI"
+        }
+    },
+    "get_compute_ops_mgmt_v1_settings": {
+        "count": 1,
+        "items": [
+            {
+                "id": "global-setting-1",
+                "type": "compute-ops-mgmt/setting",
+                "name": "Telemetry Enabled",
+                "value": true
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1_settings": {
+        "id": "global-setting-2",
+        "type": "compute-ops-mgmt/setting",
+        "name": "Email Notifications",
+        "value": {
+            "enabled": true
+        }
+    },
+    "get_compute_ops_mgmt_v1_settings_id": {
+        "id": "global-setting-1",
+        "type": "compute-ops-mgmt/setting",
+        "name": "Telemetry Enabled",
+        "value": true
+    },
+    "delete_compute_ops_mgmt_v1_settings_id": {},
+    "patch_compute_ops_mgmt_v1_settings_id": {
+        "id": "global-setting-1",
+        "type": "compute-ops-mgmt/setting",
+        "name": "Telemetry Enabled",
+        "value": false
+    },
+    "get_compute_ops_mgmt_v1beta1_settings": {
+        "count": 1,
+        "items": [
+            {
+                "id": "global-setting-beta-1",
+                "type": "compute-ops-mgmt/setting",
+                "name": "Beta Feature Flag",
+                "value": true
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1beta1_settings": {
+        "id": "global-setting-beta-2",
+        "type": "compute-ops-mgmt/setting",
+        "name": "New Beta Setting",
+        "value": "some-value"
+    },
+    "get_compute_ops_mgmt_v1beta1_settings_id": {
+        "id": "global-setting-beta-1",
+        "type": "compute-ops-mgmt/setting",
+        "name": "Beta Feature Flag",
+        "value": true
+    },
+    "delete_compute_ops_mgmt_v1beta1_settings_id": {},
+    "patch_compute_ops_mgmt_v1beta1_settings_id": {
+        "id": "global-setting-beta-1",
+        "type": "compute-ops-mgmt/setting",
+        "name": "Beta Feature Flag",
+        "value": false
+    },
+    "get_compute_ops_mgmt_v1_servers": {
+        "count": 1,
+        "items": [
+            {
+                "id": "server-A",
+                "type": "compute-ops-mgmt/server",
+                "name": "Server Alpha",
+                "status": "ONLINE"
+            }
+        ]
+    },
+    "patch_compute_ops_mgmt_v1_servers": {
+        "message": "Bulk update initiated.",
+        "asyncOperationId": "async-op-123"
+    },
+    "post_compute_ops_mgmt_v1_servers": {
+        "id": "server-B",
+        "type": "compute-ops-mgmt/server",
+        "name": "Server Beta",
+        "status": "DISCOVERING"
+    },
+    "get_compute_ops_mgmt_v1_servers_id": {
+        "id": "server-A",
+        "type": "compute-ops-mgmt/server",
+        "name": "Server Alpha",
+        "status": "ONLINE",
+        "firmwareVersion": "1.0.0"
+    },
+    "patch_compute_ops_mgmt_v1_servers_id": {
+        "id": "server-A",
+        "type": "compute-ops-mgmt/server",
+        "name": "Server Alpha-Renamed"
+    },
+    "delete_compute_ops_mgmt_v1_servers_id": {},
+    "get_compute_ops_mgmt_v1_servers_id_alerts": {
+        "count": 1,
+        "items": [
+            {
+                "id": "alert-1",
+                "severity": "CRITICAL",
+                "message": "High CPU usage"
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1_servers_id_clear_alert": {
+        "message": "Alert cleared."
+    },
+    "get_compute_ops_mgmt_v1beta2_servers": {
+        "count": 1,
+        "items": [
+            {
+                "id": "server-C",
+                "type": "compute-ops-mgmt/server",
+                "name": "Server Charlie",
+                "status": "ONLINE"
+            }
+        ]
+    },
+    "patch_compute_ops_mgmt_v1beta2_servers": {
+        "message": "Bulk update initiated.",
+        "asyncOperationId": "async-op-456"
+    },
+    "post_compute_ops_mgmt_v1beta2_servers": {
+        "id": "server-D",
+        "type": "compute-ops-mgmt/server",
+        "name": "Server Delta",
+        "status": "PENDING"
+    },
+    "get_compute_ops_mgmt_v1beta2_servers_id": {
+        "id": "server-C",
+        "type": "compute-ops-mgmt/server",
+        "name": "Server Charlie",
+        "status": "ONLINE",
+        "firmwareVersion": "1.1.0"
+    },
+    "patch_compute_ops_mgmt_v1beta2_servers_id": {
+        "id": "server-C",
+        "type": "compute-ops-mgmt/server",
+        "name": "Server Charlie-Updated"
+    },
+    "delete_compute_ops_mgmt_v1beta2_servers_id": {},
+    "get_compute_ops_mgmt_v1beta2_servers_id_alerts": {
+        "count": 1,
+        "items": [
+            {
+                "id": "alert-2",
+                "severity": "WARNING",
+                "message": "Low disk space"
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1beta2_servers_id_clear_alert": {
+        "message": "Alert cleared."
+    },
+    "get_compute_ops_mgmt_v1beta2_server_warranty": {
+        "count": 1,
+        "items": [
+            {
+                "id": "warranty-1",
+                "type": "compute-ops-mgmt/server-warranty",
+                "serverId": "server-A",
+                "endDate": "2026-12-31"
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1beta2_server_warranty_id": {
+        "id": "warranty-1",
+        "type": "compute-ops-mgmt/server-warranty",
+        "serverId": "server-A",
+        "endDate": "2026-12-31",
+        "status": "ACTIVE"
+    },
+    "get_compute_ops_mgmt_v1_user_preferences": {
+        "id": "user-pref-1",
+        "type": "compute-ops-mgmt/user-preference",
+        "userId": "user-1",
+        "emailNotifications": true
+    },
+    "post_compute_ops_mgmt_v1_user_preferences": {
+        "id": "user-pref-2",
+        "type": "compute-ops-mgmt/user-preference",
+        "userId": "user-2",
+        "emailNotifications": false
+    },
+    "get_compute_ops_mgmt_v1_user_preferences_id": {
+        "id": "user-pref-1",
+        "type": "compute-ops-mgmt/user-preference",
+        "userId": "user-1",
+        "emailNotifications": true
+    },
+    "put_compute_ops_mgmt_v1_user_preferences_id": {
+        "id": "user-pref-1",
+        "type": "compute-ops-mgmt/user-preference",
+        "userId": "user-1",
+        "emailNotifications": false,
+        "theme": "light"
+    },
+    "post_compute_ops_mgmt_v1_user_preferences_subscribe": {
+        "message": "Subscribed to alerts."
+    },
+    "post_compute_ops_mgmt_v1_user_preferences_unsubscribe": {
+        "message": "Unsubscribed from alerts."
+    },
+    "get_compute_ops_mgmt_v1beta1_user_preferences": {
+        "id": "user-pref-beta-1",
+        "type": "compute-ops-mgmt/user-preference",
+        "userId": "user-beta-1",
+        "emailNotifications": true
+    },
+    "post_compute_ops_mgmt_v1beta1_user_preferences": {
+        "id": "user-pref-beta-2",
+        "type": "compute-ops-mgmt/user-preference",
+        "userId": "user-beta-2",
+        "emailNotifications": true
+    },
+    "get_compute_ops_mgmt_v1beta1_user_preferences_id": {
+        "id": "user-pref-beta-1",
+        "type": "compute-ops-mgmt/user-preference",
+        "userId": "user-beta-1",
+        "emailNotifications": true
+    },
+    "put_compute_ops_mgmt_v1beta1_user_preferences_id": {
+        "id": "user-pref-beta-1",
+        "type": "compute-ops-mgmt/user-preference",
+        "userId": "user-beta-1",
+        "emailNotifications": false
+    },
+    "get_compute_ops_mgmt_v1beta1_utilization_over_time": {
+        "items": [
+            {
+                "timestamp": "2024-01-01T00:00:00Z",
+                "cpuUtilizationPercent": 75,
+                "memoryUtilizationPercent": 60
+            }
+        ],
+        "metricType": "UTILIZATION"
+    },
+    "get_compute_ops_mgmt_v1beta1_utilization_by_entity": {
+        "items": [
+            {
+                "entityId": "server-1",
+                "entityType": "Server",
+                "cpuUtilizationPercent": 85,
+                "memoryUtilizationPercent": 70
+            }
+        ],
+        "metricType": "UTILIZATION"
+    },
+    "get_compute_ops_mgmt_v1beta1_webhooks": {
+        "count": 1,
+        "items": [
+            {
+                "id": "webhook-1",
+                "type": "compute-ops-mgmt/webhook",
+                "name": "Alerts Webhook",
+                "url": "https://webhook.site/abc"
+            }
+        ]
+    },
+    "post_compute_ops_mgmt_v1beta1_webhooks": {
+        "id": "webhook-2",
+        "type": "compute-ops-mgmt/webhook",
+        "name": "New Webhook",
+        "url": "https://new-webhook.site/xyz"
+    },
+    "get_compute_ops_mgmt_v1beta1_webhooks_webhook_id": {
+        "id": "webhook-1",
+        "type": "compute-ops-mgmt/webhook",
+        "name": "Alerts Webhook",
+        "url": "https://webhook.site/abc",
+        "events": [
+            "server.alert"
+        ]
+    },
+    "patch_compute_ops_mgmt_v1beta1_webhooks_webhook_id": {
+        "id": "webhook-1",
+        "type": "compute-ops-mgmt/webhook",
+        "name": "Alerts Webhook",
+        "url": "https://webhook.site/abc",
+        "events": [
+            "server.statusChange",
+            "server.alert"
+        ]
+    },
+    "delete_compute_ops_mgmt_v1beta1_webhooks_webhook_id": {},
+    "get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries": {
+        "count": 1,
+        "items": [
+            {
+                "id": "delivery-1",
+                "status": "SUCCESS",
+                "timestamp": "2024-01-01T12:00:00Z"
+            }
+        ]
+    },
+    "get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries_delivery_id": {
+        "id": "delivery-1",
+        "status": "SUCCESS",
+        "timestamp": "2024-01-01T12:00:00Z",
+        "payload": {
+            "event": "server.alert"
+        }
+    },
+    "post_compute_ops_mgmt_v1_groups_group_id_devices": {},
+    "post_compute_ops_mgmt_v1_groups_group_id_devices_unassign": {},
+    "get_compute_ops_mgmt_v1_groups_group_id_external_storage_compliance": {
+        "groupId": "eb54e96e-21b8-4f54-9cd4-80fccbd06f55",
+        "createdAt": "2019-08-24T14:15:22Z",
+        "updatedAt": "2019-08-24T14:15:22Z",
+        "generation": 1,
+        "hostOs": "UNKNOWN",
+        "complianceState": "COMPLIANT",
+        "deviations": {
+            "mismatchOperatingSystem": [],
+            "missingInitiators": [],
+            "extraInitiator": [],
+            "missingHostsFromHostGroup": [],
+            "extraHostsInHostGroup": [],
+            "initiatorsWithMultipleHosts": [],
+            "missingHostGroups": [],
+            "hostGroupsNotCreated": [],
+            "noInitiators": [],
+            "preExistingHostNames": []
+        }
+    },
+    "post_compute_ops_mgmt_v1beta3_groups_group_id_devices": {},
+    "post_compute_ops_mgmt_v1beta3_groups_group_id_devices_unassign": {},
+    "get_compute_ops_mgmt_v1beta3_groups_group_id_external_storage_compliance": {},
+    "get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance": {},
+    "get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance_ilo_settings_compliance_id": {}
+}

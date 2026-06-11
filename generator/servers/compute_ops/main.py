@@ -53,24 +53,30 @@ def get_compute_ops_mgmt_v1beta2_appliances_device_id_certificate(device_id: str
     """
     collection_path = f"/compute-ops-mgmt/v1beta2/appliances/{device_id}/certificate"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta2_appliances_device_id_certificate", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -81,24 +87,30 @@ def get_compute_ops_mgmt_v1_appliance_firmware_bundles():
     """
     collection_path = f"/compute-ops-mgmt/v1/appliance-firmware-bundles"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1_appliance_firmware_bundles", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -121,24 +133,30 @@ def get_compute_ops_mgmt_v1beta1_appliance_firmware_bundles():
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/appliance-firmware-bundles"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_appliance_firmware_bundles", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -178,24 +196,30 @@ def get_compute_ops_mgmt_v1beta2_approval_policies():
     """
     collection_path = f"/compute-ops-mgmt/v1beta2/approval-policies"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta2_approval_policies", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -247,24 +271,30 @@ def get_compute_ops_mgmt_v1beta2_approval_requests():
     """
     collection_path = f"/compute-ops-mgmt/v1beta2/approval-requests"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta2_approval_requests", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -308,24 +338,30 @@ def get_compute_ops_mgmt_v1_async_operations():
     """
     collection_path = f"/compute-ops-mgmt/v1/async-operations"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1_async_operations", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -348,24 +384,30 @@ def get_compute_ops_mgmt_v1beta1_async_operations():
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/async-operations"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_async_operations", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -400,24 +442,30 @@ def get_compute_ops_mgmt_v1beta1_accounts_id_tenants(id: str):
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/accounts/{id}/tenants"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_accounts_id_tenants", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -445,24 +493,30 @@ def get_compute_ops_mgmt_v1beta1_activation_keys():
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/activation-keys"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_activation_keys", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -502,24 +556,30 @@ def get_compute_ops_mgmt_v1beta2_activities():
     """
     collection_path = f"/compute-ops-mgmt/v1beta2/activities"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta2_activities", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -547,24 +607,30 @@ def get_compute_ops_mgmt_v1beta1_ahs_files():
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/ahs-files"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_ahs_files", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -625,24 +691,30 @@ def get_compute_ops_mgmt_v1beta2_appliances():
     """
     collection_path = f"/compute-ops-mgmt/v1beta2/appliances"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta2_appliances", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -653,24 +725,30 @@ def get_compute_ops_mgmt_v1beta1_energy_over_time():
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/energy-over-time"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_energy_over_time", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -681,24 +759,30 @@ def get_compute_ops_mgmt_v1beta1_energy_by_entity():
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/energy-by-entity"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_energy_by_entity", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -709,24 +793,30 @@ def get_compute_ops_mgmt_v1beta1_external_services():
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/external-services"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_external_services", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -812,24 +902,30 @@ def get_compute_ops_mgmt_v1beta1_filters():
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/filters"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_filters", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -857,24 +953,30 @@ def get_compute_ops_mgmt_v1beta1_filters_properties():
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/filters/properties"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_filters_properties", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -926,24 +1028,30 @@ def get_compute_ops_mgmt_v1beta1_filters_id_matches(id: str):
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/filters/{id}/matches"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_filters_id_matches", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -954,24 +1062,30 @@ def get_compute_ops_mgmt_v1_firmware_bundles():
     """
     collection_path = f"/compute-ops-mgmt/v1/firmware-bundles"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1_firmware_bundles", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -994,24 +1108,30 @@ def get_compute_ops_mgmt_v1_firmware_bundles_id_bundle_details(id: str):
     """
     collection_path = f"/compute-ops-mgmt/v1/firmware-bundles/{id}/bundle-details"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1_firmware_bundles_id_bundle_details", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1022,24 +1142,30 @@ def get_compute_ops_mgmt_v1beta2_firmware_bundles():
     """
     collection_path = f"/compute-ops-mgmt/v1beta2/firmware-bundles"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta2_firmware_bundles", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1062,24 +1188,30 @@ def get_compute_ops_mgmt_v1_groups():
     """
     collection_path = f"/compute-ops-mgmt/v1/groups"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1_groups", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1119,24 +1251,30 @@ def get_compute_ops_mgmt_v1_groups_group_id_compliance():
     """
     collection_path = f"/compute-ops-mgmt/v1/groups/{{group-id}}/compliance"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1_groups_group_id_compliance", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1151,24 +1289,30 @@ def get_compute_ops_mgmt_v1_groups_group_id_devices():
     """
     collection_path = f"/compute-ops-mgmt/v1/groups/{{group-id}}/devices"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1_groups_group_id_devices", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1179,24 +1323,30 @@ def get_compute_ops_mgmt_v1beta3_groups():
     """
     collection_path = f"/compute-ops-mgmt/v1beta3/groups"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta3_groups", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1236,24 +1386,30 @@ def get_compute_ops_mgmt_v1beta3_groups_group_id_compliance():
     """
     collection_path = f"/compute-ops-mgmt/v1beta3/groups/{{group-id}}/compliance"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta3_groups_group_id_compliance", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1268,24 +1424,30 @@ def get_compute_ops_mgmt_v1beta3_groups_group_id_devices():
     """
     collection_path = f"/compute-ops-mgmt/v1beta3/groups/{{group-id}}/devices"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta3_groups_group_id_devices", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1296,24 +1458,30 @@ def get_compute_ops_v1beta2_groups():
     """
     collection_path = f"/compute-ops/v1beta2/groups"
     static_data = MOCK_DB.get("get_compute_ops_v1beta2_groups", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1353,24 +1521,30 @@ def get_compute_ops_v1beta2_groups_group_id_compliance():
     """
     collection_path = f"/compute-ops/v1beta2/groups/{{group-id}}/compliance"
     static_data = MOCK_DB.get("get_compute_ops_v1beta2_groups_group_id_compliance", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1385,24 +1559,30 @@ def get_compute_ops_v1beta2_groups_group_id_devices():
     """
     collection_path = f"/compute-ops/v1beta2/groups/{{group-id}}/devices"
     static_data = MOCK_DB.get("get_compute_ops_v1beta2_groups_group_id_devices", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1413,24 +1593,30 @@ def get_compute_ops_mgmt_v1beta2_job_templates():
     """
     collection_path = f"/compute-ops-mgmt/v1beta2/job-templates"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta2_job_templates", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1453,24 +1639,30 @@ def get_compute_ops_mgmt_v1_jobs():
     """
     collection_path = f"/compute-ops-mgmt/v1/jobs"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1_jobs", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1527,24 +1719,30 @@ def get_compute_ops_mgmt_v1beta3_jobs():
     """
     collection_path = f"/compute-ops-mgmt/v1beta3/jobs"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta3_jobs", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1601,24 +1799,30 @@ def get_compute_ops_mgmt_v1beta2_jobs():
     """
     collection_path = f"/compute-ops-mgmt/v1beta2/jobs"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta2_jobs", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1675,24 +1879,30 @@ def get_compute_ops_mgmt_v1_metrics_configurations():
     """
     collection_path = f"/compute-ops-mgmt/v1/metrics-configurations"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1_metrics_configurations", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1761,24 +1971,30 @@ def get_compute_ops_mgmt_v1beta1_oneview_appliances():
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/oneview-appliances"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_oneview_appliances", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1814,24 +2030,30 @@ def get_compute_ops_mgmt_v1beta1_oneview_settings():
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/oneview-settings"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_oneview_settings", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1842,24 +2064,30 @@ def get_compute_ops_mgmt_v1beta1_oneview_server_templates():
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/oneview-server-templates"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_oneview_server_templates", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1882,24 +2110,30 @@ def get_compute_ops_mgmt_v1beta2_reports():
     """
     collection_path = f"/compute-ops-mgmt/v1beta2/reports"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta2_reports", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1939,24 +2173,30 @@ def get_compute_ops_mgmt_v1beta2_reports_id_data(id: str):
     """
     collection_path = f"/compute-ops-mgmt/v1beta2/reports/{id}/data"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta2_reports_id_data", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -1967,24 +2207,30 @@ def get_compute_ops_mgmt_v1beta2_schedules():
     """
     collection_path = f"/compute-ops-mgmt/v1beta2/schedules"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta2_schedules", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -2053,24 +2299,30 @@ def get_compute_ops_mgmt_v1beta2_schedules_id_history(id: str):
     """
     collection_path = f"/compute-ops-mgmt/v1beta2/schedules/{id}/history"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta2_schedules_id_history", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -2121,24 +2373,30 @@ def get_compute_ops_v1beta1_server_settings():
     """
     collection_path = f"/compute-ops/v1beta1/server-settings"
     static_data = MOCK_DB.get("get_compute_ops_v1beta1_server_settings", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -2200,65 +2458,6 @@ def patch_compute_ops_v1beta1_server_settings_id(id: str, payload: PatchComputeO
     MOCK_DB["dynamic_store"][collection_path][item_id] = existing
     return existing
 
-@app.get("/compute-ops-mgmt/v1/servers/{id}")
-def get_compute_ops_mgmt_v1_servers_id(id: str):
-    """
-    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/servers/{id}
-    """
-    collection_path = f"/compute-ops-mgmt/v1/servers"
-    item_id = id
-    if "dynamic_store" in MOCK_DB and collection_path in MOCK_DB["dynamic_store"] and item_id in MOCK_DB["dynamic_store"][collection_path]:
-        return MOCK_DB["dynamic_store"][collection_path][item_id]
-    if item_id in MOCK_DB.get("servers", {}):
-        return MOCK_DB["servers"][item_id]
-    static_val = MOCK_DB.get("get_compute_ops_mgmt_v1_servers_id", dict())
-    return static_val
-
-# --- Added specifically for 1500-server scaling Demo ---
-@app.post("/compute-ops-mgmt/v1/servers/{id}/power-on")
-def post_compute_ops_mgmt_v1_servers_id_power_on(id: str):
-    """
-    Handles power-on commands for ANY dynamically generated ComOps server.
-    """
-    server = MOCK_DB.get("servers", {}).get(id)
-    if server:
-        server["powerState"] = "On"
-        return {
-            "status": "success",
-            "message": f"Cloud Node {id} powered ON successfully.",
-            "action": "power-on",
-            "uuid": id,
-            "server_details": server
-        }
-    return {
-        "status": "success",
-        "message": f"Cloud Node {id} powered ON successfully.",
-        "action": "power-on",
-        "uuid": id
-    }
-
-@app.post("/compute-ops-mgmt/v1/servers/{id}/power-off")
-def post_compute_ops_mgmt_v1_servers_id_power_off(id: str):
-    """
-    Handles power-off commands for ANY dynamically generated ComOps server.
-    """
-    server = MOCK_DB.get("servers", {}).get(id)
-    if server:
-        server["powerState"] = "Off"
-        return {
-            "status": "success",
-            "message": f"Cloud Node {id} powered OFF successfully.",
-            "action": "power-off",
-            "uuid": id,
-            "server_details": server
-        }
-    return {
-        "status": "success",
-        "message": f"Cloud Node {id} powered OFF successfully.",
-        "action": "power-off",
-        "uuid": id
-    }
-
 @app.get("/compute-ops-mgmt/v1/settings")
 def get_compute_ops_mgmt_v1_settings():
     """
@@ -2266,24 +2465,30 @@ def get_compute_ops_mgmt_v1_settings():
     """
     collection_path = f"/compute-ops-mgmt/v1/settings"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1_settings", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -2352,24 +2557,30 @@ def get_compute_ops_mgmt_v1beta1_settings():
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/settings"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_settings", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -2432,33 +2643,38 @@ def patch_compute_ops_mgmt_v1beta1_settings_id(id: str, payload: PatchComputeOps
     return existing
 
 @app.get("/compute-ops-mgmt/v1/servers")
-def get_compute_ops_mgmt_v1_servers(rack: str = Query(None)):
+def get_compute_ops_mgmt_v1_servers():
     """
     Dynamic CRUD Route: GET /compute-ops-mgmt/v1/servers
     """
     collection_path = f"/compute-ops-mgmt/v1/servers"
-    static_servers = list(MOCK_DB.get("servers", {}).values())
-    if not static_servers:
-        static_data = MOCK_DB.get("get_compute_ops_mgmt_v1_servers", dict())
-        static_servers = static_data.get("items", []) if isinstance(static_data, dict) else []
+    static_data = MOCK_DB.get("get_compute_ops_mgmt_v1_servers", dict())
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
-    if rack:
-        rack_lower = rack.lower()
-        filtered = []
-        for s in all_items:
-            loc = s.get("location", "").lower()
-            name = s.get("name", "").lower()
-            enc = s.get("enclosure", "").lower()
-            if rack_lower in loc or rack_lower in name or rack_lower in enc:
-                filtered.append(s)
-        all_items = filtered
-    return {"items": all_items, "count": len(all_items), "total": len(all_items)}
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.patch("/compute-ops-mgmt/v1/servers")
 def patch_compute_ops_mgmt_v1_servers(payload: PatchComputeOpsMgmtV1ServersRequest):
@@ -2504,8 +2720,6 @@ def get_compute_ops_mgmt_v1_servers_id(id: str):
     item_id = id
     if "dynamic_store" in MOCK_DB and collection_path in MOCK_DB["dynamic_store"] and item_id in MOCK_DB["dynamic_store"][collection_path]:
         return MOCK_DB["dynamic_store"][collection_path][item_id]
-    if item_id in MOCK_DB.get("servers", {}):
-        return MOCK_DB["servers"][item_id]
     static_val = MOCK_DB.get("get_compute_ops_mgmt_v1_servers_id", dict())
     return static_val
 
@@ -2544,51 +2758,71 @@ def get_compute_ops_mgmt_v1_servers_id_alerts(id: str):
     Dynamic CRUD Route: GET /compute-ops-mgmt/v1/servers/{id}/alerts
     """
     collection_path = f"/compute-ops-mgmt/v1/servers/{id}/alerts"
-    static_servers = list(MOCK_DB.get("servers", {}).values())
-    if not static_servers:
-        static_data = MOCK_DB.get("get_compute_ops_mgmt_v1_servers_id_alerts", dict())
-        static_servers = static_data.get("items", []) if isinstance(static_data, dict) else []
+    static_data = MOCK_DB.get("get_compute_ops_mgmt_v1_servers_id_alerts", dict())
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
-    return {"items": all_items, "count": len(all_items), "total": len(all_items)}
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1/servers/{id}/clear-alert")
 def post_compute_ops_mgmt_v1_servers_id_clear_alert(id: str, payload: PostComputeOpsMgmtV1ServersIdClearAlertRequest):
     return MOCK_DB.get("post_compute_ops_mgmt_v1_servers_id_clear_alert", dict())
 
 @app.get("/compute-ops-mgmt/v1beta2/servers")
-def get_compute_ops_mgmt_v1beta2_servers(rack: str = Query(None)):
+def get_compute_ops_mgmt_v1beta2_servers():
     """
     Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/servers
     """
     collection_path = f"/compute-ops-mgmt/v1beta2/servers"
-    static_servers = list(MOCK_DB.get("servers", {}).values())
-    if not static_servers:
-        static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta2_servers", dict())
-        static_servers = static_data.get("items", []) if isinstance(static_data, dict) else []
+    static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta2_servers", dict())
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
-    if rack:
-        rack_lower = rack.lower()
-        filtered = []
-        for s in all_items:
-            loc = s.get("location", "").lower()
-            name = s.get("name", "").lower()
-            enc = s.get("enclosure", "").lower()
-            if rack_lower in loc or rack_lower in name or rack_lower in enc:
-                filtered.append(s)
-        all_items = filtered
-    return {"items": all_items, "count": len(all_items), "total": len(all_items)}
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.patch("/compute-ops-mgmt/v1beta2/servers")
 def patch_compute_ops_mgmt_v1beta2_servers(payload: PatchComputeOpsMgmtV1beta2ServersRequest):
@@ -2634,8 +2868,6 @@ def get_compute_ops_mgmt_v1beta2_servers_id(id: str):
     item_id = id
     if "dynamic_store" in MOCK_DB and collection_path in MOCK_DB["dynamic_store"] and item_id in MOCK_DB["dynamic_store"][collection_path]:
         return MOCK_DB["dynamic_store"][collection_path][item_id]
-    if item_id in MOCK_DB.get("servers", {}):
-        return MOCK_DB["servers"][item_id]
     static_val = MOCK_DB.get("get_compute_ops_mgmt_v1beta2_servers_id", dict())
     return static_val
 
@@ -2674,18 +2906,33 @@ def get_compute_ops_mgmt_v1beta2_servers_id_alerts(id: str):
     Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/servers/{id}/alerts
     """
     collection_path = f"/compute-ops-mgmt/v1beta2/servers/{id}/alerts"
-    static_servers = list(MOCK_DB.get("servers", {}).values())
-    if not static_servers:
-        static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta2_servers_id_alerts", dict())
-        static_servers = static_data.get("items", []) if isinstance(static_data, dict) else []
+    static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta2_servers_id_alerts", dict())
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
-    return {"items": all_items, "count": len(all_items), "total": len(all_items)}
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1beta2/servers/{id}/clear-alert")
 def post_compute_ops_mgmt_v1beta2_servers_id_clear_alert(id: str, payload: PostComputeOpsMgmtV1beta2ServersIdClearAlertRequest):
@@ -2698,24 +2945,30 @@ def get_compute_ops_mgmt_v1beta2_server_warranty():
     """
     collection_path = f"/compute-ops-mgmt/v1beta2/server-warranty"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta2_server_warranty", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -2738,24 +2991,30 @@ def get_compute_ops_mgmt_v1_user_preferences():
     """
     collection_path = f"/compute-ops-mgmt/v1/user-preferences"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1_user_preferences", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -2818,24 +3077,30 @@ def get_compute_ops_mgmt_v1beta1_user_preferences():
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/user-preferences"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_user_preferences", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -2890,24 +3155,30 @@ def get_compute_ops_mgmt_v1beta1_utilization_over_time():
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/utilization-over-time"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_utilization_over_time", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -2918,24 +3189,30 @@ def get_compute_ops_mgmt_v1beta1_utilization_by_entity():
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/utilization-by-entity"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_utilization_by_entity", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -2946,24 +3223,30 @@ def get_compute_ops_mgmt_v1beta1_webhooks():
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/webhooks"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_webhooks", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -3032,24 +3315,30 @@ def get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries(webhook_id: str)
     """
     collection_path = f"/compute-ops-mgmt/v1beta1/webhooks/{webhook_id}/deliveries"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -3093,24 +3382,30 @@ def get_compute_ops_mgmt_v1_groups_group_id_external_storage_compliance():
     """
     collection_path = f"/compute-ops-mgmt/v1/groups/{{group-id}}/external-storage-compliance"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1_groups_group_id_external_storage_compliance", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -3142,24 +3437,30 @@ def get_compute_ops_mgmt_v1beta3_groups_group_id_external_storage_compliance():
     """
     collection_path = f"/compute-ops-mgmt/v1beta3/groups/{{group-id}}/external-storage-compliance"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta3_groups_group_id_external_storage_compliance", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
@@ -3170,24 +3471,30 @@ def get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance():
     """
     collection_path = f"/compute-ops-mgmt/v1beta3/groups/{{group-id}}/ilo-settings-compliance"
     static_data = MOCK_DB.get("get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance", dict())
-    static_servers = []
     dynamic_items = list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
-    all_items = list(static_servers)
-    existing_ids = {item.get("id") or item.get("uuid") or item.get("name") for item in all_items if isinstance(item, dict)}
-    for item in dynamic_items:
-        iid = item.get("id") or item.get("uuid") or item.get("name")
-        if iid not in existing_ids:
-            all_items.append(item)
+    if not dynamic_items:
+        return static_data
     if isinstance(static_data, list):
-        return all_items
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
     elif isinstance(static_data, dict):
         res = dict(static_data)
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
-                res[key] = all_items
-                res["count"] = len(all_items)
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
                 if "total" in res:
-                    res["total"] = len(all_items)
+                    res["total"] = len(res[key])
         return res
     return static_data
 
