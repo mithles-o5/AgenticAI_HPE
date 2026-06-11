@@ -294,12 +294,27 @@ def get_rest_rack_managers_id_remotesupportsettings(id: str):
     return MOCK_DB.get("get_rest_rack_managers_id_remotesupportsettings", dict())
 
 @app.get("/rest/server-hardware")
-def get_rest_server_hardware():
+def get_rest_server_hardware(rack: str = Query(None)):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Returns servers, optionally filtered by rack ID.
     """
-    return MOCK_DB.get("get_rest_server_hardware", dict())
+    servers = list(MOCK_DB.get("server_hardware", {}).values())
+    if not servers:
+        static_data = MOCK_DB.get("get_rest_server_hardware", {})
+        servers = static_data.get("members", [])
+        
+    if rack:
+        rack_lower = rack.lower()
+        filtered = []
+        for s in servers:
+            loc = s.get("location", "").lower()
+            enc = s.get("enclosure", "").lower()
+            name = s.get("name", "").lower()
+            if rack_lower in loc or rack_lower in enc or rack_lower in name:
+                filtered.append(s)
+        return {"members": filtered, "count": len(filtered)}
+        
+    return {"members": servers, "count": len(servers)}
 
 @app.post("/rest/server-hardware")
 def post_rest_server_hardware(payload: PostRestServerHardwareRequest):

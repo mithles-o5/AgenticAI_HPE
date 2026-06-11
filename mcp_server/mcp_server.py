@@ -28,10 +28,194 @@ import sys
 import os
 import json
 from datetime import datetime
-
 import httpx
 import time
 from mcp.server.fastmcp import FastMCP
+from contextlib import asynccontextmanager
+import psycopg2
+import uuid
+
+# ─────────────────────────────────────────────────────────────────────────────
+# POSTGRESQL MEMORY STORE MODULE
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Load PostgreSQL connection parameters from environment with default values
+PG_HOST = os.getenv("PGHOST", "localhost")
+PG_PORT = int(os.getenv("PGPORT", "5432"))
+PG_USER = os.getenv("PGUSER", "postgres")
+PG_PASSWORD = os.getenv("PGPASSWORD", "password")
+PG_DATABASE = os.getenv("PGDATABASE", "postgres")
+
+# Session ID file persistence path
+SESSION_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "session_id.txt")
+
+def _get_connection():
+    """Opens a connection to the PostgreSQL database."""
+    return psycopg2.connect(
+        host=PG_HOST,
+        port=PG_PORT,
+        user=PG_USER,
+        password=PG_PASSWORD,
+        database=PG_DATABASE
+    )
+
+def init_db():
+    """Initializes the database table for memory store if it doesn't exist."""
+    conn = None
+    try:
+        conn = _get_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS memory (
+                session_id TEXT,
+                key TEXT,
+                value TEXT,
+                updated_at TEXT,
+                PRIMARY KEY (session_id, key)
+            )
+        """)
+        conn.commit()
+        print("✅ PostgreSQL memory store database initialized successfully.", file=sys.stderr)
+    except Exception as e:
+        print(f"❌ Error initializing memory database: {e}", file=sys.stderr)
+        raise
+    finally:
+        if conn:
+            conn.close()
+
+def remember(session_id: str, key: str, value):
+    """Upsert a key-value pair for a session."""
+    conn = None
+    try:
+        conn = _get_connection()
+        cursor = conn.cursor()
+        val_json = json.dumps(value)
+        updated_at = datetime.utcnow().isoformat() + "Z"
+        cursor.execute("""
+            INSERT INTO memory (session_id, key, value, updated_at)
+            VALUES (%s, %s, %s, %s)
+            ON CONFLICT (session_id, key) DO UPDATE SET
+                value = EXCLUDED.value,
+                updated_at = EXCLUDED.updated_at
+        """, (session_id, key, val_json, updated_at))
+        conn.commit()
+    except Exception as e:
+        print(f"❌ Error saving to database (remember): {e}", file=sys.stderr)
+        raise
+    finally:
+        if conn:
+            conn.close()
+
+def recall(session_id: str, key: str):
+    """Fetch a single value, return None if missing."""
+    conn = None
+    try:
+        conn = _get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT value FROM memory WHERE session_id = %s AND key = %s", (session_id, key))
+        row = cursor.fetchone()
+        if row:
+            return json.loads(row[0])
+        return None
+    except Exception as e:
+        print(f"❌ Error fetching from database (recall): {e}", file=sys.stderr)
+        return None
+    finally:
+        if conn:
+            conn.close()
+
+def recall_session(session_id: str) -> dict:
+    """Return all key-value pairs for a session as a dictionary."""
+    conn = None
+    try:
+        conn = _get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT key, value FROM memory WHERE session_id = %s", (session_id,))
+        rows = cursor.fetchall()
+        return {row[0]: json.loads(row[1]) for row in rows}
+    except Exception as e:
+        print(f"❌ Error fetching session data (recall_session): {e}", file=sys.stderr)
+        return {}
+    finally:
+        if conn:
+            conn.close()
+
+def forget_key(session_id: str, key: str):
+    """Delete one key from the session."""
+    conn = None
+    try:
+        conn = _get_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM memory WHERE session_id = %s AND key = %s", (session_id, key))
+        conn.commit()
+    except Exception as e:
+        print(f"❌ Error deleting key (forget_key): {e}", file=sys.stderr)
+        raise
+    finally:
+        if conn:
+            conn.close()
+
+def forget_session(session_id: str):
+    """Delete an entire session."""
+    conn = None
+    try:
+        conn = _get_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM memory WHERE session_id = %s", (session_id,))
+        conn.commit()
+    except Exception as e:
+        print(f"❌ Error deleting session (forget_session): {e}", file=sys.stderr)
+        raise
+    finally:
+        if conn:
+            conn.close()
+
+def list_sessions() -> list:
+    """Return all active session IDs in the database."""
+    conn = None
+    try:
+        conn = _get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT DISTINCT session_id FROM memory")
+        rows = cursor.fetchall()
+        return [row[0] for row in rows]
+    except Exception as e:
+        print(f"❌ Error listing sessions: {e}", file=sys.stderr)
+        return []
+    finally:
+        if conn:
+            conn.close()
+
+def _get_or_create_session_id() -> str:
+    """Retrieves the persisted session ID from file or creates a new one."""
+    try:
+        if os.path.exists(SESSION_FILE):
+            with open(SESSION_FILE, "r") as f:
+                sid = f.read().strip()
+                if sid:
+                    return sid
+    except Exception as e:
+        print(f"⚠️ Error reading session ID file: {e}", file=sys.stderr)
+        
+    sid = str(uuid.uuid4())
+    try:
+        with open(SESSION_FILE, "w") as f:
+            f.write(sid)
+    except Exception as e:
+        print(f"⚠️ Error writing session ID file: {e}", file=sys.stderr)
+    return sid
+
+# Initialise persistent session ID
+SESSION_ID = _get_or_create_session_id()
+
+@asynccontextmanager
+async def mcp_lifespan(server: FastMCP):
+    """Lifespan hook to initialize the database at startup."""
+    try:
+        init_db()
+    except Exception as e:
+        print(f"❌ Lifespan hook failed to initialize database: {e}", file=sys.stderr)
+    yield
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Path Setup — add authentication/, authorization/, resource_resolver/
@@ -139,7 +323,8 @@ mcp = FastMCP(
     • sso_login(provider)      — Login via browser SSO
     • logout()                 — End the current session
     • check_access()           — Show identity, role, and permissions
-    """
+    """,
+    lifespan=mcp_lifespan
 )
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -540,6 +725,121 @@ async def _execute_hardware_command(query: str, env: str, expected_protocol: Pro
             )
         except Exception as e:
             return f"⚠️ Mock server call failed: {e}\nEnsure backend {expected_protocol.value} is running at {backend_url}"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Memory Store MCP Tools
+# ─────────────────────────────────────────────────────────────────────────────
+
+@mcp.tool()
+async def list_servers_in_rack(rack_id: str, session_id: str = None) -> str:
+    """
+    List all servers in a given rack on the OneView mock server.
+    Stores the result in memory under last_targets and last_rack, and returns the server list.
+    
+    Args:
+        rack_id: The ID of the rack to query (e.g. 'Rack-01', 'Rack-02').
+        session_id: Optional session ID override.
+    """
+    sid = session_id or SESSION_ID
+    url = f"{HARDWARE_BACKEND_URL}/rest/server-hardware"
+    
+    async with httpx.AsyncClient() as client:
+        try:
+            resp = await client.get(url, params={"rack": rack_id})
+            resp.raise_for_status()
+            data = resp.json()
+        except Exception as e:
+            return f"❌ Failed to fetch servers from OneView mock server: {e}"
+            
+    members = data.get("members", [])
+    if not members:
+        return f"⚠️ No servers found in rack '{rack_id}'."
+        
+    # Format and save targets to memory database
+    targets = []
+    for s in members:
+        targets.append({
+            "uuid": s.get("uuid") or s.get("id"),
+            "name": s.get("name"),
+            "location": s.get("location"),
+            "powerState": s.get("powerState") or s.get("power_state")
+        })
+        
+    try:
+        remember(sid, "last_rack", rack_id)
+        remember(sid, "last_targets", targets)
+    except Exception as e:
+        return f"⚠️ Retrieved {len(targets)} servers, but failed to persist to memory database: {e}\n\nServers:\n" + json.dumps(targets, indent=2)
+        
+    return f"✅ Found {len(targets)} servers in rack '{rack_id}' (stored in memory database under session '{sid}'):\n" + json.dumps(targets, indent=2)
+
+@mcp.tool()
+async def power_off_last_targets(session_id: str = None) -> str:
+    """
+    Recalls last_targets from memory, executes power off on each,
+    stores last_operation as power_off, and returns a summary.
+    
+    Args:
+        session_id: Optional session ID override.
+    """
+    sid = session_id or SESSION_ID
+    
+    try:
+        last_targets = recall(sid, "last_targets")
+    except Exception as e:
+        return f"❌ Error: Database read failed: {e}"
+        
+    if not last_targets:
+        return (
+            "❌ Error: No last targets found in memory for this session.\n"
+            "Please run list_servers_in_rack first to populate last_targets."
+        )
+        
+    results = []
+    async with httpx.AsyncClient() as client:
+        for target in last_targets:
+            uuid_val = target.get("uuid")
+            name_val = target.get("name")
+            if not uuid_val:
+                results.append({"name": name_val, "status": "Failed (Missing UUID)"})
+                continue
+                
+            url = f"{HARDWARE_BACKEND_URL}/rest/server-hardware/{uuid_val}/powerState"
+            try:
+                resp = await client.put(url, json={"powerState": "Off"})
+                if resp.status_code == 200:
+                    results.append({"name": name_val, "uuid": uuid_val, "status": "Success"})
+                else:
+                    results.append({"name": name_val, "uuid": uuid_val, "status": f"Failed ({resp.status_code})"})
+            except Exception as e:
+                results.append({"name": name_val, "uuid": uuid_val, "status": f"Error ({e})"})
+                
+    # Record the last operation
+    last_op = {
+        "operation": "power_off",
+        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "affected_servers": [t.get("name") for t in last_targets],
+        "results": results
+    }
+    
+    try:
+        remember(sid, "last_operation", last_op)
+    except Exception as e:
+        return (
+            f"⚠️ Executed power off on servers, but failed to save operation to memory database: {e}\n\n"
+            f"Summary:\n" + json.dumps(results, indent=2)
+        )
+        
+    return f"✅ Power off operation completed for session '{sid}'\n\nSummary:\n" + json.dumps(results, indent=2)
+
+@mcp.tool()
+def mcp_list_sessions() -> str:
+    """
+    List all active session IDs in the memory database (for debugging).
+    """
+    sessions = list_sessions()
+    return f"📋 Active sessions in database:\n" + json.dumps(sessions, indent=2)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
