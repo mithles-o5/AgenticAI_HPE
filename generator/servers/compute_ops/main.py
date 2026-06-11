@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import json
 import os
 import sys, os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 from models import *
 
 mock_file = os.path.join(os.path.dirname(__file__), "mock_data.json")
