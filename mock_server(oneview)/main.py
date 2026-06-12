@@ -120,10 +120,20 @@ def get_rest_server_hardware_id_softwareinventory(id: str):
 @app.get("/rest/server-hardware/{id}/thermal")
 def get_rest_server_hardware_id_thermal(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Returns dynamic thermal metrics based on the server's powerState.
     """
-    return MOCK_DB.get("get_rest_server_hardware_id_thermal", dict())
+    server = find_server(id)
+    if server and server.get("powerState") == "Off":
+        return {
+            "temperatureCelsius": 20.0,
+            "status": "OK",
+            "fanSpeedRpm": 0
+        }
+    return {
+        "temperatureCelsius": 35.8,
+        "status": "OK",
+        "fanSpeedRpm": 4500
+    }
 
 @app.get("/rest/rack-managers/{id}/chassis/{uuid}")
 def get_rest_rack_managers_id_chassis_uuid(id: str, uuid: str):
@@ -240,10 +250,24 @@ def get_rest_rack_managers_id_chassis(id: str):
 @app.get("/rest/rack-managers/{id}/chassis/utilization")
 def get_rest_rack_managers_id_chassis_utilization(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Returns dynamic power utilization by summing power consumption of all registered servers.
     """
-    return MOCK_DB.get("get_rest_rack_managers_id_chassis_utilization", dict())
+    servers = MOCK_DB.get("server_hardware", {})
+    total_power = 0
+    for s_data in servers.values():
+        if s_data.get("powerState") == "Off":
+            total_power += 15 # Standby power
+        else:
+            total_power += 285 # Running power
+            
+    # Default fallback if no servers
+    if total_power == 0:
+        total_power = 15
+        
+    return {
+        "powerWatts": total_power,
+        "chassisStatus": "Normal"
+    }
 
 @app.get("/rest/rack-managers/{id}/environmentalConfiguration")
 def get_rest_rack_managers_id_environmentalconfiguration(id: str):
@@ -341,12 +365,44 @@ def get_rest_server_hardware_schema():
     """
     return MOCK_DB.get("get_rest_server_hardware_schema", dict())
 
+def find_server(id: str):
+    servers = MOCK_DB.get("server_hardware", {})
+    if id in servers:
+        return servers[id]
+    
+    import re
+    match = re.search(r"(\d+)$", id)
+    if match:
+        suffix = match.group(1)
+        suffix_val = int(suffix)
+        for s_id, s_data in servers.items():
+            name = s_data.get("name", "")
+            if name.endswith(f"-{suffix}") or name.endswith(f"-{suffix_val}"):
+                return s_data
+            sn = s_data.get("serialNumber", "")
+            if sn.endswith(f"-{suffix}") or sn.endswith(f"-{suffix_val}"):
+                return s_data
+            if s_id.startswith(id) or id.startswith(s_id):
+                return s_data
+
+    for s_id, s_data in servers.items():
+        if s_data.get("name", "").lower() == id.lower():
+            return s_data
+        if s_data.get("ip_address") == id:
+            return s_data
+            
+    return None
+
 @app.get("/rest/server-hardware/{id}")
 def get_rest_server_hardware_id(id: str):
     """
-    Returns actual server data from 1500-server database or defaults.
+    Returns actual server data from 1500-server database or raises 404.
     """
-    return MOCK_DB.get("server_hardware", {}).get(id, MOCK_DB.get("get_rest_server_hardware_id", dict()))
+    server = find_server(id)
+    if server:
+        return server
+    from fastapi import HTTPException
+    raise HTTPException(status_code=404, detail="Resource not found")
 
 # --- Added specifically for 1500-server scaling Demo ---
 @app.put("/rest/server-hardware/{id}/powerState")
@@ -357,14 +413,14 @@ def put_rest_server_hardware_id_powerstate(id: str, payload: dict = {}):
     """
     state = payload.get("powerState", "Unknown")
     
-    server = MOCK_DB.get("server_hardware", {}).get(id)
+    server = find_server(id)
     if server:
         server["powerState"] = state
         return {
             "status": "success",
             "message": f"Server {id} power state successfully changed to {state}",
             "powerState": state,
-            "uuid": id,
+            "uuid": server.get("uuid", id),
             "server_details": server
         }
     

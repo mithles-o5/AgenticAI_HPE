@@ -1,0 +1,21 @@
+{
+  "name": "network-agent",
+  "version": "1.0.0",
+  "schema_version": "0.7.0",
+  "description": "Network topology discovery, interface monitoring, fault detection and config execution via SNMP, Netconf, and REST adapters.",
+  "skills": [
+    {"name": "network.topology.discover"},
+    {"name": "network.monitoring.interface"},
+    {"name": "network.monitoring.traffic"},
+    {"name": "network.execute.config_push"},
+    {"name": "network.diagnose.fault"}
+  ],
+  "domains": ["network-infrastructure", "observability"],
+  "locators": [
+    {"type": "openapi", "url": "http://network-agent:8006/openapi.json"}
+  ],
+  "modules": {
+    "protocols": ["snmp", "netconf", "rest", "mock"],
+    "resource_types": ["switch", "router", "interface", "vlan", "bgp_session", "access_point"]
+  }
+}

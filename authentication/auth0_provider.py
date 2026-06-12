@@ -101,51 +101,61 @@ class Auth0Provider(SSOProvider):
         user = provider.verify_token(token)
     """
 
+    def __init__(self):
+        self._is_logging_in = False
+
     def login(self) -> tuple[str | None, str]:
         """
         Opens the browser for Auth0 login and returns an access token.
         Blocks until the user completes login (up to 5 minutes).
         """
-        _CallbackHandler.captured_code = None
-        verifier, challenge = _generate_pkce_pair()
-
-        # Build Auth0 authorization URL
-        auth_url = (
-            f"https://{AUTH0_DOMAIN}/authorize?"
-            + urllib.parse.urlencode({
-                "response_type":         "code",
-                "client_id":             AUTH0_CLIENT_ID,
-                "redirect_uri":          REDIRECT_URI,
-                "scope":                 SCOPES,
-                "code_challenge":        challenge,
-                "code_challenge_method": "S256",
-            })
-        )
-
-        # Start local callback server (fail fast if port is already in use)
+        if getattr(self, "_is_logging_in", False):
+            return None, "Login is already in progress in another window."
+        
+        self._is_logging_in = True
         try:
-            httpd = HTTPServer(("127.0.0.1", CALLBACK_PORT), _CallbackHandler)
-        except OSError as e:
-            return None, (
-                f"Cannot start Auth0 callback server on port {CALLBACK_PORT}: {e}\n"
-                f"Another process is using that port. "
-                f"Stop it or change CALLBACK_PORT in auth0_provider.py."
+            _CallbackHandler.captured_code = None
+            verifier, challenge = _generate_pkce_pair()
+
+            # Build Auth0 authorization URL
+            auth_url = (
+                f"https://{AUTH0_DOMAIN}/authorize?"
+                + urllib.parse.urlencode({
+                    "response_type":         "code",
+                    "client_id":             AUTH0_CLIENT_ID,
+                    "redirect_uri":          REDIRECT_URI,
+                    "scope":                 SCOPES,
+                    "code_challenge":        challenge,
+                    "code_challenge_method": "S256",
+                })
             )
-        server_thread = threading.Thread(target=httpd.serve_forever)
-        server_thread.daemon = True
-        server_thread.start()
 
-        # Open browser for user login
-        webbrowser.open(auth_url)
+            # Start local callback server (fail fast if port is already in use)
+            try:
+                httpd = HTTPServer(("127.0.0.1", CALLBACK_PORT), _CallbackHandler)
+            except OSError as e:
+                return None, (
+                    f"Cannot start Auth0 callback server on port {CALLBACK_PORT}: {e}\n"
+                    f"Another process is using that port. "
+                    f"Stop it or change CALLBACK_PORT in auth0_provider.py."
+                )
+            server_thread = threading.Thread(target=httpd.serve_forever)
+            server_thread.daemon = True
+            server_thread.start()
 
-        # Wait for the callback (2-minute timeout — reduced from 5 min)
-        server_thread.join(timeout=120)
+            # Open browser for user login
+            webbrowser.open(auth_url)
 
-        if not _CallbackHandler.captured_code:
-            return None, "Login timed out or was cancelled by the user."
+            # Wait for the callback (2-minute timeout — reduced from 5 min)
+            server_thread.join(timeout=120)
 
-        # Exchange authorization code for access token
-        return self._exchange_code_for_token(_CallbackHandler.captured_code, verifier)
+            if not _CallbackHandler.captured_code:
+                return None, "Login timed out or was cancelled by the user."
+
+            # Exchange authorization code for access token
+            return self._exchange_code_for_token(_CallbackHandler.captured_code, verifier)
+        finally:
+            self._is_logging_in = False
 
     def _exchange_code_for_token(self, code: str, verifier: str) -> tuple[str | None, str]:
         """Exchange the OAuth authorization code for an access token."""

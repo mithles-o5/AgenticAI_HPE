@@ -1,0 +1,480 @@
+================================================================================
+  PROMPT REFERENCE FOR ONEVIEW APIS
+================================================================================
+Status values: 'OK' (always worked), 'WAS BROKEN - FIXED' (patched parameters)
+================================================================================
+
+
+================================================================================
+Action Key  : Allocate
+Status      : OK
+Method      : POST
+API Path    : /rest/{resource_category}
+Prompt      : action:Allocate
+Parameters  : {"resource_category": "<resource_category>"}
+Request Body: {"name": "{resource_name}"}
+================================================================================
+
+================================================================================
+Action Key  : ColdBoot
+Status      : OK
+Method      : PUT
+API Path    : /rest/{resource_category}/{uuid}/powerState
+Prompt      : action:ColdBoot
+Parameters  : {"resource_category": "<resource_category>", "uuid": "<uuid>"}
+Request Body: {"powerState": "ColdBoot"}
+================================================================================
+
+================================================================================
+Action Key  : Create
+Status      : OK
+Method      : POST
+API Path    : /rest/{resource_category}
+Prompt      : action:Create
+Parameters  : {"resource_category": "<resource_category>"}
+Request Body: {"name": "{resource_name}"}
+================================================================================
+
+================================================================================
+Action Key  : Deallocate
+Status      : OK
+Method      : DELETE
+API Path    : /rest/{resource_category}/{uuid}
+Prompt      : action:Deallocate
+Parameters  : {"resource_category": "<resource_category>", "uuid": "<uuid>"}
+================================================================================
+
+================================================================================
+Action Key  : Delete
+Status      : OK
+Method      : DELETE
+API Path    : /rest/{resource_category}/{uuid}
+Prompt      : action:Delete
+Parameters  : {"resource_category": "<resource_category>", "uuid": "<uuid>"}
+================================================================================
+
+================================================================================
+Action Key  : List
+Status      : OK
+Method      : GET
+API Path    : /rest/{resource_category}
+Prompt      : action:List
+Parameters  : {"resource_category": "<resource_category>"}
+================================================================================
+
+================================================================================
+Action Key  : Off
+Status      : OK
+Method      : PUT
+API Path    : /rest/{resource_category}/{uuid}/powerState
+Prompt      : action:Off
+Parameters  : {"resource_category": "<resource_category>", "uuid": "<uuid>"}
+Request Body: {"powerState": "Off"}
+================================================================================
+
+================================================================================
+Action Key  : On
+Status      : OK
+Method      : PUT
+API Path    : /rest/{resource_category}/{uuid}/powerState
+Prompt      : action:On
+Parameters  : {"resource_category": "<resource_category>", "uuid": "<uuid>"}
+Request Body: {"powerState": "On"}
+================================================================================
+
+================================================================================
+Action Key  : Reset
+Status      : OK
+Method      : PUT
+API Path    : /rest/{resource_category}/{uuid}/powerState
+Prompt      : action:Reset
+Parameters  : {"resource_category": "<resource_category>", "uuid": "<uuid>"}
+Request Body: {"powerState": "Reset"}
+================================================================================
+
+================================================================================
+Action Key  : Status
+Status      : OK
+Method      : GET
+API Path    : /rest/{resource_category}/{uuid}
+Prompt      : action:Status
+Parameters  : {"resource_category": "<resource_category>", "uuid": "<uuid>"}
+================================================================================
+
+================================================================================
+Action Key  : delete_rest_certificates_ca_rabbitmq_readonly
+Status      : OK
+Method      : DELETE
+API Path    : /rest/certificates/ca/rabbitmq_readonly
+Prompt      : action:delete_rest_certificates_ca_rabbitmq_readonly
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : delete_rest_rack_managers_id
+Status      : OK
+Method      : DELETE
+API Path    : /rest/rack-managers/{id}
+Prompt      : action:delete_rest_rack_managers_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_certificates_ca
+Status      : OK
+Method      : GET
+API Path    : /rest/certificates/ca
+Prompt      : action:get_rest_certificates_ca
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_certificates_client_rabbitmq_keypair_default
+Status      : OK
+Method      : GET
+API Path    : /rest/certificates/client/rabbitmq/keypair/default
+Prompt      : action:get_rest_certificates_client_rabbitmq_keypair_default
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_rack_managers
+Status      : OK
+Method      : GET
+API Path    : /rest/rack-managers
+Prompt      : action:get_rest_rack_managers
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_rack_managers_chassis
+Status      : OK
+Method      : GET
+API Path    : /rest/rack-managers/chassis
+Prompt      : action:get_rest_rack_managers_chassis
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_rack_managers_id
+Status      : OK
+Method      : GET
+API Path    : /rest/rack-managers/{id}
+Prompt      : action:get_rest_rack_managers_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_rack_managers_id_chassis
+Status      : OK
+Method      : GET
+API Path    : /rest/rack-managers/{id}/chassis
+Prompt      : action:get_rest_rack_managers_id_chassis
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_rack_managers_id_chassis_utilization
+Status      : OK
+Method      : GET
+API Path    : /rest/rack-managers/{id}/chassis/utilization
+Prompt      : action:get_rest_rack_managers_id_chassis_utilization
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_rack_managers_id_chassis_uuid
+Status      : OK
+Method      : GET
+API Path    : /rest/rack-managers/{id}/chassis/{uuid}
+Prompt      : action:get_rest_rack_managers_id_chassis_uuid
+Parameters  : {"id": "<id>", "uuid": "<uuid>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_rack_managers_id_environmentalconfiguration
+Status      : OK
+Method      : GET
+API Path    : /rest/rack-managers/{id}/environmentalConfiguration
+Prompt      : action:get_rest_rack_managers_id_environmentalconfiguration
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_rack_managers_id_managers
+Status      : OK
+Method      : GET
+API Path    : /rest/rack-managers/{id}/managers
+Prompt      : action:get_rest_rack_managers_id_managers
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_rack_managers_id_managers_managerid
+Status      : OK
+Method      : GET
+API Path    : /rest/rack-managers/{id}/managers/{managerid}
+Prompt      : action:get_rest_rack_managers_id_managers_managerid
+Parameters  : {"id": "<id>", "managerid": "<managerid>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_rack_managers_id_partitions
+Status      : OK
+Method      : GET
+API Path    : /rest/rack-managers/{id}/partitions
+Prompt      : action:get_rest_rack_managers_id_partitions
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_rack_managers_id_partitions_uuid
+Status      : OK
+Method      : GET
+API Path    : /rest/rack-managers/{id}/partitions/{uuid}
+Prompt      : action:get_rest_rack_managers_id_partitions_uuid
+Parameters  : {"id": "<id>", "uuid": "<uuid>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_rack_managers_id_remotesupportsettings
+Status      : OK
+Method      : GET
+API Path    : /rest/rack-managers/{id}/remoteSupportSettings
+Prompt      : action:get_rest_rack_managers_id_remotesupportsettings
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_rack_managers_managers
+Status      : OK
+Method      : GET
+API Path    : /rest/rack-managers/managers
+Prompt      : action:get_rest_rack_managers_managers
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_rack_managers_partitions
+Status      : OK
+Method      : GET
+API Path    : /rest/rack-managers/partitions
+Prompt      : action:get_rest_rack_managers_partitions
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_server_hardware
+Status      : OK
+Method      : GET
+API Path    : /rest/server-hardware
+Prompt      : action:get_rest_server_hardware
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_server_hardware_firmware
+Status      : OK
+Method      : GET
+API Path    : /rest/server-hardware/*/firmware
+Prompt      : action:get_rest_server_hardware_firmware
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_server_hardware_id
+Status      : OK
+Method      : GET
+API Path    : /rest/server-hardware/{id}
+Prompt      : action:get_rest_server_hardware_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_server_hardware_id_chassis
+Status      : OK
+Method      : GET
+API Path    : /rest/server-hardware/{id}/chassis
+Prompt      : action:get_rest_server_hardware_id_chassis
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_server_hardware_id_firmwareinventory
+Status      : OK
+Method      : GET
+API Path    : /rest/server-hardware/{id}/firmwareInventory
+Prompt      : action:get_rest_server_hardware_id_firmwareinventory
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_server_hardware_id_networkadapters
+Status      : OK
+Method      : GET
+API Path    : /rest/server-hardware/{id}/networkAdapters
+Prompt      : action:get_rest_server_hardware_id_networkadapters
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_server_hardware_id_powersupplies
+Status      : OK
+Method      : GET
+API Path    : /rest/server-hardware/{id}/powerSupplies
+Prompt      : action:get_rest_server_hardware_id_powersupplies
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_server_hardware_id_processors
+Status      : OK
+Method      : GET
+API Path    : /rest/server-hardware/{id}/processors
+Prompt      : action:get_rest_server_hardware_id_processors
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_server_hardware_id_softwareinventory
+Status      : OK
+Method      : GET
+API Path    : /rest/server-hardware/{id}/softwareInventory
+Prompt      : action:get_rest_server_hardware_id_softwareinventory
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_server_hardware_id_thermal
+Status      : OK
+Method      : GET
+API Path    : /rest/server-hardware/{id}/thermal
+Prompt      : action:get_rest_server_hardware_id_thermal
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_server_hardware_schema
+Status      : OK
+Method      : GET
+API Path    : /rest/server-hardware/schema
+Prompt      : action:get_rest_server_hardware_schema
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_updates
+Status      : OK
+Method      : GET
+API Path    : /rest/updates
+Prompt      : action:get_rest_updates
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : get_rest_updates_id
+Status      : OK
+Method      : GET
+API Path    : /rest/updates/{id}
+Prompt      : action:get_rest_updates_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : patch_rest_rack_managers_id
+Status      : OK
+Method      : PATCH
+API Path    : /rest/rack-managers/{id}
+Prompt      : action:patch_rest_rack_managers_id
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : post_rest_certificates_client_rabbitmq
+Status      : OK
+Method      : POST
+API Path    : /rest/certificates/client/rabbitmq
+Prompt      : action:post_rest_certificates_client_rabbitmq
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_rest_ethernet_networks_bulk
+Status      : OK
+Method      : POST
+API Path    : /rest/ethernet-networks/bulk
+Prompt      : action:post_rest_ethernet_networks_bulk
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_rest_login_sessions
+Status      : OK
+Method      : POST
+API Path    : /rest/login-sessions
+Prompt      : action:post_rest_login_sessions
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_rest_login_sessions_auth_token
+Status      : OK
+Method      : POST
+API Path    : /rest/login-sessions/auth-token
+Prompt      : action:post_rest_login_sessions_auth_token
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_rest_rack_managers
+Status      : OK
+Method      : POST
+API Path    : /rest/rack-managers
+Prompt      : action:post_rest_rack_managers
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_rest_server_hardware
+Status      : OK
+Method      : POST
+API Path    : /rest/server-hardware
+Prompt      : action:post_rest_server_hardware
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_rest_server_hardware_discovery
+Status      : OK
+Method      : POST
+API Path    : /rest/server-hardware/discovery
+Prompt      : action:post_rest_server_hardware_discovery
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : post_rest_server_hardware_firmware_compliance
+Status      : OK
+Method      : POST
+API Path    : /rest/server-hardware/firmware-compliance
+Prompt      : action:post_rest_server_hardware_firmware_compliance
+Parameters  : {}
+================================================================================
+
+================================================================================
+Action Key  : put_rest_server_hardware_id_powerstate
+Status      : OK
+Method      : PUT
+API Path    : /rest/server-hardware/{id}/powerState
+Prompt      : action:put_rest_server_hardware_id_powerstate
+Parameters  : {"id": "<id>"}
+================================================================================
+
+================================================================================
+Action Key  : put_rest_storage_volumes_id
+Status      : OK
+Method      : PUT
+API Path    : /rest/storage-volumes/{id}
+Prompt      : action:put_rest_storage_volumes_id
+Parameters  : {"id": "<id>"}
+================================================================================

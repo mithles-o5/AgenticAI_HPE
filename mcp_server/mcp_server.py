@@ -31,6 +31,8 @@ from datetime import datetime
 
 import httpx
 import time
+import psycopg2
+import uuid
 from mcp.server.fastmcp import FastMCP
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -38,16 +40,25 @@ from mcp.server.fastmcp import FastMCP
 # ─────────────────────────────────────────────────────────────────────────────
 
 BASE_DIR     = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR     = os.path.normpath(os.path.join(BASE_DIR, ".."))
 AUTH_DIR     = os.path.normpath(os.path.join(BASE_DIR, "..", "authentication"))
 AUTHZ_DIR    = os.path.normpath(os.path.join(BASE_DIR, "..", "authorization"))
 RESOLVER_DIR = os.path.normpath(os.path.join(BASE_DIR, "..", "resource_resolver"))
+PLANNER_DIR  = os.path.normpath(os.path.join(BASE_DIR, "..", "task_planner"))
+ENGINE_DIR   = os.path.normpath(os.path.join(BASE_DIR, "..", "execution_engine"))
 
+sys.path.insert(0, ROOT_DIR)
 sys.path.insert(0, AUTH_DIR)
 sys.path.insert(0, AUTHZ_DIR)
 sys.path.insert(0, RESOLVER_DIR)
+sys.path.insert(0, PLANNER_DIR)
+sys.path.insert(0, ENGINE_DIR)
+
+import mock_db_cache
+mock_db_cache.setup()
 
 # Authentication imports
-from __init__    import get_provider, PROVIDER       # noqa: E402
+from authentication import get_provider, PROVIDER       # noqa: E402
 from token_store import save_token, load_token, load_provider, clear_token  # noqa: E402
 
 # Authorization engine imports (runs in-process, no separate server needed)
@@ -57,11 +68,20 @@ from models import TokenPayload, Resource, Context  # noqa: E402
 
 # Resource Resolver imports
 from resolver    import ResourceResolver   # noqa: E402
-from registry    import ResourceRegistry  # noqa: E402
 from cache       import ResourceCache     # noqa: E402
-from sample_data import load_sample_registry  # noqa: E402
+from db_loader   import load_registry_from_db  # noqa: E402
+from query_agent import QueryAgent        # noqa: E402
+from planner     import TaskPlanner       # noqa: E402
 from errors      import ResolverError     # noqa: E402
-from records     import Protocol          # noqa: E402
+from enum        import Enum              # noqa: E402
+
+# Execution engine / Agent dispatcher
+from execution_engine import AgentDispatcher  # noqa: E402
+_dispatcher = AgentDispatcher()
+
+class Protocol(str, Enum):
+    ONEVIEW = "oneview"
+    COMS = "coms"
 
 # Path to roles.json (the role mapping file you can freely edit)
 ROLES_FILE = os.path.join(AUTHZ_DIR, "roles.json")
@@ -75,8 +95,8 @@ _CLAIMS_CACHE_TTL = 300  # seconds — re-verify every 5 minutes max
 HARDWARE_BACKEND_URL = "http://127.0.0.1:8000"
 
 # ── Resolver singletons (built once at startup) ───────────────────────────────
-_registry = load_sample_registry()
-_cache    = ResourceCache(ttl=300)
+_registry = load_registry_from_db()
+_cache    = ResourceCache()
 _resolver = ResourceResolver(registry=_registry, cache=_cache)
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -85,10 +105,10 @@ _resolver = ResourceResolver(registry=_registry, cache=_cache)
 
 # Available SSO providers — ALL use browser-based PKCE (no credentials in chat).
 AVAILABLE_PROVIDERS = {
-    "local" : "Local Dev  ✅ Ready         (automated demo)",
     "auth0" : "Auth0      ✅ Ready         (browser login via Auth0)",
-    "okta"  : "Okta       🔲 Needs config  (fill in OKTA_DOMAIN + OKTA_CLIENT_ID in okta_provider.py)",
+    "okta"  : "Okta       ✅ Ready         (browser login via okta)",
     "azure" : "Azure AD   🔲 Needs config  (fill in AZURE_TENANT_ID + AZURE_CLIENT_ID in azure_provider.py)",
+    "local" : "Local Mock ✅ Ready         (username/password credentials)",
 }
 
 PROVIDER_LIST = "\n".join(
@@ -98,23 +118,31 @@ PROVIDER_LIST = "\n".join(
 mcp = FastMCP(
     "HPE-Integrated-MCP",
     instructions=f"""
-    You are managing HPE physical servers via MCP.
+    You are managing HPE infrastructure via MCP.
 
-    ── PRIMARY TOOLS ────────────────────────────────────────────────────────────
-    For hardware commands on OneView servers, use: manage_oneview_server(query="<user request>")
-    For hardware commands on Compute Ops (CoM) servers, use: manage_comops_server(query="<user request>")
-    
-    Both tools handle the full pipeline automatically:
+    ── SERVER TOOLS (on-premises) ────────────────────────────────────────────
+    manage_oneview_resource(query)   — OneView physical servers
+    manage_comops_resource(query)    — Compute Ops cloud nodes
+
+    ── OASF AGENT TOOLS ─────────────────────────────────────────────────────
+    manage_cloud_resource(query, provider, resource_type)
+      Manage cloud VMs/containers. provider: aws | azure | gcp | mock
+      resource_type: vm | container | function
+
+    manage_network_resource(query, protocol, resource_type)
+      Manage network devices. protocol: snmp | netconf | rest | mock
+      resource_type: switch | router | interface
+
+    manage_storage_resource(query, provider, resource_type)
+      Manage storage. provider: dscc | nas | s3 | mock
+      resource_type: volume | array | pool | bucket
+
+    ── FULL PIPELINE (all tools) ─────────────────────────────────────────────
       1. Authenticates the user
-      2. Resolves the natural language command to the correct server + API
-      3. Checks role-based permissions (RBAC + ABAC)
-      4. Executes on the respective mock server (OneView or CoM)
+      2. Parses the natural language command
+      3. Checks RBAC + ABAC permissions
+      4. Dispatches to the correct backend / agent
       5. Returns the result
-
-    Examples:
-      manage_oneview_server(query="turn on OV1-RackServer-001")
-      manage_comops_server(query="power on CoM-CloudNode-005")
-      manage_oneview_server(query="list all servers")
 
     ── AUTHENTICATION (BROWSER ONLY — no credentials in chat) ──────────────────
     All login flows open a secure browser window. Credentials NEVER pass through chat.
@@ -122,10 +150,11 @@ mcp = FastMCP(
     CRITICAL LOGIN RULES (Follow strictly):
     1. If the user is not logged in, reply with EXACTLY:
        "You are not logged in. Please choose an SSO provider:
+       • [auth0](https://auth0.com) — Auth0 SSO Login
+       • [okta](https://okta.com) — Okta SSO Login
+       • [azure](https://azure.microsoft.com) — Azure AD SSO Login
 
-{PROVIDER_LIST}
-
-       Reply with: auth0, okta, or azure."
+       Reply with your choice: auth0, okta, or azure."
 
     2. STOP. Wait for the user to reply with their choice.
     3. Once the user replies, call `sso_login(provider="<their choice>")`.
@@ -133,12 +162,14 @@ mcp = FastMCP(
     5. NEVER auto-select a provider.
 
     CRITICAL LOGOUT RULES:
-    If the user asks to logout or end the session, you MUST execute the `logout()` tool. Do not just say you logged out without executing the tool.
+    If the user asks to logout or end the session, you MUST execute the `logout()` tool.
 
-    ── OTHER TOOLS ─────────────────────────────────────────────────────────────
-    • sso_login(provider)      — Login via browser SSO
-    • logout()                 — End the current session
-    • check_access()           — Show identity, role, and permissions
+    ── CRITICAL BEHAVIOURAL RULES (STRICT) ─────────────────────────────────────
+    1. ZERO HALLUCINATION: You MUST ONLY reply using the data returned by the tools.
+       If a tool returns an error, "Not found", or "Task resolution failed", you must report that failure verbatim.
+       NEVER make up or assume any status, configuration, metrics, or details for any resource.
+    2. FORCE SSO: If the tool returns "Not authenticated" or "Not logged in", you MUST NOT perform any actions or show any resource information. Force the user to log in first.
+    3. NO ACCESS BYPASS: If a resource is not found in the CMDB database (resolution fails), you must tell the user that the resource is not registered in the system. Do not guess its state.
     """
 )
 
@@ -432,114 +463,700 @@ async def _execute_hardware_command(query: str, env: str, expected_protocol: Pro
     try:
         token, claims = _get_token_and_claims()
         email, role   = _resolve_role(claims)
-    except ValueError as e:
+    except ValueError:
         return (
-            f"❌ Not authenticated.\n{e}\n\n"
-            f"Please login first using sso_login(provider='auth0' | 'okta' | 'azure')."
+            "You are not logged in. Please choose an SSO provider:\n\n"
+            "• [auth0](https://auth0.com) — Auth0 SSO Login\n"
+            "• [okta](https://okta.com) — Okta SSO Login\n"
+            "• [azure](https://azure.microsoft.com) — Azure AD SSO Login\n\n"
+            "Reply with your choice: auth0, okta, or azure."
         )
 
     # ── Step 2: Resource Resolution ───────────────────────────────────────────
     if any(w in query.lower() for w in ["list", "all servers", "show servers"]):
-        ov_records = [r for r in _registry.all_records() if Protocol.ONEVIEW in r.supported_protocols]
-        com_records = [r for r in _registry.all_records() if Protocol.COMS in r.supported_protocols]
-        
-        ov_on = sum(1 for r in ov_records if r.power_state == "On")
-        com_on = sum(1 for r in com_records if r.power_state == "On")
+        ov_records = _registry.list_devices_by_management_source("oneview")
+        com_records = _registry.list_devices_by_management_source("coms")
         
         # Grab top 5 for sample individual data
         sample_data = []
         for r in (ov_records[:3] + com_records[:2]):
             sample_data.append({
-                "uuid": r.uuid,
-                "name": r.name,
-                "protocol": "OneView" if Protocol.ONEVIEW in r.supported_protocols else "Compute Ops",
-                "powerState": r.power_state,
+                "uuid": r.id,
+                "name": r.serial_number,
+                "protocol": "OneView" if r.management_source == "oneview" else "Compute Ops",
+                "powerState": "Unknown",
                 "ip_address": r.ip_address
             })
             
         return (
             f"✅ Authenticated as {email} (Role: {role})\n"
             f"📋 Infrastructure Summary (Total: {len(ov_records) + len(com_records)}):\n"
-            f"  • OneView Physical Nodes : {len(ov_records)} ({ov_on} Powered On)\n"
-            f"  • Compute Ops Cloud Nodes: {len(com_records)} ({com_on} Powered On)\n\n"
+            f"  • OneView Physical Nodes : {len(ov_records)}\n"
+            f"  • Compute Ops Cloud Nodes: {len(com_records)}\n\n"
             f"🔍 Sample Individual Data (First 5 records):\n"
             f"{json.dumps(sample_data, indent=2)}\n\n"
             f"💡 Note: Displaying 5 of 1500 to prevent chat overflow. "
             f"To check a specific resource, ask for its status directly."
         )
 
-    try:
-        ctx = _resolver.resolve(query)
-    except ResolverError as e:
-        return f"❌ Resource not found or query unclear.\nReason: {e}"
+    tasks = TaskPlanner.decompose_instruction(query)
+    if not tasks:
+        return f"❌ Query parsed to an empty task list: '{query}'"
 
-    if expected_protocol != ctx.selected_protocol:
-        return f"❌ Wrong tool used! Server {ctx.resource_name} uses protocol {ctx.selected_protocol.value}, but you used the tool for {expected_protocol.value}."
+    resolved_tasks = []
+    results = []
+    
+    # ── Step 3: Resource Resolution ───────────────────────────────────────────
+    for task in tasks:
+        try:
+            parsed_payload = {
+                "identifier": task.identifier,
+                "action": task.action,
+                "category": task.category
+            }
+            ctx = _resolver.resolve(
+                parsed_payload=parsed_payload,
+                requested_by=email,
+            )
+            resolved_tasks.append((task, ctx))
+        except ResolverError as e:
+            results.append(f"❌ Task resolution failed for '{task.identifier}': {e}")
+
+    # ── Step 4: Vendor Synthesis (Group and Optimize by Vendor/Host) ─────────
+    from synthesizer import VendorSynthesizer
+    batches = VendorSynthesizer.synthesize_batches(resolved_tasks)
+    
+    # Iterate through synthesized batches and execute
+    for key, batch in batches.items():
+        for task in batch.tasks:
+            # Find the corresponding resolved context for this task
+            ctx = next(r for t, r in resolved_tasks if t.task_id == task.task_id)
+
+            if expected_protocol != ctx.management_source:
+                results.append(f"❌ Wrong tool used! Server {ctx.device.serial_number} uses protocol {ctx.management_source}, but you used the tool for {expected_protocol}.")
+                continue
+
+            # ── Step 5: Authorization (RBAC + ABAC) ───────────────────────────────────
+            action_verb_map = {
+                "ON": "execute", "OFF": "execute", "RESET": "execute", "COLD_BOOT": "execute",
+                "STATUS": "read", "CREATE": "create", "ALLOCATE": "create",
+                "DEALLOCATE": "delete", "DELETE": "delete",
+            }
+            action_val = task.action
+            rbac_action = action_verb_map.get(action_val, "execute")
+            
+            try:
+                allowed, reason, identity = _authorize(
+                    rbac_action, ctx.device.id, "server-hardware", env, "HPE"
+                )
+            except (RuntimeError, ValueError) as e:
+                results.append(f"❌ Authorization error for '{task.identifier}': {e}")
+                continue
+
+            if not allowed:
+                results.append(f"❌ Access Denied for {email} (Role: {role}) on '{task.identifier}'\nReason: {reason}")
+                continue
+
+            # ── Step 6: Dispatch via OASF Agent (Resolved from Capability Registry) ──
+            import asyncio
+            loop = asyncio.get_event_loop()
+            
+            # Map action_val to OASF Skill parameters if required
+            parameters = {}
+            if action_val in ("ON", "OFF", "RESET", "COLD_BOOT"):
+                parameters = {"action_type": "power", "state": "On" if action_val == "ON" else "Off" if action_val == "OFF" else "Reset"}
+            elif action_val == "STATUS":
+                # Onprem health check skill is mapped via health_check action
+                pass
+
+            try:
+                # If query is status of server, map action_val to health_check or fetch_metrics
+                query_action = "health_check" if action_val == "STATUS" else "execute_action"
+                
+                response_data = await loop.run_in_executor(
+                    None,
+                    lambda: _dispatcher.dispatch(
+                        agent_type="onprem",
+                        query_action=query_action,
+                        resource_type=ctx.device.device_type or "server_hardware",
+                        resource_id=ctx.device.serial_number,
+                        provider_or_protocol=ctx.management_source,
+                        parameters=parameters,
+                    ),
+                )
+
+                # Extract key fields for clear visibility
+                norm_data = response_data.get("normalized_data", {}) or response_data.get("raw", {})
+                if not norm_data and "raw" in response_data.get("normalized_data", {}):
+                    norm_data = response_data["normalized_data"]["raw"]
+                
+                power_state = (
+                    norm_data.get("power_state") 
+                    or norm_data.get("powerState") 
+                    or (response_data.get("metrics", {})).get("power_state") 
+                    or response_data.get("power_state") 
+                    or "N/A"
+                )
+                health_status = (
+                    response_data.get("status_level") 
+                    or norm_data.get("health_status") 
+                    or norm_data.get("health") 
+                    or norm_data.get("status") 
+                    or "N/A"
+                )
+                
+                insights_list = response_data.get("insights", [])
+                insights_summary = ""
+                if insights_list:
+                    insights_summary = "\nInsights:\n" + "\n".join(f"  • [{i.get('severity', 'info').upper()}] {i.get('message')}" for i in insights_list)
+
+                results.append(
+                    f"✅ Executed Successfully via OASF Route\n"
+                    f"User         : {email} (Role: {role})\n"
+                    f"Resource     : {ctx.device.serial_number}\n"
+                    f"Power State  : {power_state.upper()}\n"
+                    f"Health Status: {health_status.upper()}\n"
+                    f"Action       : {action_val}\n"
+                    f"─────────────────────────────────"
+                    f"{insights_summary}\n\n"
+                    f"Raw Agent Response:\n"
+                    + json.dumps(response_data, indent=2)
+                )
+            except Exception as e:
+                results.append(f"⚠️ Agent call failed for '{task.identifier}': {e}")
+
+    return "\n\n=========================================\n\n".join(results)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Tools 5-7 — OASF Agent Microservices
+# ─────────────────────────────────────────────────────────────────────────────
+
+@mcp.tool()
+async def manage_cloud_resource(
+    query: str,
+    provider: str = "mock",
+    resource_type: str = "vm",
+    env: str = "dev",
+) -> str:
+    """
+    Manage a cloud resource (VM, container, function) via the Cloud Agent.
+    provider: 'aws' | 'azure' | 'gcp' | 'mock'
+    resource_type: 'vm' | 'container' | 'function'
+    Examples:
+      manage_cloud_resource(query="status of my-vm-001", provider="aws")
+      manage_cloud_resource(query="create vm prod-worker", provider="gcp")
+    """
+    return await _execute_agent_command(
+        query=query,
+        env=env,
+        agent_type="cloud",
+        provider_or_protocol=provider,
+        resource_type=resource_type,
+    )
+
+
+@mcp.tool()
+async def manage_network_resource(
+    query: str,
+    protocol: str = "mock",
+    resource_type: str = "switch",
+    env: str = "dev",
+) -> str:
+    """
+    Manage a network device (switch, router, interface) via the Network Agent.
+    protocol: 'snmp' | 'netconf' | 'rest' | 'mock'
+    resource_type: 'switch' | 'router' | 'interface'
+    Examples:
+      manage_network_resource(query="status of core-sw-01", protocol="snmp")
+      manage_network_resource(query="discover topology of dc-router-01")
+    """
+    return await _execute_agent_command(
+        query=query,
+        env=env,
+        agent_type="network",
+        provider_or_protocol=protocol,
+        resource_type=resource_type,
+    )
+
+
+@mcp.tool()
+async def manage_storage_resource(
+    query: str,
+    provider: str = "mock",
+    resource_type: str = "volume",
+    env: str = "dev",
+) -> str:
+    """
+    Manage a storage resource (volume, array, pool, bucket) via the Storage Agent.
+    provider: 'dscc' | 'nas' | 's3' | 'mock'
+    resource_type: 'volume' | 'array' | 'pool' | 'bucket'
+    Examples:
+      manage_storage_resource(query="capacity of prod-vol-001", provider="dscc")
+      manage_storage_resource(query="discover all arrays", provider="nas")
+    """
+    return await _execute_agent_command(
+        query=query,
+        env=env,
+        agent_type="storage",
+        provider_or_protocol=provider,
+        resource_type=resource_type,
+    )
+
+
+@mcp.tool()
+async def manage_server_resource(
+    query: str,
+    provider: str = "mock",
+    resource_type: str = "server",
+    env: str = "dev",
+) -> str:
+    """
+    Manage a bare-metal server (server, bmc, sensor, firmware, event_log) via the Server Agent.
+    provider: 'redfish' | 'ipmi' | 'ilo' | 'mock'
+    resource_type: 'server' | 'bmc' | 'sensor' | 'firmware' | 'event_log'
+    Examples:
+      manage_server_resource(query="status of OV1-RackServer-001", provider="redfish")
+      manage_server_resource(query="power off MS-123", provider="ipmi")
+    """
+    return await _execute_agent_command(
+        query=query,
+        env=env,
+        agent_type="server",
+        provider_or_protocol=provider,
+        resource_type=resource_type,
+    )
+
+
+async def _execute_agent_command(
+    query: str,
+    env: str,
+    agent_type: str,
+    provider_or_protocol: str,
+    resource_type: str,
+) -> str:
+    """Shared pipeline for the three OASF agent tools."""
+    import asyncio
+
+    # ── Step 1: Authentication ────────────────────────────────────────────────
+    try:
+        token, claims = _get_token_and_claims()
+        email, role   = _resolve_role(claims)
+    except ValueError:
+        return (
+            "You are not logged in. Please choose an SSO provider:\n\n"
+            "• [auth0](https://auth0.com) — Auth0 SSO Login\n"
+            "• [okta](https://okta.com) — Okta SSO Login\n"
+            "• [azure](https://azure.microsoft.com) — Azure AD SSO Login\n\n"
+            "Reply with your choice: auth0, okta, or azure."
+        )
+
+    # ── Step 2: Parse query with QueryAgent ───────────────────────────────────
+    parsed   = QueryAgent.parse_query(query)
+    action   = parsed.get("action", "STATUS")
+    identifier = parsed.get("identifier") or query.strip()
+    if identifier.lower().startswith("of "):
+        identifier = identifier[3:].strip()
+
+    # ── Step 2.5: Verify CMDB Resource Existence ─────────────────────────────
+    allowed_mock_resources = {"demo-vm-001", "core-switch-01", "core-sw-01", "prod-vol-001", "prod-worker", "MS-123", "OV1-RackServer-001", "CoM-CloudNode-001"}
+    device = None
+    try:
+        from resolver import ResourceResolver
+        ident_type = ResourceResolver._infer_identifier_type(identifier)
+        device = _registry.lookup(identifier, ident_type)
+    except Exception:
+        pass
+
+    if not device and identifier not in allowed_mock_resources:
+        return f"❌ Resource '{identifier}' not found in the CMDB registry. Unable to route task."
 
     # ── Step 3: Authorization (RBAC + ABAC) ───────────────────────────────────
     action_verb_map = {
-        "On": "execute", "Off": "execute", "Reset": "execute", "ColdBoot": "execute",
-        "Status": "read", "Create": "create", "Allocate": "create",
-        "Deallocate": "delete", "Delete": "delete",
+        "ON": "execute", "OFF": "execute", "RESET": "execute",
+        "COLD_BOOT": "execute", "STATUS": "read",
+        "CREATE": "create", "ALLOCATE": "create",
+        "DEALLOCATE": "delete", "DELETE": "delete",
+        "RESCAN": "read", "RELOAD": "execute",
+        "FAILOVER": "execute", "POLICY_SYNC": "execute",
     }
-    action_val = ctx.action.value if hasattr(ctx.action, "value") else str(ctx.action)
-    rbac_action = action_verb_map.get(action_val, "execute")
-    
+    rbac_action = action_verb_map.get(action, "execute")
+    resource_id_for_authz = identifier or "unknown"
+
     try:
         allowed, reason, identity = _authorize(
-            rbac_action, ctx.resource_uuid, "server-hardware", env, ctx.vendor.value
+            rbac_action, resource_id_for_authz, resource_type, env, "HPE"
         )
     except (RuntimeError, ValueError) as e:
-        return f"❌ Authorization error: {e}"
+        return f"Authorization error for '{identifier}': {e}"
 
     if not allowed:
-        return f"❌ Access Denied for {email} (Role: {role})\nReason: {reason}"
+        return f"Access Denied for {email} (Role: {role}) on '{identifier}'\nReason: {reason}"
 
-    # ── Step 4: Execute on Mock Server ────────────────────────────────────────
-    if expected_protocol == Protocol.ONEVIEW:
-        action_endpoint_map = {
-            "On":         ("PUT",  f"/rest/{resource_category}/{ctx.resource_uuid}/powerState",  {"powerState": "On"}),
-            "Off":        ("PUT",  f"/rest/{resource_category}/{ctx.resource_uuid}/powerState",  {"powerState": "Off"}),
-            "Status":     ("GET",  f"/rest/{resource_category}/{ctx.resource_uuid}",             None),
-            "Create":     ("POST", f"/rest/{resource_category}", {"name": ctx.resource_name}),
-            "Delete":     ("DELETE", f"/rest/{resource_category}/{ctx.resource_uuid}", None),
-        }
-    else:
-        # CoM Endpoints
-        action_endpoint_map = {
-            "On":         ("POST", f"/compute-ops-mgmt/v1/{resource_category}/{ctx.resource_uuid}/power-on", {}),
-            "Off":        ("POST", f"/compute-ops-mgmt/v1/{resource_category}/{ctx.resource_uuid}/power-off", {}),
-            "Status":     ("GET",  f"/compute-ops-mgmt/v1/{resource_category}/{ctx.resource_uuid}", None),
-            "Create":     ("POST", f"/compute-ops-mgmt/v1/{resource_category}", {"name": ctx.resource_name}),
-            "Delete":     ("DELETE", f"/compute-ops-mgmt/v1/{resource_category}/{ctx.resource_uuid}", None),
-        }
-
-    http_method, endpoint, body = action_endpoint_map.get(
-        action_val,
-        ("GET", f"/rest/{resource_category}/{ctx.resource_uuid}" if expected_protocol == Protocol.ONEVIEW else f"/compute-ops-mgmt/v1/{resource_category}/{ctx.resource_uuid}", None)
+    # ── Step 4: Dispatch to OASF Agent microservice ───────────────────────────
+    loop = asyncio.get_event_loop()
+    result = await loop.run_in_executor(
+        None,
+        lambda: _dispatcher.dispatch(
+            agent_type=agent_type,
+            query_action=action,
+            resource_type=resource_type,
+            resource_id=identifier,
+            provider_or_protocol=provider_or_protocol,
+        ),
     )
 
+    # ── Step 5: Format response ───────────────────────────────────────────────
+    status       = result.get("status", "unknown")
+    status_level = result.get("status_level", "")
+    errors       = result.get("errors", [])
+    insights     = result.get("insights", [])
+    metrics      = result.get("metrics", {})
+    actions_taken = result.get("actions_taken", [])
+
+    if status == "failed" or errors:
+        error_text = "\n  ".join(errors) if errors else "Unknown error"
+        return (
+            f"Agent command failed\n"
+            f"User       : {email} (Role: {role})\n"
+            f"Agent      : {agent_type}-agent\n"
+            f"Resource   : {resource_type}/{identifier}\n"
+            f"Provider   : {provider_or_protocol}\n"
+            f"Action     : {action}\n"
+            f"Errors:\n  {error_text}\n"
+            f"Tip: ensure the {agent_type}-agent is running "
+            f"(python agents/{agent_type}_agent/main.py)"
+        )
+
+    norm_data = result.get("normalized_data", {})
+    # Unpack power state or capacity metrics depending on agent type
+    power_state = norm_data.get("power_state") or (result.get("metrics", {})).get("power_state") or "N/A"
+    health_status = status_level or norm_data.get("health_status") or "N/A"
+
+    lines = [
+        f"Agent command succeeded",
+        f"User         : {email} (Role: {role})",
+        f"Agent        : {agent_type}-agent",
+        f"Resource     : {resource_type}/{identifier}",
+        f"Power State  : {power_state.upper()}",
+        f"Health Status: {health_status.upper()}",
+        f"Provider     : {provider_or_protocol}",
+        f"Action       : {action}",
+        f"Status       : {status}",
+    ]
+    if insights:
+        lines.append("Insights:")
+        lines.extend(f"  • {i}" for i in insights)
+    if actions_taken:
+        lines.append("Actions taken:")
+        lines.extend(f"  • {a}" for a in actions_taken)
+    if metrics:
+        lines.append(f"Metrics:\n{json.dumps(metrics, indent=2)}")
+
+    return "\n".join(lines)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# POSTGRESQL MEMORY STORE MODULE
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Load PostgreSQL connection parameters from environment with default values
+PG_HOST = os.getenv("PGHOST", "localhost")
+PG_PORT = int(os.getenv("PGPORT", "5432"))
+PG_USER = os.getenv("PGUSER", "postgres")
+PG_PASSWORD = os.getenv("PGPASSWORD", "password")
+PG_DATABASE = os.getenv("PGDATABASE", "postgres")
+
+# Session ID file persistence path
+SESSION_ID_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "session_id.txt")
+
+def _get_connection():
+    """Opens a connection to the PostgreSQL database."""
+    return psycopg2.connect(
+        host=PG_HOST,
+        port=PG_PORT,
+        user=PG_USER,
+        password=PG_PASSWORD,
+        database=PG_DATABASE
+    )
+
+def init_db():
+    """Initializes the database table for memory store if it doesn't exist."""
+    conn = None
+    try:
+        conn = _get_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS memory (
+                session_id TEXT,
+                key TEXT,
+                value TEXT,
+                updated_at TEXT,
+                PRIMARY KEY (session_id, key)
+            )
+        """)
+        conn.commit()
+        print("✅ PostgreSQL memory store database initialized successfully.", file=sys.stderr)
+    except Exception as e:
+        print(f"❌ Error initializing memory database: {e}", file=sys.stderr)
+        raise
+    finally:
+        if conn:
+            conn.close()
+
+def remember(session_id: str, key: str, value):
+    """Upsert a key-value pair for a session."""
+    conn = None
+    try:
+        conn = _get_connection()
+        cursor = conn.cursor()
+        val_json = json.dumps(value)
+        updated_at = datetime.utcnow().isoformat() + "Z"
+        cursor.execute("""
+            INSERT INTO memory (session_id, key, value, updated_at)
+            VALUES (%s, %s, %s, %s)
+            ON CONFLICT (session_id, key) DO UPDATE SET
+                value = EXCLUDED.value,
+                updated_at = EXCLUDED.updated_at
+        """, (session_id, key, val_json, updated_at))
+        conn.commit()
+    except Exception as e:
+        print(f"❌ Error saving to database (remember): {e}", file=sys.stderr)
+        raise
+    finally:
+        if conn:
+            conn.close()
+
+def recall(session_id: str, key: str):
+    """Fetch a single value, return None if missing."""
+    conn = None
+    try:
+        conn = _get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT value FROM memory WHERE session_id = %s AND key = %s", (session_id, key))
+        row = cursor.fetchone()
+        if row:
+            return json.loads(row[0])
+        return None
+    except Exception as e:
+        print(f"❌ Error fetching from database (recall): {e}", file=sys.stderr)
+        return None
+    finally:
+        if conn:
+            conn.close()
+
+def recall_session(session_id: str) -> dict:
+    """Return all key-value pairs for a session as a dictionary."""
+    conn = None
+    try:
+        conn = _get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT key, value FROM memory WHERE session_id = %s", (session_id,))
+        rows = cursor.fetchall()
+        return {row[0]: json.loads(row[1]) for row in rows}
+    except Exception as e:
+        print(f"❌ Error fetching session data (recall_session): {e}", file=sys.stderr)
+        return {}
+    finally:
+        if conn:
+            conn.close()
+
+def forget_key(session_id: str, key: str):
+    """Delete one key from the session."""
+    conn = None
+    try:
+        conn = _get_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM memory WHERE session_id = %s AND key = %s", (session_id, key))
+        conn.commit()
+    except Exception as e:
+        print(f"❌ Error deleting key (forget_key): {e}", file=sys.stderr)
+        raise
+    finally:
+        if conn:
+            conn.close()
+
+def forget_session(session_id: str):
+    """Delete an entire session."""
+    conn = None
+    try:
+        conn = _get_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM memory WHERE session_id = %s", (session_id,))
+        conn.commit()
+    except Exception as e:
+        print(f"❌ Error deleting session (forget_session): {e}", file=sys.stderr)
+        raise
+    finally:
+        if conn:
+            conn.close()
+
+def list_sessions() -> list:
+    """Return all active session IDs in the database."""
+    conn = None
+    try:
+        conn = _get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT DISTINCT session_id FROM memory")
+        rows = cursor.fetchall()
+        return [row[0] for row in rows]
+    except Exception as e:
+        print(f"❌ Error listing sessions: {e}", file=sys.stderr)
+        return []
+    finally:
+        if conn:
+            conn.close()
+
+def _get_or_create_session_id() -> str:
+    """Retrieves the persisted session ID from file or creates a new one."""
+    try:
+        if os.path.exists(SESSION_ID_FILE):
+            with open(SESSION_ID_FILE, "r") as f:
+                sid = f.read().strip()
+                if sid:
+                    return sid
+    except Exception as e:
+        print(f"⚠️ Error reading session ID file: {e}", file=sys.stderr)
+        
+    sid = str(uuid.uuid4())
+    try:
+        with open(SESSION_ID_FILE, "w") as f:
+            f.write(sid)
+    except Exception as e:
+        print(f"⚠️ Error writing session ID file: {e}", file=sys.stderr)
+    return sid
+
+# Initialise persistent session ID
+SESSION_ID = _get_or_create_session_id()
+
+# Initialize memory store table at module loading time (since we already have a lifespan context)
+try:
+    init_db()
+except Exception as e:
+    print(f"⚠️ Failed to auto-initialize PostgreSQL memory database: {e}", file=sys.stderr)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Memory Store MCP Tools
+# ─────────────────────────────────────────────────────────────────────────────
+
+@mcp.tool()
+async def list_servers_in_rack(rack_id: str, session_id: str = None) -> str:
+    """
+    List all servers in a given rack on the OneView mock server.
+    Stores the result in memory under last_targets and last_rack, and returns the server list.
+    
+    Args:
+        rack_id: The ID of the rack to query (e.g. 'Rack-01', 'Rack-02').
+        session_id: Optional session ID override.
+    """
+    sid = session_id or SESSION_ID
+    url = f"{HARDWARE_BACKEND_URL}/rest/server-hardware"
+    
     async with httpx.AsyncClient() as client:
         try:
-            url = f"{backend_url}{endpoint}"
-            if http_method == "GET": resp = await client.get(url)
-            elif http_method == "POST": resp = await client.post(url, json=body or {})
-            elif http_method == "PUT": resp = await client.put(url, json=body or {})
-            elif http_method == "DELETE": resp = await client.delete(url)
-            
-            response_data = resp.json() if resp.content else {"status": resp.status_code}
-
-            return (
-                f"✅ Executed Successfully via {expected_protocol.value}\n"
-                f"User      : {email} (Role: {role})\n"
-                f"Resource  : {ctx.resource_name}\n"
-                f"Action    : {action_val}\n"
-                f"Endpoint  : {endpoint} ({http_method} → {resp.status_code})\n"
-                f"─────────────────────────────────\n"
-                + json.dumps(response_data, indent=2)
-            )
+            resp = await client.get(url, params={"rack": rack_id})
+            resp.raise_for_status()
+            data = resp.json()
         except Exception as e:
-            return f"⚠️ Mock server call failed: {e}\nEnsure backend {expected_protocol.value} is running at {backend_url}"
+            return f"❌ Failed to fetch servers from OneView mock server: {e}"
+            
+    # Handle if returned structure is list or dict
+    members = []
+    if isinstance(data, dict):
+        if "members" in data:
+            members = data["members"]
+        elif "server_hardware" in data:
+            members = list(data["server_hardware"].values())
+    elif isinstance(data, list):
+        members = data
+        
+    if not members:
+        return f"⚠️ No servers found in rack '{rack_id}'."
+        
+    # Format and save targets to memory database
+    targets = []
+    for s in members:
+        targets.append({
+            "uuid": s.get("uuid") or s.get("id"),
+            "name": s.get("name"),
+            "location": s.get("location"),
+            "powerState": s.get("powerState") or s.get("power_state")
+        })
+        
+    try:
+        remember(sid, "last_rack", rack_id)
+        remember(sid, "last_targets", targets)
+    except Exception as e:
+        return f"⚠️ Retrieved {len(targets)} servers, but failed to persist to memory database: {e}\n\nServers:\n" + json.dumps(targets, indent=2)
+        
+    return f"✅ Found {len(targets)} servers in rack '{rack_id}' (stored in memory database under session '{sid}'):\n" + json.dumps(targets, indent=2)
+
+@mcp.tool()
+async def power_off_last_targets(session_id: str = None) -> str:
+    """
+    Recalls last_targets from memory, executes power off on each,
+    stores last_operation as power_off, and returns a summary.
+    
+    Args:
+        session_id: Optional session ID override.
+    """
+    sid = session_id or SESSION_ID
+    
+    try:
+        last_targets = recall(sid, "last_targets")
+    except Exception as e:
+        return f"❌ Error: Database read failed: {e}"
+        
+    if not last_targets:
+        return (
+            "❌ Error: No last targets found in memory for this session.\n"
+            "Please run list_servers_in_rack first to populate last_targets."
+        )
+        
+    results = []
+    async with httpx.AsyncClient() as client:
+        for target in last_targets:
+            uuid_val = target.get("uuid")
+            name_val = target.get("name")
+            if not uuid_val:
+                results.append({"name": name_val, "status": "Failed (Missing UUID)"})
+                continue
+                
+            url = f"{HARDWARE_BACKEND_URL}/rest/server-hardware/{uuid_val}/powerState"
+            try:
+                resp = await client.put(url, json={"powerState": "Off"})
+                if resp.status_code == 200:
+                    results.append({"name": name_val, "uuid": uuid_val, "status": "Success"})
+                else:
+                    results.append({"name": name_val, "uuid": uuid_val, "status": f"Failed ({resp.status_code})"})
+            except Exception as e:
+                results.append({"name": name_val, "uuid": uuid_val, "status": f"Error ({e})"})
+                
+    # Record the last operation
+    last_op = {
+        "operation": "power_off",
+        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "affected_servers": [t.get("name") for t in last_targets],
+        "results": results
+    }
+    
+    try:
+        remember(sid, "last_operation", last_op)
+    except Exception as e:
+        return (
+            f"⚠️ Executed power off on servers, but failed to save operation to memory database: {e}\n\n"
+            f"Summary:\n" + json.dumps(results, indent=2)
+        )
+        
+    return f"✅ Power off operation completed for session '{sid}'\n\nSummary:\n" + json.dumps(results, indent=2)
+
+@mcp.tool()
+def mcp_list_sessions() -> str:
+    """
+    List all active session IDs in the memory database (for debugging).
+    """
+    sessions = list_sessions()
+    return f"📋 Active sessions in database:\n" + json.dumps(sessions, indent=2)
 
 
 # ─────────────────────────────────────────────────────────────────────────────

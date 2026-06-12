@@ -1,0 +1,278 @@
+{
+    "protocol": "Storage",
+    "base_url": "http://localhost:8000",
+    "endpoints": {
+        "get_data_services_v1beta1_async_operations": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/async-operations",
+            "triggers": [
+                "get_data_services_v1beta1_async_operations",
+                "/data-services/v1beta1/async-operations"
+            ],
+            "body_template": {}
+        },
+        "get_data_services_v1beta1_async_operations_id": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/async-operations/{id}",
+            "triggers": [
+                "get_data_services_v1beta1_async_operations_id",
+                "/data-services/v1beta1/async-operations/{id}"
+            ],
+            "body_template": {}
+        },
+        "get_data_services_v1beta1_dual_auth_operations": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/dual-auth-operations",
+            "triggers": [
+                "get_data_services_v1beta1_dual_auth_operations",
+                "/data-services/v1beta1/dual-auth-operations"
+            ],
+            "body_template": {}
+        },
+        "get_data_services_v1beta1_dual_auth_operations_id": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/dual-auth-operations/{id}",
+            "triggers": [
+                "get_data_services_v1beta1_dual_auth_operations_id",
+                "/data-services/v1beta1/dual-auth-operations/{id}"
+            ],
+            "body_template": {}
+        },
+        "patch_data_services_v1beta1_dual_auth_operations_id": {
+            "method": "PATCH",
+            "path_template": "/data-services/v1beta1/dual-auth-operations/{id}",
+            "triggers": [
+                "patch_data_services_v1beta1_dual_auth_operations_id",
+                "/data-services/v1beta1/dual-auth-operations/{id}"
+            ],
+            "body_template": {
+                "state": "APPROVED",
+                "checkedByEmail": "approver@example.com",
+                "checkedByUri": "/users/approver",
+                "checkedAt": "2024-01-20T11:15:00Z"
+            }
+        },
+        "get_data_services_v1beta1_issues": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/issues",
+            "triggers": [
+                "get_data_services_v1beta1_issues",
+                "/data-services/v1beta1/issues"
+            ],
+            "body_template": {}
+        },
+        "get_data_services_v1beta1_issues_id": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/issues/{id}",
+            "triggers": [
+                "get_data_services_v1beta1_issues_id",
+                "/data-services/v1beta1/issues/{id}"
+            ],
+            "body_template": {}
+        },
+        "patch_data_services_v1beta1_issues_id": {
+            "method": "PATCH",
+            "path_template": "/data-services/v1beta1/issues/{id}",
+            "triggers": [
+                "patch_data_services_v1beta1_issues_id",
+                "/data-services/v1beta1/issues/{id}"
+            ],
+            "body_template": {
+                "state": "RESOLVED",
+                "resolutionDetails": "Applied patch KB12345 to resolve the database connectivity."
+            }
+        },
+        "delete_data_services_v1beta1_issues_id": {
+            "method": "DELETE",
+            "path_template": "/data-services/v1beta1/issues/{id}",
+            "triggers": [
+                "delete_data_services_v1beta1_issues_id",
+                "/data-services/v1beta1/issues/{id}"
+            ],
+            "body_template": {}
+        },
+        "get_data_services_v1beta1_issues_metadata": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/issues-metadata",
+            "triggers": [
+                "get_data_services_v1beta1_issues_metadata",
+                "/data-services/v1beta1/issues-metadata"
+            ],
+            "body_template": {}
+        },
+        "get_data_services_v1beta1_secrets_id": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/secrets/{id}",
+            "triggers": [
+                "get_data_services_v1beta1_secrets_id",
+                "/data-services/v1beta1/secrets/{id}"
+            ],
+            "body_template": {}
+        },
+        "get_data_services_v1beta1_secrets": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/secrets",
+            "triggers": [
+                "get_data_services_v1beta1_secrets",
+                "/data-services/v1beta1/secrets"
+            ],
+            "body_template": {}
+        },
+        "post_data_services_v1beta1_secrets": {
+            "method": "POST",
+            "path_template": "/data-services/v1beta1/secrets",
+            "triggers": [
+                "post_data_services_v1beta1_secrets",
+                "/data-services/v1beta1/secrets"
+            ],
+            "body_template": {
+                "service": "MycorpIT",
+                "name": "Azure App 1",
+                "secret": {
+                    "azureSPClient": {
+                        "clientId": "app1",
+                        "clientSecret": "cRyq8P8bbDxx7qrrWpG939Xr",
+                        "tenantId": "tenant-uuid-1234"
+                    }
+                }
+            }
+        },
+        "patch_data_services_v1beta1_secrets_id": {
+            "method": "PATCH",
+            "path_template": "/data-services/v1beta1/secrets/{id}",
+            "triggers": [
+                "patch_data_services_v1beta1_secrets_id",
+                "/data-services/v1beta1/secrets/{id}"
+            ],
+            "body_template": {
+                "secret": {
+                    "azureSPClient": {
+                        "clientSecret": "BcytLruvkHk7X6wrTUS842Kf"
+                    }
+                },
+                "description": "Rotated secret 29-Feb-2024"
+            }
+        },
+        "delete_data_services_v1beta1_secrets_id": {
+            "method": "DELETE",
+            "path_template": "/data-services/v1beta1/secrets/{id}",
+            "triggers": [
+                "delete_data_services_v1beta1_secrets_id",
+                "/data-services/v1beta1/secrets/{id}"
+            ],
+            "body_template": {}
+        },
+        "get_data_services_v1beta1_secret_assignments_id": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/secret-assignments/{id}",
+            "triggers": [
+                "get_data_services_v1beta1_secret_assignments_id",
+                "/data-services/v1beta1/secret-assignments/{id}"
+            ],
+            "body_template": {}
+        },
+        "get_data_services_v1beta1_secret_assignments": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/secret-assignments",
+            "triggers": [
+                "get_data_services_v1beta1_secret_assignments",
+                "/data-services/v1beta1/secret-assignments"
+            ],
+            "body_template": {}
+        },
+        "get_data_services_v1beta1_settings": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/settings",
+            "triggers": [
+                "get_data_services_v1beta1_settings",
+                "/data-services/v1beta1/settings"
+            ],
+            "body_template": {}
+        },
+        "get_data_services_v1beta1_settings_id": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/settings/{id}",
+            "triggers": [
+                "get_data_services_v1beta1_settings_id",
+                "/data-services/v1beta1/settings/{id}"
+            ],
+            "body_template": {}
+        },
+        "patch_data_services_v1beta1_settings_id": {
+            "method": "PATCH",
+            "path_template": "/data-services/v1beta1/settings/{id}",
+            "triggers": [
+                "patch_data_services_v1beta1_settings_id",
+                "/data-services/v1beta1/settings/{id}"
+            ],
+            "body_template": {
+                "value": false
+            }
+        },
+        "get_data_services_v1beta1_software_components_id_install_release": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/software-components/{id}/install-release",
+            "triggers": [
+                "get_data_services_v1beta1_software_components_id_install_release",
+                "/data-services/v1beta1/software-components/{id}/install-release"
+            ],
+            "body_template": {}
+        },
+        "get_data_services_v1beta1_software_releases_id": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/software-releases/{id}",
+            "triggers": [
+                "get_data_services_v1beta1_software_releases_id",
+                "/data-services/v1beta1/software-releases/{id}"
+            ],
+            "body_template": {}
+        },
+        "get_data_services_v1beta1_software_releases": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/software-releases",
+            "triggers": [
+                "get_data_services_v1beta1_software_releases",
+                "/data-services/v1beta1/software-releases"
+            ],
+            "body_template": {}
+        },
+        "post_data_services_v1beta1_software_releases_id_download": {
+            "method": "POST",
+            "path_template": "/data-services/v1beta1/software-releases/{id}/download",
+            "triggers": [
+                "post_data_services_v1beta1_software_releases_id_download",
+                "/data-services/v1beta1/software-releases/{id}/download"
+            ],
+            "body_template": {
+                "file": "SOFTWARE"
+            }
+        },
+        "get_data_services_v1beta1_software_upgrades": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/software-upgrades",
+            "triggers": [
+                "get_data_services_v1beta1_software_upgrades",
+                "/data-services/v1beta1/software-upgrades"
+            ],
+            "body_template": {}
+        },
+        "get_data_services_v1beta1_storage_locations": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/storage-locations",
+            "triggers": [
+                "get_data_services_v1beta1_storage_locations",
+                "/data-services/v1beta1/storage-locations"
+            ],
+            "body_template": {}
+        },
+        "get_data_services_v1beta1_tags": {
+            "method": "GET",
+            "path_template": "/data-services/v1beta1/tags",
+            "triggers": [
+                "get_data_services_v1beta1_tags",
+                "/data-services/v1beta1/tags"
+            ],
+            "body_template": {}
+        }
+    }
+}

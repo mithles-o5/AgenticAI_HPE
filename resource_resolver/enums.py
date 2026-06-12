@@ -1,47 +1,44 @@
+"""Enums used by the resource resolver routing pipeline."""
+
 from enum import Enum
 
 
-class Vendor(str, Enum):
-    HPE = "HPE"
-
-
-class DeploymentType(str, Enum):
-    CLOUD   = "Cloud"          # Compute Ops API (cloud-hosted)
-    ON_PREM = "On-Premises"    # OneView API (on-premises)
-
-
-class Protocol(str, Enum):
-    ONEVIEW = "OneView"        # HPE OneView API (on-premises)
-    COMS    = "COMS"           # HPE Compute Ops API (cloud)
-
-
-class ActionCategory(str, Enum):
-    PROVISIONING = "Provisioning"   # Create / Allocate
-    OPERATIONAL  = "Operational"    # Power, Reboot, Status, etc.
-
-
-class PowerAction(str, Enum):
-    ON     = "On"
-    OFF    = "Off"
-    RESET  = "Reset"
-    COLD   = "ColdBoot"
-    STATUS = "Status"
-
-
-class ProvisionAction(str, Enum):
-    CREATE     = "Create"
-    ALLOCATE   = "Allocate"
-    DEALLOCATE = "Deallocate"
-    DELETE     = "Delete"
-
-
-class ResourceHealth(str, Enum):
-    OK       = "OK"
-    WARNING  = "Warning"
-    CRITICAL = "Critical"
-    UNKNOWN  = "Unknown"
+class IdentifierType(str, Enum):
+    IP = "ip"
+    SERIAL_NUMBER = "sn"
+    FQDN = "fqdn"
 
 
 class CacheStatus(str, Enum):
-    HIT  = "hit"
+    HIT = "hit"
     MISS = "miss"
+
+
+class ManagementSource(str, Enum):
+    ONEVIEW = "oneview"
+    COMS = "coms"
+
+
+class ActionCategory(str, Enum):
+    OPERATIONAL = "Operational"
+    PROVISIONING = "Provisioning"
+
+
+class ActionType(str, Enum):
+    ON = "ON"
+    OFF = "OFF"
+    RESET = "RESET"
+    COLD_BOOT = "COLD_BOOT"
+    STATUS = "STATUS"
+    CREATE = "CREATE"
+    ALLOCATE = "ALLOCATE"
+    DEALLOCATE = "DEALLOCATE"
+    DELETE = "DELETE"
+    RELOAD = "RELOAD"
+    FAILOVER = "FAILOVER"
+    POLICY_SYNC = "POLICY_SYNC"
+    RESCAN = "RESCAN"
+
+
+
+

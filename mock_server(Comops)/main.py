@@ -294,20 +294,30 @@ def get_compute_ops_mgmt_v1beta2_appliances():
     return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_appliances", dict())
 
 @app.get("/compute-ops-mgmt/v1beta1/energy-over-time")
-def get_compute_ops_mgmt_v1beta1_energy_over_time():
+def get_compute_ops_mgmt_v1beta1_energy_over_time(serverId: str = None):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Returns energy utilization. Returns standby energy if server is off.
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_energy_over_time", dict())
+    if serverId:
+        server = find_server(serverId)
+        if server and server.get("powerState") == "Off":
+            return {"averagePowerWatts": 5.2}
+    return {
+        "averagePowerWatts": 205.5
+    }
 
 @app.get("/compute-ops-mgmt/v1beta1/energy-by-entity")
-def get_compute_ops_mgmt_v1beta1_energy_by_entity():
+def get_compute_ops_mgmt_v1beta1_energy_by_entity(serverId: str = None):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Returns energy consumption by server.
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_energy_by_entity", dict())
+    if serverId:
+        server = find_server(serverId)
+        if server and server.get("powerState") == "Off":
+            return {"entityPowerWatts": 5.2}
+    return {
+        "entityPowerWatts": 205.5
+    }
 
 @app.get("/compute-ops-mgmt/v1beta1/external-services")
 def get_compute_ops_mgmt_v1beta1_external_services():
@@ -469,48 +479,48 @@ def post_compute_ops_mgmt_v1_groups(payload: PostComputeOpsMgmtV1GroupsRequest):
     """
     return MOCK_DB.get("post_compute_ops_mgmt_v1_groups", dict())
 
-@app.get("/compute-ops-mgmt/v1/groups/{group-id}")
-def get_compute_ops_mgmt_v1_groups_group_id():
+@app.get("/compute-ops-mgmt/v1/groups/{group_id}")
+def get_compute_ops_mgmt_v1_groups_group_id(group_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("get_compute_ops_mgmt_v1_groups_group_id", dict())
 
-@app.delete("/compute-ops-mgmt/v1/groups/{group-id}")
-def delete_compute_ops_mgmt_v1_groups_group_id():
+@app.delete("/compute-ops-mgmt/v1/groups/{group_id}")
+def delete_compute_ops_mgmt_v1_groups_group_id(group_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("delete_compute_ops_mgmt_v1_groups_group_id", dict())
 
-@app.patch("/compute-ops-mgmt/v1/groups/{group-id}")
-def patch_compute_ops_mgmt_v1_groups_group_id(payload: PatchComputeOpsMgmtV1GroupsGroupIdRequest):
+@app.patch("/compute-ops-mgmt/v1/groups/{group_id}")
+def patch_compute_ops_mgmt_v1_groups_group_id(group_id: str, payload: PatchComputeOpsMgmtV1GroupsGroupIdRequest):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("patch_compute_ops_mgmt_v1_groups_group_id", dict())
 
-@app.get("/compute-ops-mgmt/v1/groups/{group-id}/compliance")
-def get_compute_ops_mgmt_v1_groups_group_id_compliance():
+@app.get("/compute-ops-mgmt/v1/groups/{group_id}/compliance")
+def get_compute_ops_mgmt_v1_groups_group_id_compliance(group_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("get_compute_ops_mgmt_v1_groups_group_id_compliance", dict())
 
-@app.get("/compute-ops-mgmt/v1/groups/{group-id}/compliance/{compliance-id}")
-def get_compute_ops_mgmt_v1_groups_group_id_compliance_compliance_id():
+@app.get("/compute-ops-mgmt/v1/groups/{group_id}/compliance/{compliance_id}")
+def get_compute_ops_mgmt_v1_groups_group_id_compliance_compliance_id(group_id: str, compliance_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("get_compute_ops_mgmt_v1_groups_group_id_compliance_compliance_id", dict())
 
-@app.get("/compute-ops-mgmt/v1/groups/{group-id}/devices")
-def get_compute_ops_mgmt_v1_groups_group_id_devices():
+@app.get("/compute-ops-mgmt/v1/groups/{group_id}/devices")
+def get_compute_ops_mgmt_v1_groups_group_id_devices(group_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
@@ -533,48 +543,48 @@ def post_compute_ops_mgmt_v1beta3_groups(payload: PostComputeOpsMgmtV1beta3Group
     """
     return MOCK_DB.get("post_compute_ops_mgmt_v1beta3_groups", dict())
 
-@app.get("/compute-ops-mgmt/v1beta3/groups/{group-id}")
-def get_compute_ops_mgmt_v1beta3_groups_group_id():
+@app.get("/compute-ops-mgmt/v1beta3/groups/{group_id}")
+def get_compute_ops_mgmt_v1beta3_groups_group_id(group_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("get_compute_ops_mgmt_v1beta3_groups_group_id", dict())
 
-@app.delete("/compute-ops-mgmt/v1beta3/groups/{group-id}")
-def delete_compute_ops_mgmt_v1beta3_groups_group_id():
+@app.delete("/compute-ops-mgmt/v1beta3/groups/{group_id}")
+def delete_compute_ops_mgmt_v1beta3_groups_group_id(group_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("delete_compute_ops_mgmt_v1beta3_groups_group_id", dict())
 
-@app.patch("/compute-ops-mgmt/v1beta3/groups/{group-id}")
-def patch_compute_ops_mgmt_v1beta3_groups_group_id(payload: PatchComputeOpsMgmtV1beta3GroupsGroupIdRequest):
+@app.patch("/compute-ops-mgmt/v1beta3/groups/{group_id}")
+def patch_compute_ops_mgmt_v1beta3_groups_group_id(group_id: str, payload: PatchComputeOpsMgmtV1beta3GroupsGroupIdRequest):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("patch_compute_ops_mgmt_v1beta3_groups_group_id", dict())
 
-@app.get("/compute-ops-mgmt/v1beta3/groups/{group-id}/compliance")
-def get_compute_ops_mgmt_v1beta3_groups_group_id_compliance():
+@app.get("/compute-ops-mgmt/v1beta3/groups/{group_id}/compliance")
+def get_compute_ops_mgmt_v1beta3_groups_group_id_compliance(group_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("get_compute_ops_mgmt_v1beta3_groups_group_id_compliance", dict())
 
-@app.get("/compute-ops-mgmt/v1beta3/groups/{group-id}/compliance/{compliance-id}")
-def get_compute_ops_mgmt_v1beta3_groups_group_id_compliance_compliance_id():
+@app.get("/compute-ops-mgmt/v1beta3/groups/{group_id}/compliance/{compliance_id}")
+def get_compute_ops_mgmt_v1beta3_groups_group_id_compliance_compliance_id(group_id: str, compliance_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("get_compute_ops_mgmt_v1beta3_groups_group_id_compliance_compliance_id", dict())
 
-@app.get("/compute-ops-mgmt/v1beta3/groups/{group-id}/devices")
-def get_compute_ops_mgmt_v1beta3_groups_group_id_devices():
+@app.get("/compute-ops-mgmt/v1beta3/groups/{group_id}/devices")
+def get_compute_ops_mgmt_v1beta3_groups_group_id_devices(group_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
@@ -597,48 +607,48 @@ def post_compute_ops_v1beta2_groups(payload: PostComputeOpsV1beta2GroupsRequest)
     """
     return MOCK_DB.get("post_compute_ops_v1beta2_groups", dict())
 
-@app.get("/compute-ops/v1beta2/groups/{group-id}")
-def get_compute_ops_v1beta2_groups_group_id():
+@app.get("/compute-ops/v1beta2/groups/{group_id}")
+def get_compute_ops_v1beta2_groups_group_id(group_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("get_compute_ops_v1beta2_groups_group_id", dict())
 
-@app.delete("/compute-ops/v1beta2/groups/{group-id}")
-def delete_compute_ops_v1beta2_groups_group_id():
+@app.delete("/compute-ops/v1beta2/groups/{group_id}")
+def delete_compute_ops_v1beta2_groups_group_id(group_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("delete_compute_ops_v1beta2_groups_group_id", dict())
 
-@app.patch("/compute-ops/v1beta2/groups/{group-id}")
-def patch_compute_ops_v1beta2_groups_group_id(payload: PatchComputeOpsV1beta2GroupsGroupIdRequest):
+@app.patch("/compute-ops/v1beta2/groups/{group_id}")
+def patch_compute_ops_v1beta2_groups_group_id(group_id: str, payload: PatchComputeOpsV1beta2GroupsGroupIdRequest):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("patch_compute_ops_v1beta2_groups_group_id", dict())
 
-@app.get("/compute-ops/v1beta2/groups/{group-id}/compliance")
-def get_compute_ops_v1beta2_groups_group_id_compliance():
+@app.get("/compute-ops/v1beta2/groups/{group_id}/compliance")
+def get_compute_ops_v1beta2_groups_group_id_compliance(group_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("get_compute_ops_v1beta2_groups_group_id_compliance", dict())
 
-@app.get("/compute-ops/v1beta2/groups/{group-id}/compliance/{compliance-id}")
-def get_compute_ops_v1beta2_groups_group_id_compliance_compliance_id():
+@app.get("/compute-ops/v1beta2/groups/{group_id}/compliance/{compliance_id}")
+def get_compute_ops_v1beta2_groups_group_id_compliance_compliance_id(group_id: str, compliance_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("get_compute_ops_v1beta2_groups_group_id_compliance_compliance_id", dict())
 
-@app.get("/compute-ops/v1beta2/groups/{group-id}/devices")
-def get_compute_ops_v1beta2_groups_group_id_devices():
+@app.get("/compute-ops/v1beta2/groups/{group_id}/devices")
+def get_compute_ops_v1beta2_groups_group_id_devices(group_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
@@ -813,16 +823,16 @@ def post_compute_ops_mgmt_v1beta1_oneview_appliances(payload: PostComputeOpsMgmt
     """
     return MOCK_DB.get("post_compute_ops_mgmt_v1beta1_oneview_appliances", dict())
 
-@app.get("/compute-ops-mgmt/v1beta1/oneview-appliances/{device-id}")
-def get_compute_ops_mgmt_v1beta1_oneview_appliances_device_id():
+@app.get("/compute-ops-mgmt/v1beta1/oneview-appliances/{device_id}")
+def get_compute_ops_mgmt_v1beta1_oneview_appliances_device_id(device_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_oneview_appliances_device_id", dict())
 
-@app.delete("/compute-ops-mgmt/v1beta1/oneview-appliances/{device-id}")
-def delete_compute_ops_mgmt_v1beta1_oneview_appliances_device_id():
+@app.delete("/compute-ops-mgmt/v1beta1/oneview-appliances/{device_id}")
+def delete_compute_ops_mgmt_v1beta1_oneview_appliances_device_id(device_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
@@ -933,8 +943,8 @@ def get_compute_ops_mgmt_v1beta2_schedules_id_history(id: str):
     """
     return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_schedules_id_history", dict())
 
-@app.get("/compute-ops-mgmt/v1beta2/schedules/{id}/history/{history-id}")
-def get_compute_ops_mgmt_v1beta2_schedules_id_history_history_id(id: str):
+@app.get("/compute-ops-mgmt/v1beta2/schedules/{id}/history/{history_id}")
+def get_compute_ops_mgmt_v1beta2_schedules_id_history_history_id(history_id: str, id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
@@ -1005,9 +1015,38 @@ def patch_compute_ops_v1beta1_server_settings_id(id: str, payload: PatchComputeO
     """
     return MOCK_DB.get("patch_compute_ops_v1beta1_server_settings_id", dict())
 
+def find_server(id: str):
+    servers = MOCK_DB.get("servers", {})
+    if id in servers:
+        return servers[id]
+    
+    import re
+    match = re.search(r"(\d+)$", id)
+    if match:
+        suffix = match.group(1)
+        suffix_val = int(suffix)
+        for s_id, s_data in servers.items():
+            name = s_data.get("name", "")
+            if name.endswith(f"-{suffix}") or name.endswith(f"-{suffix_val}"):
+                return s_data
+            if s_id.startswith(id) or id.startswith(s_id):
+                return s_data
+
+    for s_id, s_data in servers.items():
+        if s_data.get("name", "").lower() == id.lower():
+            return s_data
+        if s_data.get("ip_address") == id:
+            return s_data
+            
+    return None
+
 @app.get("/compute-ops-mgmt/v1/servers/{id}")
 def get_compute_ops_mgmt_v1_servers_id(id: str):
-    return MOCK_DB.get("servers", {}).get(id, {"error": "Not Found"})
+    server = find_server(id)
+    if server:
+        return server
+    from fastapi import HTTPException
+    raise HTTPException(status_code=404, detail="Resource not found")
 
 # --- Added specifically for 1500-server scaling Demo ---
 @app.post("/compute-ops-mgmt/v1/servers/{id}/power-on")
@@ -1015,14 +1054,14 @@ def post_compute_ops_mgmt_v1_servers_id_power_on(id: str):
     """
     Handles power-on commands for ANY dynamically generated ComOps server.
     """
-    server = MOCK_DB.get("servers", {}).get(id)
+    server = find_server(id)
     if server:
         server["powerState"] = "On"
         return {
             "status": "success",
             "message": f"Cloud Node {id} powered ON successfully.",
             "action": "power-on",
-            "uuid": id,
+            "uuid": server.get("uuid", id),
             "server_details": server
         }
     return {
@@ -1037,14 +1076,14 @@ def post_compute_ops_mgmt_v1_servers_id_power_off(id: str):
     """
     Handles power-off commands for ANY dynamically generated ComOps server.
     """
-    server = MOCK_DB.get("servers", {}).get(id)
+    server = find_server(id)
     if server:
         server["powerState"] = "Off"
         return {
             "status": "success",
             "message": f"Cloud Node {id} powered OFF successfully.",
             "action": "power-off",
-            "uuid": id,
+            "uuid": server.get("uuid", id),
             "server_details": server
         }
     return {
@@ -1359,12 +1398,21 @@ def put_compute_ops_mgmt_v1beta1_user_preferences_id(id: str, payload: PutComput
     return MOCK_DB.get("put_compute_ops_mgmt_v1beta1_user_preferences_id", dict())
 
 @app.get("/compute-ops-mgmt/v1beta1/utilization-over-time")
-def get_compute_ops_mgmt_v1beta1_utilization_over_time():
+def get_compute_ops_mgmt_v1beta1_utilization_over_time(serverId: str = None):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Returns utilization over time. If server is off, utilization averages are 0.
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_utilization_over_time", dict())
+    if serverId:
+        server = find_server(serverId)
+        if server and server.get("powerState") == "Off":
+            return {
+                "cpuAveragePercent": 0.0,
+                "memoryAveragePercent": 0.0
+            }
+    return {
+        "cpuAveragePercent": 40.5,
+        "memoryAveragePercent": 55.2
+    }
 
 @app.get("/compute-ops-mgmt/v1beta1/utilization-by-entity")
 def get_compute_ops_mgmt_v1beta1_utilization_by_entity():
@@ -1430,64 +1478,64 @@ def get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries_delivery_id(webh
     """
     return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries_delivery_id", dict())
 
-@app.post("/compute-ops-mgmt/v1/groups/{group-id}/devices")
-def post_compute_ops_mgmt_v1_groups_group_id_devices(payload: PostComputeOpsMgmtV1GroupsGroupIdDevicesRequest):
+@app.post("/compute-ops-mgmt/v1/groups/{group_id}/devices")
+def post_compute_ops_mgmt_v1_groups_group_id_devices(group_id: str, payload: PostComputeOpsMgmtV1GroupsGroupIdDevicesRequest):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("post_compute_ops_mgmt_v1_groups_group_id_devices", dict())
 
-@app.post("/compute-ops-mgmt/v1/groups/{group-id}/devices/unassign")
-def post_compute_ops_mgmt_v1_groups_group_id_devices_unassign(payload: PostComputeOpsMgmtV1GroupsGroupIdDevicesUnassignRequest):
+@app.post("/compute-ops-mgmt/v1/groups/{group_id}/devices/unassign")
+def post_compute_ops_mgmt_v1_groups_group_id_devices_unassign(group_id: str, payload: PostComputeOpsMgmtV1GroupsGroupIdDevicesUnassignRequest):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("post_compute_ops_mgmt_v1_groups_group_id_devices_unassign", dict())
 
-@app.get("/compute-ops-mgmt/v1/groups/{group-id}/external-storage-compliance")
-def get_compute_ops_mgmt_v1_groups_group_id_external_storage_compliance():
+@app.get("/compute-ops-mgmt/v1/groups/{group_id}/external-storage-compliance")
+def get_compute_ops_mgmt_v1_groups_group_id_external_storage_compliance(group_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("get_compute_ops_mgmt_v1_groups_group_id_external_storage_compliance", dict())
 
-@app.post("/compute-ops-mgmt/v1beta3/groups/{group-id}/devices")
-def post_compute_ops_mgmt_v1beta3_groups_group_id_devices():
+@app.post("/compute-ops-mgmt/v1beta3/groups/{group_id}/devices")
+def post_compute_ops_mgmt_v1beta3_groups_group_id_devices(group_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("post_compute_ops_mgmt_v1beta3_groups_group_id_devices", dict())
 
-@app.post("/compute-ops-mgmt/v1beta3/groups/{group-id}/devices/unassign")
-def post_compute_ops_mgmt_v1beta3_groups_group_id_devices_unassign():
+@app.post("/compute-ops-mgmt/v1beta3/groups/{group_id}/devices/unassign")
+def post_compute_ops_mgmt_v1beta3_groups_group_id_devices_unassign(group_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("post_compute_ops_mgmt_v1beta3_groups_group_id_devices_unassign", dict())
 
-@app.get("/compute-ops-mgmt/v1beta3/groups/{group-id}/external-storage-compliance")
-def get_compute_ops_mgmt_v1beta3_groups_group_id_external_storage_compliance():
+@app.get("/compute-ops-mgmt/v1beta3/groups/{group_id}/external-storage-compliance")
+def get_compute_ops_mgmt_v1beta3_groups_group_id_external_storage_compliance(group_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("get_compute_ops_mgmt_v1beta3_groups_group_id_external_storage_compliance", dict())
 
-@app.get("/compute-ops-mgmt/v1beta3/groups/{group-id}/ilo-settings-compliance")
-def get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance():
+@app.get("/compute-ops-mgmt/v1beta3/groups/{group_id}/ilo-settings-compliance")
+def get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance(group_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted
     """
     return MOCK_DB.get("get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance", dict())
 
-@app.get("/compute-ops-mgmt/v1beta3/groups/{group-id}/ilo-settings-compliance/{ilo-settings-compliance-id}")
-def get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance_ilo_settings_compliance_id():
+@app.get("/compute-ops-mgmt/v1beta3/groups/{group_id}/ilo-settings-compliance/{ilo_settings_compliance_id}")
+def get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance_ilo_settings_compliance_id(group_id: str, ilo_settings_compliance_id: str):
     """
     Auto-generated Route
     Original Doc: Batch Extracted

@@ -4,14 +4,8 @@ class ResolverError(Exception):
 class ResourceNotFoundError(ResolverError):
     """No resource matched the query in cache, registry, or CMDB."""
 
-class ProtocolError(ResolverError):
-    """Protocol handler encountered an unrecoverable error."""
+class InvalidIdentifierError(ResolverError):
+    """The supplied identifier or identifier type is invalid."""
 
-class TaskTimeoutError(ResolverError):
-    """Async task (e.g. HPE OneView) did not complete within the timeout."""
-
-class CredentialError(ResolverError):
-    """Credential reference missing or vault lookup failed."""
-
-class ActionClassificationError(ResolverError):
-    """Unable to classify the requested action as Provisioning or Operational."""
+class EndpointNotFoundError(ResolverError):
+    """No endpoint_registry row matches the requested (vendor, action_key) pair."""

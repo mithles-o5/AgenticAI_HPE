@@ -28,7 +28,7 @@ from local_provider import LocalProvider
 # Change this to switch between SSO providers
 # ─────────────────────────────────────────────────────────────────────────────
 
-PROVIDER = "okta"
+PROVIDER = "local"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Provider Registry

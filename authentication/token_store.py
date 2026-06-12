@@ -51,7 +51,12 @@ _MEMORY_STORE: dict = {"token": None, "provider": None}
 
 def _save_to_file(token: str, provider: str) -> None:
     """Saves the token + provider to a JSON session file and locks permissions."""
-    payload = json.dumps({"token": token, "provider": provider})
+    from datetime import date
+    payload = json.dumps({
+        "token": token,
+        "provider": provider,
+        "date": date.today().isoformat()
+    })
     with open(SESSION_FILE, "w") as f:
         f.write(payload)
 
@@ -64,13 +69,22 @@ def _save_to_file(token: str, provider: str) -> None:
 
 def _load_from_file() -> tuple[str | None, str | None]:
     """Loads token + provider from the secure session file.
-    Returns (token, provider) or (None, None) if missing/corrupt.
+    Returns (token, provider) or (None, None) if missing/corrupt or expired today.
     """
     if not os.path.exists(SESSION_FILE):
         return None, None
     try:
+        from datetime import date
         with open(SESSION_FILE, "r") as f:
             data = json.loads(f.read().strip())
+        
+        # Verify if session was created on a different day
+        session_date_str = data.get("date")
+        if session_date_str and session_date_str != date.today().isoformat():
+            # Invalidate session file automatically on date change
+            _clear_file()
+            return None, None
+
         token    = data.get("token", "").strip() or None
         provider = data.get("provider", "").strip() or None
         return token, provider
