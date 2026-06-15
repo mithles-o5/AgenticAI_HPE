@@ -1,5 +1,5 @@
 import uuid
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import json
 import os
@@ -22,6 +22,71 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/compute-ops-mgmt/v1/custom-servers")
+def get_compute_ops_mgmt_v1_custom_servers():
+    """
+    Custom CRUD Route: GET /compute-ops-mgmt/v1/custom-servers
+    """
+    collection_path = "/compute-ops-mgmt/v1/custom-servers"
+    return list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
+
+@app.get("/compute-ops-mgmt/v1/custom-servers/{id}")
+def get_compute_ops_mgmt_v1_custom_servers_id(id: str):
+    """
+    Custom CRUD Route: GET /compute-ops-mgmt/v1/custom-servers/{id}
+    """
+    collection_path = "/compute-ops-mgmt/v1/custom-servers"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Server not found")
+    return store[id]
+
+@app.post("/compute-ops-mgmt/v1/custom-servers")
+def post_compute_ops_mgmt_v1_custom_servers(payload: CustomServerCreateRequest):
+    """
+    Custom CRUD Route: POST /compute-ops-mgmt/v1/custom-servers
+    """
+    collection_path = "/compute-ops-mgmt/v1/custom-servers"
+    if "dynamic_store" not in MOCK_DB:
+        MOCK_DB["dynamic_store"] = {}
+    if collection_path not in MOCK_DB["dynamic_store"]:
+        MOCK_DB["dynamic_store"][collection_path] = {}
+    
+    item_id = str(uuid.uuid4())
+    item_data = payload.dict()
+    item_data["id"] = item_id
+    MOCK_DB["dynamic_store"][collection_path][item_id] = item_data
+    return item_data
+
+@app.put("/compute-ops-mgmt/v1/custom-servers/{id}")
+def put_compute_ops_mgmt_v1_custom_servers_id(id: str, payload: CustomServerUpdateRequest):
+    """
+    Custom CRUD Route: PUT /compute-ops-mgmt/v1/custom-servers/{id}
+    """
+    collection_path = "/compute-ops-mgmt/v1/custom-servers"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Server not found")
+    
+    existing = store[id]
+    payload_dict = {k: v for k, v in payload.dict().items() if v is not None}
+    existing.update(payload_dict)
+    MOCK_DB["dynamic_store"][collection_path][id] = existing
+    return existing
+
+@app.delete("/compute-ops-mgmt/v1/custom-servers/{id}")
+def delete_compute_ops_mgmt_v1_custom_servers_id(id: str):
+    """
+    Custom CRUD Route: DELETE /compute-ops-mgmt/v1/custom-servers/{id}
+    """
+    collection_path = "/compute-ops-mgmt/v1/custom-servers"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Server not found")
+    deleted = MOCK_DB["dynamic_store"][collection_path].pop(id)
+    return {"message": "Deleted successfully", "id": id, "item": deleted}
+
 
 @app.get("/compute-ops-mgmt/v1beta2/appliances/{device_id}")
 def get_compute_ops_mgmt_v1beta2_appliances_device_id(device_id: str):

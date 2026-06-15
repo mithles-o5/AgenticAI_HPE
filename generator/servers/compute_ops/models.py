@@ -206,3 +206,26 @@ class PostComputeOpsMgmtV1GroupsGroupIdDevicesRequest(BaseModel):
 class PostComputeOpsMgmtV1GroupsGroupIdDevicesUnassignRequest(BaseModel):
     devices: list = None
 
+
+class CustomServerCreateRequest(BaseModel):
+    name: str
+    status: str = "OK"
+    temperature: float = 25.0
+    powerState: str = "On"
+    serialNumber: str = None
+    firmwareVersion: str = None
+    memoryGiB: int = 128
+    cpuCores: int = 32
+
+
+class CustomServerUpdateRequest(BaseModel):
+    name: str = None
+    status: str = None
+    temperature: float = None
+    powerState: str = None
+    serialNumber: str = None
+    firmwareVersion: str = None
+    memoryGiB: int = None
+    cpuCores: int = None
+
+

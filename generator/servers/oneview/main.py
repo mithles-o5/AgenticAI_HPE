@@ -1,5 +1,5 @@
 import uuid
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import json
 import os
@@ -22,6 +22,71 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/rest/custom-servers")
+def get_rest_custom_servers():
+    """
+    Custom CRUD Route: GET /rest/custom-servers
+    """
+    collection_path = "/rest/custom-servers"
+    return list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
+
+@app.get("/rest/custom-servers/{id}")
+def get_rest_custom_servers_id(id: str):
+    """
+    Custom CRUD Route: GET /rest/custom-servers/{id}
+    """
+    collection_path = "/rest/custom-servers"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Server not found")
+    return store[id]
+
+@app.post("/rest/custom-servers")
+def post_rest_custom_servers(payload: CustomServerCreateRequest):
+    """
+    Custom CRUD Route: POST /rest/custom-servers
+    """
+    collection_path = "/rest/custom-servers"
+    if "dynamic_store" not in MOCK_DB:
+        MOCK_DB["dynamic_store"] = {}
+    if collection_path not in MOCK_DB["dynamic_store"]:
+        MOCK_DB["dynamic_store"][collection_path] = {}
+    
+    item_id = str(uuid.uuid4())
+    item_data = payload.dict()
+    item_data["id"] = item_id
+    MOCK_DB["dynamic_store"][collection_path][item_id] = item_data
+    return item_data
+
+@app.put("/rest/custom-servers/{id}")
+def put_rest_custom_servers_id(id: str, payload: CustomServerUpdateRequest):
+    """
+    Custom CRUD Route: PUT /rest/custom-servers/{id}
+    """
+    collection_path = "/rest/custom-servers"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Server not found")
+    
+    existing = store[id]
+    payload_dict = {k: v for k, v in payload.dict().items() if v is not None}
+    existing.update(payload_dict)
+    MOCK_DB["dynamic_store"][collection_path][id] = existing
+    return existing
+
+@app.delete("/rest/custom-servers/{id}")
+def delete_rest_custom_servers_id(id: str):
+    """
+    Custom CRUD Route: DELETE /rest/custom-servers/{id}
+    """
+    collection_path = "/rest/custom-servers"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Server not found")
+    deleted = MOCK_DB["dynamic_store"][collection_path].pop(id)
+    return {"message": "Deleted successfully", "id": id, "item": deleted}
+
 
 @app.post("/rest/login-sessions")
 def post_rest_login_sessions(payload: PostRestLoginSessionsRequest):
