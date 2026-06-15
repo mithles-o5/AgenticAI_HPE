@@ -42,6 +42,29 @@ def get_compute_ops_mgmt_v1_custom_servers_id(id: str):
         raise HTTPException(status_code=404, detail="Server not found")
     return store[id]
 
+@app.get("/compute-ops-mgmt/v1/custom-servers/{id}/{feature}")
+def get_compute_ops_mgmt_v1_custom_servers_id_feature(id: str, feature: str):
+    """
+    Custom CRUD Route: Get a specific feature value of a custom server
+    """
+    collection_path = "/compute-ops-mgmt/v1/custom-servers"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Server not found")
+    
+    server = store[id]
+    if feature not in server:
+        raise HTTPException(status_code=404, detail=f"Feature '{feature}' not found on this server")
+    
+    return {
+        "id": id,
+        "name": server.get("name"),
+        "feature": feature,
+        "value": server.get(feature)
+    }
+
+
+
 @app.post("/compute-ops-mgmt/v1/custom-servers")
 def post_compute_ops_mgmt_v1_custom_servers(payload: CustomServerCreateRequest):
     """
