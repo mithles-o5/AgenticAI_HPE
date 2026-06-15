@@ -1,0 +1,169 @@
+================================================================================
+  HUMAN PROMPTS REFERENCE GUIDE FOR STORAGE APIS
+================================================================================
+Copy and paste any of the prompts below directly into your chat with Claude.
+Replace '<value>' with the actual UUID, ID, or payload values you want to target.
+================================================================================
+
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 ISSUES (DELETE)
+Prompt  : Delete data services v1beta1 issues with id '<value>'.
+Action  : action:delete_data_services_v1beta1_issues_id
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 SECRETS (DELETE)
+Prompt  : Delete data services v1beta1 secrets with id '<value>'.
+Action  : action:delete_data_services_v1beta1_secrets_id
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 ASYNC OPERATIONS (GET)
+Prompt  : List all data services v1beta1 async operations.
+Action  : action:get_data_services_v1beta1_async_operations
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 ASYNC OPERATIONS (GET)
+Prompt  : Get details of data services v1beta1 async operations with id '<value>'.
+Action  : action:get_data_services_v1beta1_async_operations_id
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 DUAL AUTH OPERATIONS (GET)
+Prompt  : List all data services v1beta1 dual auth operations.
+Action  : action:get_data_services_v1beta1_dual_auth_operations
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 DUAL AUTH OPERATIONS (GET)
+Prompt  : Get details of data services v1beta1 dual auth operations with id '<value>'.
+Action  : action:get_data_services_v1beta1_dual_auth_operations_id
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 ISSUES (GET)
+Prompt  : List all data services v1beta1 issues.
+Action  : action:get_data_services_v1beta1_issues
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 ISSUES (GET)
+Prompt  : Get details of data services v1beta1 issues with id '<value>'.
+Action  : action:get_data_services_v1beta1_issues_id
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 ISSUES METADATA (GET)
+Prompt  : List all data services v1beta1 issues metadata.
+Action  : action:get_data_services_v1beta1_issues_metadata
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 SECRET ASSIGNMENTS (GET)
+Prompt  : List all data services v1beta1 secret assignments.
+Action  : action:get_data_services_v1beta1_secret_assignments
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 SECRET ASSIGNMENTS (GET)
+Prompt  : Get details of data services v1beta1 secret assignments with id '<value>'.
+Action  : action:get_data_services_v1beta1_secret_assignments_id
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 SECRETS (GET)
+Prompt  : List all data services v1beta1 secrets.
+Action  : action:get_data_services_v1beta1_secrets
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 SECRETS (GET)
+Prompt  : Get details of data services v1beta1 secrets with id '<value>'.
+Action  : action:get_data_services_v1beta1_secrets_id
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 SETTINGS (GET)
+Prompt  : List all data services v1beta1 settings.
+Action  : action:get_data_services_v1beta1_settings
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 SETTINGS (GET)
+Prompt  : Get details of data services v1beta1 settings with id '<value>'.
+Action  : action:get_data_services_v1beta1_settings_id
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 SOFTWARE COMPONENTS INSTALL RELEASE (GET)
+Prompt  : Get details of data services v1beta1 software components install release with id '<value>'.
+Action  : action:get_data_services_v1beta1_software_components_id_install_release
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 SOFTWARE RELEASES (GET)
+Prompt  : List all data services v1beta1 software releases.
+Action  : action:get_data_services_v1beta1_software_releases
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 SOFTWARE RELEASES (GET)
+Prompt  : Get details of data services v1beta1 software releases with id '<value>'.
+Action  : action:get_data_services_v1beta1_software_releases_id
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 SOFTWARE UPGRADES (GET)
+Prompt  : List all data services v1beta1 software upgrades.
+Action  : action:get_data_services_v1beta1_software_upgrades
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 STORAGE LOCATIONS (GET)
+Prompt  : List all data services v1beta1 storage locations.
+Action  : action:get_data_services_v1beta1_storage_locations
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 TAGS (GET)
+Prompt  : List all data services v1beta1 tags.
+Action  : action:get_data_services_v1beta1_tags
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 DUAL AUTH OPERATIONS (PATCH)
+Prompt  : Update data services v1beta1 dual auth operations with id '<value>'.
+Action  : action:patch_data_services_v1beta1_dual_auth_operations_id
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 ISSUES (PATCH)
+Prompt  : Update data services v1beta1 issues with id '<value>'.
+Action  : action:patch_data_services_v1beta1_issues_id
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 SECRETS (PATCH)
+Prompt  : Update data services v1beta1 secrets with id '<value>'.
+Action  : action:patch_data_services_v1beta1_secrets_id
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 SETTINGS (PATCH)
+Prompt  : Update data services v1beta1 settings with id '<value>'.
+Action  : action:patch_data_services_v1beta1_settings_id
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 SECRETS (POST)
+Prompt  : Create a new data services v1beta1 secrets .
+Action  : action:post_data_services_v1beta1_secrets
+================================================================================
+
+================================================================================
+API Goal: DATA SERVICES V1BETA1 SOFTWARE RELEASES DOWNLOAD (POST)
+Prompt  : Create a new data services v1beta1 software releases download with id '<value>'.
+Action  : action:post_data_services_v1beta1_software_releases_id_download
+================================================================================
