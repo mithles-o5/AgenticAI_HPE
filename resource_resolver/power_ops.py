@@ -208,7 +208,7 @@ class ExecutionOrchestrator:
     # ------------------------------------------------------------------
     # Dispatch
     # ------------------------------------------------------------------
-
+#Just prints the log messages, that's it
     def execute_operation(self, context: dict) -> dict:
         """Route the operation to the correct registered management source handler."""
         source  = context["management_source"].lower()

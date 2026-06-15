@@ -1,4 +1,4 @@
-"""Database registry loader and bootstrap helpers."""
+"""Helper function, if my db connection fails it throws an error ."""
 
 from __future__ import annotations
 
