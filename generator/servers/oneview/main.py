@@ -5,12 +5,13 @@ import json
 import os
 from models import *
 
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from db_store import get_db_store
+
 mock_file = os.path.join(os.path.dirname(__file__), "mock_data.json")
-try:
-    with open(mock_file, "r", encoding="utf-8") as f:
-        MOCK_DB = json.load(f)
-except Exception:
-    MOCK_DB = {}
+MOCK_DB = get_db_store("oneview", mock_file)
 
 app = FastAPI(title='Generated Mock Server', description='Generated automatically from API docs.')
 
