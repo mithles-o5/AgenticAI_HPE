@@ -1,31 +1,23 @@
 import os
 import json
-import psycopg2
+import sqlite3
 from contextlib import contextmanager
 import fastapi
 from fastapi import HTTPException
 
 
-PG_HOST = os.getenv("PGHOST", "localhost")
-PG_PORT = int(os.getenv("PGPORT", "5432"))
-PG_USER = os.getenv("PGUSER", "postgres")
-PG_PASSWORD = os.getenv("PGPASSWORD", "password")
-PG_DATABASE = os.getenv("PGDATABASE", "postgres")
+# Save SQLite database file in the same directory as db_store.py
+DB_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), "mock_db.sqlite"))
 
 def _get_connection():
-    return psycopg2.connect(
-        host=PG_HOST,
-        port=PG_PORT,
-        user=PG_USER,
-        password=PG_PASSWORD,
-        database=PG_DATABASE
-    )
+    return sqlite3.connect(DB_FILE)
 
 @contextmanager
 def db_cursor():
     conn = None
     try:
         conn = _get_connection()
+        conn.execute("PRAGMA busy_timeout = 30000")
         cursor = conn.cursor()
         yield cursor
         conn.commit()
@@ -41,11 +33,11 @@ def init_table():
     with db_cursor() as cursor:
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS mock_db_store (
-                server_name VARCHAR(50),
-                key_name VARCHAR(255),
-                subkey_name VARCHAR(255) DEFAULT '',
-                subsubkey_name VARCHAR(255) DEFAULT '',
-                data JSONB,
+                server_name TEXT,
+                key_name TEXT,
+                subkey_name TEXT DEFAULT '',
+                subsubkey_name TEXT DEFAULT '',
+                data TEXT,
                 PRIMARY KEY (server_name, key_name, subkey_name, subsubkey_name)
             )
         """)
@@ -53,7 +45,7 @@ def init_table():
 def seed_if_empty(server_name, mock_file_path):
     with db_cursor() as cursor:
         cursor.execute(
-            "SELECT COUNT(*) FROM mock_db_store WHERE server_name = %s",
+            "SELECT COUNT(*) FROM mock_db_store WHERE server_name = ?",
             (server_name,)
         )
         count = cursor.fetchone()[0]
@@ -63,7 +55,7 @@ def seed_if_empty(server_name, mock_file_path):
     if not mock_file_path or not os.path.exists(mock_file_path):
         return
 
-    print(f"[db_store] Seeding PostgreSQL mock_db_store for '{server_name}' from {mock_file_path}...")
+    print(f"[db_store] Seeding SQLite mock_db_store for '{server_name}' from {mock_file_path}...")
     try:
         with open(mock_file_path, "r", encoding="utf-8") as f:
             db_data = json.load(f)
@@ -77,7 +69,7 @@ def seed_if_empty(server_name, mock_file_path):
                 for subkey, item in val.items():
                     cursor.execute(
                         """INSERT INTO mock_db_store (server_name, key_name, subkey_name, subsubkey_name, data)
-                           VALUES (%s, %s, %s, '', %s)
+                           VALUES (?, ?, ?, '', ?)
                            ON CONFLICT (server_name, key_name, subkey_name, subsubkey_name)
                            DO UPDATE SET data = EXCLUDED.data""",
                         (server_name, key, subkey, json.dumps(item))
@@ -88,7 +80,7 @@ def seed_if_empty(server_name, mock_file_path):
                         for subsubkey, item in col_items.items():
                             cursor.execute(
                                 """INSERT INTO mock_db_store (server_name, key_name, subkey_name, subsubkey_name, data)
-                                   VALUES (%s, %s, %s, %s, %s)
+                                   VALUES (?, ?, ?, ?, ?)
                                    ON CONFLICT (server_name, key_name, subkey_name, subsubkey_name)
                                    DO UPDATE SET data = EXCLUDED.data""",
                                 (server_name, key, subkey, subsubkey, json.dumps(item))
@@ -96,7 +88,7 @@ def seed_if_empty(server_name, mock_file_path):
             else:
                 cursor.execute(
                     """INSERT INTO mock_db_store (server_name, key_name, subkey_name, subsubkey_name, data)
-                       VALUES (%s, %s, '', '', %s)
+                       VALUES (?, ?, '', '', ?)
                        ON CONFLICT (server_name, key_name, subkey_name, subsubkey_name)
                        DO UPDATE SET data = EXCLUDED.data""",
                     (server_name, key, json.dumps(val))
@@ -107,17 +99,17 @@ def fetch_item(server_name, key_name, subkey_name='', subsubkey_name=''):
     with db_cursor() as cursor:
         cursor.execute(
             """SELECT data FROM mock_db_store 
-               WHERE server_name = %s AND key_name = %s AND subkey_name = %s AND subsubkey_name = %s""",
+               WHERE server_name = ? AND key_name = ? AND subkey_name = ? AND subsubkey_name = ?""",
             (server_name, key_name, subkey_name, subsubkey_name)
         )
         row = cursor.fetchone()
-        return row[0] if row else None
+        return json.loads(row[0]) if row else None
 
 def save_item(server_name, key_name, subkey_name, subsubkey_name, data):
     with db_cursor() as cursor:
         cursor.execute(
             """INSERT INTO mock_db_store (server_name, key_name, subkey_name, subsubkey_name, data)
-               VALUES (%s, %s, %s, %s, %s)
+               VALUES (?, ?, ?, ?, ?)
                ON CONFLICT (server_name, key_name, subkey_name, subsubkey_name)
                DO UPDATE SET data = EXCLUDED.data""",
             (server_name, key_name, subkey_name, subsubkey_name, json.dumps(data))
@@ -126,36 +118,43 @@ def save_item(server_name, key_name, subkey_name, subsubkey_name, data):
 def delete_item(server_name, key_name, subkey_name, subsubkey_name):
     with db_cursor() as cursor:
         cursor.execute(
-            """DELETE FROM mock_db_store 
-               WHERE server_name = %s AND key_name = %s AND subkey_name = %s AND subsubkey_name = %s
-               RETURNING data""",
+            """SELECT data FROM mock_db_store 
+               WHERE server_name = ? AND key_name = ? AND subkey_name = ? AND subsubkey_name = ?""",
             (server_name, key_name, subkey_name, subsubkey_name)
         )
         row = cursor.fetchone()
-        return row[0] if row else None
+        val = json.loads(row[0]) if row else None
+        
+        if val is not None:
+            cursor.execute(
+                """DELETE FROM mock_db_store 
+                   WHERE server_name = ? AND key_name = ? AND subkey_name = ? AND subsubkey_name = ?""",
+                (server_name, key_name, subkey_name, subsubkey_name)
+            )
+        return val
 
 def fetch_all_items(server_name, key_name, subkey_name=''):
     with db_cursor() as cursor:
         if subkey_name:
             cursor.execute(
                 """SELECT subsubkey_name, data FROM mock_db_store 
-                   WHERE server_name = %s AND key_name = %s AND subkey_name = %s""",
+                   WHERE server_name = ? AND key_name = ? AND subkey_name = ?""",
                 (server_name, key_name, subkey_name)
             )
         else:
             cursor.execute(
                 """SELECT subkey_name, data FROM mock_db_store 
-                   WHERE server_name = %s AND key_name = %s AND subsubkey_name = ''""",
+                   WHERE server_name = ? AND key_name = ? AND subsubkey_name = ''""",
                 (server_name, key_name)
             )
         rows = cursor.fetchall()
-        return {row[0]: row[1] for row in rows}
+        return {row[0]: json.loads(row[1]) for row in rows}
 
 def fetch_subkeys(server_name, key_name):
     with db_cursor() as cursor:
         cursor.execute(
             """SELECT DISTINCT subkey_name FROM mock_db_store 
-               WHERE server_name = %s AND key_name = %s""",
+               WHERE server_name = ? AND key_name = ?""",
             (server_name, key_name)
         )
         rows = cursor.fetchall()
@@ -165,7 +164,7 @@ def has_top_level_key(server_name, key_name):
     with db_cursor() as cursor:
         cursor.execute(
             """SELECT 1 FROM mock_db_store 
-               WHERE server_name = %s AND key_name = %s LIMIT 1""",
+               WHERE server_name = ? AND key_name = ? LIMIT 1""",
             (server_name, key_name)
         )
         return cursor.fetchone() is not None
@@ -336,7 +335,7 @@ def _new_fastapi_init(self, *args, **kwargs):
 
 fastapi.FastAPI.__init__ = _new_fastapi_init
 
-class PGMockDB(dict):
+class SQLiteMockDB(dict):
     def __init__(self, server_name, mock_file_path):
         self.server_name = server_name
         self.mock_file_path = mock_file_path
@@ -403,5 +402,5 @@ _db_store_cache = {}
 
 def get_db_store(server_name, mock_file_path):
     if server_name not in _db_store_cache:
-        _db_store_cache[server_name] = PGMockDB(server_name, mock_file_path)
+        _db_store_cache[server_name] = SQLiteMockDB(server_name, mock_file_path)
     return _db_store_cache[server_name]
