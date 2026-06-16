@@ -758,18 +758,33 @@ async def _execute_agent_command(
     if identifier.lower().startswith("of "):
         identifier = identifier[3:].strip()
 
-    # ── Step 2.5: Verify CMDB Resource Existence ─────────────────────────────
+    # ── Step 2.5: Verify CMDB Resource Existence & Resolve Route ─────────────
     allowed_mock_resources = {"demo-vm-001", "core-switch-01", "core-sw-01", "prod-vol-001", "prod-worker", "MS-123", "OV1-RackServer-001", "CoM-CloudNode-001"}
     device = None
+    ctx = None
     try:
         from resolver import ResourceResolver
         ident_type = ResourceResolver._infer_identifier_type(identifier)
         device = _registry.lookup(identifier, ident_type)
+        if device:
+            parsed_payload = {
+                "identifier": identifier,
+                "action": action,
+                "category": resource_type
+            }
+            ctx = _resolver.resolve(
+                parsed_payload=parsed_payload,
+                requested_by=email,
+            )
     except Exception:
         pass
 
     if not device and identifier not in allowed_mock_resources:
         return f"❌ Resource '{identifier}' not found in the CMDB registry. Unable to route task."
+
+    # Use resolved details if available from the routing context
+    resolved_provider = ctx.management_source if ctx else provider_or_protocol
+    resolved_cred_ref = ctx.credential_ref if ctx else None
 
     # ── Step 3: Authorization (RBAC + ABAC) ───────────────────────────────────
     action_verb_map = {
@@ -802,7 +817,8 @@ async def _execute_agent_command(
             query_action=action,
             resource_type=resource_type,
             resource_id=identifier,
-            provider_or_protocol=provider_or_protocol,
+            provider_or_protocol=resolved_provider,
+            credentials_ref=resolved_cred_ref,
         ),
     )
 
@@ -821,7 +837,7 @@ async def _execute_agent_command(
             f"User       : {email} (Role: {role})\n"
             f"Agent      : {agent_type}-agent\n"
             f"Resource   : {resource_type}/{identifier}\n"
-            f"Provider   : {provider_or_protocol}\n"
+            f"Provider   : {resolved_provider}\n"
             f"Action     : {action}\n"
             f"Errors:\n  {error_text}\n"
             f"Tip: ensure the {agent_type}-agent is running "
@@ -840,7 +856,7 @@ async def _execute_agent_command(
         f"Resource     : {resource_type}/{identifier}",
         f"Power State  : {power_state.upper()}",
         f"Health Status: {health_status.upper()}",
-        f"Provider     : {provider_or_protocol}",
+        f"Provider     : {resolved_provider}",
         f"Action       : {action}",
         f"Status       : {status}",
     ]

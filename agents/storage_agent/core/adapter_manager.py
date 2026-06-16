@@ -20,6 +20,10 @@ class StorageAdapterManager:
     @staticmethod
     def get(provider: str) -> BaseStorageAdapter:
         key = provider.strip().lower()
+        if key == "coms":
+            key = "dscc"
+        elif key == "oneview":
+            key = "nas"
         cls = REGISTRY.get(key)
         if cls is None:
             raise ValueError(f"No storage adapter for provider '{provider}'. Known: {sorted(REGISTRY)}")
