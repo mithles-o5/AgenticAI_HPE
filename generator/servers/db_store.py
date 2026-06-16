@@ -1,5 +1,19 @@
 import os
 import json
+import sys
+
+# Try to import mock_db_cache to run in-memory mock mode if Postgres is not running
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_ROOT = os.path.abspath(os.path.join(_HERE, "..", ".."))
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+try:
+    import mock_db_cache
+    mock_db_cache.setup()
+    print("[db_store] In-memory mock database cache injected successfully.")
+except Exception as e:
+    print(f"[db_store] Failed to inject mock_db_cache (PostgreSQL default connection will be used): {e}")
+
 import psycopg2
 from contextlib import contextmanager
 import fastapi
@@ -37,10 +51,22 @@ def db_cursor():
         if conn:
             conn.close()
 
+def _row_val(row, key_or_index):
+    """Extract a value from a row that may be a dict (mock) or tuple (psycopg2)."""
+    if row is None:
+        return None
+    if isinstance(row, dict):
+        # Try by key name first, then first value
+        if key_or_index in row:
+            return row[key_or_index]
+        return list(row.values())[0] if row else None
+    return row[key_or_index]
+
 def init_table():
     with db_cursor() as cursor:
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS mock_db_store (
+                id TEXT,
                 server_name VARCHAR(50),
                 key_name VARCHAR(255),
                 subkey_name VARCHAR(255) DEFAULT '',
@@ -56,7 +82,12 @@ def seed_if_empty(server_name, mock_file_path):
             "SELECT COUNT(*) FROM mock_db_store WHERE server_name = %s",
             (server_name,)
         )
-        count = cursor.fetchone()[0]
+        row = cursor.fetchone()
+        # Handle both dict (mock SQLite) and tuple (real psycopg2) cursors
+        if isinstance(row, dict):
+            count = list(row.values())[0]
+        else:
+            count = row[0]
         if count > 0:
             return
 
@@ -111,7 +142,7 @@ def fetch_item(server_name, key_name, subkey_name='', subsubkey_name=''):
             (server_name, key_name, subkey_name, subsubkey_name)
         )
         row = cursor.fetchone()
-        return row[0] if row else None
+        return _row_val(row, "data") if row else None
 
 def save_item(server_name, key_name, subkey_name, subsubkey_name, data):
     with db_cursor() as cursor:
@@ -132,7 +163,7 @@ def delete_item(server_name, key_name, subkey_name, subsubkey_name):
             (server_name, key_name, subkey_name, subsubkey_name)
         )
         row = cursor.fetchone()
-        return row[0] if row else None
+        return _row_val(row, "data") if row else None
 
 def fetch_all_items(server_name, key_name, subkey_name=''):
     with db_cursor() as cursor:
@@ -149,7 +180,16 @@ def fetch_all_items(server_name, key_name, subkey_name=''):
                 (server_name, key_name)
             )
         rows = cursor.fetchall()
-        return {row[0]: row[1] for row in rows}
+        result = {}
+        for row in rows:
+            if isinstance(row, dict):
+                key_col = "subsubkey_name" if subkey_name else "subkey_name"
+                k = row.get(key_col, list(row.values())[0])
+                v = row.get("data", list(row.values())[1] if len(row) > 1 else None)
+            else:
+                k, v = row[0], row[1]
+            result[k] = v
+        return result
 
 def fetch_subkeys(server_name, key_name):
     with db_cursor() as cursor:
@@ -159,7 +199,13 @@ def fetch_subkeys(server_name, key_name):
             (server_name, key_name)
         )
         rows = cursor.fetchall()
-        return [row[0] for row in rows]
+        result = []
+        for row in rows:
+            if isinstance(row, dict):
+                result.append(row.get("subkey_name", list(row.values())[0]))
+            else:
+                result.append(row[0])
+        return result
 
 def has_top_level_key(server_name, key_name):
     with db_cursor() as cursor:
@@ -170,13 +216,26 @@ def has_top_level_key(server_name, key_name):
         )
         return cursor.fetchone() is not None
 
+
+def _parse_data(data):
+    """Ensure data is a dict/list — parse JSON string if needed."""
+    if isinstance(data, str):
+        try:
+            return json.loads(data)
+        except Exception:
+            return {}
+    if data is None:
+        return {}
+    return data
+
 class PGItemProxy(dict):
     def __init__(self, server_name, key_name, subkey_name, subsubkey_name, data):
         self.server_name = server_name
         self.key_name = key_name
         self.subkey_name = subkey_name
         self.subsubkey_name = subsubkey_name
-        super().__init__(data)
+        parsed = _parse_data(data)
+        super().__init__(parsed if isinstance(parsed, dict) else {"_value": parsed})
 
     def __setitem__(self, key, value):
         super().__setitem__(key, value)
@@ -205,7 +264,7 @@ class PGCollectionProxy(dict):
         val = fetch_item(self.server_name, self.key_name, sk, ssk)
         if val is None:
             raise KeyError(item_id)
-        return PGItemProxy(self.server_name, self.key_name, sk, ssk, val)
+        return PGItemProxy(self.server_name, self.key_name, sk, ssk, _parse_data(val))
 
     def __setitem__(self, item_id, value):
         sk, ssk = self._get_item_keys(item_id)
@@ -217,7 +276,7 @@ class PGCollectionProxy(dict):
         val = fetch_item(self.server_name, self.key_name, sk, ssk)
         if val is None:
             return default
-        return PGItemProxy(self.server_name, self.key_name, sk, ssk, val)
+        return PGItemProxy(self.server_name, self.key_name, sk, ssk, _parse_data(val))
 
     def pop(self, item_id, default=None):
         sk, ssk = self._get_item_keys(item_id)
@@ -225,14 +284,14 @@ class PGCollectionProxy(dict):
         super().pop(item_id, None)
         if val is None:
             return default
-        return val
+        return _parse_data(val)
 
     def values(self):
         items = fetch_all_items(self.server_name, self.key_name, self.subkey_name)
         result = []
         for item_id, val in items.items():
             sk, ssk = self._get_item_keys(item_id)
-            result.append(PGItemProxy(self.server_name, self.key_name, sk, ssk, val))
+            result.append(PGItemProxy(self.server_name, self.key_name, sk, ssk, _parse_data(val)))
         return result
 
 class PGDynamicStoreProxy(dict):
@@ -405,3 +464,16 @@ def get_db_store(server_name, mock_file_path):
     if server_name not in _db_store_cache:
         _db_store_cache[server_name] = PGMockDB(server_name, mock_file_path)
     return _db_store_cache[server_name]
+
+
+if __name__ == "__main__":
+    print("[db_store] Running direct seeding script...")
+    init_table()
+    # Find mock files and seed them
+    here = os.path.dirname(os.path.abspath(__file__))
+    seed_if_empty("oneview", os.path.join(here, "oneview", "mock_data.json"))
+    seed_if_empty("compute_ops", os.path.join(here, "compute_ops", "mock_data.json"))
+    seed_if_empty("cloud", os.path.join(here, "Cloud", "mock_data.json"))
+    seed_if_empty("storage", os.path.join(here, "Storage", "mock_data.json"))
+    print("[db_store] Direct seeding finished.")
+

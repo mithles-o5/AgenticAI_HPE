@@ -5,7 +5,8 @@ import time
 import httpx
 import structlog
 import uuid
-from fastapi import FastAPI, Request
+import re
+from fastapi import FastAPI, Request, Response, HTTPException
 from contextlib import asynccontextmanager
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
@@ -89,6 +90,82 @@ async def add_process_time_and_request_id(request: Request, call_next):
 
 # Mount routes
 app.include_router(router, prefix="/server-agent", tags=["Server Agent"])
+
+# Proxy handler to forward server-related requests to the mock API servers
+async def handle_proxy(request: Request, target_base: str, is_oneview: bool):
+    full_path = request.url.path
+    path_clean = full_path
+    if path_clean.startswith("/server-agent"):
+        path_clean = path_clean[len("/server-agent"):]
+        
+    if is_oneview:
+        # OneView category checking
+        if path_clean.startswith("/rest/"):
+            parts = [p for p in path_clean.split("/") if p]
+            if len(parts) >= 2:
+                category = parts[1]
+                if category not in {"server-hardware", "custom-servers", "rack-managers", "updates", "certificates", "login-sessions"}:
+                    raise HTTPException(
+                        status_code=403,
+                        detail="Access denied: Only server-related APIs are accessible through the Server Agent."
+                    )
+    else:
+        # Compute Ops category checking
+        if path_clean.startswith("/compute-ops-mgmt/") or path_clean.startswith("/compute-ops/"):
+            parts = [p for p in path_clean.split("/") if p]
+            if len(parts) >= 2:
+                if re.match(r"^v\d", parts[1]):
+                    category_idx = 2
+                else:
+                    category_idx = 1
+                
+                if len(parts) > category_idx:
+                    category = parts[category_idx]
+                    if category in {"storage", "switches", "networks"}:
+                        raise HTTPException(
+                            status_code=403,
+                            detail="Access denied: Only server-related APIs are accessible through the Server Agent."
+                        )
+            
+    # Rewrite legacy /compute-ops/ prefix → /compute-ops-mgmt/ (the mock only exposes /compute-ops-mgmt/)
+    if not is_oneview and path_clean.startswith("/compute-ops/"):
+        path_clean = "/compute-ops-mgmt/" + path_clean[len("/compute-ops/"):]
+
+    target_url = f"{target_base}{path_clean}"
+    if request.url.query:
+        target_url += f"?{request.url.query}"
+        
+    async with httpx.AsyncClient() as client:
+        body = await request.body()
+        headers = dict(request.headers)
+        headers.pop("host", None)
+        try:
+            resp = await client.request(
+                method=request.method,
+                url=target_url,
+                headers=headers,
+                content=body,
+                timeout=30.0
+            )
+            return Response(
+                content=resp.content,
+                status_code=resp.status_code,
+                headers=dict(resp.headers)
+            )
+        except Exception as e:
+            raise HTTPException(status_code=502, detail=f"Proxy request failed: {str(e)}")
+
+@app.api_route("/rest/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
+@app.api_route("/server-agent/rest/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
+async def proxy_oneview(request: Request, path: str):
+    return await handle_proxy(request, settings.ONEVIEW_URL, is_oneview=True)
+
+@app.api_route("/compute-ops-mgmt/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
+@app.api_route("/server-agent/compute-ops-mgmt/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
+@app.api_route("/compute-ops/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
+@app.api_route("/server-agent/compute-ops/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
+async def proxy_compute_ops(request: Request, path: str):
+    return await handle_proxy(request, settings.COMPUTE_OPS_URL, is_oneview=False)
 
 if __name__ == "__main__":
     import uvicorn

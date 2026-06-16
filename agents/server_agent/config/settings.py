@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     CRED_VAULT_URL: str = "http://localhost:8200"
     SERVICE_TOKEN: str = "mock-service-token"
     CMDB_URL: str = "http://localhost:8004"
+    ONEVIEW_URL: str = "http://localhost:8000"
+    COMPUTE_OPS_URL: str = "http://localhost:8001"
 
     # Polling
     POLL_ENABLED: bool = True
