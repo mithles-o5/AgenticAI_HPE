@@ -92,3 +92,25 @@ class CustomServerUpdateRequest(BaseModel):
     cpuCores: int = None
 
 
+class CustomSwitchCreateRequest(BaseModel):
+    name: str
+    status: str = "OK"
+    temperature: float = 25.0
+    powerState: str = "On"
+    serialNumber: str = None
+    firmwareVersion: str = None
+    model: str = None
+    ipAddress: str = None
+    portCount: int = 24
+
+
+class CustomSwitchUpdateRequest(BaseModel):
+    name: str = None
+    status: str = None
+    temperature: float = None
+    powerState: str = None
+    serialNumber: str = None
+    firmwareVersion: str = None
+    model: str = None
+    ipAddress: str = None
+    portCount: int = None

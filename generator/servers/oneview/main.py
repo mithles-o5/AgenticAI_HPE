@@ -111,8 +111,95 @@ def delete_rest_custom_servers_id(id: str):
     return {"message": "Deleted successfully", "id": id, "item": deleted}
 
 
+@app.get("/rest/custom-switches")
+def get_rest_custom_switches():
+    """
+    Custom CRUD Route: GET /rest/custom-switches
+    """
+    collection_path = "/rest/custom-switches"
+    return list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
+
+@app.get("/rest/custom-switches/{id}")
+def get_rest_custom_switches_id(id: str):
+    """
+    Custom CRUD Route: GET /rest/custom-switches/{id}
+    """
+    collection_path = "/rest/custom-switches"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Switch not found")
+    return store[id]
+
+@app.get("/rest/custom-switches/{id}/{feature}")
+def get_rest_custom_switches_id_feature(id: str, feature: str):
+    """
+    Custom CRUD Route: Get a specific feature value of a custom switch
+    """
+    collection_path = "/rest/custom-switches"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Switch not found")
+    
+    switch = store[id]
+    if feature not in switch:
+        raise HTTPException(status_code=404, detail=f"Feature '{feature}' not found on this switch")
+    
+    return {
+        "id": id,
+        "name": switch.get("name"),
+        "feature": feature,
+        "value": switch.get(feature)
+    }
+
+@app.post("/rest/custom-switches")
+def post_rest_custom_switches(payload: CustomSwitchCreateRequest):
+    """
+    Custom CRUD Route: POST /rest/custom-switches
+    """
+    collection_path = "/rest/custom-switches"
+    if "dynamic_store" not in MOCK_DB:
+        MOCK_DB["dynamic_store"] = {}
+    if collection_path not in MOCK_DB["dynamic_store"]:
+        MOCK_DB["dynamic_store"][collection_path] = {}
+    
+    item_id = str(uuid.uuid4())
+    item_data = payload.dict()
+    item_data["id"] = item_id
+    MOCK_DB["dynamic_store"][collection_path][item_id] = item_data
+    return item_data
+
+@app.put("/rest/custom-switches/{id}")
+def put_rest_custom_switches_id(id: str, payload: CustomSwitchUpdateRequest):
+    """
+    Custom CRUD Route: PUT /rest/custom-switches/{id}
+    """
+    collection_path = "/rest/custom-switches"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Switch not found")
+    
+    existing = store[id]
+    payload_dict = {k: v for k, v in payload.dict().items() if v is not None}
+    existing.update(payload_dict)
+    MOCK_DB["dynamic_store"][collection_path][id] = existing
+    return existing
+
+@app.delete("/rest/custom-switches/{id}")
+def delete_rest_custom_switches_id(id: str):
+    """
+    Custom CRUD Route: DELETE /rest/custom-switches/{id}
+    """
+    collection_path = "/rest/custom-switches"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Switch not found")
+    deleted = MOCK_DB["dynamic_store"][collection_path].pop(id)
+    return {"message": "Deleted successfully", "id": id, "item": deleted}
+
+
 @app.post("/rest/login-sessions")
 def post_rest_login_sessions(payload: PostRestLoginSessionsRequest):
+
     """
     Dynamic CRUD Route: POST /rest/login-sessions
     """
