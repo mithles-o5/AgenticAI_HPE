@@ -1,0 +1,24 @@
+{
+  "name": "server-agent",
+  "version": "1.0.0",
+  "schema_version": "0.7.0",
+  "description": "Bare-metal server monitoring, hardware inventory, lifecycle actions and anomaly detection via Redfish, IPMI and iLO",
+  "authors": ["infra-team@company.com"],
+  "skills": [
+    {"name": "server.monitoring.health"},
+    {"name": "server.monitoring.sensors"},
+    {"name": "server.monitoring.eventlog"},
+    {"name": "server.execute.power_action"},
+    {"name": "server.execute.boot_config"},
+    {"name": "server.execute.virtual_media"},
+    {"name": "server.discover.inventory"},
+    {"name": "server.diagnose.anomaly"},
+    {"name": "server.sync.cmdb"}
+  ],
+  "domains": ["server-infrastructure", "hardware-management", "observability"],
+  "locators": [{"type": "openapi", "url": "http://server-agent:8009/openapi.json"}],
+  "modules": {
+    "providers": ["redfish", "ipmi", "ilo", "mock"],
+    "resource_types": ["server", "bmc", "sensor", "firmware", "event_log"]
+  }
+}
