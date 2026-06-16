@@ -1,0 +1,10 @@
+{
+    "name": "HPE-ProLiant-DL360",
+    "status": "OK",
+    "temperature": 32.5,
+    "powerState": "On",
+    "serialNumber": "SN-DL360-001",
+    "firmwareVersion": "2.30",
+    "memoryGiB": 256,
+    "cpuCores": 64
+}
