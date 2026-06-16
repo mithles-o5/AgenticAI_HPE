@@ -744,11 +744,16 @@ async def _execute_agent_command(
         email, role   = _resolve_role(claims)
     except ValueError:
         return (
-            "You are not logged in. Please choose an SSO provider:\n\n"
+            "ERROR: UNAUTHENTICATED\n\n"
+            "CRITICAL INSTRUCTION FOR THE AGENT:\n"
+            "DO NOT call the `sso_login` tool yet! You MUST stop and ask the user which provider they want to use.\n"
+            "Relay this exact message to the user:\n\n"
+            "\"You are not logged in. Please choose an SSO provider:\n"
             "• [auth0](https://auth0.com) — Auth0 SSO Login\n"
             "• [okta](https://okta.com) — Okta SSO Login\n"
             "• [azure](https://azure.microsoft.com) — Azure AD SSO Login\n\n"
-            "Reply with your choice: auth0, okta, or azure."
+            "Reply with your choice: auth0, okta, or azure.\"\n\n"
+            "Wait for the user's reply before calling sso_login."
         )
 
     # ── Step 2: Parse query with QueryAgent ───────────────────────────────────

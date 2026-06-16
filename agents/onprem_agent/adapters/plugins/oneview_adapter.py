@@ -34,7 +34,7 @@ class OneViewAdapter(BaseAdapter):
 
     async def health_check(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> dict:
         async with await self._get_client(credentials) as client:
-            if resource_type in ("server_profile", "server_hardware") or (not resource_type and resource_id.startswith("OV")):
+            if resource_type in ("server_profile", "server_hardware", "server-hardware") or (not resource_type and resource_id.startswith("OV")):
                 resp = await client.get(f"/rest/server-hardware/{resource_id}")
                 if resp.status_code == 200:
                     return {"resource_type": resource_type or "server_hardware", "raw": resp.json()}
@@ -78,29 +78,44 @@ class OneViewAdapter(BaseAdapter):
 
     async def fetch_metrics(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> dict:
         async with await self._get_client(credentials) as client:
-            metrics = {
-                "cpu_utilization_percent": 45.2,
-                "memory_utilization_percent": 60.8,
-                "power_draw_watts": 280,
-                "temperature_celsius": 32.5
-            }
-            
-            # Query real endpoint thermal if resource is server
-            if resource_type in ("server_profile", "server_hardware") or (not resource_type and resource_id.startswith("OV")):
-                resp = await client.get(f"/rest/server-hardware/{resource_id}/thermal")
+            power_state = "On"
+            if resource_type in ("server_profile", "server_hardware", "server-hardware") or (not resource_type and resource_id.startswith("OV")):
+                resp = await client.get(f"/rest/server-hardware/{resource_id}")
                 if resp.status_code == 200:
-                    thermal_data = resp.json()
-                    # extract temperature from thermal sensors
-                    temp = thermal_data.get("temperatureCelsius")
-                    if temp:
-                        metrics["temperature_celsius"] = float(temp)
+                    power_state = resp.json().get("powerState", "On")
+
+            if power_state == "Off":
+                metrics = {
+                    "cpu_utilization_percent": 0.0,
+                    "memory_utilization_percent": 0.0,
+                    "power_draw_watts": 15.0,
+                    "temperature_celsius": 20.0,
+                    "power_state": "Off"
+                }
+            else:
+                metrics = {
+                    "cpu_utilization_percent": 45.2,
+                    "memory_utilization_percent": 60.8,
+                    "power_draw_watts": 280.0,
+                    "temperature_celsius": 32.5,
+                    "power_state": "On"
+                }
+                
+                # Query real endpoint thermal if resource is server
+                if resource_type in ("server_profile", "server_hardware", "server-hardware") or (not resource_type and resource_id.startswith("OV")):
+                    resp = await client.get(f"/rest/server-hardware/{resource_id}/thermal")
+                    if resp.status_code == 200:
+                        thermal_data = resp.json()
+                        temp = thermal_data.get("temperatureCelsius")
+                        if temp:
+                            metrics["temperature_celsius"] = float(temp)
             
             # Query chassis utilization if enclosure
-            elif resource_type == "enclosure":
+            if resource_type == "enclosure":
                 resp = await client.get(f"/rest/rack-managers/{resource_id}/chassis/utilization")
                 if resp.status_code == 200:
                     util_data = resp.json()
-                    metrics["power_draw_watts"] = util_data.get("powerWatts", 350)
+                    metrics["power_draw_watts"] = util_data.get("powerWatts", 350.0)
             
             return metrics
 
@@ -151,7 +166,7 @@ class OneViewAdapter(BaseAdapter):
     async def discover_inventory(self, resource_type: str, credentials: dict, parameters: dict) -> list:
         async with await self._get_client(credentials) as client:
             inventory = []
-            if resource_type in ("server_profile", "server_hardware") or not resource_type:
+            if resource_type in ("server_profile", "server_hardware", "server-hardware") or not resource_type:
                 resp = await client.get("/rest/server-hardware")
                 if resp.status_code == 200:
                     servers = resp.json()

@@ -370,6 +370,15 @@ def find_server(id: str):
     if id in servers:
         return servers[id]
     
+    # Check exact match for name, serial number, or IP first
+    for s_id, s_data in servers.items():
+        if s_data.get("name", "").lower() == id.lower():
+            return s_data
+        if s_data.get("serialNumber", "").lower() == id.lower():
+            return s_data
+        if s_data.get("ip_address") == id:
+            return s_data
+
     import re
     match = re.search(r"(\d+)$", id)
     if match:
@@ -384,12 +393,6 @@ def find_server(id: str):
                 return s_data
             if s_id.startswith(id) or id.startswith(s_id):
                 return s_data
-
-    for s_id, s_data in servers.items():
-        if s_data.get("name", "").lower() == id.lower():
-            return s_data
-        if s_data.get("ip_address") == id:
-            return s_data
             
     return None
 
@@ -416,6 +419,12 @@ def put_rest_server_hardware_id_powerstate(id: str, payload: dict = {}):
     server = find_server(id)
     if server:
         server["powerState"] = state
+        try:
+            with open(mock_file, "w", encoding="utf-8") as f:
+                json.dump(MOCK_DB, f, indent=4)
+        except Exception as e:
+            print(f"Error writing to mock_data.json: {e}")
+            
         return {
             "status": "success",
             "message": f"Server {id} power state successfully changed to {state}",

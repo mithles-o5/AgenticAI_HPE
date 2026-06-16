@@ -70,17 +70,23 @@ class MockCloudAdapter(BaseCloudAdapter):
         credentials: Dict[str, Any],
         parameters: Dict[str, Any],
     ) -> Dict[str, Any]:
+        action_clean = action.lower().strip()
+        if action_clean == "off":
+            action_clean = "stop"
+        elif action_clean == "on":
+            action_clean = "start"
+
         supported = {"start", "stop", "restart", "resize", "terminate", "snapshot"}
-        if action.lower() not in supported:
+        if action_clean not in supported:
             return {
                 "result": "failed",
                 "detail": f"Action '{action}' is not supported. Supported: {sorted(supported)}",
             }
         return {
             "result":      "success",
-            "detail":      f"[MOCK] Action '{action}' executed on {resource_type}/{resource_id}.",
+            "detail":      f"[MOCK] Action '{action_clean}' executed on {resource_type}/{resource_id}.",
             "resource_id": resource_id,
-            "action":      action,
+            "action":      action_clean,
             "region":      region,
         }
 

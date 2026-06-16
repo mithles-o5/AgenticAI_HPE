@@ -84,9 +84,35 @@ class MockCursor:
         # But skip escaped % (%%)
         parts = query_processed.split("%s")
         query_final = ""
-        for part in parts[:-1]:
-            query_final += part + "?"
-        query_final += parts[-1]
+        new_params = []
+        
+        if params is not None and (len(params) if isinstance(params, (list, tuple)) else 1) == len(parts) - 1:
+            if not isinstance(params, (list, tuple)):
+                params = [params]
+            param_idx = 0
+            for i, part in enumerate(parts[:-1]):
+                if part.endswith("ANY("):
+                    list_val = params[param_idx]
+                    if not isinstance(list_val, (list, tuple, set)):
+                        list_val = [list_val]
+                    placeholders = ", ".join(["?"] * len(list_val))
+                    part = part[:-4].rstrip()
+                    if part.endswith("="):
+                        part = part[:-1].rstrip()
+                    part = part + " IN ("
+                    query_final += part + placeholders
+                    new_params.extend(list_val)
+                else:
+                    query_final += part + "?"
+                    new_params.append(params[param_idx])
+                param_idx += 1
+            query_final += parts[-1]
+            params = tuple(new_params)
+        else:
+            for part in parts[:-1]:
+                query_final += part + "?"
+            query_final += parts[-1]
+            
         query_final = query_final.replace("%%", "%")
 
         # Auto-inject UUID for INSERT statements if ID is missing from columns
@@ -347,13 +373,18 @@ def _seed_devices():
         (str(uuid.uuid4()), "edge-r1", "10.100.1.12", "edge-r1.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-edger1", "router"),
         (str(uuid.uuid4()), "wan-r2", "10.100.1.21", "wan-r2.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-wanr2", "router"),
         (str(uuid.uuid4()), "core-sw01", "10.100.1.13", "core-sw01.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-coresw01", "switch"),
+        (str(uuid.uuid4()), "core-sw-01", "10.100.1.13", "core-sw-01.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-coresw01-hyphen", "switch"),
         (str(uuid.uuid4()), "leaf-sw12", "10.100.1.22", "leaf-sw12.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-leafsw12", "switch"),
         (str(uuid.uuid4()), "fw-core-01", "10.100.1.14", "fw-core-01.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-fc01", "firewall"),
         (str(uuid.uuid4()), "fw-edge-02", "10.100.1.23", "fw-edge-02.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-fwedge02", "firewall"),
+        (str(uuid.uuid4()), "prod-vol-001", "10.100.1.15", "prod-vol-001.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-prodvol001", "storage"),
+        (str(uuid.uuid4()), "dsk-007", "10.100.1.16", "dsk-007.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-dsk007", "storage"),
 
         # COMS devices
         ("97f236a5-548d-5223-b096-6d38059d1d27", "CoM-CloudNode-001", "192.168.100.2", "CoM-CloudNode-001.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-001", "server"),
         (str(uuid.uuid4()), "MS-123", "192.168.100.123", "MS-123.local", "coms", "coms-01.cloud.local", "coms-uuid-123", "server"),
+        (str(uuid.uuid4()), "demo-vm-001", "192.168.100.124", "demo-vm-001.local", "coms", "coms-01.cloud.local", "coms-uuid-demovm001", "server"),
+        (str(uuid.uuid4()), "MS-2112", "192.168.100.212", "MS-2112.local", "coms", "coms-01.cloud.local", "coms-uuid-2112", "server"),
         (str(uuid.uuid4()), "CoM-CloudNode-128", "192.168.100.129", "CoM-CloudNode-128.cloud.local", "coms", "coms-01.cloud.local", "3097b130-3c1b-5656-88ef-49c70576410a", "server"),
         (str(uuid.uuid4()), "prod-x1", "10.200.1.13", "prod-x1.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-prodx1", "server"),
         (str(uuid.uuid4()), "core-r3", "10.200.1.20", "core-r3.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-corer3", "router"),

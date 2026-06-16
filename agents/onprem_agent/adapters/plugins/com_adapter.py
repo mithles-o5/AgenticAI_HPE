@@ -38,25 +38,39 @@ class ComOpsAdapter(BaseAdapter):
 
     async def fetch_metrics(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> dict:
         async with await self._get_client(credentials) as client:
+            power_state = "On"
+            resp_srv = await client.get(f"/compute-ops-mgmt/v1/servers/{resource_id}")
+            if resp_srv.status_code == 200:
+                power_state = resp_srv.json().get("powerState", "On")
+
+            if power_state == "Off":
+                return {
+                    "cpu_utilization_percent": 0.0,
+                    "memory_utilization_percent": 0.0,
+                    "power_draw_watts": 15.0,
+                    "temperature_celsius": 20.0,
+                    "power_state": "Off"
+                }
+
             metrics = {
                 "cpu_utilization_percent": 30.0,
                 "memory_utilization_percent": 45.0,
-                "power_draw_watts": 180,
-                "temperature_celsius": 28.0
+                "power_draw_watts": 180.0,
+                "temperature_celsius": 28.0,
+                "power_state": "On"
             }
             
             # Query utilization endpoint
             resp = await client.get(f"/compute-ops-mgmt/v1beta1/utilization-over-time?serverId={resource_id}")
             if resp.status_code == 200:
                 data = resp.json()
-                # Use mock-realistic metrics from response or default
                 metrics["cpu_utilization_percent"] = data.get("cpuAveragePercent", 35.5)
                 metrics["memory_utilization_percent"] = data.get("memoryAveragePercent", 50.2)
             
             resp_energy = await client.get(f"/compute-ops-mgmt/v1beta1/energy-over-time?serverId={resource_id}")
             if resp_energy.status_code == 200:
                 data_energy = resp_energy.json()
-                metrics["power_draw_watts"] = data_energy.get("averagePowerWatts", 205)
+                metrics["power_draw_watts"] = data_energy.get("averagePowerWatts", 205.0)
                 
             return metrics
 
