@@ -2,157 +2,88 @@ import os
 import json
 import uuid
 import sys
-from datetime import datetime
-import psycopg2
+import redis
 
-# Session ID file persistence path
+# Redis connection details from environment (matching resource_resolver/cache.py)
+REDIS_HOST = os.getenv("MEMURAI_HOST", os.getenv("REDIS_HOST", "localhost"))
+REDIS_PORT = int(os.getenv("MEMURAI_PORT", os.getenv("REDIS_PORT", "6379")))
+REDIS_DB = int(os.getenv("MEMURAI_DB", os.getenv("REDIS_DB", "0")))
+REDIS_PASSWORD = os.getenv("MEMURAI_PASSWORD", os.getenv("REDIS_PASSWORD"))
+
+# Persistence path for Session ID
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Put the session_id.txt in the mcp_server directory to maintain compatibility
 SESSION_ID_FILE = os.path.join(os.path.dirname(BASE_DIR), "mcp_server", "session_id.txt")
 
-# Load database connection parameters
-PG_HOST = os.getenv("PGHOST", "localhost")
-PG_PORT = int(os.getenv("PGPORT", "5432"))
-PG_USER = os.getenv("PGUSER", "postgres")
-PG_PASSWORD = os.getenv("PGPASSWORD", "password")
-PG_DATABASE = os.getenv("PGDATABASE", "postgres")
-
-def _get_connection():
-    """Opens a connection to the database."""
-    return psycopg2.connect(
-        host=PG_HOST,
-        port=PG_PORT,
-        user=PG_USER,
-        password=PG_PASSWORD,
-        database=PG_DATABASE
-    )
+# Create a shared Redis client
+_client = redis.Redis(
+    host=REDIS_HOST,
+    port=REDIS_PORT,
+    db=REDIS_DB,
+    password=REDIS_PASSWORD,
+    decode_responses=True
+)
 
 def init_db():
-    """Initializes the database table for memory store if it doesn't exist."""
-    conn = None
+    """Initializes/pings the Redis database."""
     try:
-        conn = _get_connection()
-        cursor = conn.cursor()
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS memory (
-                session_id TEXT,
-                key TEXT,
-                value TEXT,
-                updated_at TEXT,
-                PRIMARY KEY (session_id, key)
-            )
-        """)
-        conn.commit()
-        print("✅ memory store database initialized successfully.", file=sys.stderr)
+        _client.ping()
+        print("✅ Redis memory store connection verified successfully.", file=sys.stderr)
     except Exception as e:
-        print(f"❌ Error initializing memory database: {e}", file=sys.stderr)
+        print(f"❌ Error connecting to Redis memory store: {e}", file=sys.stderr)
         raise
-    finally:
-        if conn:
-            conn.close()
 
 def remember(session_id: str, key: str, value):
-    """Upsert a key-value pair for a session."""
-    conn = None
-    try:
-        conn = _get_connection()
-        cursor = conn.cursor()
-        val_json = json.dumps(value)
-        updated_at = datetime.utcnow().isoformat() + "Z"
-        cursor.execute("""
-            INSERT INTO memory (session_id, key, value, updated_at)
-            VALUES (%s, %s, %s, %s)
-            ON CONFLICT (session_id, key) DO UPDATE SET
-                value = EXCLUDED.value,
-                updated_at = EXCLUDED.updated_at
-        """, (session_id, key, val_json, updated_at))
-        conn.commit()
-    except Exception as e:
-        print(f"❌ Error saving to database (remember): {e}", file=sys.stderr)
-        raise
-    finally:
-        if conn:
-            conn.close()
+    """Upsert a key-value pair for a session in Redis."""
+    redis_key = f"session:{session_id}:{key}"
+    val_json = json.dumps(value)
+    # Store key value
+    _client.set(redis_key, val_json)
+    # Keep track of the keys in this session via a Redis Set
+    _client.sadd(f"session:{session_id}:_keys", key)
 
 def recall(session_id: str, key: str):
-    """Fetch a single value, return None if missing."""
-    conn = None
-    try:
-        conn = _get_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT value FROM memory WHERE session_id = %s AND key = %s", (session_id, key))
-        row = cursor.fetchone()
-        if row:
-            return json.loads(row[0])
-        return None
-    except Exception as e:
-        print(f"❌ Error fetching from database (recall): {e}", file=sys.stderr)
-        return None
-    finally:
-        if conn:
-            conn.close()
+    """Fetch a single value from Redis, return None if missing."""
+    redis_key = f"session:{session_id}:{key}"
+    val_json = _client.get(redis_key)
+    if val_json:
+        return json.loads(val_json)
+    return None
 
 def recall_session(session_id: str) -> dict:
     """Return all key-value pairs for a session as a dictionary."""
-    conn = None
-    try:
-        conn = _get_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT key, value FROM memory WHERE session_id = %s", (session_id,))
-        rows = cursor.fetchall()
-        return {row[0]: json.loads(row[1]) for row in rows}
-    except Exception as e:
-        print(f"❌ Error fetching session data (recall_session): {e}", file=sys.stderr)
+    keys_set = _client.smembers(f"session:{session_id}:_keys")
+    if not keys_set:
         return {}
-    finally:
-        if conn:
-            conn.close()
+    session_data = {}
+    for key in keys_set:
+        val = recall(session_id, key)
+        if val is not None:
+            session_data[key] = val
+    return session_data
 
 def forget_key(session_id: str, key: str):
     """Delete one key from the session."""
-    conn = None
-    try:
-        conn = _get_connection()
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM memory WHERE session_id = %s AND key = %s", (session_id, key))
-        conn.commit()
-    except Exception as e:
-        print(f"❌ Error deleting key (forget_key): {e}", file=sys.stderr)
-        raise
-    finally:
-        if conn:
-            conn.close()
+    redis_key = f"session:{session_id}:{key}"
+    _client.delete(redis_key)
+    _client.srem(f"session:{session_id}:_keys", key)
 
 def forget_session(session_id: str):
     """Delete an entire session."""
-    conn = None
-    try:
-        conn = _get_connection()
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM memory WHERE session_id = %s", (session_id,))
-        conn.commit()
-    except Exception as e:
-        print(f"❌ Error deleting session (forget_session): {e}", file=sys.stderr)
-        raise
-    finally:
-        if conn:
-            conn.close()
+    keys_set = _client.smembers(f"session:{session_id}:_keys")
+    if keys_set:
+        for key in keys_set:
+            _client.delete(f"session:{session_id}:{key}")
+    _client.delete(f"session:{session_id}:_keys")
 
 def list_sessions() -> list:
-    """Return all active session IDs in the database."""
-    conn = None
-    try:
-        conn = _get_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT DISTINCT session_id FROM memory")
-        rows = cursor.fetchall()
-        return [row[0] for row in rows]
-    except Exception as e:
-        print(f"❌ Error listing sessions: {e}", file=sys.stderr)
-        return []
-    finally:
-        if conn:
-            conn.close()
+    """Return all active session IDs in the Redis store."""
+    sessions = set()
+    for k in _client.scan_iter(match="session:*:_keys"):
+        parts = k.split(":")
+        if len(parts) >= 3:
+            sessions.add(parts[1])
+    return list(sessions)
 
 def _get_or_create_session_id() -> str:
     """Retrieves the persisted session ID from file or creates a new one."""

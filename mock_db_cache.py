@@ -250,6 +250,9 @@ class MockRedis:
     def setex(self, key, ttl, value):
         self._cache[key] = (value, time.time() + ttl)
 
+    def set(self, key, value):
+        self._cache[key] = (value, float('inf'))
+
     def get(self, key):
         if key in self._cache:
             val, expires_at = self._cache[key]
@@ -270,8 +273,16 @@ class MockRedis:
             self._sets[key] = set()
         self._sets[key].add(member)
 
+    def smembers(self, key):
+        return self._sets.get(key, set())
+
+    def srem(self, key, member):
+        if key in self._sets:
+            self._sets[key].discard(member)
+
     def expire(self, key, ttl):
         pass
+
 
     def hset(self, key, mapping):
         self._hashes[key] = mapping
