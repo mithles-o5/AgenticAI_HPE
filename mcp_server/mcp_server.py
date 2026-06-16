@@ -520,7 +520,66 @@ async def _execute_hardware_command(query: str, env: str, expected_protocol: Pro
             )
             resolved_tasks.append((task, ctx))
         except ResolverError as e:
-            results.append(f"❌ Task resolution failed for '{task.identifier}': {e}")
+            if task.action in ("CREATE", "ALLOCATE"):
+                from enums import CacheStatus, IdentifierType
+                from records import DeviceRecord, RouteResolution
+                import re
+                
+                # Sanitize the identifier (server name)
+                cleaned_name = task.identifier
+                cleaned_name = re.sub(r"\bnamed\b", "", cleaned_name, flags=re.IGNORECASE)
+                cleaned_name = re.sub(r"\bin compute ops\b", "", cleaned_name, flags=re.IGNORECASE)
+                cleaned_name = re.sub(r"\bin coms\b", "", cleaned_name, flags=re.IGNORECASE)
+                cleaned_name = re.sub(r"\bin oneview\b", "", cleaned_name, flags=re.IGNORECASE)
+                cleaned_name = re.sub(r"\bwith\s+ip\s+address\b.*", "", cleaned_name, flags=re.IGNORECASE)
+                cleaned_name = re.sub(r"\bwith\s+ip\b.*", "", cleaned_name, flags=re.IGNORECASE)
+                cleaned_name = re.sub(r"\bwith\b.*", "", cleaned_name, flags=re.IGNORECASE)
+                cleaned_name = re.sub(r"\bat\b.*", "", cleaned_name, flags=re.IGNORECASE)
+                cleaned_name = re.sub(r"\bip\s+address\b.*", "", cleaned_name, flags=re.IGNORECASE)
+                cleaned_name = re.sub(r"\bip\b.*", "", cleaned_name, flags=re.IGNORECASE)
+                cleaned_name = re.sub(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b", "", cleaned_name)
+                cleaned_name = cleaned_name.strip()
+                if not cleaned_name:
+                    cleaned_name = f"OV1-RackServer-{uuid.uuid4().hex[:4].upper()}"
+                
+                task.identifier = cleaned_name
+                
+                # Extract potential IP address from the user query
+                ip_match = re.search(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b", query)
+                ip_address = ip_match.group(0) if ip_match else ("10.200.1.100" if expected_protocol == Protocol.COMS else "10.10.1.100")
+                
+                device = DeviceRecord(
+                    id=str(uuid.uuid4()),
+                    serial_number=cleaned_name,
+                    management_source=expected_protocol.value,
+                    ip_address=ip_address,
+                    fqdn=f"{cleaned_name}.local",
+                    source_host="coms-01.cloud.local" if expected_protocol == Protocol.COMS else "oneview-01.mgmt.local",
+                    device_type="server"
+                )
+                
+                ctx = RouteResolution(
+                    identifier=cleaned_name,
+                    identifier_type=IdentifierType.SERIAL_NUMBER,
+                    device=device,
+                    mcp_tool="manage_comops_resource" if expected_protocol == Protocol.COMS else "manage_oneview_resource",
+                    credential_ref=None,
+                    cache_status=CacheStatus.MISS,
+                    resolution_ms=0,
+                    api_endpoint="/compute-ops-mgmt/v1/servers" if expected_protocol == Protocol.COMS else "/rest/server-hardware",
+                    management_source=expected_protocol.value,
+                    resource={
+                        "name": cleaned_name,
+                        "vendor": "HPE"
+                    },
+                    action={
+                        "category": "Provisioning",
+                        "action": task.action
+                    }
+                )
+                resolved_tasks.append((task, ctx))
+            else:
+                results.append(f"❌ Task resolution failed for '{task.identifier}': {e}")
 
     # ── Step 4: Vendor Synthesis (Group and Optimize by Vendor/Host) ─────────
     from synthesizer import VendorSynthesizer
@@ -565,6 +624,14 @@ async def _execute_hardware_command(query: str, env: str, expected_protocol: Pro
             parameters = {}
             if action_val in ("ON", "OFF", "RESET", "COLD_BOOT"):
                 parameters = {"action_type": "power", "state": "On" if action_val == "ON" else "Off" if action_val == "OFF" else "Reset"}
+            elif action_val in ("CREATE", "ALLOCATE"):
+                # Pass ip_address if parsed
+                import re
+                ip_match = re.search(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b", query)
+                parameters = {
+                    "action_type": "create_server",
+                    "ip_address": ip_match.group(0) if ip_match else (ctx.device.ip_address or "10.200.1.100")
+                }
             elif action_val == "STATUS":
                 # Onprem health check skill is mapped via health_check action
                 pass
@@ -609,6 +676,21 @@ async def _execute_hardware_command(query: str, env: str, expected_protocol: Pro
                 insights_summary = ""
                 if insights_list:
                     insights_summary = "\nInsights:\n" + "\n".join(f"  • [{i.get('severity', 'info').upper()}] {i.get('message')}" for i in insights_list)
+
+                # If this was a creation/allocation task, register the new device in the CMDB
+                if action_val in ("CREATE", "ALLOCATE") and response_data.get("status") == "success":
+                    try:
+                        from db_queries import DeviceQueries
+                        DeviceQueries.upsert({
+                            "serial_number": ctx.device.serial_number,
+                            "management_source": ctx.management_source,
+                            "ip_address": ctx.device.ip_address,
+                            "fqdn": ctx.device.fqdn,
+                            "source_host": ctx.device.source_host,
+                            "device_type": "server",
+                        })
+                    except Exception as db_err:
+                        insights_summary += f"\n⚠️ Server created, but registration in CMDB failed: {db_err}"
 
                 results.append(
                     f"✅ Executed Successfully via OASF Route\n"

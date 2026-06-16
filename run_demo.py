@@ -41,29 +41,29 @@ async def main():
     )
 
     # Start on-premises mock servers
-    print("[+] Starting OneView Mock Server on port 8000...")
+    print("\n[+] Starting OneView Mock Server on port 8000...")
     ov_server = subprocess.Popen(
         [sys.executable, "-m", "uvicorn", "main:app", "--port", "8000", "--log-level", "error"],
-        cwd="mock_server(oneview)", stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        cwd=os.path.join("generator", "servers", "oneview"), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
     )
 
     print("[+] Starting Compute Ops Mock Server on port 8001...")
     com_server = subprocess.Popen(
         [sys.executable, "-m", "uvicorn", "main:app", "--port", "8001", "--log-level", "error"],
-        cwd="mock_server(Comops)", stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        cwd=os.path.join("generator", "servers", "compute_ops"), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
     )
 
     # Start Cloud and Storage Mock API servers
     print("[+] Starting Cloud Mock API Server on port 8003...")
     cloud_mock = subprocess.Popen(
         [sys.executable, "-m", "uvicorn", "main:app", "--port", "8003", "--log-level", "error"],
-        cwd="mock_server(cloud)", stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        cwd=os.path.join("generator", "servers", "Cloud"), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
     )
 
     print("[+] Starting Storage Mock API Server on port 8004...")
     storage_mock = subprocess.Popen(
         [sys.executable, "-m", "uvicorn", "main:app", "--port", "8004", "--log-level", "error"],
-        cwd="mock_server(storage)", stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        cwd=os.path.join("generator", "servers", "Storage"), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
     )
 
     # Start OASF agent microservices

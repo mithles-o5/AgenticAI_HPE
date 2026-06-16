@@ -274,6 +274,33 @@ class SyncCmdbSkill(BaseSkill):
             "normalized_data": cmdb_payload
         }
 
+class CreateServerSkill(BaseSkill):
+    async def execute(self, adapter, request, credentials: dict) -> dict:
+        server_name = request.resource_id
+        res = await adapter.create_server(
+            request.resource_type,
+            server_name,
+            credentials,
+            request.parameters
+        )
+        if res.get("status") == "success":
+            return {
+                "status": "success",
+                "metrics": {},
+                "actions_taken": ["create_server"],
+                "status_level": "healthy",
+                "insights": [{"type": "lifecycle_event", "message": f"Server {server_name} successfully created"}],
+                "normalized_data": res.get("raw", {})
+            }
+        else:
+            return {
+                "status": "failed",
+                "metrics": {},
+                "actions_taken": [],
+                "status_level": "critical",
+                "errors": [res.get("error", "Server creation failed")]
+            }
+
 # Global registry mapping skills
 SKILLS: Dict[str, BaseSkill] = {
     "onprem.monitoring.health": HealthSkill(),
@@ -282,6 +309,7 @@ SKILLS: Dict[str, BaseSkill] = {
     "onprem.execute.power_action": PowerActionSkill(),
     "onprem.execute.profile_assign": ProfileAssignSkill(),
     "onprem.execute.firmware_update": FirmwareUpdateSkill(),
+    "onprem.execute.create_server": CreateServerSkill(),
     "onprem.discover.inventory": InventorySkill(),
     "onprem.diagnose.anomaly": AnomalySkill(),
     "onprem.sync.cmdb": SyncCmdbSkill()
@@ -310,6 +338,8 @@ def resolve_skill_name(action: str, parameters: dict = None) -> str:
             return "onprem.execute.profile_assign"
         elif action_type == "firmware_update":
             return "onprem.execute.firmware_update"
+        elif action_type == "create_server":
+            return "onprem.execute.create_server"
         else:
             raise SkillError(f"Unknown execute_action type: '{action_type}'")
     else:

@@ -1227,14 +1227,58 @@ def get_rest_server_hardware_schema():
         return res
     return static_data
 
+def _find_server(id_or_name: str):
+    collection_path = f"/rest/server-hardware"
+    if "dynamic_store" in MOCK_DB and collection_path in MOCK_DB["dynamic_store"]:
+        store = MOCK_DB["dynamic_store"][collection_path]
+        if id_or_name in store:
+            return store[id_or_name]
+        for s in store.values():
+            if s.get("name") == id_or_name or s.get("serialNumber") == id_or_name or s.get("uuid") == id_or_name or s.get("id") == id_or_name:
+                return s
+    if "server_hardware" in MOCK_DB:
+        sh_collection = MOCK_DB["server_hardware"]
+        if id_or_name in sh_collection:
+            return sh_collection[id_or_name]
+        for s in sh_collection.values():
+            if s.get("name") == id_or_name or s.get("serialNumber") == id_or_name or s.get("uuid") == id_or_name or s.get("id") == id_or_name:
+                return s
+    return None
+
 @app.get("/rest/server-hardware/{id}")
 def get_rest_server_hardware_id(id: str):
     """
     Dynamic CRUD Route: GET /rest/server-hardware/{id}
     """
-    collection_path = f"/rest/server-hardware"
-    item_id = id
-    if "dynamic_store" in MOCK_DB and collection_path in MOCK_DB["dynamic_store"] and item_id in MOCK_DB["dynamic_store"][collection_path]:
-        return MOCK_DB["dynamic_store"][collection_path][item_id]
+    server = _find_server(id)
+    if server is not None:
+        return server
     static_val = MOCK_DB.get("get_rest_server_hardware_id", dict())
     return static_val
+
+@app.put("/rest/server-hardware/{id}/powerState")
+def put_rest_server_hardware_id_powerstate(id: str, payload: dict):
+    """
+    Custom route to handle server power state updates.
+    """
+    server = _find_server(id)
+    if server is not None:
+        server = dict(server)
+    else:
+        static_val = MOCK_DB.get("get_rest_server_hardware_id", {})
+        server = dict(static_val)
+        server["id"] = id
+        server["uuid"] = id
+        
+    state = payload.get("powerState", "On")
+    server["powerState"] = state
+    
+    collection_path = "/rest/server-hardware"
+    if "dynamic_store" not in MOCK_DB:
+        MOCK_DB["dynamic_store"] = {}
+    if collection_path not in MOCK_DB["dynamic_store"]:
+        MOCK_DB["dynamic_store"][collection_path] = {}
+        
+    save_id = server.get("id") or server.get("uuid") or id
+    MOCK_DB["dynamic_store"][collection_path][save_id] = server
+    return server

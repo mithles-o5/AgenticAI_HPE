@@ -45,8 +45,8 @@ async def main():
 
     # On-premises mock servers
     for name, port, cwd in [
-        ("oneview", 8000, "mock_server(oneview)"),
-        ("coms", 8001, "mock_server(Comops)")
+        ("oneview", 8000, os.path.join("generator", "servers", "oneview")),
+        ("coms", 8001, os.path.join("generator", "servers", "compute_ops"))
     ]:
         proc = subprocess.Popen(
             [sys.executable, "-m", "uvicorn", "main:app", "--port", str(port), "--log-level", "error"],

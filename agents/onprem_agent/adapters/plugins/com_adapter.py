@@ -100,7 +100,19 @@ class ComOpsAdapter(BaseAdapter):
     async def execute_action(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> dict:
         action_type = parameters.get("action_type")
         async with await self._get_client(credentials) as client:
-            if action_type == "power":
+            # Batch power‑off handling – if a list of IDs is supplied, iterate over each
+            if isinstance(resource_id, list) and action_type == "power":
+                results = []
+                for rid in resource_id:
+                    state = parameters.get("state", "On").lower()
+                    endpoint = f"/compute-ops-mgmt/v1/servers/{rid}/power-on" if state in ("on", "power-on") else f"/compute-ops-mgmt/v1/servers/{rid}/power-off"
+                    resp = await client.post(endpoint)
+                    if resp.status_code == 200:
+                        results.append({"resource_id": rid, "status": "success", "action_taken": f"Power state set to {state.upper()}", "raw": resp.json()})
+                    else:
+                        results.append({"resource_id": rid, "status": "failed", "error": f"ComOps returned status code {resp.status_code}"})
+                return {"status": "partial" if any(r["status"] == "failed" for r in results) else "success", "results": results}
+            elif action_type == "power":
                 state = parameters.get("state", "On").lower()
                 endpoint = f"/compute-ops-mgmt/v1/servers/{resource_id}/power-on" if state in ("on", "power-on") else f"/compute-ops-mgmt/v1/servers/{resource_id}/power-off"
                 resp = await client.post(endpoint)
@@ -108,6 +120,9 @@ class ComOpsAdapter(BaseAdapter):
                     return {"status": "success", "action_taken": f"Power state set to {state.upper()}", "raw": resp.json()}
                 else:
                     return {"status": "failed", "error": f"ComOps returned status code {resp.status_code}"}
+            elif action_type == "create_server":
+                # Forward to the dedicated create_server method
+                return await self.create_server(resource_type, resource_id, credentials, parameters)
             elif action_type == "firmware_update":
                 version = parameters.get("firmware_version", "Compute Ops v1.3")
                 # Simulate firmware update job
@@ -130,6 +145,23 @@ class ComOpsAdapter(BaseAdapter):
                     }
             else:
                 return {"status": "failed", "error": f"Unsupported action type: {action_type}"}
+
+    async def create_server(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> dict:
+        async with await self._get_client(credentials) as client:
+            payload = {
+                "name": resource_id,
+                "ipAddress": parameters.get("ip_address") or "10.200.1.100",
+                "credentials": {"username": "admin", "password": "password"}
+            }
+            resp = await client.post("/compute-ops-mgmt/v1/servers", json=payload)
+            if resp.status_code in (200, 201):
+                return {"status": "success", "raw": resp.json()}
+            else:
+                try:
+                    err_msg = resp.text
+                except Exception:
+                    err_msg = str(resp.status_code)
+                return {"status": "failed", "error": f"ComOps returned status code {resp.status_code}: {err_msg}"}
 
     async def discover_inventory(self, resource_type: str, credentials: dict, parameters: dict) -> list:
         async with await self._get_client(credentials) as client:

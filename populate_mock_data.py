@@ -16,7 +16,7 @@ devices = cur.fetchall()
 print(f"Fetched {len(devices)} devices from CMDB registry")
 
 # 2. Read OneView mock_data.json
-oneview_mock_file = os.path.join(ROOT_DIR, "mock_server(oneview)", "mock_data.json")
+oneview_mock_file = os.path.join(ROOT_DIR, "generator", "servers", "oneview", "mock_data.json")
 try:
     with open(oneview_mock_file, "r", encoding="utf-8") as f:
         oneview_db = json.load(f)
@@ -28,7 +28,7 @@ if "server_hardware" not in oneview_db:
     oneview_db["server_hardware"] = {}
 
 # 3. Read ComOps mock_data.json
-comops_mock_file = os.path.join(ROOT_DIR, "mock_server(Comops)", "mock_data.json")
+comops_mock_file = os.path.join(ROOT_DIR, "generator", "servers", "compute_ops", "mock_data.json")
 try:
     with open(comops_mock_file, "r", encoding="utf-8") as f:
         comops_db = json.load(f)

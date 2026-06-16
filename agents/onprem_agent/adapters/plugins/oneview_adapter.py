@@ -163,6 +163,25 @@ class OneViewAdapter(BaseAdapter):
             else:
                 return {"status": "failed", "error": f"Unsupported action type: {action_type}"}
 
+    async def create_server(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> dict:
+        async with await self._get_client(credentials) as client:
+            payload = {
+                "name": resource_id,
+                "hostname": parameters.get("ip_address") or "10.10.1.100",
+                "username": "admin",
+                "password": "password",
+                "force": True
+            }
+            resp = await client.post("/rest/server-hardware", json=payload)
+            if resp.status_code in (200, 201):
+                return {"status": "success", "raw": resp.json()}
+            else:
+                try:
+                    err_msg = resp.text
+                except Exception:
+                    err_msg = str(resp.status_code)
+                return {"status": "failed", "error": f"OneView returned code {resp.status_code}: {err_msg}"}
+
     async def discover_inventory(self, resource_type: str, credentials: dict, parameters: dict) -> list:
         async with await self._get_client(credentials) as client:
             inventory = []

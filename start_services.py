@@ -32,26 +32,27 @@ def main():
         print("[+] Starting OneView Mock Server on port 8000...")
         processes.append(subprocess.Popen(
             [sys.executable, "-m", "uvicorn", "main:app", "--port", "8000", "--log-level", "error"],
-            cwd=os.path.join(ROOT_DIR, "mock_server(oneview)")
+            cwd=os.path.join(ROOT_DIR, "generator", "servers", "oneview")
         ))
 
         print("[+] Starting Compute Ops Mock Server on port 8001...")
         processes.append(subprocess.Popen(
             [sys.executable, "-m", "uvicorn", "main:app", "--port", "8001", "--log-level", "error"],
-            cwd=os.path.join(ROOT_DIR, "mock_server(Comops)")
+            cwd=os.path.join(ROOT_DIR, "generator", "servers", "compute_ops")
         ))
 
         print("[+] Starting Cloud Mock API Server on port 8003...")
         processes.append(subprocess.Popen(
             [sys.executable, "-m", "uvicorn", "main:app", "--port", "8003", "--log-level", "error"],
-            cwd=os.path.join(ROOT_DIR, "mock_server(cloud)")
+            cwd=os.path.join(ROOT_DIR, "generator", "servers", "Cloud")
         ))
 
         print("[+] Starting Storage Mock API Server on port 8004...")
         processes.append(subprocess.Popen(
             [sys.executable, "-m", "uvicorn", "main:app", "--port", "8004", "--log-level", "error"],
-            cwd=os.path.join(ROOT_DIR, "mock_server(storage)")
+            cwd=os.path.join(ROOT_DIR, "generator", "servers", "Storage")
         ))
+
 
         # 3. Start OASF Agents
         print("[+] Starting Cloud Agent on port 8005...")

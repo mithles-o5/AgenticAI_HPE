@@ -17,7 +17,7 @@ def main():
     print("[+] Starting OneView Mock Server on port 8000...")
     ov_process = subprocess.Popen(
         [sys.executable, "-m", "uvicorn", "main:app", "--port", "8000"],
-        cwd=os.path.join(root_dir, "mock_server(oneview)"),
+        cwd=os.path.join(root_dir, "generator", "servers", "oneview"),
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL
     )
@@ -25,7 +25,7 @@ def main():
     print("[+] Starting Compute Ops (CoM) Mock Server on port 8001...")
     com_process = subprocess.Popen(
         [sys.executable, "-m", "uvicorn", "main:app", "--port", "8001"],
-        cwd=os.path.join(root_dir, "mock_server(Comops)"),
+        cwd=os.path.join(root_dir, "generator", "servers", "compute_ops"),
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL
     )
