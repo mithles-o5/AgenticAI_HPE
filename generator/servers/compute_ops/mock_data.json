@@ -1576,5 +1576,44 @@
   "get_compute_ops_mgmt_v1beta3_groups_group_id_external_storage_compliance": {},
   "get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance": {},
   "get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance_ilo_settings_compliance_id": {},
-  "dynamic_store": {}
+  "dynamic_store": {
+    "/compute-ops-mgmt/v1/custom-servers": {
+      "8b00a9c9-8c8e-4d61-8c68-2e6aa98a05ac": {
+        "name": "compute-ops-new1",
+        "status": "OK",
+        "temperature": 25.0,
+        "powerState": "On",
+        "serialNumber": "string",
+        "firmwareVersion": "string",
+        "memoryGiB": 128,
+        "cpuCores": 32,
+        "additionalProp1": {},
+        "id": "8b00a9c9-8c8e-4d61-8c68-2e6aa98a05ac"
+      },
+      "9ab91d90-2c55-497c-a3dd-79ad25ef0d96": {
+        "name": "compute-ops-new2",
+        "status": "OK",
+        "temperature": 25.0,
+        "powerState": "On",
+        "serialNumber": "string",
+        "firmwareVersion": "string",
+        "memoryGiB": 128,
+        "cpuCores": 32,
+        "additionalProp1": {},
+        "id": "9ab91d90-2c55-497c-a3dd-79ad25ef0d96"
+      },
+      "d0a7e085-65b7-4d8c-afda-fdc0d5f3b004": {
+        "name": "compute-ops-new3",
+        "status": "OK",
+        "temperature": 25.0,
+        "powerState": "On",
+        "serialNumber": "string",
+        "firmwareVersion": "string",
+        "memoryGiB": 128,
+        "cpuCores": 32,
+        "additionalProp1": {},
+        "id": "d0a7e085-65b7-4d8c-afda-fdc0d5f3b004"
+      }
+    }
+  }
 }
