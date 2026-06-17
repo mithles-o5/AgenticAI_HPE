@@ -8,10 +8,7 @@ from models import *
 import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from db_store import get_db_store
-
-mock_file = os.path.join(os.path.dirname(__file__), "mock_data.json")
-MOCK_DB = get_db_store("cloud", mock_file)
+from db_store import MOCK_DB
 
 app = FastAPI(title='Generated Mock Server', description='Generated automatically from API docs.')
 

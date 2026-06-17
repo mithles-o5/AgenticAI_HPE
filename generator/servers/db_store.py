@@ -1,174 +1,174 @@
+# SQLite-backed mock store for all servers
+
 import os
 import json
 import sqlite3
-from contextlib import contextmanager
+import threading
 import fastapi
 from fastapi import HTTPException
 
+# Global caches for collection and item keys used by the FastAPI route mapper
+_collection_keys = {}
+_item_keys = {}
 
-# Save SQLite database file in the same directory as db_store.py
-DB_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), "mock_db.sqlite"))
+# Helper to extract a stable ID from items
+def get_item_id(item):
+    if not isinstance(item, dict):
+        return None
+    for field in [
+        "id", "uuid", "uid", "name", "uri", "resourceUri",
+        "serverHardwareUri", "entityId", "volumeName", "volumeWWN", "wwn",
+        "timestamp", "applicationSetType", "hostGroupName", "deviceType"
+    ]:
+        val = item.get(field)
+        if val is not None and not isinstance(val, (dict, list)):
+            sval = str(val).strip()
+            if sval != "":
+                return sval[:255]
+    return None
 
-def _get_connection():
-    return sqlite3.connect(DB_FILE)
+class SQLiteMockDB(dict):
+    """A thin wrapper around a single SQLite database that stores a JSON blob per server.
+    The class mimics a dict for compatibility with the existing proxy classes.
+    """
 
-@contextmanager
-def db_cursor():
-    conn = None
-    try:
-        conn = _get_connection()
-        conn.execute("PRAGMA busy_timeout = 30000")
-        cursor = conn.cursor()
-        yield cursor
-        conn.commit()
-    except Exception as e:
-        if conn:
-            conn.rollback()
-        raise e
-    finally:
-        if conn:
-            conn.close()
-
-def init_table():
-    with db_cursor() as cursor:
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS mock_db_store (
-                server_name TEXT,
-                key_name TEXT,
-                subkey_name TEXT DEFAULT '',
-                subsubkey_name TEXT DEFAULT '',
-                data TEXT,
-                PRIMARY KEY (server_name, key_name, subkey_name, subsubkey_name)
+    def __init__(self, server_name: str, db_path: str):
+        self.server_name = server_name
+        self.db_path = db_path
+        self._conn = sqlite3.connect(self.db_path, check_same_thread=False)
+        self._lock = threading.RLock()
+        with self._lock:
+            self._conn.execute(
+                "CREATE TABLE IF NOT EXISTS store (server TEXT PRIMARY KEY, data TEXT)"
             )
-        """)
-
-def seed_if_empty(server_name, mock_file_path):
-    with db_cursor() as cursor:
-        cursor.execute(
-            "SELECT COUNT(*) FROM mock_db_store WHERE server_name = ?",
-            (server_name,)
-        )
-        count = cursor.fetchone()[0]
-        if count > 0:
-            return
-
-    if not mock_file_path or not os.path.exists(mock_file_path):
-        return
-
-    print(f"[db_store] Seeding SQLite mock_db_store for '{server_name}' from {mock_file_path}...")
-    try:
-        with open(mock_file_path, "r", encoding="utf-8") as f:
-            db_data = json.load(f)
-    except Exception as e:
-        print(f"[db_store] Error loading mock file {mock_file_path}: {e}")
-        return
-
-    with db_cursor() as cursor:
-        for key, val in db_data.items():
-            if key in ["server_hardware", "servers"] and isinstance(val, dict):
-                for subkey, item in val.items():
-                    cursor.execute(
-                        """INSERT INTO mock_db_store (server_name, key_name, subkey_name, subsubkey_name, data)
-                           VALUES (?, ?, ?, '', ?)
-                           ON CONFLICT (server_name, key_name, subkey_name, subsubkey_name)
-                           DO UPDATE SET data = EXCLUDED.data""",
-                        (server_name, key, subkey, json.dumps(item))
-                    )
-            elif key == "dynamic_store" and isinstance(val, dict):
-                for subkey, col_items in val.items():
-                    if isinstance(col_items, dict):
-                        for subsubkey, item in col_items.items():
-                            cursor.execute(
-                                """INSERT INTO mock_db_store (server_name, key_name, subkey_name, subsubkey_name, data)
-                                   VALUES (?, ?, ?, ?, ?)
-                                   ON CONFLICT (server_name, key_name, subkey_name, subsubkey_name)
-                                   DO UPDATE SET data = EXCLUDED.data""",
-                                (server_name, key, subkey, subsubkey, json.dumps(item))
-                            )
-            else:
-                cursor.execute(
-                    """INSERT INTO mock_db_store (server_name, key_name, subkey_name, subsubkey_name, data)
-                       VALUES (?, ?, '', '', ?)
-                       ON CONFLICT (server_name, key_name, subkey_name, subsubkey_name)
-                       DO UPDATE SET data = EXCLUDED.data""",
-                    (server_name, key, json.dumps(val))
+            self._conn.commit()
+        cur = self._conn.execute(
+            "SELECT data FROM store WHERE server = ?", (self.server_name,)
+        ).fetchone()
+        if cur is None:
+            self._data = {"dynamic_store": {}}
+            # Insert empty record
+            with self._lock:
+                self._conn.execute(
+                    "INSERT INTO store (server, data) VALUES (?, ?)",
+                    (self.server_name, json.dumps(self._data)),
                 )
-    print(f"[db_store] Seeding for '{server_name}' complete.")
+                self._conn.commit()
+        else:
+            try:
+                self._data = json.loads(cur[0])
+            except Exception:
+                self._data = {"dynamic_store": {}}
+        # Ensure dynamic_store exists
+        self._data.setdefault("dynamic_store", {})
+        super().__init__(self._data)
 
-def fetch_item(server_name, key_name, subkey_name='', subsubkey_name=''):
-    with db_cursor() as cursor:
-        cursor.execute(
-            """SELECT data FROM mock_db_store 
-               WHERE server_name = ? AND key_name = ? AND subkey_name = ? AND subsubkey_name = ?""",
-            (server_name, key_name, subkey_name, subsubkey_name)
-        )
-        row = cursor.fetchone()
-        return json.loads(row[0]) if row else None
-
-def save_item(server_name, key_name, subkey_name, subsubkey_name, data):
-    with db_cursor() as cursor:
-        cursor.execute(
-            """INSERT INTO mock_db_store (server_name, key_name, subkey_name, subsubkey_name, data)
-               VALUES (?, ?, ?, ?, ?)
-               ON CONFLICT (server_name, key_name, subkey_name, subsubkey_name)
-               DO UPDATE SET data = EXCLUDED.data""",
-            (server_name, key_name, subkey_name, subsubkey_name, json.dumps(data))
-        )
-
-def delete_item(server_name, key_name, subkey_name, subsubkey_name):
-    with db_cursor() as cursor:
-        cursor.execute(
-            """SELECT data FROM mock_db_store 
-               WHERE server_name = ? AND key_name = ? AND subkey_name = ? AND subsubkey_name = ?""",
-            (server_name, key_name, subkey_name, subsubkey_name)
-        )
-        row = cursor.fetchone()
-        val = json.loads(row[0]) if row else None
-        
-        if val is not None:
-            cursor.execute(
-                """DELETE FROM mock_db_store 
-                   WHERE server_name = ? AND key_name = ? AND subkey_name = ? AND subsubkey_name = ?""",
-                (server_name, key_name, subkey_name, subsubkey_name)
+    # Persistence helper – write full JSON blob back to SQLite
+    def persist(self):
+        json_blob = json.dumps(self._data)
+        with self._lock:
+            self._conn.execute(
+                "INSERT OR REPLACE INTO store (server, data) VALUES (?, ?)",
+                (self.server_name, json_blob),
             )
+            self._conn.commit()
+
+    def __getitem__(self, key):
+        if key in ["server_hardware", "servers"]:
+            return PGCollectionProxy(self.server_name, key)
+        elif key == "dynamic_store":
+            return PGDynamicStoreProxy(self.server_name)
+        else:
+            if key not in self._data:
+                raise KeyError(key)
+            return self._data[key]
+
+    def get(self, key, default=None):
+        if key in ["server_hardware", "servers"]:
+            return PGCollectionProxy(self.server_name, key)
+        elif key == "dynamic_store":
+            return PGDynamicStoreProxy(self.server_name)
+        return self._data.get(key, default)
+
+    def __contains__(self, key):
+        if key in {"dynamic_store", "server_hardware", "servers"}:
+            return True
+        return key in self._data
+
+    def __setitem__(self, key, value):
+        super().__setitem__(key, value)
+        self._data[key] = value
+        self.persist()
+
+    def __delitem__(self, key):
+        super().__delitem__(key)
+        self._data.pop(key, None)
+        self.persist()
+
+    def update(self, other):
+        super().update(other)
+        self._data.update(other)
+        self.persist()
+
+    def pop(self, key, default=None):
+        val = super().pop(key, default)
+        if key in self._data:
+            self._data.pop(key)
+            self.persist()
         return val
 
-def fetch_all_items(server_name, key_name, subkey_name=''):
-    with db_cursor() as cursor:
+    # Helper methods used by proxy classes
+    def _fetch_item(self, key_name, subkey_name="", subsubkey_name=""):
+        cur = self._data.get(key_name)
+        if cur is None:
+            return None
         if subkey_name:
-            cursor.execute(
-                """SELECT subsubkey_name, data FROM mock_db_store 
-                   WHERE server_name = ? AND key_name = ? AND subkey_name = ?""",
-                (server_name, key_name, subkey_name)
-            )
-        else:
-            cursor.execute(
-                """SELECT subkey_name, data FROM mock_db_store 
-                   WHERE server_name = ? AND key_name = ? AND subsubkey_name = ''""",
-                (server_name, key_name)
-            )
-        rows = cursor.fetchall()
-        return {row[0]: json.loads(row[1]) for row in rows}
+            cur = cur.get(subkey_name, {})
+            if subsubkey_name:
+                cur = cur.get(subsubkey_name)
+        return cur
 
-def fetch_subkeys(server_name, key_name):
-    with db_cursor() as cursor:
-        cursor.execute(
-            """SELECT DISTINCT subkey_name FROM mock_db_store 
-               WHERE server_name = ? AND key_name = ?""",
-            (server_name, key_name)
-        )
-        rows = cursor.fetchall()
-        return [row[0] for row in rows]
+    def _save_item(self, key_name, subkey_name, subsubkey_name, data):
+        with self._lock:
+            if subkey_name:
+                self._data.setdefault(key_name, {})
+                self._data[key_name].setdefault(subkey_name, {})
+                self._data[key_name][subkey_name][subsubkey_name] = data
+            else:
+                self._data[key_name] = data
+            # Reflect changes in dict view
+            self[key_name] = self._data[key_name]
+            self.persist()
 
-def has_top_level_key(server_name, key_name):
-    with db_cursor() as cursor:
-        cursor.execute(
-            """SELECT 1 FROM mock_db_store 
-               WHERE server_name = ? AND key_name = ? LIMIT 1""",
-            (server_name, key_name)
-        )
-        return cursor.fetchone() is not None
+    def _delete_item(self, key_name, subkey_name, subsubkey_name):
+        with self._lock:
+            cur = self._data.get(key_name)
+            if cur is None:
+                return None
+            if subkey_name:
+                sub = cur.get(subkey_name, {})
+                val = sub.pop(subsubkey_name, None)
+                if not sub:
+                    cur.pop(subkey_name, None)
+            else:
+                val = self._data.pop(key_name, None)
+            self.pop(key_name, None)
+            self.persist()
+            return val
 
+    def _fetch_all_items(self, key_name, subkey_name=""):
+        cur = self._data.get(key_name, {})
+        if subkey_name:
+            cur = cur.get(subkey_name, {})
+        return cur
+
+    def _fetch_subkeys(self, key_name):
+        return list(self._data.get(key_name, {}).keys())
+
+    def _has_top_level_key(self, key_name):
+        return key_name in self._data
+
+# Proxy classes unchanged – they operate on SQLiteMockDB via the helper methods above
 class PGItemProxy(dict):
     def __init__(self, server_name, key_name, subkey_name, subsubkey_name, data):
         self.server_name = server_name
@@ -179,18 +179,21 @@ class PGItemProxy(dict):
 
     def __setitem__(self, key, value):
         super().__setitem__(key, value)
-        save_item(self.server_name, self.key_name, self.subkey_name, self.subsubkey_name, dict(self))
+        db = _db_store_cache[self.server_name]
+        db._save_item(self.key_name, self.subkey_name, self.subsubkey_name, dict(self))
 
     def update(self, other):
         super().update(other)
-        save_item(self.server_name, self.key_name, self.subkey_name, self.subsubkey_name, dict(self))
+        db = _db_store_cache[self.server_name]
+        db._save_item(self.key_name, self.subkey_name, self.subsubkey_name, dict(self))
 
 class PGCollectionProxy(dict):
     def __init__(self, server_name, key_name, subkey_name=''):
         self.server_name = server_name
         self.key_name = key_name
         self.subkey_name = subkey_name
-        items = fetch_all_items(server_name, key_name, subkey_name)
+        db = _db_store_cache[server_name]
+        items = db._fetch_all_items(key_name, subkey_name)
         super().__init__(items)
 
     def _get_item_keys(self, item_id):
@@ -201,33 +204,36 @@ class PGCollectionProxy(dict):
 
     def __getitem__(self, item_id):
         sk, ssk = self._get_item_keys(item_id)
-        val = fetch_item(self.server_name, self.key_name, sk, ssk)
+        db = _db_store_cache[self.server_name]
+        val = db._fetch_item(self.key_name, sk, ssk)
         if val is None:
             raise KeyError(item_id)
         return PGItemProxy(self.server_name, self.key_name, sk, ssk, val)
 
     def __setitem__(self, item_id, value):
         sk, ssk = self._get_item_keys(item_id)
-        save_item(self.server_name, self.key_name, sk, ssk, value)
+        db = _db_store_cache[self.server_name]
+        db._save_item(self.key_name, sk, ssk, value)
         super().__setitem__(item_id, value)
 
     def get(self, item_id, default=None):
         sk, ssk = self._get_item_keys(item_id)
-        val = fetch_item(self.server_name, self.key_name, sk, ssk)
+        db = _db_store_cache[self.server_name]
+        val = db._fetch_item(self.key_name, sk, ssk)
         if val is None:
             return default
         return PGItemProxy(self.server_name, self.key_name, sk, ssk, val)
 
     def pop(self, item_id, default=None):
         sk, ssk = self._get_item_keys(item_id)
-        val = delete_item(self.server_name, self.key_name, sk, ssk)
+        db = _db_store_cache[self.server_name]
+        val = db._delete_item(self.key_name, sk, ssk)
         super().pop(item_id, None)
-        if val is None:
-            return default
-        return val
+        return val if val is not None else default
 
     def values(self):
-        items = fetch_all_items(self.server_name, self.key_name, self.subkey_name)
+        db = _db_store_cache[self.server_name]
+        items = db._fetch_all_items(self.key_name, self.subkey_name)
         result = []
         for item_id, val in items.items():
             sk, ssk = self._get_item_keys(item_id)
@@ -237,59 +243,39 @@ class PGCollectionProxy(dict):
 class PGDynamicStoreProxy(dict):
     def __init__(self, server_name):
         self.server_name = server_name
-        subkeys = fetch_subkeys(self.server_name, "dynamic_store")
+        db = _db_store_cache[server_name]
+        subkeys = db._fetch_subkeys("dynamic_store")
         super().__init__({sk: None for sk in subkeys})
 
     def __getitem__(self, collection_path):
         return PGCollectionProxy(self.server_name, "dynamic_store", collection_path)
 
     def __setitem__(self, collection_path, value):
+        # direct assignment not needed; dynamic store updates go through proxies
         pass
 
     def get(self, collection_path, default=None):
         return PGCollectionProxy(self.server_name, "dynamic_store", collection_path)
 
-_collection_keys = {}
-_item_keys = {}
-
-def get_item_id(item):
-    if not isinstance(item, dict):
-        return None
-    for field in [
-        "id", "uuid", "uid", "name", "uri", "resourceUri", 
-        "serverHardwareUri", "entityId", "volumeName", "volumeWWN", "wwn", 
-        "timestamp", "applicationSetType", "hostGroupName", "deviceType"
-    ]:
-        val = item.get(field)
-        if val is not None and not isinstance(val, (dict, list)):
-            sval = str(val).strip()
-            if sval != "":
-                return sval[:255]
-    return None
-
-
+# FastAPI integration – unchanged, but now works with SQLiteMockDB
 _original_fastapi_init = fastapi.FastAPI.__init__
 
 def _new_fastapi_init(self, *args, **kwargs):
     _original_fastapi_init(self, *args, **kwargs)
-    
+
     @self.on_event("startup")
     def sync_and_map_routes():
         for server_name, db in _db_store_cache.items():
             coll_keys = {}
             item_keys = set()
-            
             for route in self.routes:
                 if not hasattr(route, "path") or not hasattr(route, "name") or not hasattr(route, "methods"):
                     continue
-                
                 methods = route.methods
                 if not methods or not (methods & {"GET", "PATCH", "PUT", "DELETE"}):
                     continue
-                
                 path = route.path
                 func_name = route.name
-                
                 if path.endswith("}"):
                     parts = path.rstrip("/").split("/")
                     if parts and parts[-1].startswith("{") and parts[-1].endswith("}"):
@@ -297,110 +283,65 @@ def _new_fastapi_init(self, *args, **kwargs):
                 else:
                     if "GET" in methods:
                         coll_keys[func_name] = path
-            
             _collection_keys[server_name] = coll_keys
             _item_keys[server_name] = item_keys
-            
-            try:
-                mock_path = getattr(db, "mock_file_path", None)
-                if mock_path and os.path.exists(mock_path):
-                    with open(mock_path, "r", encoding="utf-8") as f:
-                        mock_json = json.load(f)
-                    
-                    for func_name, path in coll_keys.items():
-                        if func_name in mock_json:
-                            val = mock_json[func_name]
-                            items = []
-                            if isinstance(val, list):
-                                items = val
-                            elif isinstance(val, dict):
-                                for k in ["items", "members"]:
-                                    if k in val and isinstance(val[k], list):
-                                        items = val[k]
-                                        break
-                            
-                            dynamic_store = db.get("dynamic_store")
-                            if dynamic_store is not None:
-                                collection = dynamic_store[path]
-                                for item in items:
-                                    iid = get_item_id(item)
-                                    if iid:
-                                        try:
-                                            _ = collection[iid]
-                                        except KeyError:
-                                            collection[iid] = item
-                                            print(f"[db_store] Dynamic seed for '{server_name}': {path}/{iid}")
-            except Exception as e:
-                print(f"[db_store] Error dynamically seeding '{server_name}': {e}")
+        # No seeding logic
 
 fastapi.FastAPI.__init__ = _new_fastapi_init
 
-class SQLiteMockDB(dict):
-    def __init__(self, server_name, mock_file_path):
-        self.server_name = server_name
-        self.mock_file_path = mock_file_path
-        init_table()
-        seed_if_empty(server_name, mock_file_path)
-        keys = fetch_subkeys(server_name, "dynamic_store")
-        super().__init__({k: None for k in keys})
-
-    def __getitem__(self, key):
-        val = self.get(key, None)
-        if val is None:
-            raise KeyError(key)
-        return val
-
-    def get(self, key, default=None):
-        item_keys = _item_keys.get(self.server_name, set())
-        if key in item_keys:
-            raise HTTPException(status_code=404, detail="Resource not found")
-        
-        coll_keys = _collection_keys.get(self.server_name, {})
-        if key in coll_keys:
-            collection_path = coll_keys[key]
-            dynamic_store = self.get("dynamic_store")
-            items = []
-            if dynamic_store is not None:
-                items = list(dynamic_store[collection_path].values())
-            
-            original_val = fetch_item(self.server_name, key, '', '')
-            if original_val is None:
-                original_val = default
-            
-            if isinstance(original_val, list):
-                return items
-            elif isinstance(original_val, dict):
-                res = dict(original_val)
-                replaced = False
-                for k in ["items", "members"]:
-                    if k in res:
-                        res[k] = items
-                        replaced = True
-                if not replaced:
-                    res["items"] = items
-                res["count"] = len(items)
-                if "total" in res:
-                    res["total"] = len(items)
-                return res
-            return items
-
-        if key in ["server_hardware", "servers"]:
-            return PGCollectionProxy(self.server_name, key)
-        elif key == "dynamic_store":
-            return PGDynamicStoreProxy(self.server_name)
-        val = fetch_item(self.server_name, key, '', '')
-        if val is None:
-            return default
-        return val
-
-    def __contains__(self, key):
-        if key in {"dynamic_store", "server_hardware", "servers"}:
-            return True
-        return has_top_level_key(self.server_name, key)
-
+# Global cache for SQLiteMockDB instances
+import os
+# Shared SQLite DB path located at generator/servers/mock_db.sqlite
+shared_db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "mock_db.sqlite"))
 _db_store_cache = {}
 
-def get_db_store(server_name, mock_file_path):
-    if server_name not in _db_store_cache:
-        _db_store_cache[server_name] = SQLiteMockDB(server_name, mock_file_path)
-    return _db_store_cache[server_name]
+def get_db_store(server_name, db_path):
+    # Use a single shared SQLiteMockDB instance for all servers to ensure consistent data and thread safety
+    shared_key = "shared"
+    if shared_key not in _db_store_cache:
+        _db_store_cache[shared_key] = SQLiteMockDB(shared_key, shared_db_path)
+    return _db_store_cache[shared_key]
+
+MOCK_DB = get_db_store("shared", shared_db_path)
+
+# Persistence helper – run this script to write back all in‑memory changes to the SQLite DB
+# and also export the current store to each server's mock_data.json (append/merge)
+if __name__ == "__main__":
+    # 1️⃣ Persist SQLite DB first
+    for db in _db_store_cache.values():
+        db.persist()
+    print("[db_store] All changes persisted to SQLite DB.")
+
+    # 2️⃣ Export data to each server's mock_data.json (merge with existing content)
+    import os, json
+
+    # Server folder names under ./servers
+    server_folders = ["Cloud", "compute_ops", "Storage", "oneview"]
+
+    # The shared in‑memory data (the whole JSON blob stored in SQLite)
+    shared_data = _db_store_cache["shared"]._data
+
+    for srv in server_folders:
+        json_path = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), srv, "mock_data.json")
+        )
+
+        # Load existing JSON (if any) and shallow‑merge with the shared data
+        if os.path.exists(json_path):
+            try:
+                with open(json_path, "r", encoding="utf-8") as f:
+                    existing = json.load(f)
+                if isinstance(existing, dict):
+                    merged = {**existing, **shared_data}
+                else:
+                    merged = shared_data
+            except Exception:
+                merged = shared_data
+        else:
+            merged = shared_data
+
+        # Write back the merged content
+        with open(json_path, "w", encoding="utf-8") as f:
+            json.dump(merged, f, indent=2)
+        print(f"[db_store] Exported data for {srv} to {json_path}")
+

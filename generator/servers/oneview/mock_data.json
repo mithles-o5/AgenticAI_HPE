@@ -1,1023 +1,596 @@
 {
-    "post_rest_login_sessions": {
-        "sessionID": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFkbWluaXN0cmF0b3IiLCJpYXQiOjE1MTYyMzkwMjJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
-        "userName": "Administrator",
-        "roles": [
-            "appliance_administrator",
-            "read_only_user"
-        ],
-        "loginDomain": "local",
-        "userDisplayName": "HPE OneView Admin",
-        "sessionExpiryTime": "2025-10-26T14:30:00Z"
-    },
-    "post_rest_login_sessions_auth_token": {
-        "sessionID": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFkbWluaXN0cmF0b3IiLCJzY29wZWRfaWQiOiJzY29wZWQtdG9rZW4tYm9keSIsImlhdCI6MTY3ODkzNjAwMCwiZXhwIjoxNjc4OTM5NjAwfQ.SignaturePart2",
-        "userName": "Administrator",
-        "roles": [
-            "server_administrator"
-        ],
-        "loginDomain": "local",
-        "scopedPermissions": [
+  "post_rest_login_sessions": {
+    "sessionID": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFkbWluaXN0cmF0b3IiLCJpYXQiOjE1MTYyMzkwMjJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+    "userName": "Administrator",
+    "roles": [
+      "appliance_administrator",
+      "read_only_user"
+    ],
+    "loginDomain": "local",
+    "userDisplayName": "HPE OneView Admin",
+    "sessionExpiryTime": "2025-10-26T14:30:00Z"
+  },
+  "post_rest_login_sessions_auth_token": {
+    "sessionID": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFkbWluaXN0cmF0b3IiLCJzY29wZWRfaWQiOiJzY29wZWQtdG9rZW4tYm9keSIsImlhdCI6MTY3ODkzNjAwMCwiZXhwIjoxNjc4OTM5NjAwfQ.SignaturePart2",
+    "userName": "Administrator",
+    "roles": [
+      "server_administrator"
+    ],
+    "loginDomain": "local",
+    "scopedPermissions": [
+      {
+        "roleName": "Server administrator",
+        "scopeUris": [
+          "/rest/scopes/a1b2c3d4-e5f6-7890-1234-567890abcdef"
+        ]
+      }
+    ],
+    "sessionExpiryTime": "2025-10-26T14:30:00Z"
+  },
+  "post_rest_certificates_client_rabbitmq": {
+    "type": "CertificateRequestStatus",
+    "status": "Created",
+    "uri": "/rest/certificates/client/rabbitmq/task/7f8c6d5b-4a3e-2d1c-0b9a-8f7e6d5c4b3a",
+    "message": "RabbitMQ client certificate generation initiated."
+  },
+  "get_rest_certificates_client_rabbitmq_keypair_default": {
+    "certificate": "-----BEGIN CERTIFICATE-----\nMIIC5jCCAc4CFF...\n-----END CERTIFICATE-----\n",
+    "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA...\n-----END RSA PRIVATE KEY-----\n",
+    "commonName": "default",
+    "expirationDate": "2026-10-26T10:00:00Z",
+    "issuer": "CN=HPE OneView Internal CA",
+    "fingerprint": "SHA256:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90"
+  },
+  "get_rest_certificates_ca": {
+    "certificate": "-----BEGIN CERTIFICATE-----\nMIIDqzCCAxOg...\n-----END CERTIFICATE-----\n",
+    "certType": "INTERNAL",
+    "commonName": "HPE OneView Root CA",
+    "expirationDate": "2030-10-26T10:00:00Z",
+    "issuer": "CN=HPE OneView Root CA",
+    "fingerprint": "SHA256:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90"
+  },
+  "delete_rest_certificates_ca_rabbitmq_readonly": {
+    "status": "Success",
+    "message": "RabbitMQ client CA certificate revoked and regeneration initiated.",
+    "taskUri": "/rest/tasks/a7b8c9d0-e1f2-3a4b-5c6d-7e8f9a0b1c2d"
+  },
+  "get_rest_server_hardware_id_chassis": {
+    "chassisList": [
+      {
+        "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+        "name": "Blade Chassis 1-A",
+        "serialNumber": "SNCHASSIS001A",
+        "chassisType": "BladeEnclosure",
+        "model": "HPE Synergy 12000 Frame",
+        "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef",
+        "partNumber": "797893-B21",
+        "powerState": "On",
+        "status": "OK"
+      },
+      {
+        "id": "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+        "name": "Blade Chassis 1-B",
+        "serialNumber": "SNCHASSIS001B",
+        "chassisType": "BladeEnclosure",
+        "model": "HPE Synergy 12000 Frame",
+        "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/chassis/b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+        "partNumber": "797893-B21",
+        "powerState": "On",
+        "status": "Warning",
+        "healthStatus": {
+          "overallHealth": "Degraded",
+          "issues": [
             {
-                "roleName": "Server administrator",
-                "scopeUris": [
-                    "/rest/scopes/a1b2c3d4-e5f6-7890-1234-567890abcdef"
-                ]
+              "code": "CHASSIS_FAN_FAIL",
+              "message": "Chassis fan 3 reports a failure."
             }
-        ],
-        "sessionExpiryTime": "2025-10-26T14:30:00Z"
-    },
-    "post_rest_certificates_client_rabbitmq": {
-        "type": "CertificateRequestStatus",
-        "status": "Created",
-        "uri": "/rest/certificates/client/rabbitmq/task/7f8c6d5b-4a3e-2d1c-0b9a-8f7e6d5c4b3a",
-        "message": "RabbitMQ client certificate generation initiated."
-    },
-    "get_rest_certificates_client_rabbitmq_keypair_default": {
-        "certificate": "-----BEGIN CERTIFICATE-----\nMIIC5jCCAc4CFF...\n-----END CERTIFICATE-----\n",
-        "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA...\n-----END RSA PRIVATE KEY-----\n",
-        "commonName": "default",
-        "expirationDate": "2026-10-26T10:00:00Z",
-        "issuer": "CN=HPE OneView Internal CA",
-        "fingerprint": "SHA256:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90"
-    },
-    "get_rest_certificates_ca": {
-        "certificate": "-----BEGIN CERTIFICATE-----\nMIIDqzCCAxOg...\n-----END CERTIFICATE-----\n",
-        "certType": "INTERNAL",
-        "commonName": "HPE OneView Root CA",
-        "expirationDate": "2030-10-26T10:00:00Z",
-        "issuer": "CN=HPE OneView Root CA",
-        "fingerprint": "SHA256:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90"
-    },
-    "delete_rest_certificates_ca_rabbitmq_readonly": {
-        "status": "Success",
-        "message": "RabbitMQ client CA certificate revoked and regeneration initiated.",
-        "taskUri": "/rest/tasks/a7b8c9d0-e1f2-3a4b-5c6d-7e8f9a0b1c2d"
-    },
-    "get_rest_server_hardware_id_chassis": {
-        "chassisList": [
+          ]
+        }
+      }
+    ],
+    "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
+    "totalChassisCount": 2
+  },
+  "get_rest_server_hardware_id_firmwareinventory": {
+    "components": [
+      {
+        "componentName": "iLO 5",
+        "componentVersion": "2.90",
+        "componentLocation": "Management Processor",
+        "releaseDate": "2024-03-15T00:00:00Z"
+      },
+      {
+        "componentName": "System ROM",
+        "componentVersion": "U44 v2.80 (02/01/2024)",
+        "componentLocation": "System Board",
+        "releaseDate": "2024-02-01T00:00:00Z"
+      },
+      {
+        "componentName": "HPE Smart Array P408i-a SR Gen10 Controller",
+        "componentVersion": "2.80",
+        "componentLocation": "PCI Slot 1",
+        "releaseDate": "2023-11-20T00:00:00Z"
+      }
+    ],
+    "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
+    "firmwareBaselineUri": "/rest/firmware-bundles/b1c2d3e4-f5a6-7b8c-9d0e-1f2a3b4c5d6e",
+    "lastUpdated": "2025-09-10T18:22:24Z"
+  },
+  "get_rest_server_hardware_id_networkadapters": {
+    "adapters": [
+      {
+        "name": "HPE Ethernet 10Gb 2-port 530FLR-SFP+ Adapter",
+        "macAddress": "00:1A:11:22:33:44",
+        "portCount": 2,
+        "status": "OK",
+        "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/networkAdapters/a1b2c3d4-e5f6-7890-1234-567890abcdef",
+        "firmwareVersion": "1.8.10",
+        "networkBootCapable": true,
+        "ports": [
+          {
+            "portId": "1",
+            "macAddress": "00:1A:11:22:33:44",
+            "linkStatus": "Up",
+            "linkSpeedGbps": 10
+          },
+          {
+            "portId": "2",
+            "macAddress": "00:1A:11:22:33:45",
+            "linkStatus": "Up",
+            "linkSpeedGbps": 10
+          }
+        ]
+      },
+      {
+        "name": "HPE FlexFabric 20Gb 2-port 630FLB Adapter",
+        "macAddress": "00:1B:11:22:33:44",
+        "portCount": 2,
+        "status": "OK",
+        "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/networkAdapters/b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+        "firmwareVersion": "3.2.0",
+        "networkBootCapable": true,
+        "ports": [
+          {
+            "portId": "1",
+            "macAddress": "00:1B:11:22:33:44",
+            "linkStatus": "Up",
+            "linkSpeedGbps": 20
+          },
+          {
+            "portId": "2",
+            "macAddress": "00:1B:11:22:33:45",
+            "linkStatus": "Down",
+            "linkSpeedGbps": 0
+          }
+        ]
+      }
+    ],
+    "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f"
+  },
+  "get_rest_server_hardware_id_powersupplies": {
+    "powerSupplies": [
+      {
+        "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+        "status": "OK",
+        "capacityWatts": 1600,
+        "firmwareVersion": "1.00",
+        "model": "HPE 1600W Flex Slot Platinum Hot Plug Low Halogen Power Supply",
+        "serialNumber": "PSU001ABC",
+        "bayNumber": 1,
+        "inputVoltage": 220,
+        "powerCapacityWatts": 1600,
+        "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/powerSupplies/a1b2c3d4-e5f6-7890-1234-567890abcdef"
+      },
+      {
+        "id": "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+        "status": "OK",
+        "capacityWatts": 1600,
+        "firmwareVersion": "1.00",
+        "model": "HPE 1600W Flex Slot Platinum Hot Plug Low Halogen Power Supply",
+        "serialNumber": "PSU002DEF",
+        "bayNumber": 2,
+        "inputVoltage": 220,
+        "powerCapacityWatts": 1600,
+        "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/powerSupplies/b2c3d4e5-f6a7-8901-2345-67890abcdef0"
+      },
+      {
+        "id": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+        "status": "Warning",
+        "capacityWatts": 1600,
+        "firmwareVersion": "1.00",
+        "model": "HPE 1600W Flex Slot Platinum Hot Plug Low Halogen Power Supply",
+        "serialNumber": "PSU003GHI",
+        "bayNumber": 3,
+        "inputVoltage": 220,
+        "powerCapacityWatts": 1600,
+        "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/powerSupplies/c3d4e5f6-a7b8-9012-3456-7890abcdef12"
+      }
+    ],
+    "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
+    "redundancyStatus": "Redundant",
+    "totalCapacityWatts": 4800
+  },
+  "get_rest_server_hardware_id_processors": {
+    "processors": [
+      {
+        "id": "e5f6a7b8-c9d0-1234-5678-90abcdef56",
+        "model": "Intel Xeon Gold 6248R",
+        "coreCount": 24,
+        "threadCount": 48,
+        "speedMhz": 3000,
+        "status": "OK",
+        "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/processors/e5f6a7b8-c9d0-1234-5678-90abcdef56",
+        "socket": "CPU1",
+        "architecture": "x86_64",
+        "manufacturer": "Intel"
+      },
+      {
+        "id": "f6a7b8c9-d0e1-2345-6789-0abcdef789",
+        "model": "Intel Xeon Gold 6248R",
+        "coreCount": 24,
+        "threadCount": 48,
+        "speedMhz": 3000,
+        "status": "OK",
+        "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/processors/f6a7b8c9-d0e1-2345-6789-0abcdef789",
+        "socket": "CPU2",
+        "architecture": "x86_64",
+        "manufacturer": "Intel"
+      }
+    ],
+    "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
+    "totalProcessorCount": 2,
+    "totalCoreCount": 48,
+    "totalThreadCount": 96
+  },
+  "get_rest_server_hardware_id_softwareinventory": {
+    "softwareComponents": [
+      {
+        "name": "Operating System",
+        "version": "Windows Server 2022 Datacenter",
+        "installedDate": "2024-02-15T09:00:00Z",
+        "vendor": "Microsoft"
+      },
+      {
+        "name": "HPE Agentless Management Service",
+        "version": "14.1.0",
+        "installedDate": "2024-03-01T10:30:00Z",
+        "vendor": "HPE"
+      },
+      {
+        "name": "HPE ProLiant Health Monitor",
+        "version": "12.0.0",
+        "installedDate": "2024-03-01T10:45:00Z",
+        "vendor": "HPE"
+      }
+    ],
+    "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
+    "lastScanDate": "2025-09-10T18:22:24Z"
+  },
+  "get_rest_server_hardware_id_thermal": {
+    "fans": [
+      {
+        "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+        "name": "System Fan 1",
+        "speedPercent": 70,
+        "status": "OK",
+        "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/thermal/fans/a1b2c3d4-e5f6-7890-1234-567890abcdef",
+        "currentRPM": 7200,
+        "ratedRPM": 10000
+      },
+      {
+        "id": "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+        "name": "System Fan 2",
+        "speedPercent": 65,
+        "status": "Warning",
+        "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/thermal/fans/b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+        "currentRPM": 6800,
+        "ratedRPM": 10000,
+        "healthStatus": {
+          "overallHealth": "Degraded",
+          "issues": [
             {
-                "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
-                "name": "Blade Chassis 1-A",
-                "serialNumber": "SNCHASSIS001A",
-                "chassisType": "BladeEnclosure",
-                "model": "HPE Synergy 12000 Frame",
-                "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef",
-                "partNumber": "797893-B21",
-                "powerState": "On",
-                "status": "OK"
-            },
-            {
-                "id": "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
-                "name": "Blade Chassis 1-B",
-                "serialNumber": "SNCHASSIS001B",
-                "chassisType": "BladeEnclosure",
-                "model": "HPE Synergy 12000 Frame",
-                "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/chassis/b2c3d4e5-f6a7-8901-2345-67890abcdef0",
-                "partNumber": "797893-B21",
-                "powerState": "On",
-                "status": "Warning",
-                "healthStatus": {
-                    "overallHealth": "Degraded",
-                    "issues": [
-                        {
-                            "code": "CHASSIS_FAN_FAIL",
-                            "message": "Chassis fan 3 reports a failure."
-                        }
-                    ]
-                }
+              "code": "FAN_SPEED_LOW",
+              "message": "Fan speed is below threshold."
             }
-        ],
-        "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
-        "totalChassisCount": 2
-    },
-    "get_rest_server_hardware_id_firmwareinventory": {
-        "components": [
-            {
-                "componentName": "iLO 5",
-                "componentVersion": "2.90",
-                "componentLocation": "Management Processor",
-                "releaseDate": "2024-03-15T00:00:00Z"
-            },
-            {
-                "componentName": "System ROM",
-                "componentVersion": "U44 v2.80 (02/01/2024)",
-                "componentLocation": "System Board",
-                "releaseDate": "2024-02-01T00:00:00Z"
-            },
-            {
-                "componentName": "HPE Smart Array P408i-a SR Gen10 Controller",
-                "componentVersion": "2.80",
-                "componentLocation": "PCI Slot 1",
-                "releaseDate": "2023-11-20T00:00:00Z"
-            }
-        ],
-        "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
-        "firmwareBaselineUri": "/rest/firmware-bundles/b1c2d3e4-f5a6-7b8c-9d0e-1f2a3b4c5d6e",
-        "lastUpdated": "2025-09-10T18:22:24Z"
-    },
-    "get_rest_server_hardware_id_networkadapters": {
-        "adapters": [
-            {
-                "name": "HPE Ethernet 10Gb 2-port 530FLR-SFP+ Adapter",
-                "macAddress": "00:1A:11:22:33:44",
-                "portCount": 2,
-                "status": "OK",
-                "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/networkAdapters/a1b2c3d4-e5f6-7890-1234-567890abcdef",
-                "firmwareVersion": "1.8.10",
-                "networkBootCapable": true,
-                "ports": [
-                    {
-                        "portId": "1",
-                        "macAddress": "00:1A:11:22:33:44",
-                        "linkStatus": "Up",
-                        "linkSpeedGbps": 10
-                    },
-                    {
-                        "portId": "2",
-                        "macAddress": "00:1A:11:22:33:45",
-                        "linkStatus": "Up",
-                        "linkSpeedGbps": 10
-                    }
-                ]
-            },
-            {
-                "name": "HPE FlexFabric 20Gb 2-port 630FLB Adapter",
-                "macAddress": "00:1B:11:22:33:44",
-                "portCount": 2,
-                "status": "OK",
-                "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/networkAdapters/b2c3d4e5-f6a7-8901-2345-67890abcdef0",
-                "firmwareVersion": "3.2.0",
-                "networkBootCapable": true,
-                "ports": [
-                    {
-                        "portId": "1",
-                        "macAddress": "00:1B:11:22:33:44",
-                        "linkStatus": "Up",
-                        "linkSpeedGbps": 20
-                    },
-                    {
-                        "portId": "2",
-                        "macAddress": "00:1B:11:22:33:45",
-                        "linkStatus": "Down",
-                        "linkSpeedGbps": 0
-                    }
-                ]
-            }
-        ],
-        "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f"
-    },
-    "get_rest_server_hardware_id_powersupplies": {
-        "powerSupplies": [
-            {
-                "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
-                "status": "OK",
-                "capacityWatts": 1600,
-                "firmwareVersion": "1.00",
-                "model": "HPE 1600W Flex Slot Platinum Hot Plug Low Halogen Power Supply",
-                "serialNumber": "PSU001ABC",
-                "bayNumber": 1,
-                "inputVoltage": 220,
-                "powerCapacityWatts": 1600,
-                "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/powerSupplies/a1b2c3d4-e5f6-7890-1234-567890abcdef"
-            },
-            {
-                "id": "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
-                "status": "OK",
-                "capacityWatts": 1600,
-                "firmwareVersion": "1.00",
-                "model": "HPE 1600W Flex Slot Platinum Hot Plug Low Halogen Power Supply",
-                "serialNumber": "PSU002DEF",
-                "bayNumber": 2,
-                "inputVoltage": 220,
-                "powerCapacityWatts": 1600,
-                "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/powerSupplies/b2c3d4e5-f6a7-8901-2345-67890abcdef0"
-            },
-            {
-                "id": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-                "status": "Warning",
-                "capacityWatts": 1600,
-                "firmwareVersion": "1.00",
-                "model": "HPE 1600W Flex Slot Platinum Hot Plug Low Halogen Power Supply",
-                "serialNumber": "PSU003GHI",
-                "bayNumber": 3,
-                "inputVoltage": 220,
-                "powerCapacityWatts": 1600,
-                "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/powerSupplies/c3d4e5f6-a7b8-9012-3456-7890abcdef12"
-            }
-        ],
-        "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
-        "redundancyStatus": "Redundant",
-        "totalCapacityWatts": 4800
-    },
-    "get_rest_server_hardware_id_processors": {
-        "processors": [
-            {
-                "id": "e5f6a7b8-c9d0-1234-5678-90abcdef56",
-                "model": "Intel Xeon Gold 6248R",
-                "coreCount": 24,
-                "threadCount": 48,
-                "speedMhz": 3000,
-                "status": "OK",
-                "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/processors/e5f6a7b8-c9d0-1234-5678-90abcdef56",
-                "socket": "CPU1",
-                "architecture": "x86_64",
-                "manufacturer": "Intel"
-            },
-            {
-                "id": "f6a7b8c9-d0e1-2345-6789-0abcdef789",
-                "model": "Intel Xeon Gold 6248R",
-                "coreCount": 24,
-                "threadCount": 48,
-                "speedMhz": 3000,
-                "status": "OK",
-                "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/processors/f6a7b8c9-d0e1-2345-6789-0abcdef789",
-                "socket": "CPU2",
-                "architecture": "x86_64",
-                "manufacturer": "Intel"
-            }
-        ],
-        "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
-        "totalProcessorCount": 2,
-        "totalCoreCount": 48,
-        "totalThreadCount": 96
-    },
-    "get_rest_server_hardware_id_softwareinventory": {
-        "softwareComponents": [
-            {
-                "name": "Operating System",
-                "version": "Windows Server 2022 Datacenter",
-                "installedDate": "2024-02-15T09:00:00Z",
-                "vendor": "Microsoft"
-            },
-            {
-                "name": "HPE Agentless Management Service",
-                "version": "14.1.0",
-                "installedDate": "2024-03-01T10:30:00Z",
-                "vendor": "HPE"
-            },
-            {
-                "name": "HPE ProLiant Health Monitor",
-                "version": "12.0.0",
-                "installedDate": "2024-03-01T10:45:00Z",
-                "vendor": "HPE"
-            }
-        ],
-        "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
-        "lastScanDate": "2025-09-10T18:22:24Z"
-    },
-    "get_rest_server_hardware_id_thermal": {
-        "fans": [
-            {
-                "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
-                "name": "System Fan 1",
-                "speedPercent": 70,
-                "status": "OK",
-                "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/thermal/fans/a1b2c3d4-e5f6-7890-1234-567890abcdef",
-                "currentRPM": 7200,
-                "ratedRPM": 10000
-            },
-            {
-                "id": "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
-                "name": "System Fan 2",
-                "speedPercent": 65,
-                "status": "Warning",
-                "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/thermal/fans/b2c3d4e5-f6a7-8901-2345-67890abcdef0",
-                "currentRPM": 6800,
-                "ratedRPM": 10000,
-                "healthStatus": {
-                    "overallHealth": "Degraded",
-                    "issues": [
-                        {
-                            "code": "FAN_SPEED_LOW",
-                            "message": "Fan speed is below threshold."
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-                "name": "System Fan 3",
-                "speedPercent": 75,
-                "status": "OK",
-                "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/thermal/fans/c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-                "currentRPM": 7500,
-                "ratedRPM": 10000
-            }
-        ],
-        "temperatures": [
-            {
-                "sensorName": "Inlet Ambient",
-                "celsius": 25,
-                "status": "OK",
-                "location": "Front"
-            },
-            {
-                "sensorName": "CPU 1",
-                "celsius": 55,
-                "status": "OK",
-                "location": "Processor"
-            },
-            {
-                "sensorName": "CPU 2",
-                "celsius": 53,
-                "status": "OK",
-                "location": "Processor"
-            },
-            {
-                "sensorName": "Memory Module 1",
-                "celsius": 40,
-                "status": "OK",
-                "location": "DIMM Slot"
-            }
-        ],
-        "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
-        "overallThermalStatus": "OK",
-        "thermalDesignPowerWatts": 250
-    },
-    "get_rest_rack_managers_id_chassis_uuid": {
+          ]
+        }
+      },
+      {
+        "id": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+        "name": "System Fan 3",
+        "speedPercent": 75,
+        "status": "OK",
+        "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f/thermal/fans/c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+        "currentRPM": 7500,
+        "ratedRPM": 10000
+      }
+    ],
+    "temperatures": [
+      {
+        "sensorName": "Inlet Ambient",
+        "celsius": 25,
+        "status": "OK",
+        "location": "Front"
+      },
+      {
+        "sensorName": "CPU 1",
+        "celsius": 55,
+        "status": "OK",
+        "location": "Processor"
+      },
+      {
+        "sensorName": "CPU 2",
+        "celsius": 53,
+        "status": "OK",
+        "location": "Processor"
+      },
+      {
+        "sensorName": "Memory Module 1",
+        "celsius": 40,
+        "status": "OK",
+        "location": "DIMM Slot"
+      }
+    ],
+    "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
+    "overallThermalStatus": "OK",
+    "thermalDesignPowerWatts": 250
+  },
+  "get_rest_rack_managers_id_chassis_uuid": {
+    "type": "ChassisV1",
+    "chassisType": "Base",
+    "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+    "manufacturer": "HPE",
+    "model": "HPE Superdome Flex Base Chassis",
+    "name": "SuperdomeFlex-Chassis-01",
+    "serialNumber": "SNCHAS001PROD",
+    "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+    "status": "OK",
+    "state": "Monitored",
+    "uPosition": 1,
+    "remoteSupportUri": "/rest/support/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef",
+    "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef",
+    "partNumber": "123456-B21",
+    "assetTag": "PROD-CHAS-001"
+  },
+  "post_rest_ethernet_networks_bulk": {
+    "type": "ResourceList",
+    "members": [
+      {
+        "name": "EthNet-Prod-VLAN-100",
+        "uri": "/rest/ethernet-networks/00a1b2c3-d4e5-f6a7-b8c9-d0e1f2a3b4c5",
+        "vlanId": 100,
+        "status": "OK"
+      },
+      {
+        "name": "EthNet-Prod-VLAN-101",
+        "uri": "/rest/ethernet-networks/01b2c3d4-e5f6-a7b8-c9d0-e1f2a3b4c5d6",
+        "vlanId": 101,
+        "status": "OK"
+      },
+      {
+        "name": "EthNet-Prod-VLAN-102",
+        "uri": "/rest/ethernet-networks/02c3d4e5-f6a7-b8c9-d0e1-f2a3b4c5d6e7",
+        "vlanId": 102,
+        "status": "OK"
+      }
+    ],
+    "total": 3,
+    "message": "Bulk creation of Ethernet networks initiated successfully."
+  },
+  "put_rest_storage_volumes_id": {
+    "type": "StorageVolume",
+    "id": "9a8b7c6d-5e4f-3a2b-1c0d-e9f8a7b6c5d4",
+    "name": "ProductionDataVolume_Updated",
+    "capacityBytes": 214748364800,
+    "provisioningType": "Thin",
+    "isShareable": true,
+    "status": "OK",
+    "state": "Managed",
+    "uri": "/rest/storage-volumes/9a8b7c6d-5e4f-3a2b-1c0d-e9f8a7b6c5d4",
+    "storageSystemUri": "/rest/storage-systems/0f1e2d3c-4b5a-6978-8796-543210fedcba",
+    "storagePoolUri": "/rest/storage-pools/1f2e3d4c-5b6a-7988-97a6-543210fedcba",
+    "modified": "2025-09-10T18:30:00Z"
+  },
+  "get_rest_updates": {
+    "type": "ResourceList",
+    "members": [
+      {
+        "name": "HPE Firmware Bundle 2024.03",
+        "id": "0a1b2c3d-4e5f-6a7b-8c9d-e0f1a2b3c4d5",
+        "version": "2024.03",
+        "bundleGeneration": "Gen10 Plus",
+        "releaseDate": "2024-03-15T00:00:00Z",
+        "uri": "/rest/updates/0a1b2c3d-4e5f-6a7b-8c9d-e0f1a2b3c4d5",
+        "description": "Latest firmware bundle for Gen10 Plus servers."
+      },
+      {
+        "name": "HPE Synergy Software Release 2024.02",
+        "id": "1b2c3d4e-5f6a-7b8c-9d0e-f1a2b3c4d5e6",
+        "version": "2024.02",
+        "bundleGeneration": "Synergy",
+        "releaseDate": "2024-02-01T00:00:00Z",
+        "uri": "/rest/updates/1b2c3d4e-5f6a-7b8c-9d0e-f1a2b3c4d5e6",
+        "description": "Synergy Image Streamer release with new features."
+      }
+    ],
+    "total": 2,
+    "count": 2,
+    "start": 0,
+    "category": "updates",
+    "modified": "2025-09-10T18:22:24Z",
+    "created": "2025-09-10T18:20:00Z",
+    "nextPageUri": null,
+    "prevPageUri": null,
+    "uri": "/rest/updates"
+  },
+  "get_rest_updates_id": {
+    "type": "Update",
+    "id": "0a1b2c3d-4e5f-6a7b-8c9d-e0f1a2b3c4d5",
+    "name": "HPE Firmware Bundle 2024.03",
+    "version": "2024.03",
+    "bundleGeneration": "Gen10 Plus",
+    "releaseDate": "2024-03-15T00:00:00Z",
+    "uri": "/rest/updates/0a1b2c3d-4e5f-6a7b-8c9d-e0f1a2b3c4d5",
+    "description": "Latest firmware bundle for Gen10 Plus servers, including security patches and performance improvements.",
+    "components": [
+      {
+        "name": "iLO 5 Firmware",
+        "version": "2.90",
+        "category": "Management"
+      },
+      {
+        "name": "System ROM",
+        "version": "U44 v2.80",
+        "category": "BIOS/UEFI"
+      }
+    ],
+    "downloadUrl": "https://downloads.hpe.com/software/HPE_FW_Bundle_2024_03.zip",
+    "severity": "Critical",
+    "releaseNotesUri": "https://www.hpe.com/info/release-notes/2024-03"
+  },
+  "get_rest_rack_managers": {
+    "category": "rack-managers",
+    "count": 2,
+    "created": "2025-09-10T09:00:00Z",
+    "eTag": "2025-09-10 09:00:00.00",
+    "members": [
+      {
+        "type": "RackManagerV3",
+        "id": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+        "name": "RM-Primary-DC1",
+        "serialNumber": "SNRM12345678",
+        "licensingIntent": "OneViewStandard",
+        "state": "Managed",
+        "status": "OK",
+        "model": "HPE Superdome Flex 280",
+        "remoteSupportUri": "/rest/support/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+        "subResources": {
+          "chassis": {
+            "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis",
+            "count": 2
+          },
+          "partitions": {
+            "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/partitions",
+            "count": 1
+          },
+          "managers": {
+            "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/managers",
+            "count": 1
+          }
+        },
+        "firmwareVersion": "2.80"
+      },
+      {
+        "type": "RackManagerV3",
+        "id": "d4e5f6a7-b8c9-0123-4567-890abcdef34",
+        "name": "RM-Secondary-DC2",
+        "serialNumber": "SNRM87654321",
+        "licensingIntent": "OneViewStandard",
+        "state": "Managed",
+        "status": "Warning",
+        "model": "HPE Superdome Flex 280",
+        "remoteSupportUri": "/rest/support/rack-managers/d4e5f6a7-b8c9-0123-4567-890abcdef34",
+        "uri": "/rest/rack-managers/d4e5f6a7-b8c9-0123-4567-890abcdef34",
+        "subResources": {
+          "chassis": {
+            "uri": "/rest/rack-managers/d4e5f6a7-b8c9-0123-4567-890abcdef34/chassis",
+            "count": 1
+          },
+          "partitions": {
+            "uri": "/rest/rack-managers/d4e5f6a7-b8c9-0123-4567-890abcdef34/partitions",
+            "count": 1
+          },
+          "managers": {
+            "uri": "/rest/rack-managers/d4e5f6a7-b8c9-0123-4567-890abcdef34/managers",
+            "count": 1
+          }
+        },
+        "firmwareVersion": "2.70"
+      }
+    ],
+    "modified": "2025-09-10T09:30:00Z",
+    "nextPageUri": null,
+    "prevPageUri": null,
+    "start": 0,
+    "total": 2,
+    "type": "ResourceListV1",
+    "uri": "/rest/rack-managers"
+  },
+  "post_rest_rack_managers": {
+    "type": "RackManager",
+    "id": "e5f6a7b8-c9d0-1234-5678-90abcdef56",
+    "name": "RM-DR-Site",
+    "status": "Adding",
+    "state": "DiscoveryStarted",
+    "uri": "/rest/rack-managers/e5f6a7b8-c9d0-1234-5678-90abcdef56",
+    "taskUri": "/rest/tasks/f1e2d3c4-b5a6-9788-7654-3210fedcba98",
+    "created": "2025-09-10T18:35:00Z"
+  },
+  "get_rest_rack_managers_chassis": {
+    "category": "rack-managers",
+    "count": 3,
+    "created": "2025-09-10T10:05:00Z",
+    "eTag": "2025-09-10 10:05:00.00",
+    "members": [
+      {
         "type": "ChassisV1",
         "chassisType": "Base",
         "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
         "manufacturer": "HPE",
         "model": "HPE Superdome Flex Base Chassis",
-        "name": "SuperdomeFlex-Chassis-01",
-        "serialNumber": "SNCHAS001PROD",
+        "name": "Chassis-DC1-01",
+        "serialNumber": "SNCHASDC1A",
         "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
         "status": "OK",
         "state": "Monitored",
         "uPosition": 1,
-        "remoteSupportUri": "/rest/support/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef",
-        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef",
-        "partNumber": "123456-B21",
-        "assetTag": "PROD-CHAS-001"
-    },
-    "post_rest_ethernet_networks_bulk": {
-        "type": "ResourceList",
-        "members": [
-            {
-                "name": "EthNet-Prod-VLAN-100",
-                "uri": "/rest/ethernet-networks/00a1b2c3-d4e5-f6a7-b8c9-d0e1f2a3b4c5",
-                "vlanId": 100,
-                "status": "OK"
-            },
-            {
-                "name": "EthNet-Prod-VLAN-101",
-                "uri": "/rest/ethernet-networks/01b2c3d4-e5f6-a7b8-c9d0-e1f2a3b4c5d6",
-                "vlanId": 101,
-                "status": "OK"
-            },
-            {
-                "name": "EthNet-Prod-VLAN-102",
-                "uri": "/rest/ethernet-networks/02c3d4e5-f6a7-b8c9-d0e1-f2a3b4c5d6e7",
-                "vlanId": 102,
-                "status": "OK"
-            }
-        ],
-        "total": 3,
-        "message": "Bulk creation of Ethernet networks initiated successfully."
-    },
-    "put_rest_storage_volumes_id": {
-        "type": "StorageVolume",
-        "id": "9a8b7c6d-5e4f-3a2b-1c0d-e9f8a7b6c5d4",
-        "name": "ProductionDataVolume_Updated",
-        "capacityBytes": 214748364800,
-        "provisioningType": "Thin",
-        "isShareable": true,
+        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef"
+      },
+      {
+        "type": "ChassisV1",
+        "chassisType": "Base",
+        "id": "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+        "manufacturer": "HPE",
+        "model": "HPE Superdome Flex Base Chassis",
+        "name": "Chassis-DC1-02",
+        "serialNumber": "SNCHASDC1B",
+        "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
         "status": "OK",
-        "state": "Managed",
-        "uri": "/rest/storage-volumes/9a8b7c6d-5e4f-3a2b-1c0d-e9f8a7b6c5d4",
-        "storageSystemUri": "/rest/storage-systems/0f1e2d3c-4b5a-6978-8796-543210fedcba",
-        "storagePoolUri": "/rest/storage-pools/1f2e3d4c-5b6a-7988-97a6-543210fedcba",
-        "modified": "2025-09-10T18:30:00Z"
-    },
-    "get_rest_updates": {
-        "type": "ResourceList",
-        "members": [
-            {
-                "name": "HPE Firmware Bundle 2024.03",
-                "id": "0a1b2c3d-4e5f-6a7b-8c9d-e0f1a2b3c4d5",
-                "version": "2024.03",
-                "bundleGeneration": "Gen10 Plus",
-                "releaseDate": "2024-03-15T00:00:00Z",
-                "uri": "/rest/updates/0a1b2c3d-4e5f-6a7b-8c9d-e0f1a2b3c4d5",
-                "description": "Latest firmware bundle for Gen10 Plus servers."
-            },
-            {
-                "name": "HPE Synergy Software Release 2024.02",
-                "id": "1b2c3d4e-5f6a-7b8c-9d0e-f1a2b3c4d5e6",
-                "version": "2024.02",
-                "bundleGeneration": "Synergy",
-                "releaseDate": "2024-02-01T00:00:00Z",
-                "uri": "/rest/updates/1b2c3d4e-5f6a-7b8c-9d0e-f1a2b3c4d5e6",
-                "description": "Synergy Image Streamer release with new features."
-            }
-        ],
-        "total": 2,
-        "count": 2,
-        "start": 0,
-        "category": "updates",
-        "modified": "2025-09-10T18:22:24Z",
-        "created": "2025-09-10T18:20:00Z",
-        "nextPageUri": null,
-        "prevPageUri": null,
-        "uri": "/rest/updates"
-    },
-    "get_rest_updates_id": {
-        "type": "Update",
-        "id": "0a1b2c3d-4e5f-6a7b-8c9d-e0f1a2b3c4d5",
-        "name": "HPE Firmware Bundle 2024.03",
-        "version": "2024.03",
-        "bundleGeneration": "Gen10 Plus",
-        "releaseDate": "2024-03-15T00:00:00Z",
-        "uri": "/rest/updates/0a1b2c3d-4e5f-6a7b-8c9d-e0f1a2b3c4d5",
-        "description": "Latest firmware bundle for Gen10 Plus servers, including security patches and performance improvements.",
-        "components": [
-            {
-                "name": "iLO 5 Firmware",
-                "version": "2.90",
-                "category": "Management"
-            },
-            {
-                "name": "System ROM",
-                "version": "U44 v2.80",
-                "category": "BIOS/UEFI"
-            }
-        ],
-        "downloadUrl": "https://downloads.hpe.com/software/HPE_FW_Bundle_2024_03.zip",
-        "severity": "Critical",
-        "releaseNotesUri": "https://www.hpe.com/info/release-notes/2024-03"
-    },
-    "get_rest_rack_managers": {
-        "category": "rack-managers",
-        "count": 2,
-        "created": "2025-09-10T09:00:00Z",
-        "eTag": "2025-09-10 09:00:00.00",
-        "members": [
-            {
-                "type": "RackManagerV3",
-                "id": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-                "name": "RM-Primary-DC1",
-                "serialNumber": "SNRM12345678",
-                "licensingIntent": "OneViewStandard",
-                "state": "Managed",
-                "status": "OK",
-                "model": "HPE Superdome Flex 280",
-                "remoteSupportUri": "/rest/support/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-                "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-                "subResources": {
-                    "chassis": {
-                        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis",
-                        "count": 2
-                    },
-                    "partitions": {
-                        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/partitions",
-                        "count": 1
-                    },
-                    "managers": {
-                        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/managers",
-                        "count": 1
-                    }
-                },
-                "firmwareVersion": "2.80"
-            },
-            {
-                "type": "RackManagerV3",
-                "id": "d4e5f6a7-b8c9-0123-4567-890abcdef34",
-                "name": "RM-Secondary-DC2",
-                "serialNumber": "SNRM87654321",
-                "licensingIntent": "OneViewStandard",
-                "state": "Managed",
-                "status": "Warning",
-                "model": "HPE Superdome Flex 280",
-                "remoteSupportUri": "/rest/support/rack-managers/d4e5f6a7-b8c9-0123-4567-890abcdef34",
-                "uri": "/rest/rack-managers/d4e5f6a7-b8c9-0123-4567-890abcdef34",
-                "subResources": {
-                    "chassis": {
-                        "uri": "/rest/rack-managers/d4e5f6a7-b8c9-0123-4567-890abcdef34/chassis",
-                        "count": 1
-                    },
-                    "partitions": {
-                        "uri": "/rest/rack-managers/d4e5f6a7-b8c9-0123-4567-890abcdef34/partitions",
-                        "count": 1
-                    },
-                    "managers": {
-                        "uri": "/rest/rack-managers/d4e5f6a7-b8c9-0123-4567-890abcdef34/managers",
-                        "count": 1
-                    }
-                },
-                "firmwareVersion": "2.70"
-            }
-        ],
-        "modified": "2025-09-10T09:30:00Z",
-        "nextPageUri": null,
-        "prevPageUri": null,
-        "start": 0,
-        "total": 2,
-        "type": "ResourceListV1",
-        "uri": "/rest/rack-managers"
-    },
-    "post_rest_rack_managers": {
-        "type": "RackManager",
-        "id": "e5f6a7b8-c9d0-1234-5678-90abcdef56",
-        "name": "RM-DR-Site",
-        "status": "Adding",
-        "state": "DiscoveryStarted",
-        "uri": "/rest/rack-managers/e5f6a7b8-c9d0-1234-5678-90abcdef56",
-        "taskUri": "/rest/tasks/f1e2d3c4-b5a6-9788-7654-3210fedcba98",
-        "created": "2025-09-10T18:35:00Z"
-    },
-    "get_rest_rack_managers_chassis": {
-        "category": "rack-managers",
-        "count": 3,
-        "created": "2025-09-10T10:05:00Z",
-        "eTag": "2025-09-10 10:05:00.00",
-        "members": [
-            {
-                "type": "ChassisV1",
-                "chassisType": "Base",
-                "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
-                "manufacturer": "HPE",
-                "model": "HPE Superdome Flex Base Chassis",
-                "name": "Chassis-DC1-01",
-                "serialNumber": "SNCHASDC1A",
-                "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-                "status": "OK",
-                "state": "Monitored",
-                "uPosition": 1,
-                "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef"
-            },
-            {
-                "type": "ChassisV1",
-                "chassisType": "Base",
-                "id": "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
-                "manufacturer": "HPE",
-                "model": "HPE Superdome Flex Base Chassis",
-                "name": "Chassis-DC1-02",
-                "serialNumber": "SNCHASDC1B",
-                "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-                "status": "OK",
-                "state": "Monitored",
-                "uPosition": 12,
-                "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/b2c3d4e5-f6a7-8901-2345-67890abcdef0"
-            },
-            {
-                "type": "ChassisV1",
-                "chassisType": "Base",
-                "id": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-                "manufacturer": "HPE",
-                "model": "HPE Superdome Flex Base Chassis",
-                "name": "Chassis-DC2-01",
-                "serialNumber": "SNCHASDC2A",
-                "rackManagerId": "d4e5f6a7-b8c9-0123-4567-890abcdef34",
-                "status": "Warning",
-                "state": "Monitored",
-                "uPosition": 1,
-                "uri": "/rest/rack-managers/d4e5f6a7-b8c9-0123-4567-890abcdef34/chassis/c3d4e5f6-a7b8-9012-3456-7890abcdef12"
-            }
-        ],
-        "modified": "2025-09-10T10:15:00Z",
-        "nextPageUri": null,
-        "prevPageUri": null,
-        "start": 0,
-        "total": 3,
-        "type": "ResourceListV1",
-        "uri": "/rest/rack-managers/chassis"
-    },
-    "get_rest_rack_managers_managers": {
-        "category": "rack-managers",
-        "count": 2,
-        "created": "2025-09-10T10:10:00Z",
-        "eTag": "2025-09-10 10:10:00.00",
-        "members": [
-            {
-                "type": "ManagerV1",
-                "fwVersion": "2.8.0",
-                "hostName": "rmc-dc1-manager.corp.com",
-                "id": "e5f6a7b8-c9d0-1234-5678-90abcdef56",
-                "ipv4Address": "192.168.1.10",
-                "managerType": "Standalone",
-                "model": "Rack Management Controller",
-                "name": "RMC-DC1-Manager",
-                "serialNumber": "SNMAN001DC1",
-                "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-                "status": "OK",
-                "state": "Enabled",
-                "uPosition": 21,
-                "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/managers/e5f6a7b8-c9d0-1234-5678-90abcdef56"
-            },
-            {
-                "type": "ManagerV1",
-                "fwVersion": "2.7.0",
-                "hostName": "rmc-dc2-manager.corp.com",
-                "id": "f6a7b8c9-d0e1-2345-6789-0abcdef789",
-                "ipv4Address": "192.168.2.10",
-                "managerType": "Standalone",
-                "model": "Rack Management Controller",
-                "name": "RMC-DC2-Manager",
-                "serialNumber": "SNMAN001DC2",
-                "rackManagerId": "d4e5f6a7-b8c9-0123-4567-890abcdef34",
-                "status": "OK",
-                "state": "Enabled",
-                "uPosition": 21,
-                "uri": "/rest/rack-managers/d4e5f6a7-b8c9-0123-4567-890abcdef34/managers/f6a7b8c9-d0e1-2345-6789-0abcdef789"
-            }
-        ],
-        "modified": "2025-09-10T10:20:00Z",
-        "nextPageUri": null,
-        "prevPageUri": null,
-        "start": 0,
-        "total": 2,
-        "type": "ResourceListV1",
-        "uri": "/rest/rack-managers/managers"
-    },
-    "get_rest_rack_managers_partitions": {
-        "category": "rack-managers",
-        "count": 2,
-        "created": "2025-09-10T10:15:00Z",
-        "eTag": "2025-09-10 10:15:00.00",
-        "members": [
-            {
-                "type": "PartitionV1",
-                "chassisCount": 2,
-                "chassisUris": [
-                    "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef",
-                    "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/b2c3d4e5-f6a7-8901-2345-67890abcdef0"
-                ],
-                "name": "Production-Partition-01",
-                "partitionId": "1a2b3c4d-5e6f-7890-abcd-ef0123456789",
-                "powerState": "ON",
-                "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-                "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
-                "state": "Enabled",
-                "status": "OK",
-                "totalPartitionMemoryGB": 512,
-                "totalProcessorCount": 8,
-                "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/partitions/1a2b3c4d-5e6f-7890-abcd-ef0123456789"
-            },
-            {
-                "type": "PartitionV1",
-                "chassisCount": 1,
-                "chassisUris": [
-                    "/rest/rack-managers/d4e5f6a7-b8c9-0123-4567-890abcdef34/chassis/c3d4e5f6-a7b8-9012-3456-7890abcdef12"
-                ],
-                "name": "DR-Partition-01",
-                "partitionId": "2b3c4d5e-6f7a-8901-bcde-f01234567890",
-                "powerState": "OFF",
-                "rackManagerId": "d4e5f6a7-b8c9-0123-4567-890abcdef34",
-                "serverHardwareUri": "/rest/server-hardware/f4e2d0c3-7g9b-5d8e-9f1a-0b3c2d4e5f6a",
-                "state": "Enabled",
-                "status": "Warning",
-                "totalPartitionMemoryGB": 256,
-                "totalProcessorCount": 4,
-                "uri": "/rest/rack-managers/d4e5f6a7-b8c9-0123-4567-890abcdef34/partitions/2b3c4d5e-6f7a-8901-bcde-f01234567890"
-            }
-        ],
-        "modified": "2025-09-10T10:25:00Z",
-        "nextPageUri": null,
-        "prevPageUri": null,
-        "start": 0,
-        "total": 2,
-        "type": "ResourceListV1",
-        "uri": "/rest/rack-managers/partitions"
-    },
-    "get_rest_rack_managers_id": {
-        "type": "RackManagerV3",
+        "state": "Monitored",
+        "uPosition": 12,
+        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/b2c3d4e5-f6a7-8901-2345-67890abcdef0"
+      },
+      {
+        "type": "ChassisV1",
+        "chassisType": "Base",
         "id": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-        "name": "RM-Primary-DC1",
-        "serialNumber": "SNRM12345678",
-        "partNumber": "880927-B21",
-        "licensingIntent": "OneViewStandard",
-        "eTag": "2025-09-10 10:00:00.00",
-        "state": "Managed",
-        "status": "OK",
-        "model": "HPE Superdome Flex 280",
-        "location": {
-            "rackName": "Primary_DataCenter_Rack_A",
-            "uPosition": 1,
-            "rackId": "rack-guid-12345"
-        },
-        "refreshState": "NotRefreshing",
-        "supportState": "Supported",
-        "supportDataCollectionType": "Automatic",
-        "supportDataCollectionState": "Enabled",
-        "supportDataCollectionsUri": "/rest/support/data-collections?deviceID=c3d4e5f6-a7b8-9012-3456-7890abcdef12&category=rack-managers",
-        "performanceDataCollectionServiceState": "Enabled",
-        "remoteSupportUri": "/rest/support/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-        "stateReason": "ManagedByAppliance",
-        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-        "category": "rack-managers",
-        "created": "2025-09-10T10:00:00Z",
-        "modified": "2025-09-10T10:00:00Z",
-        "subResources": {
-            "chassis": {
-                "type": "SubResourceV1",
-                "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis",
-                "modified": "2025-09-10T10:05:00Z",
-                "state": "Collected",
-                "etag": "2025-09-10 10:05:00.00",
-                "count": 2,
-                "data": [
-                    {
-                        "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
-                        "name": "Chassis-DC1-01",
-                        "serialNumber": "SNCHASDC1A",
-                        "status": "OK",
-                        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef"
-                    }
-                ]
-            },
-            "partitions": {
-                "type": "SubResourceV1",
-                "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/partitions",
-                "modified": "2025-09-10T10:15:00Z",
-                "state": "Collected",
-                "etag": "2025-09-10 10:15:00.00",
-                "count": 1,
-                "data": [
-                    {
-                        "id": "1a2b3c4d-5e6f-7890-abcd-ef0123456789",
-                        "name": "Production-Partition-01",
-                        "status": "OK",
-                        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/partitions/1a2b3c4d-5e6f-7890-abcd-ef0123456789"
-                    }
-                ]
-            },
-            "managers": {
-                "type": "SubResourceV1",
-                "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/managers",
-                "modified": "2025-09-10T10:10:00Z",
-                "state": "Collected",
-                "etag": "2025-09-10 10:10:00.00",
-                "count": 1,
-                "data": [
-                    {
-                        "id": "e5f6a7b8-c9d0-1234-5678-90abcdef56",
-                        "name": "RMC-DC1-Manager",
-                        "status": "OK",
-                        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/managers/e5f6a7b8-c9d0-1234-5678-90abcdef56"
-                    }
-                ]
-            },
-            "remoteSupportSettings": {
-                "type": "SubResourceV1",
-                "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/remoteSupportSettings",
-                "modified": "2025-09-10T10:20:00Z",
-                "state": "Collected",
-                "etag": "2025-09-10 10:20:00.00",
-                "count": 1,
-                "data": [
-                    {
-                        "id": "settings-id-1",
-                        "remoteSupportCurrentState": "Enabled",
-                        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/remoteSupportSettings"
-                    }
-                ]
-            }
-        }
-    },
-    "patch_rest_rack_managers_id": {
-        "status": "Accepted",
-        "message": "Rack manager refresh initiated.",
-        "taskUri": "/rest/tasks/a1b2c3d4-e5f6-7890-1234-567890fedcba"
-    },
-    "delete_rest_rack_managers_id": {
-        "status": "Accepted",
-        "message": "Rack manager deletion initiated.",
-        "taskUri": "/rest/tasks/b2c3d4e5-f6a7-8901-2345-67890fedcba9"
-    },
-    "get_rest_rack_managers_id_chassis": {
-        "category": "rack-managers",
-        "count": 2,
-        "created": "2025-09-10T10:05:00Z",
-        "eTag": "2025-09-10 10:05:00.00",
-        "members": [
-            {
-                "type": "ChassisV1",
-                "chassisType": "Base",
-                "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
-                "manufacturer": "HPE",
-                "model": "HPE Superdome Flex Base Chassis",
-                "name": "Chassis-DC1-01",
-                "serialNumber": "SNCHASDC1A",
-                "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-                "status": "OK",
-                "state": "Monitored",
-                "uPosition": 1,
-                "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef"
-            },
-            {
-                "type": "ChassisV1",
-                "chassisType": "Base",
-                "id": "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
-                "manufacturer": "HPE",
-                "model": "HPE Superdome Flex Base Chassis",
-                "name": "Chassis-DC1-02",
-                "serialNumber": "SNCHASDC1B",
-                "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-                "status": "OK",
-                "state": "Monitored",
-                "uPosition": 12,
-                "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/b2c3d4e5-f6a7-8901-2345-67890abcdef0"
-            }
-        ],
-        "modified": "2025-09-10T10:15:00Z",
-        "nextPageUri": null,
-        "prevPageUri": null,
-        "start": 0,
-        "total": 2,
-        "type": "ResourceListV1",
-        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis"
-    },
-    "get_rest_rack_managers_id_chassis_utilization": {
-        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/",
-        "resolution": 600000,
-        "sliceStartTime": "2025-06-03T12:20:00Z",
-        "sliceEndTime": "2025-06-03T13:30:00Z",
-        "chassisMetricData": [
-            {
-                "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef",
-                "newestSampleTime": "2025-06-03T13:30:00Z",
-                "oldestSampleTime": "2025-06-03T12:20:00Z",
-                "metricList": [
-                    {
-                        "metricName": "ChassisPower",
-                        "metricSamples": [
-                            [
-                                1717411800000,
-                                662.0
-                            ],
-                            [
-                                1717411200000,
-                                905.0
-                            ],
-                            [
-                                1717410600000,
-                                880.5
-                            ]
-                        ],
-                        "metricCapacity": 2000
-                    },
-                    {
-                        "metricName": "ChassisTemperature",
-                        "metricSamples": [
-                            [
-                                1717411800000,
-                                22
-                            ],
-                            [
-                                1717411200000,
-                                23
-                            ],
-                            [
-                                1717410600000,
-                                21
-                            ]
-                        ],
-                        "metricCapacity": 50
-                    }
-                ]
-            },
-            {
-                "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/b2c3d4e5-f6a7-8901-2345-67890abcdef0",
-                "newestSampleTime": "2025-06-03T13:30:00Z",
-                "oldestSampleTime": "2025-06-03T12:20:00Z",
-                "metricList": [
-                    {
-                        "metricName": "ChassisPower",
-                        "metricSamples": [
-                            [
-                                1717411800000,
-                                700.0
-                            ],
-                            [
-                                1717411200000,
-                                920.0
-                            ],
-                            [
-                                1717410600000,
-                                890.0
-                            ]
-                        ],
-                        "metricCapacity": 2000
-                    },
-                    {
-                        "metricName": "ChassisTemperature",
-                        "metricSamples": [
-                            [
-                                1717411800000,
-                                24
-                            ],
-                            [
-                                1717411200000,
-                                25
-                            ],
-                            [
-                                1717410600000,
-                                23
-                            ]
-                        ],
-                        "metricCapacity": 50
-                    }
-                ]
-            }
-        ],
-        "metricsAvailable": true
-    },
-    "get_rest_rack_managers_id_environmentalconfiguration": {
-        "calibratedMaxPower": 2000,
-        "capHistorySupported": true,
-        "height": 4,
-        "historyBufferSize": 288,
-        "historySampleIntervalSeconds": 300,
-        "idleMaxPower": 200,
-        "licenseRequirement": "OneViewStandard",
-        "powerCapType": "Electrical",
-        "powerHistorySupported": true,
-        "psuList": [
-            {
-                "capacity": 1600,
-                "inputVoltage": 220,
-                "powerType": "AC",
-                "psuId": 1,
-                "side": "A",
-                "status": "OK"
-            },
-            {
-                "capacity": 1600,
-                "inputVoltage": 220,
-                "powerType": "AC",
-                "psuId": 2,
-                "side": "B",
-                "status": "OK"
-            },
-            {
-                "capacity": 1600,
-                "inputVoltage": 220,
-                "powerType": "AC",
-                "psuId": 3,
-                "side": "A",
-                "status": "Warning"
-            }
-        ],
-        "rackId": "rack-guid-primary-dc1",
-        "rackModel": "HPE G2 Advanced Series Rack 42U",
-        "rackName": "Primary_DataCenter_Rack_A",
-        "rackUHeight": 42,
-        "relativeOrder": 1,
-        "thermalHistorySupported": true,
-        "uSlot": 1,
-        "utilizationHistorySupported": true,
-        "rackManagerUri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12"
-    },
-    "get_rest_rack_managers_id_managers": {
-        "category": "rack-managers",
-        "count": 1,
-        "created": "2025-09-10T10:10:00Z",
-        "eTag": "2025-09-10 10:10:00.00",
-        "members": [
-            {
-                "type": "ManagerV1",
-                "fwVersion": "2.8.0",
-                "hostName": "rmc-dc1-manager.corp.com",
-                "id": "e5f6a7b8-c9d0-1234-5678-90abcdef56",
-                "ipv4Address": "192.168.1.10",
-                "managerType": "Standalone",
-                "model": "Rack Management Controller",
-                "name": "RMC-DC1-Manager",
-                "serialNumber": "SNMAN001DC1",
-                "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-                "status": "OK",
-                "state": "Enabled",
-                "uPosition": 21,
-                "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/managers/e5f6a7b8-c9d0-1234-5678-90abcdef56"
-            },
-            {
-                "type": "ManagerV1",
-                "fwVersion": "2.8.0",
-                "hostName": "rmc-dc1-manager-b.corp.com",
-                "id": "f6a7b8c9-d0e1-2345-6789-0abcdef789",
-                "ipv4Address": "192.168.1.11",
-                "managerType": "Standalone",
-                "model": "Rack Management Controller",
-                "name": "RMC-DC1-Manager-B",
-                "serialNumber": "SNMAN002DC1",
-                "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-                "status": "OK",
-                "state": "Enabled",
-                "uPosition": 22,
-                "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/managers/f6a7b8c9-d0e1-2345-6789-0abcdef789"
-            }
-        ],
-        "modified": "2025-09-10T10:20:00Z",
-        "nextPageUri": null,
-        "prevPageUri": null,
-        "start": 0,
-        "total": 2,
-        "type": "ResourceListV1",
-        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/managers"
-    },
-    "get_rest_rack_managers_id_managers_managerid": {
+        "manufacturer": "HPE",
+        "model": "HPE Superdome Flex Base Chassis",
+        "name": "Chassis-DC2-01",
+        "serialNumber": "SNCHASDC2A",
+        "rackManagerId": "d4e5f6a7-b8c9-0123-4567-890abcdef34",
+        "status": "Warning",
+        "state": "Monitored",
+        "uPosition": 1,
+        "uri": "/rest/rack-managers/d4e5f6a7-b8c9-0123-4567-890abcdef34/chassis/c3d4e5f6-a7b8-9012-3456-7890abcdef12"
+      }
+    ],
+    "modified": "2025-09-10T10:15:00Z",
+    "nextPageUri": null,
+    "prevPageUri": null,
+    "start": 0,
+    "total": 3,
+    "type": "ResourceListV1",
+    "uri": "/rest/rack-managers/chassis"
+  },
+  "get_rest_rack_managers_managers": {
+    "category": "rack-managers",
+    "count": 2,
+    "created": "2025-09-10T10:10:00Z",
+    "eTag": "2025-09-10 10:10:00.00",
+    "members": [
+      {
         "type": "ManagerV1",
         "fwVersion": "2.8.0",
         "hostName": "rmc-dc1-manager.corp.com",
@@ -1031,74 +604,45 @@
         "status": "OK",
         "state": "Enabled",
         "uPosition": 21,
-        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/managers/e5f6a7b8-c9d0-1234-5678-90abcdef56",
-        "ethernetInterfaces": [
-            {
-                "name": "Management Port",
-                "macAddress": "00:01:02:03:04:05",
-                "ipv4Address": "192.168.1.10",
-                "subnetMask": "255.255.255.0",
-                "gateway": "192.168.1.1"
-            }
-        ],
-        "powerState": "On"
-    },
-    "get_rest_rack_managers_id_partitions": {
-        "category": "rack-managers",
-        "count": 1,
-        "created": "2025-09-10T10:15:00Z",
-        "eTag": "2025-09-10 10:15:00.00",
-        "members": [
-            {
-                "type": "PartitionV1",
-                "chassisCount": 2,
-                "chassisUris": [
-                    "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef",
-                    "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/b2c3d4e5-f6a7-8901-2345-67890abcdef0"
-                ],
-                "name": "Production-Partition-01",
-                "partitionId": "1a2b3c4d-5e6f-7890-abcd-ef0123456789",
-                "powerState": "ON",
-                "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-                "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
-                "state": "Enabled",
-                "status": "OK",
-                "totalPartitionMemoryGB": 512,
-                "totalProcessorCount": 8,
-                "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/partitions/1a2b3c4d-5e6f-7890-abcd-ef0123456789"
-            },
-            {
-                "type": "PartitionV1",
-                "chassisCount": 1,
-                "chassisUris": [
-                    "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/b2c3d4e5-f6a7-8901-2345-67890abcdef0"
-                ],
-                "name": "Development-Partition-02",
-                "partitionId": "2b3c4d5e-6f7a-8901-bcde-f01234567890",
-                "powerState": "OFF",
-                "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-                "serverHardwareUri": "/rest/server-hardware/f4e2d0c3-7g9b-5d8e-9f1a-0b3c2d4e5f6a",
-                "state": "Disabled",
-                "status": "Warning",
-                "totalPartitionMemoryGB": 128,
-                "totalProcessorCount": 2,
-                "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/partitions/2b3c4d5e-6f7a-8901-bcde-f01234567890"
-            }
-        ],
-        "modified": "2025-09-10T10:25:00Z",
-        "nextPageUri": null,
-        "prevPageUri": null,
-        "start": 0,
-        "total": 2,
-        "type": "ResourceListV1",
-        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/partitions"
-    },
-    "get_rest_rack_managers_id_partitions_uuid": {
+        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/managers/e5f6a7b8-c9d0-1234-5678-90abcdef56"
+      },
+      {
+        "type": "ManagerV1",
+        "fwVersion": "2.7.0",
+        "hostName": "rmc-dc2-manager.corp.com",
+        "id": "f6a7b8c9-d0e1-2345-6789-0abcdef789",
+        "ipv4Address": "192.168.2.10",
+        "managerType": "Standalone",
+        "model": "Rack Management Controller",
+        "name": "RMC-DC2-Manager",
+        "serialNumber": "SNMAN001DC2",
+        "rackManagerId": "d4e5f6a7-b8c9-0123-4567-890abcdef34",
+        "status": "OK",
+        "state": "Enabled",
+        "uPosition": 21,
+        "uri": "/rest/rack-managers/d4e5f6a7-b8c9-0123-4567-890abcdef34/managers/f6a7b8c9-d0e1-2345-6789-0abcdef789"
+      }
+    ],
+    "modified": "2025-09-10T10:20:00Z",
+    "nextPageUri": null,
+    "prevPageUri": null,
+    "start": 0,
+    "total": 2,
+    "type": "ResourceListV1",
+    "uri": "/rest/rack-managers/managers"
+  },
+  "get_rest_rack_managers_partitions": {
+    "category": "rack-managers",
+    "count": 2,
+    "created": "2025-09-10T10:15:00Z",
+    "eTag": "2025-09-10 10:15:00.00",
+    "members": [
+      {
         "type": "PartitionV1",
         "chassisCount": 2,
         "chassisUris": [
-            "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef",
-            "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/b2c3d4e5-f6a7-8901-2345-67890abcdef0"
+          "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef",
+          "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/b2c3d4e5-f6a7-8901-2345-67890abcdef0"
         ],
         "name": "Production-Partition-01",
         "partitionId": "1a2b3c4d-5e6f-7890-abcd-ef0123456789",
@@ -1109,241 +653,498 @@
         "status": "OK",
         "totalPartitionMemoryGB": 512,
         "totalProcessorCount": 8,
-        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/partitions/1a2b3c4d-5e6f-7890-abcd-ef0123456789",
-        "allocatedMemoryGB": 480,
-        "allocatedProcessorCount": 7,
-        "bootOrder": [
-            "HDD",
-            "NIC",
-            "USB"
+        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/partitions/1a2b3c4d-5e6f-7890-abcd-ef0123456789"
+      },
+      {
+        "type": "PartitionV1",
+        "chassisCount": 1,
+        "chassisUris": [
+          "/rest/rack-managers/d4e5f6a7-b8c9-0123-4567-890abcdef34/chassis/c3d4e5f6-a7b8-9012-3456-7890abcdef12"
+        ],
+        "name": "DR-Partition-01",
+        "partitionId": "2b3c4d5e-6f7a-8901-bcde-f01234567890",
+        "powerState": "OFF",
+        "rackManagerId": "d4e5f6a7-b8c9-0123-4567-890abcdef34",
+        "serverHardwareUri": "/rest/server-hardware/f4e2d0c3-7g9b-5d8e-9f1a-0b3c2d4e5f6a",
+        "state": "Enabled",
+        "status": "Warning",
+        "totalPartitionMemoryGB": 256,
+        "totalProcessorCount": 4,
+        "uri": "/rest/rack-managers/d4e5f6a7-b8c9-0123-4567-890abcdef34/partitions/2b3c4d5e-6f7a-8901-bcde-f01234567890"
+      }
+    ],
+    "modified": "2025-09-10T10:25:00Z",
+    "nextPageUri": null,
+    "prevPageUri": null,
+    "start": 0,
+    "total": 2,
+    "type": "ResourceListV1",
+    "uri": "/rest/rack-managers/partitions"
+  },
+  "get_rest_rack_managers_id": {
+    "type": "RackManagerV3",
+    "id": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+    "name": "RM-Primary-DC1",
+    "serialNumber": "SNRM12345678",
+    "partNumber": "880927-B21",
+    "licensingIntent": "OneViewStandard",
+    "eTag": "2025-09-10 10:00:00.00",
+    "state": "Managed",
+    "status": "OK",
+    "model": "HPE Superdome Flex 280",
+    "location": {
+      "rackName": "Primary_DataCenter_Rack_A",
+      "uPosition": 1,
+      "rackId": "rack-guid-12345"
+    },
+    "refreshState": "NotRefreshing",
+    "supportState": "Supported",
+    "supportDataCollectionType": "Automatic",
+    "supportDataCollectionState": "Enabled",
+    "supportDataCollectionsUri": "/rest/support/data-collections?deviceID=c3d4e5f6-a7b8-9012-3456-7890abcdef12&category=rack-managers",
+    "performanceDataCollectionServiceState": "Enabled",
+    "remoteSupportUri": "/rest/support/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+    "stateReason": "ManagedByAppliance",
+    "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+    "category": "rack-managers",
+    "created": "2025-09-10T10:00:00Z",
+    "modified": "2025-09-10T10:00:00Z",
+    "subResources": {
+      "chassis": {
+        "type": "SubResourceV1",
+        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis",
+        "modified": "2025-09-10T10:05:00Z",
+        "state": "Collected",
+        "etag": "2025-09-10 10:05:00.00",
+        "count": 2,
+        "data": [
+          {
+            "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+            "name": "Chassis-DC1-01",
+            "serialNumber": "SNCHASDC1A",
+            "status": "OK",
+            "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef"
+          }
         ]
-    },
-    "get_rest_rack_managers_id_remotesupportsettings": {
-        "category": "remote-support-settings",
-        "created": "2025-09-10T10:20:00Z",
-        "destination": "HPE Support Center",
-        "eTag": "2025-09-10 10:20:00.00",
-        "id": "a1b2c3d4-e5f6-7890-1234-567890fedcba",
-        "modified": "2025-09-10T10:20:00Z",
-        "name": "Remote Support Settings for RM-Primary-DC1",
-        "remoteSupportCurrentState": "Enabled",
-        "state": "Managed",
-        "status": "OK",
-        "type": "RemoteSupportSettings",
+      },
+      "partitions": {
+        "type": "SubResourceV1",
+        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/partitions",
+        "modified": "2025-09-10T10:15:00Z",
+        "state": "Collected",
+        "etag": "2025-09-10 10:15:00.00",
+        "count": 1,
+        "data": [
+          {
+            "id": "1a2b3c4d-5e6f-7890-abcd-ef0123456789",
+            "name": "Production-Partition-01",
+            "status": "OK",
+            "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/partitions/1a2b3c4d-5e6f-7890-abcd-ef0123456789"
+          }
+        ]
+      },
+      "managers": {
+        "type": "SubResourceV1",
+        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/managers",
+        "modified": "2025-09-10T10:10:00Z",
+        "state": "Collected",
+        "etag": "2025-09-10 10:10:00.00",
+        "count": 1,
+        "data": [
+          {
+            "id": "e5f6a7b8-c9d0-1234-5678-90abcdef56",
+            "name": "RMC-DC1-Manager",
+            "status": "OK",
+            "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/managers/e5f6a7b8-c9d0-1234-5678-90abcdef56"
+          }
+        ]
+      },
+      "remoteSupportSettings": {
+        "type": "SubResourceV1",
         "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/remoteSupportSettings",
-        "contractId": "HPE-CONTRACT-12345",
-        "customerName": "Example Corp",
-        "proxySettings": {
-            "enabled": false,
-            "proxyUri": null
-        }
-    },
-    "get_rest_server_hardware": {
-        "category": "server-hardware",
-        "count": 2,
-        "created": "2025-09-10T11:00:00Z",
-        "eTag": "2025-09-10 11:00:00.00",
-        "members": [
-            {
-                "type": "server-hardware-12",
-                "id": "e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
-                "name": "Prod-Server-DB01",
-                "serialNumber": "SNABCDEF0123",
-                "model": "HPE ProLiant DL380 Gen10",
-                "powerState": "On",
-                "status": "OK",
-                "state": "ProfileApplied",
-                "memoryMb": 262144,
-                "processorCount": 2,
-                "processorCoreCount": 32,
-                "processorSpeedMhz": 3200,
-                "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
-                "ipAddress": "10.0.0.100",
-                "firmwareVersion": "2.90"
-            },
-            {
-                "type": "server-hardware-12",
-                "id": "f4e2d0c3-7g9b-5d8e-9f1a-0b3c2d4e5f6a",
-                "name": "Dev-Server-Web02",
-                "serialNumber": "SNGHIJKL4567",
-                "model": "HPE ProLiant DL360 Gen10",
-                "powerState": "Off",
-                "status": "Warning",
-                "state": "Monitoring",
-                "memoryMb": 131072,
-                "processorCount": 1,
-                "processorCoreCount": 16,
-                "processorSpeedMhz": 2800,
-                "uri": "/rest/server-hardware/f4e2d0c3-7g9b-5d8e-9f1a-0b3c2d4e5f6a",
-                "ipAddress": "10.0.1.101",
-                "firmwareVersion": "2.70"
-            }
+        "modified": "2025-09-10T10:20:00Z",
+        "state": "Collected",
+        "etag": "2025-09-10 10:20:00.00",
+        "count": 1,
+        "data": [
+          {
+            "id": "settings-id-1",
+            "remoteSupportCurrentState": "Enabled",
+            "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/remoteSupportSettings"
+          }
+        ]
+      }
+    }
+  },
+  "patch_rest_rack_managers_id": {
+    "status": "Accepted",
+    "message": "Rack manager refresh initiated.",
+    "taskUri": "/rest/tasks/a1b2c3d4-e5f6-7890-1234-567890fedcba"
+  },
+  "delete_rest_rack_managers_id": {
+    "status": "Accepted",
+    "message": "Rack manager deletion initiated.",
+    "taskUri": "/rest/tasks/b2c3d4e5-f6a7-8901-2345-67890fedcba9"
+  },
+  "get_rest_rack_managers_id_chassis": {
+    "category": "rack-managers",
+    "count": 2,
+    "created": "2025-09-10T10:05:00Z",
+    "eTag": "2025-09-10 10:05:00.00",
+    "members": [
+      {
+        "type": "ChassisV1",
+        "chassisType": "Base",
+        "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+        "manufacturer": "HPE",
+        "model": "HPE Superdome Flex Base Chassis",
+        "name": "Chassis-DC1-01",
+        "serialNumber": "SNCHASDC1A",
+        "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+        "status": "OK",
+        "state": "Monitored",
+        "uPosition": 1,
+        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef"
+      },
+      {
+        "type": "ChassisV1",
+        "chassisType": "Base",
+        "id": "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+        "manufacturer": "HPE",
+        "model": "HPE Superdome Flex Base Chassis",
+        "name": "Chassis-DC1-02",
+        "serialNumber": "SNCHASDC1B",
+        "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+        "status": "OK",
+        "state": "Monitored",
+        "uPosition": 12,
+        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/b2c3d4e5-f6a7-8901-2345-67890abcdef0"
+      }
+    ],
+    "modified": "2025-09-10T10:15:00Z",
+    "nextPageUri": null,
+    "prevPageUri": null,
+    "start": 0,
+    "total": 2,
+    "type": "ResourceListV1",
+    "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis"
+  },
+  "get_rest_rack_managers_id_chassis_utilization": {
+    "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/",
+    "resolution": 600000,
+    "sliceStartTime": "2025-06-03T12:20:00Z",
+    "sliceEndTime": "2025-06-03T13:30:00Z",
+    "chassisMetricData": [
+      {
+        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef",
+        "newestSampleTime": "2025-06-03T13:30:00Z",
+        "oldestSampleTime": "2025-06-03T12:20:00Z",
+        "metricList": [
+          {
+            "metricName": "ChassisPower",
+            "metricSamples": [
+              [
+                1717411800000,
+                662.0
+              ],
+              [
+                1717411200000,
+                905.0
+              ],
+              [
+                1717410600000,
+                880.5
+              ]
+            ],
+            "metricCapacity": 2000
+          },
+          {
+            "metricName": "ChassisTemperature",
+            "metricSamples": [
+              [
+                1717411800000,
+                22
+              ],
+              [
+                1717411200000,
+                23
+              ],
+              [
+                1717410600000,
+                21
+              ]
+            ],
+            "metricCapacity": 50
+          }
+        ]
+      },
+      {
+        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+        "newestSampleTime": "2025-06-03T13:30:00Z",
+        "oldestSampleTime": "2025-06-03T12:20:00Z",
+        "metricList": [
+          {
+            "metricName": "ChassisPower",
+            "metricSamples": [
+              [
+                1717411800000,
+                700.0
+              ],
+              [
+                1717411200000,
+                920.0
+              ],
+              [
+                1717410600000,
+                890.0
+              ]
+            ],
+            "metricCapacity": 2000
+          },
+          {
+            "metricName": "ChassisTemperature",
+            "metricSamples": [
+              [
+                1717411800000,
+                24
+              ],
+              [
+                1717411200000,
+                25
+              ],
+              [
+                1717410600000,
+                23
+              ]
+            ],
+            "metricCapacity": 50
+          }
+        ]
+      }
+    ],
+    "metricsAvailable": true
+  },
+  "get_rest_rack_managers_id_environmentalconfiguration": {
+    "calibratedMaxPower": 2000,
+    "capHistorySupported": true,
+    "height": 4,
+    "historyBufferSize": 288,
+    "historySampleIntervalSeconds": 300,
+    "idleMaxPower": 200,
+    "licenseRequirement": "OneViewStandard",
+    "powerCapType": "Electrical",
+    "powerHistorySupported": true,
+    "psuList": [
+      {
+        "capacity": 1600,
+        "inputVoltage": 220,
+        "powerType": "AC",
+        "psuId": 1,
+        "side": "A",
+        "status": "OK"
+      },
+      {
+        "capacity": 1600,
+        "inputVoltage": 220,
+        "powerType": "AC",
+        "psuId": 2,
+        "side": "B",
+        "status": "OK"
+      },
+      {
+        "capacity": 1600,
+        "inputVoltage": 220,
+        "powerType": "AC",
+        "psuId": 3,
+        "side": "A",
+        "status": "Warning"
+      }
+    ],
+    "rackId": "rack-guid-primary-dc1",
+    "rackModel": "HPE G2 Advanced Series Rack 42U",
+    "rackName": "Primary_DataCenter_Rack_A",
+    "rackUHeight": 42,
+    "relativeOrder": 1,
+    "thermalHistorySupported": true,
+    "uSlot": 1,
+    "utilizationHistorySupported": true,
+    "rackManagerUri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12"
+  },
+  "get_rest_rack_managers_id_managers": {
+    "category": "rack-managers",
+    "count": 1,
+    "created": "2025-09-10T10:10:00Z",
+    "eTag": "2025-09-10 10:10:00.00",
+    "members": [
+      {
+        "type": "ManagerV1",
+        "fwVersion": "2.8.0",
+        "hostName": "rmc-dc1-manager.corp.com",
+        "id": "e5f6a7b8-c9d0-1234-5678-90abcdef56",
+        "ipv4Address": "192.168.1.10",
+        "managerType": "Standalone",
+        "model": "Rack Management Controller",
+        "name": "RMC-DC1-Manager",
+        "serialNumber": "SNMAN001DC1",
+        "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+        "status": "OK",
+        "state": "Enabled",
+        "uPosition": 21,
+        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/managers/e5f6a7b8-c9d0-1234-5678-90abcdef56"
+      },
+      {
+        "type": "ManagerV1",
+        "fwVersion": "2.8.0",
+        "hostName": "rmc-dc1-manager-b.corp.com",
+        "id": "f6a7b8c9-d0e1-2345-6789-0abcdef789",
+        "ipv4Address": "192.168.1.11",
+        "managerType": "Standalone",
+        "model": "Rack Management Controller",
+        "name": "RMC-DC1-Manager-B",
+        "serialNumber": "SNMAN002DC1",
+        "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+        "status": "OK",
+        "state": "Enabled",
+        "uPosition": 22,
+        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/managers/f6a7b8c9-d0e1-2345-6789-0abcdef789"
+      }
+    ],
+    "modified": "2025-09-10T10:20:00Z",
+    "nextPageUri": null,
+    "prevPageUri": null,
+    "start": 0,
+    "total": 2,
+    "type": "ResourceListV1",
+    "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/managers"
+  },
+  "get_rest_rack_managers_id_managers_managerid": {
+    "type": "ManagerV1",
+    "fwVersion": "2.8.0",
+    "hostName": "rmc-dc1-manager.corp.com",
+    "id": "e5f6a7b8-c9d0-1234-5678-90abcdef56",
+    "ipv4Address": "192.168.1.10",
+    "managerType": "Standalone",
+    "model": "Rack Management Controller",
+    "name": "RMC-DC1-Manager",
+    "serialNumber": "SNMAN001DC1",
+    "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+    "status": "OK",
+    "state": "Enabled",
+    "uPosition": 21,
+    "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/managers/e5f6a7b8-c9d0-1234-5678-90abcdef56",
+    "ethernetInterfaces": [
+      {
+        "name": "Management Port",
+        "macAddress": "00:01:02:03:04:05",
+        "ipv4Address": "192.168.1.10",
+        "subnetMask": "255.255.255.0",
+        "gateway": "192.168.1.1"
+      }
+    ],
+    "powerState": "On"
+  },
+  "get_rest_rack_managers_id_partitions": {
+    "category": "rack-managers",
+    "count": 1,
+    "created": "2025-09-10T10:15:00Z",
+    "eTag": "2025-09-10 10:15:00.00",
+    "members": [
+      {
+        "type": "PartitionV1",
+        "chassisCount": 2,
+        "chassisUris": [
+          "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef",
+          "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/b2c3d4e5-f6a7-8901-2345-67890abcdef0"
         ],
-        "modified": "2025-09-10T11:05:00Z",
-        "nextPageUri": "/rest/server-hardware?start=2&count=50",
-        "prevPageUri": null,
-        "start": 0,
-        "total": 2,
-        "type": "server-hardware-list-12",
-        "uri": "/rest/server-hardware"
-    },
-    "post_rest_server_hardware": {
-        "type": "server-hardware-12",
-        "id": "a1b2c3d4-e5f6-7890-1234-567890fedcba",
-        "name": "New-RackMount-Server-03",
-        "status": "Adding",
-        "state": "DiscoveryStarted",
-        "uri": "/rest/server-hardware/a1b2c3d4-e5f6-7890-1234-567890fedcba",
-        "taskUri": "/rest/tasks/c1d2e3f4-a5b6-7c8d-9e0f-1a2b3c4d5e6f",
-        "created": "2025-09-10T18:40:00Z"
-    },
-    "get_rest_server_hardware_firmware": {
-        "category": "server-hardware",
-        "count": 2,
-        "created": "2025-09-10T11:05:00Z",
-        "eTag": "2025-09-10 11:05:00.00",
-        "members": [
-            {
-                "type": "server-hardware-firmware-1",
-                "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
-                "serverName": "Prod-Server-DB01",
-                "serverModel": "HPE ProLiant DL380 Gen10",
-                "state": "Supported",
-                "components": [
-                    {
-                        "componentName": "iLO 5",
-                        "componentVersion": "2.90",
-                        "componentLocation": "Management Processor"
-                    },
-                    {
-                        "componentName": "System ROM",
-                        "componentVersion": "U44 v2.80 (02/01/2024)",
-                        "componentLocation": "System Board"
-                    }
-                ],
-                "lastScanned": "2025-09-10T11:04:00Z"
-            },
-            {
-                "type": "server-hardware-firmware-1",
-                "serverHardwareUri": "/rest/server-hardware/f4e2d0c3-7g9b-5d8e-9f1a-0b3c2d4e5f6a",
-                "serverName": "Dev-Server-Web02",
-                "serverModel": "HPE ProLiant DL360 Gen10",
-                "state": "NotCompliant",
-                "components": [
-                    {
-                        "componentName": "iLO 5",
-                        "componentVersion": "2.70",
-                        "componentLocation": "Management Processor"
-                    },
-                    {
-                        "componentName": "System ROM",
-                        "componentVersion": "P92 v2.60 (08/01/2023)",
-                        "componentLocation": "System Board"
-                    }
-                ],
-                "lastScanned": "2025-09-10T11:03:00Z"
-            }
-        ],
-        "modified": "2025-09-10T11:05:00Z",
-        "nextPageUri": null,
-        "prevPageUri": null,
-        "start": 0,
-        "total": 2,
-        "type": "server-firmwareinventory-list-1",
-        "uri": "/rest/server-hardware/*/firmware"
-    },
-    "post_rest_server_hardware_discovery": {
-        "status": "Accepted",
-        "message": "Server hardware discovery initiated for specified hosts and ranges.",
-        "taskUri": "/rest/tasks/d2e3f4a5-b6c7-8d9e-0f1a-2b3c4d5e6f7a",
-        "discoveredCount": 0,
-        "discoveryAttemptedCount": 0
-    },
-    "post_rest_server_hardware_firmware_compliance": {
-        "componentMappingList": [
-            {
-                "componentKey": "a6b1a447-382a-5a4f-9005-028f103c0602",
-                "componentLocation": "Embedded RAID",
-                "componentName": "HPE Smart Array P408i-a SR Gen10",
-                "componentType": "Firmware",
-                "installedVersion": "2.80-218",
-                "baselineVersion": "2.80",
-                "componentFirmwareUpdateRequired": false,
-                "hpsumManaged": true,
-                "status": "Compliant"
-            },
-            {
-                "componentKey": "b7c2b558-493b-6b50-1016-039g114d1713",
-                "componentLocation": "System Board",
-                "componentName": "iLO 5",
-                "componentType": "Firmware",
-                "installedVersion": "2.90 Mar 15 2024",
-                "baselineVersion": "2.90",
-                "componentFirmwareUpdateRequired": false,
-                "hpsumManaged": true,
-                "status": "Compliant"
-            },
-            {
-                "componentKey": "c8d3c669-504c-7c61-2127-040h125e2824",
-                "componentLocation": "Network Adapter",
-                "componentName": "HPE Ethernet 10Gb 2-port 530FLR-SFP+ Adapter",
-                "componentType": "Firmware",
-                "installedVersion": "1.8.10",
-                "baselineVersion": "1.8.15",
-                "componentFirmwareUpdateRequired": true,
-                "hpsumManaged": true,
-                "status": "NotCompliant"
-            }
-        ],
-        "serverFirmwareUpdateRequired": true,
+        "name": "Production-Partition-01",
+        "partitionId": "1a2b3c4d-5e6f-7890-abcd-ef0123456789",
+        "powerState": "ON",
+        "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
         "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
-        "baselineUri": "/rest/firmware-drivers/SPP202403_2024_03_15"
-    },
-    "get_rest_server_hardware_schema": {
-        "title": "Server Hardware Schema",
-        "type": "object",
-        "properties": {
-            "name": {
-                "type": "string",
-                "description": "User-friendly name of the server hardware."
-            },
-            "serialNumber": {
-                "type": "string",
-                "description": "Manufacturer-assigned serial number of the server hardware, typically unique."
-            },
-            "model": {
-                "type": "string",
-                "description": "Model of the server hardware (e.g., HPE ProLiant DL380 Gen10)."
-            },
-            "powerState": {
-                "type": "string",
-                "enum": [
-                    "On",
-                    "Off",
-                    "Unknown",
-                    "Resetting"
-                ],
-                "description": "Current power state of the server."
-            },
-            "memoryMb": {
-                "type": "integer",
-                "format": "int64",
-                "description": "Total installed memory in Megabytes."
-            },
-            "uri": {
-                "type": "string",
-                "format": "uri",
-                "description": "Uniform Resource Identifier (URI) for the resource."
-            }
-        },
-        "required": [
-            "name",
-            "serialNumber",
-            "uri"
+        "state": "Enabled",
+        "status": "OK",
+        "totalPartitionMemoryGB": 512,
+        "totalProcessorCount": 8,
+        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/partitions/1a2b3c4d-5e6f-7890-abcd-ef0123456789"
+      },
+      {
+        "type": "PartitionV1",
+        "chassisCount": 1,
+        "chassisUris": [
+          "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/b2c3d4e5-f6a7-8901-2345-67890abcdef0"
         ],
-        "description": "JSON schema for a server hardware resource in HPE OneView."
-    },
-    "get_rest_server_hardware_id": {
+        "name": "Development-Partition-02",
+        "partitionId": "2b3c4d5e-6f7a-8901-bcde-f01234567890",
+        "powerState": "OFF",
+        "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+        "serverHardwareUri": "/rest/server-hardware/f4e2d0c3-7g9b-5d8e-9f1a-0b3c2d4e5f6a",
+        "state": "Disabled",
+        "status": "Warning",
+        "totalPartitionMemoryGB": 128,
+        "totalProcessorCount": 2,
+        "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/partitions/2b3c4d5e-6f7a-8901-bcde-f01234567890"
+      }
+    ],
+    "modified": "2025-09-10T10:25:00Z",
+    "nextPageUri": null,
+    "prevPageUri": null,
+    "start": 0,
+    "total": 2,
+    "type": "ResourceListV1",
+    "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/partitions"
+  },
+  "get_rest_rack_managers_id_partitions_uuid": {
+    "type": "PartitionV1",
+    "chassisCount": 2,
+    "chassisUris": [
+      "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/chassis/b2c3d4e5-f6a7-8901-2345-67890abcdef0"
+    ],
+    "name": "Production-Partition-01",
+    "partitionId": "1a2b3c4d-5e6f-7890-abcd-ef0123456789",
+    "powerState": "ON",
+    "rackManagerId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+    "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
+    "state": "Enabled",
+    "status": "OK",
+    "totalPartitionMemoryGB": 512,
+    "totalProcessorCount": 8,
+    "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/partitions/1a2b3c4d-5e6f-7890-abcd-ef0123456789",
+    "allocatedMemoryGB": 480,
+    "allocatedProcessorCount": 7,
+    "bootOrder": [
+      "HDD",
+      "NIC",
+      "USB"
+    ]
+  },
+  "get_rest_rack_managers_id_remotesupportsettings": {
+    "category": "remote-support-settings",
+    "created": "2025-09-10T10:20:00Z",
+    "destination": "HPE Support Center",
+    "eTag": "2025-09-10 10:20:00.00",
+    "id": "a1b2c3d4-e5f6-7890-1234-567890fedcba",
+    "modified": "2025-09-10T10:20:00Z",
+    "name": "Remote Support Settings for RM-Primary-DC1",
+    "remoteSupportCurrentState": "Enabled",
+    "state": "Managed",
+    "status": "OK",
+    "type": "RemoteSupportSettings",
+    "uri": "/rest/rack-managers/c3d4e5f6-a7b8-9012-3456-7890abcdef12/remoteSupportSettings",
+    "contractId": "HPE-CONTRACT-12345",
+    "customerName": "Example Corp",
+    "proxySettings": {
+      "enabled": false,
+      "proxyUri": null
+    }
+  },
+  "get_rest_server_hardware": {
+    "category": "server-hardware",
+    "count": 2,
+    "created": "2025-09-10T11:00:00Z",
+    "eTag": "2025-09-10 11:00:00.00",
+    "members": [
+      {
         "type": "server-hardware-12",
         "id": "e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
         "name": "Prod-Server-DB01",
@@ -1357,40 +1158,250 @@
         "processorCoreCount": 32,
         "processorSpeedMhz": 3200,
         "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
-        "description": "Primary database server in production environment.",
-        "firmwareAndDriversInstallState": {
-            "installState": "Activated",
-            "installedStateTimestamp": "2025-01-15T10:00:00Z",
-            "firmwareBaselineUri": "/rest/firmware-drivers/SPP202403_2024_03_15"
+        "ipAddress": "10.0.0.100",
+        "firmwareVersion": "2.90"
+      },
+      {
+        "type": "server-hardware-12",
+        "id": "f4e2d0c3-7g9b-5d8e-9f1a-0b3c2d4e5f6a",
+        "name": "Dev-Server-Web02",
+        "serialNumber": "SNGHIJKL4567",
+        "model": "HPE ProLiant DL360 Gen10",
+        "powerState": "Off",
+        "status": "Warning",
+        "state": "Monitoring",
+        "memoryMb": 131072,
+        "processorCount": 1,
+        "processorCoreCount": 16,
+        "processorSpeedMhz": 2800,
+        "uri": "/rest/server-hardware/f4e2d0c3-7g9b-5d8e-9f1a-0b3c2d4e5f6a",
+        "ipAddress": "10.0.1.101",
+        "firmwareVersion": "2.70"
+      }
+    ],
+    "modified": "2025-09-10T11:05:00Z",
+    "nextPageUri": "/rest/server-hardware?start=2&count=50",
+    "prevPageUri": null,
+    "start": 0,
+    "total": 2,
+    "type": "server-hardware-list-12",
+    "uri": "/rest/server-hardware"
+  },
+  "post_rest_server_hardware": {
+    "type": "server-hardware-12",
+    "id": "a1b2c3d4-e5f6-7890-1234-567890fedcba",
+    "name": "New-RackMount-Server-03",
+    "status": "Adding",
+    "state": "DiscoveryStarted",
+    "uri": "/rest/server-hardware/a1b2c3d4-e5f6-7890-1234-567890fedcba",
+    "taskUri": "/rest/tasks/c1d2e3f4-a5b6-7c8d-9e0f-1a2b3c4d5e6f",
+    "created": "2025-09-10T18:40:00Z"
+  },
+  "get_rest_server_hardware_firmware": {
+    "category": "server-hardware",
+    "count": 2,
+    "created": "2025-09-10T11:05:00Z",
+    "eTag": "2025-09-10 11:05:00.00",
+    "members": [
+      {
+        "type": "server-hardware-firmware-1",
+        "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
+        "serverName": "Prod-Server-DB01",
+        "serverModel": "HPE ProLiant DL380 Gen10",
+        "state": "Supported",
+        "components": [
+          {
+            "componentName": "iLO 5",
+            "componentVersion": "2.90",
+            "componentLocation": "Management Processor"
+          },
+          {
+            "componentName": "System ROM",
+            "componentVersion": "U44 v2.80 (02/01/2024)",
+            "componentLocation": "System Board"
+          }
+        ],
+        "lastScanned": "2025-09-10T11:04:00Z"
+      },
+      {
+        "type": "server-hardware-firmware-1",
+        "serverHardwareUri": "/rest/server-hardware/f4e2d0c3-7g9b-5d8e-9f1a-0b3c2d4e5f6a",
+        "serverName": "Dev-Server-Web02",
+        "serverModel": "HPE ProLiant DL360 Gen10",
+        "state": "NotCompliant",
+        "components": [
+          {
+            "componentName": "iLO 5",
+            "componentVersion": "2.70",
+            "componentLocation": "Management Processor"
+          },
+          {
+            "componentName": "System ROM",
+            "componentVersion": "P92 v2.60 (08/01/2023)",
+            "componentLocation": "System Board"
+          }
+        ],
+        "lastScanned": "2025-09-10T11:03:00Z"
+      }
+    ],
+    "modified": "2025-09-10T11:05:00Z",
+    "nextPageUri": null,
+    "prevPageUri": null,
+    "start": 0,
+    "total": 2,
+    "type": "server-firmwareinventory-list-1",
+    "uri": "/rest/server-hardware/*/firmware"
+  },
+  "post_rest_server_hardware_discovery": {
+    "status": "Accepted",
+    "message": "Server hardware discovery initiated for specified hosts and ranges.",
+    "taskUri": "/rest/tasks/d2e3f4a5-b6c7-8d9e-0f1a-2b3c4d5e6f7a",
+    "discoveredCount": 0,
+    "discoveryAttemptedCount": 0
+  },
+  "post_rest_server_hardware_firmware_compliance": {
+    "componentMappingList": [
+      {
+        "componentKey": "a6b1a447-382a-5a4f-9005-028f103c0602",
+        "componentLocation": "Embedded RAID",
+        "componentName": "HPE Smart Array P408i-a SR Gen10",
+        "componentType": "Firmware",
+        "installedVersion": "2.80-218",
+        "baselineVersion": "2.80",
+        "componentFirmwareUpdateRequired": false,
+        "hpsumManaged": true,
+        "status": "Compliant"
+      },
+      {
+        "componentKey": "b7c2b558-493b-6b50-1016-039g114d1713",
+        "componentLocation": "System Board",
+        "componentName": "iLO 5",
+        "componentType": "Firmware",
+        "installedVersion": "2.90 Mar 15 2024",
+        "baselineVersion": "2.90",
+        "componentFirmwareUpdateRequired": false,
+        "hpsumManaged": true,
+        "status": "Compliant"
+      },
+      {
+        "componentKey": "c8d3c669-504c-7c61-2127-040h125e2824",
+        "componentLocation": "Network Adapter",
+        "componentName": "HPE Ethernet 10Gb 2-port 530FLR-SFP+ Adapter",
+        "componentType": "Firmware",
+        "installedVersion": "1.8.10",
+        "baselineVersion": "1.8.15",
+        "componentFirmwareUpdateRequired": true,
+        "hpsumManaged": true,
+        "status": "NotCompliant"
+      }
+    ],
+    "serverFirmwareUpdateRequired": true,
+    "serverHardwareUri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
+    "baselineUri": "/rest/firmware-drivers/SPP202403_2024_03_15"
+  },
+  "get_rest_server_hardware_schema": {
+    "title": "Server Hardware Schema",
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "User-friendly name of the server hardware."
+      },
+      "serialNumber": {
+        "type": "string",
+        "description": "Manufacturer-assigned serial number of the server hardware, typically unique."
+      },
+      "model": {
+        "type": "string",
+        "description": "Model of the server hardware (e.g., HPE ProLiant DL380 Gen10)."
+      },
+      "powerState": {
+        "type": "string",
+        "enum": [
+          "On",
+          "Off",
+          "Unknown",
+          "Resetting"
+        ],
+        "description": "Current power state of the server."
+      },
+      "memoryMb": {
+        "type": "integer",
+        "format": "int64",
+        "description": "Total installed memory in Megabytes."
+      },
+      "uri": {
+        "type": "string",
+        "format": "uri",
+        "description": "Uniform Resource Identifier (URI) for the resource."
+      }
+    },
+    "required": [
+      "name",
+      "serialNumber",
+      "uri"
+    ],
+    "description": "JSON schema for a server hardware resource in HPE OneView."
+  },
+  "get_rest_server_hardware_id": {
+    "type": "server-hardware-12",
+    "id": "e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
+    "name": "Prod-Server-DB01",
+    "serialNumber": "SNABCDEF0123",
+    "model": "HPE ProLiant DL380 Gen10",
+    "powerState": "On",
+    "status": "OK",
+    "state": "ProfileApplied",
+    "memoryMb": 262144,
+    "processorCount": 2,
+    "processorCoreCount": 32,
+    "processorSpeedMhz": 3200,
+    "uri": "/rest/server-hardware/e3d1c9b2-6f8a-4c7d-8e0f-9a2b1c3d4e5f",
+    "description": "Primary database server in production environment.",
+    "firmwareAndDriversInstallState": {
+      "installState": "Activated",
+      "installedStateTimestamp": "2025-01-15T10:00:00Z",
+      "firmwareBaselineUri": "/rest/firmware-drivers/SPP202403_2024_03_15"
+    },
+    "mpFirmwareVersion": "2.90",
+    "mpHostInfo": {
+      "mpHostName": "ilo-prod-db01.local",
+      "mpIpAddresses": [
+        {
+          "address": "10.0.0.100",
+          "type": "Static"
         },
-        "mpFirmwareVersion": "2.90",
-        "mpHostInfo": {
-            "mpHostName": "ilo-prod-db01.local",
-            "mpIpAddresses": [
-                {
-                    "address": "10.0.0.100",
-                    "type": "Static"
-                },
-                {
-                    "address": "fe80::1:2:3:4",
-                    "type": "DHCPv6"
-                }
-            ]
-        },
-        "licensingIntent": "OneViewAdvanced",
-        "refreshState": "NotRefreshing",
-        "romVersion": "U44 v2.80 (02/01/2024)",
-        "assetTag": "PROD-DB01",
-        "portMap": {
-            "ethernetPorts": [
-                {
-                    "name": "Port 1",
-                    "macAddress": "00:1A:2B:3C:4D:5E",
-                    "linkSpeedMbps": 10000
-                }
-            ]
-        },
-        "created": "2025-01-01T08:00:00Z",
-        "modified": "2025-09-10T18:45:00Z"
+        {
+          "address": "fe80::1:2:3:4",
+          "type": "DHCPv6"
+        }
+      ]
+    },
+    "licensingIntent": "OneViewAdvanced",
+    "refreshState": "NotRefreshing",
+    "romVersion": "U44 v2.80 (02/01/2024)",
+    "assetTag": "PROD-DB01",
+    "portMap": {
+      "ethernetPorts": [
+        {
+          "name": "Port 1",
+          "macAddress": "00:1A:2B:3C:4D:5E",
+          "linkSpeedMbps": 10000
+        }
+      ]
+    },
+    "created": "2025-01-01T08:00:00Z",
+    "modified": "2025-09-10T18:45:00Z"
+  },
+  "dynamic_store": {
+    "/api/v1/host-initiator-groups": {
+      "test-group-id": {
+        "hostProximityValues": null,
+        "hostsToCreate": null,
+        "name": "test-group",
+        "removedHosts": null,
+        "updatedHosts": null
+      }
     }
+  }
 }

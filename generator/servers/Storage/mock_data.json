@@ -1,168 +1,92 @@
 {
-    "get_data_services_v1beta1_async_operations": {
-        "items": [
-            {
-                "id": "21d09afe-5e5c-4993-99be-25772b67982d",
-                "state": "RUNNING",
-                "progressPercentage": 75,
-                "createdAt": "2024-01-15T10:00:00Z",
-                "updatedAt": "2024-01-15T10:30:00Z",
-                "associatedResources": [
-                    {
-                        "id": "res-001",
-                        "type": "data-services/volume",
-                        "name": "ProductionVolume1"
-                    }
-                ],
-                "error": null,
-                "healthStatus": "OK",
-                "logMessages": [
-                    "Operation started",
-                    "Allocating storage",
-                    "Data migration in progress"
-                ],
-                "hasChildOperations": false,
-                "parent": null,
-                "rootOperation": null
-            },
-            {
-                "id": "a2b3c4d5-e6f7-8901-2345-67890abcdef0",
-                "state": "INITIALIZED",
-                "progressPercentage": 0,
-                "createdAt": "2024-01-16T08:00:00Z",
-                "updatedAt": "2024-01-16T08:00:00Z",
-                "associatedResources": [],
-                "error": null,
-                "healthStatus": "OK",
-                "logMessages": [],
-                "hasChildOperations": false,
-                "parent": null,
-                "rootOperation": null
-            }
-        ],
-        "count": 2,
-        "offset": 0,
-        "total": 2
-    },
-    "get_data_services_v1beta1_async_operations_id": {
+  "get_data_services_v1beta1_async_operations": {
+    "items": [
+      {
         "id": "21d09afe-5e5c-4993-99be-25772b67982d",
         "state": "RUNNING",
         "progressPercentage": 75,
         "createdAt": "2024-01-15T10:00:00Z",
         "updatedAt": "2024-01-15T10:30:00Z",
         "associatedResources": [
-            {
-                "id": "res-001",
-                "type": "data-services/volume",
-                "name": "ProductionVolume1"
-            }
+          {
+            "id": "res-001",
+            "type": "data-services/volume",
+            "name": "ProductionVolume1"
+          }
         ],
         "error": null,
         "healthStatus": "OK",
         "logMessages": [
-            "Operation started",
-            "Allocating storage",
-            "Data migration in progress"
+          "Operation started",
+          "Allocating storage",
+          "Data migration in progress"
         ],
         "hasChildOperations": false,
         "parent": null,
         "rootOperation": null
-    },
-    "get_data_services_v1beta1_dual_auth_operations": {
-        "count": 2,
-        "items": [
-            {
-                "associatedResources": [
-                    {
-                        "groups": [
-                            {
-                                "id": "group-id-1",
-                                "name": "AdminGroup"
-                            }
-                        ],
-                        "resource": {
-                            "consoleUri": "/console/resources/volume-123",
-                            "name": "Production Volume Deletion",
-                            "resourceUri": "/data-services/v1beta1/volumes/volume-123",
-                            "type": "data-services/volume"
-                        }
-                    }
-                ],
-                "checkedAt": null,
-                "checkedByEmail": null,
-                "checkedByUri": null,
-                "createdAt": "2024-01-20T11:00:00Z",
-                "customerId": "00000000-0000-0000-0000-000000000000",
-                "description": "Request to delete critical production volume.",
-                "generation": 1,
-                "id": "op-id-497f6eca-6276-4993-bfeb-53cbbbba6f08",
-                "name": "Delete Prod Volume",
-                "requestedAt": "2024-01-20T10:55:00Z",
-                "requestedByEmail": "submitter@example.com",
-                "requestedByUri": "/users/submitter",
-                "requestedOperation": "DELETE_VOLUME",
-                "resourceUri": "/data-services/v1beta1/dual-auth-operations/op-id-497f6eca-6276-4993-bfeb-53cbbbba6f08",
-                "sourceServiceExternalName": "Data Protection",
-                "state": "PENDING_APPROVAL",
-                "type": "data-services/dual-auth-operation",
-                "updatedAt": "2024-01-20T11:00:00Z"
-            },
-            {
-                "associatedResources": [
-                    {
-                        "groups": [
-                            {
-                                "id": "group-id-2",
-                                "name": "SecurityTeam"
-                            }
-                        ],
-                        "resource": {
-                            "consoleUri": "/console/resources/backup-policy-456",
-                            "name": "Sensitive Data Backup Policy Modification",
-                            "resourceUri": "/data-services/v1beta1/backup-policies/policy-456",
-                            "type": "data-services/backup-policy"
-                        }
-                    }
-                ],
-                "checkedAt": "2024-01-21T14:30:00Z",
-                "checkedByEmail": "reviewer@example.com",
-                "checkedByUri": "/users/reviewer",
-                "createdAt": "2024-01-21T14:00:00Z",
-                "customerId": "00000000-0000-0000-0000-000000000000",
-                "description": "Request to modify backup policy for customer PII data.",
-                "generation": 2,
-                "id": "op-id-b8a9c0d1-e2f3-4455-6677-88990aabbccdd",
-                "name": "Modify PII Backup Policy",
-                "requestedAt": "2024-01-21T13:50:00Z",
-                "requestedByEmail": "initiator@example.com",
-                "requestedByUri": "/users/initiator",
-                "requestedOperation": "UPDATE_BACKUP_POLICY",
-                "resourceUri": "/data-services/v1beta1/dual-auth-operations/op-id-b8a9c0d1-e2f3-4455-6677-88990aabbccdd",
-                "sourceServiceExternalName": "Data Security",
-                "state": "APPROVED",
-                "type": "data-services/dual-auth-operation",
-                "updatedAt": "2024-01-21T14:30:00Z"
-            }
-        ],
-        "offset": 0,
-        "total": 2
-    },
-    "get_data_services_v1beta1_dual_auth_operations_id": {
+      },
+      {
+        "id": "a2b3c4d5-e6f7-8901-2345-67890abcdef0",
+        "state": "INITIALIZED",
+        "progressPercentage": 0,
+        "createdAt": "2024-01-16T08:00:00Z",
+        "updatedAt": "2024-01-16T08:00:00Z",
+        "associatedResources": [],
+        "error": null,
+        "healthStatus": "OK",
+        "logMessages": [],
+        "hasChildOperations": false,
+        "parent": null,
+        "rootOperation": null
+      }
+    ],
+    "count": 2,
+    "offset": 0,
+    "total": 2
+  },
+  "get_data_services_v1beta1_async_operations_id": {
+    "id": "21d09afe-5e5c-4993-99be-25772b67982d",
+    "state": "RUNNING",
+    "progressPercentage": 75,
+    "createdAt": "2024-01-15T10:00:00Z",
+    "updatedAt": "2024-01-15T10:30:00Z",
+    "associatedResources": [
+      {
+        "id": "res-001",
+        "type": "data-services/volume",
+        "name": "ProductionVolume1"
+      }
+    ],
+    "error": null,
+    "healthStatus": "OK",
+    "logMessages": [
+      "Operation started",
+      "Allocating storage",
+      "Data migration in progress"
+    ],
+    "hasChildOperations": false,
+    "parent": null,
+    "rootOperation": null
+  },
+  "get_data_services_v1beta1_dual_auth_operations": {
+    "count": 2,
+    "items": [
+      {
         "associatedResources": [
-            {
-                "groups": [
-                    {
-                        "id": "group-id-1",
-                        "name": "AdminGroup"
-                    }
-                ],
-                "resource": {
-                    "consoleUri": "/console/resources/volume-123",
-                    "name": "Production Volume Deletion",
-                    "resourceUri": "/data-services/v1beta1/volumes/volume-123",
-                    "type": "data-services/volume"
-                }
+          {
+            "groups": [
+              {
+                "id": "group-id-1",
+                "name": "AdminGroup"
+              }
+            ],
+            "resource": {
+              "consoleUri": "/console/resources/volume-123",
+              "name": "Production Volume Deletion",
+              "resourceUri": "/data-services/v1beta1/volumes/volume-123",
+              "type": "data-services/volume"
             }
+          }
         ],
         "checkedAt": null,
         "checkedByEmail": null,
@@ -182,75 +106,122 @@
         "state": "PENDING_APPROVAL",
         "type": "data-services/dual-auth-operation",
         "updatedAt": "2024-01-20T11:00:00Z"
-    },
-    "patch_data_services_v1beta1_dual_auth_operations_id": {
+      },
+      {
         "associatedResources": [
-            {
-                "groups": [
-                    {
-                        "id": "group-id-1",
-                        "name": "AdminGroup"
-                    }
-                ],
-                "resource": {
-                    "consoleUri": "/console/resources/volume-123",
-                    "name": "Production Volume Deletion",
-                    "resourceUri": "/data-services/v1beta1/volumes/volume-123",
-                    "type": "data-services/volume"
-                }
+          {
+            "groups": [
+              {
+                "id": "group-id-2",
+                "name": "SecurityTeam"
+              }
+            ],
+            "resource": {
+              "consoleUri": "/console/resources/backup-policy-456",
+              "name": "Sensitive Data Backup Policy Modification",
+              "resourceUri": "/data-services/v1beta1/backup-policies/policy-456",
+              "type": "data-services/backup-policy"
             }
+          }
         ],
-        "checkedAt": "2024-01-20T11:15:00Z",
-        "checkedByEmail": "approver@example.com",
-        "checkedByUri": "/users/approver",
-        "createdAt": "2024-01-20T11:00:00Z",
+        "checkedAt": "2024-01-21T14:30:00Z",
+        "checkedByEmail": "reviewer@example.com",
+        "checkedByUri": "/users/reviewer",
+        "createdAt": "2024-01-21T14:00:00Z",
         "customerId": "00000000-0000-0000-0000-000000000000",
-        "description": "Request to delete critical production volume.",
-        "generation": 1,
-        "id": "op-id-497f6eca-6276-4993-bfeb-53cbbbba6f08",
-        "name": "Delete Prod Volume",
-        "requestedAt": "2024-01-20T10:55:00Z",
-        "requestedByEmail": "submitter@example.com",
-        "requestedByUri": "/users/submitter",
-        "requestedOperation": "DELETE_VOLUME",
-        "resourceUri": "/data-services/v1beta1/dual-auth-operations/op-id-497f6eca-6276-4993-bfeb-53cbbbba6f08",
-        "sourceServiceExternalName": "Data Protection",
+        "description": "Request to modify backup policy for customer PII data.",
+        "generation": 2,
+        "id": "op-id-b8a9c0d1-e2f3-4455-6677-88990aabbccdd",
+        "name": "Modify PII Backup Policy",
+        "requestedAt": "2024-01-21T13:50:00Z",
+        "requestedByEmail": "initiator@example.com",
+        "requestedByUri": "/users/initiator",
+        "requestedOperation": "UPDATE_BACKUP_POLICY",
+        "resourceUri": "/data-services/v1beta1/dual-auth-operations/op-id-b8a9c0d1-e2f3-4455-6677-88990aabbccdd",
+        "sourceServiceExternalName": "Data Security",
         "state": "APPROVED",
         "type": "data-services/dual-auth-operation",
-        "updatedAt": "2024-01-20T11:15:00Z"
-    },
-    "get_data_services_v1beta1_issues": {
-        "items": [
-            {
-                "id": "issue-001-abc",
-                "title": "Database connection error",
-                "description": "Failed to connect to primary database instance.",
-                "state": "CREATED",
-                "severity": "HIGH",
-                "category": "Connectivity",
-                "service": "Backup Recovery",
-                "createdAt": "2024-03-01T09:00:00Z",
-                "updatedAt": "2024-03-01T09:00:00Z",
-                "resourceUri": "/data-services/v1beta1/resources/res-db-001"
-            },
-            {
-                "id": "issue-002-def",
-                "title": "Storage volume low space",
-                "description": "Critical storage volume is at 90% capacity.",
-                "state": "CREATED",
-                "severity": "MEDIUM",
-                "category": "Storage",
-                "service": "Virtualization",
-                "createdAt": "2024-03-02T14:30:00Z",
-                "updatedAt": "2024-03-02T14:30:00Z",
-                "resourceUri": "/data-services/v1beta1/resources/res-storage-002"
-            }
+        "updatedAt": "2024-01-21T14:30:00Z"
+      }
+    ],
+    "offset": 0,
+    "total": 2
+  },
+  "get_data_services_v1beta1_dual_auth_operations_id": {
+    "associatedResources": [
+      {
+        "groups": [
+          {
+            "id": "group-id-1",
+            "name": "AdminGroup"
+          }
         ],
-        "count": 2,
-        "offset": 0,
-        "total": 2
-    },
-    "get_data_services_v1beta1_issues_id": {
+        "resource": {
+          "consoleUri": "/console/resources/volume-123",
+          "name": "Production Volume Deletion",
+          "resourceUri": "/data-services/v1beta1/volumes/volume-123",
+          "type": "data-services/volume"
+        }
+      }
+    ],
+    "checkedAt": null,
+    "checkedByEmail": null,
+    "checkedByUri": null,
+    "createdAt": "2024-01-20T11:00:00Z",
+    "customerId": "00000000-0000-0000-0000-000000000000",
+    "description": "Request to delete critical production volume.",
+    "generation": 1,
+    "id": "op-id-497f6eca-6276-4993-bfeb-53cbbbba6f08",
+    "name": "Delete Prod Volume",
+    "requestedAt": "2024-01-20T10:55:00Z",
+    "requestedByEmail": "submitter@example.com",
+    "requestedByUri": "/users/submitter",
+    "requestedOperation": "DELETE_VOLUME",
+    "resourceUri": "/data-services/v1beta1/dual-auth-operations/op-id-497f6eca-6276-4993-bfeb-53cbbbba6f08",
+    "sourceServiceExternalName": "Data Protection",
+    "state": "PENDING_APPROVAL",
+    "type": "data-services/dual-auth-operation",
+    "updatedAt": "2024-01-20T11:00:00Z"
+  },
+  "patch_data_services_v1beta1_dual_auth_operations_id": {
+    "associatedResources": [
+      {
+        "groups": [
+          {
+            "id": "group-id-1",
+            "name": "AdminGroup"
+          }
+        ],
+        "resource": {
+          "consoleUri": "/console/resources/volume-123",
+          "name": "Production Volume Deletion",
+          "resourceUri": "/data-services/v1beta1/volumes/volume-123",
+          "type": "data-services/volume"
+        }
+      }
+    ],
+    "checkedAt": "2024-01-20T11:15:00Z",
+    "checkedByEmail": "approver@example.com",
+    "checkedByUri": "/users/approver",
+    "createdAt": "2024-01-20T11:00:00Z",
+    "customerId": "00000000-0000-0000-0000-000000000000",
+    "description": "Request to delete critical production volume.",
+    "generation": 1,
+    "id": "op-id-497f6eca-6276-4993-bfeb-53cbbbba6f08",
+    "name": "Delete Prod Volume",
+    "requestedAt": "2024-01-20T10:55:00Z",
+    "requestedByEmail": "submitter@example.com",
+    "requestedByUri": "/users/submitter",
+    "requestedOperation": "DELETE_VOLUME",
+    "resourceUri": "/data-services/v1beta1/dual-auth-operations/op-id-497f6eca-6276-4993-bfeb-53cbbbba6f08",
+    "sourceServiceExternalName": "Data Protection",
+    "state": "APPROVED",
+    "type": "data-services/dual-auth-operation",
+    "updatedAt": "2024-01-20T11:15:00Z"
+  },
+  "get_data_services_v1beta1_issues": {
+    "items": [
+      {
         "id": "issue-001-abc",
         "title": "Database connection error",
         "description": "Failed to connect to primary database instance.",
@@ -261,183 +232,223 @@
         "createdAt": "2024-03-01T09:00:00Z",
         "updatedAt": "2024-03-01T09:00:00Z",
         "resourceUri": "/data-services/v1beta1/resources/res-db-001"
+      },
+      {
+        "id": "issue-002-def",
+        "title": "Storage volume low space",
+        "description": "Critical storage volume is at 90% capacity.",
+        "state": "CREATED",
+        "severity": "MEDIUM",
+        "category": "Storage",
+        "service": "Virtualization",
+        "createdAt": "2024-03-02T14:30:00Z",
+        "updatedAt": "2024-03-02T14:30:00Z",
+        "resourceUri": "/data-services/v1beta1/resources/res-storage-002"
+      }
+    ],
+    "count": 2,
+    "offset": 0,
+    "total": 2
+  },
+  "get_data_services_v1beta1_issues_id": {
+    "id": "issue-001-abc",
+    "title": "Database connection error",
+    "description": "Failed to connect to primary database instance.",
+    "state": "CREATED",
+    "severity": "HIGH",
+    "category": "Connectivity",
+    "service": "Backup Recovery",
+    "createdAt": "2024-03-01T09:00:00Z",
+    "updatedAt": "2024-03-01T09:00:00Z",
+    "resourceUri": "/data-services/v1beta1/resources/res-db-001"
+  },
+  "patch_data_services_v1beta1_issues_id": {
+    "id": "issue-001-abc",
+    "title": "Database connection error",
+    "description": "Failed to connect to primary database instance.",
+    "state": "RESOLVED",
+    "severity": "HIGH",
+    "category": "Connectivity",
+    "service": "Backup Recovery",
+    "createdAt": "2024-03-01T09:00:00Z",
+    "updatedAt": "2024-03-01T15:00:00Z",
+    "resourceUri": "/data-services/v1beta1/resources/res-db-001",
+    "resolutionDetails": "Applied patch KB12345 to resolve the database connectivity."
+  },
+  "delete_data_services_v1beta1_issues_id": {
+    "message": "Issue deleted successfully."
+  },
+  "get_data_services_v1beta1_issues_metadata": {
+    "categories": [
+      "Connectivity",
+      "Performance",
+      "Security",
+      "Storage",
+      "Configuration"
+    ],
+    "services": [
+      "Backup Recovery",
+      "Public Cloud Business Edition",
+      "Virtualization"
+    ],
+    "severities": [
+      "LOW",
+      "MEDIUM",
+      "HIGH",
+      "CRITICAL"
+    ]
+  },
+  "get_data_services_v1beta1_secrets_id": {
+    "id": "b253093a-a264-4185-b9f9-fc44d66e2841",
+    "type": "data-services/secret",
+    "customerId": "a7d8c2f2e5ab11eb996bd6f781f4ee4e",
+    "service": "MycorpIT",
+    "name": "Azure App 1",
+    "domain": {
+      "name": "CONFIGURATION"
     },
-    "patch_data_services_v1beta1_issues_id": {
-        "id": "issue-001-abc",
-        "title": "Database connection error",
-        "description": "Failed to connect to primary database instance.",
-        "state": "RESOLVED",
-        "severity": "HIGH",
-        "category": "Connectivity",
-        "service": "Backup Recovery",
-        "createdAt": "2024-03-01T09:00:00Z",
-        "updatedAt": "2024-03-01T15:00:00Z",
-        "resourceUri": "/data-services/v1beta1/resources/res-db-001",
-        "resolutionDetails": "Applied patch KB12345 to resolve the database connectivity."
+    "properties": {
+      "CREATED_BY": "admin@example.com",
+      "DESCRIPTION": "Service Principal for Azure application 'App 1'",
+      "LAST_UPDATED_BY": "admin@example.com",
+      "LIFECYCLE_EVENT_KEY": "azure-app1-events",
+      "LOCK_DELETE": false
     },
-    "delete_data_services_v1beta1_issues_id": {
-        "message": "Issue deleted successfully."
+    "subclassifier": {
+      "name": "AZURE_SPCLIENT",
+      "properties": {
+        "CLIENT_ID": "app1",
+        "TENANT_ID": "tenant-uuid-1234"
+      }
     },
-    "get_data_services_v1beta1_issues_metadata": {
-        "categories": [
-            "Connectivity",
-            "Performance",
-            "Security",
-            "Storage",
-            "Configuration"
-        ],
-        "services": [
-            "Backup Recovery",
-            "Public Cloud Business Edition",
-            "Virtualization"
-        ],
-        "severities": [
-            "LOW",
-            "MEDIUM",
-            "HIGH",
-            "CRITICAL"
-        ]
-    },
-    "get_data_services_v1beta1_secrets_id": {
+    "createdAt": "2024-02-28T10:00:00Z",
+    "updatedAt": "2024-02-28T10:00:00Z"
+  },
+  "get_data_services_v1beta1_secrets": {
+    "items": [
+      {
         "id": "b253093a-a264-4185-b9f9-fc44d66e2841",
         "type": "data-services/secret",
         "customerId": "a7d8c2f2e5ab11eb996bd6f781f4ee4e",
         "service": "MycorpIT",
         "name": "Azure App 1",
         "domain": {
-            "name": "CONFIGURATION"
+          "name": "CONFIGURATION"
         },
         "properties": {
-            "CREATED_BY": "admin@example.com",
-            "DESCRIPTION": "Service Principal for Azure application 'App 1'",
-            "LAST_UPDATED_BY": "admin@example.com",
-            "LIFECYCLE_EVENT_KEY": "azure-app1-events",
-            "LOCK_DELETE": false
+          "CREATED_BY": "admin@example.com",
+          "DESCRIPTION": "Service Principal for Azure application 'App 1'",
+          "LAST_UPDATED_BY": "admin@example.com",
+          "LIFECYCLE_EVENT_KEY": "azure-app1-events",
+          "LOCK_DELETE": false
         },
         "subclassifier": {
-            "name": "AZURE_SPCLIENT",
-            "properties": {
-                "CLIENT_ID": "app1",
-                "TENANT_ID": "tenant-uuid-1234"
-            }
+          "name": "AZURE_SPCLIENT",
+          "properties": {
+            "CLIENT_ID": "app1",
+            "TENANT_ID": "tenant-uuid-1234"
+          }
         },
         "createdAt": "2024-02-28T10:00:00Z",
         "updatedAt": "2024-02-28T10:00:00Z"
-    },
-    "get_data_services_v1beta1_secrets": {
-        "items": [
-            {
-                "id": "b253093a-a264-4185-b9f9-fc44d66e2841",
-                "type": "data-services/secret",
-                "customerId": "a7d8c2f2e5ab11eb996bd6f781f4ee4e",
-                "service": "MycorpIT",
-                "name": "Azure App 1",
-                "domain": {
-                    "name": "CONFIGURATION"
-                },
-                "properties": {
-                    "CREATED_BY": "admin@example.com",
-                    "DESCRIPTION": "Service Principal for Azure application 'App 1'",
-                    "LAST_UPDATED_BY": "admin@example.com",
-                    "LIFECYCLE_EVENT_KEY": "azure-app1-events",
-                    "LOCK_DELETE": false
-                },
-                "subclassifier": {
-                    "name": "AZURE_SPCLIENT",
-                    "properties": {
-                        "CLIENT_ID": "app1",
-                        "TENANT_ID": "tenant-uuid-1234"
-                    }
-                },
-                "createdAt": "2024-02-28T10:00:00Z",
-                "updatedAt": "2024-02-28T10:00:00Z"
-            },
-            {
-                "id": "c364104b-a375-5296-c000-fd55e77e3952",
-                "type": "data-services/secret",
-                "customerId": "a7d8c2f2e5ab11eb996bd6f781f4ee4e",
-                "service": "Security",
-                "name": "SSH Key Prod Server",
-                "domain": {
-                    "name": "CONFIGURATION"
-                },
-                "properties": {
-                    "CREATED_BY": "security_admin@example.com",
-                    "DESCRIPTION": "SSH keypair for production server access.",
-                    "LAST_UPDATED_BY": "security_admin@example.com",
-                    "LIFECYCLE_EVENT_KEY": "prod-ssh-key",
-                    "LOCK_DELETE": true
-                },
-                "subclassifier": {
-                    "name": "SSH_KEYPAIR",
-                    "properties": {
-                        "PUBLIC_KEY": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQ..."
-                    }
-                },
-                "createdAt": "2024-01-10T11:00:00Z",
-                "updatedAt": "2024-01-10T11:00:00Z"
-            }
-        ],
-        "count": 2,
-        "offset": 0,
-        "total": 2
-    },
-    "post_data_services_v1beta1_secrets": {
-        "id": "new-secret-uuid-123",
+      },
+      {
+        "id": "c364104b-a375-5296-c000-fd55e77e3952",
         "type": "data-services/secret",
         "customerId": "a7d8c2f2e5ab11eb996bd6f781f4ee4e",
-        "service": "MycorpIT",
-        "name": "Azure App 1",
+        "service": "Security",
+        "name": "SSH Key Prod Server",
         "domain": {
-            "name": "CONFIGURATION"
+          "name": "CONFIGURATION"
         },
         "properties": {
-            "CREATED_BY": "apiuser@hpe.com",
-            "DESCRIPTION": null,
-            "LAST_UPDATED_BY": "apiuser@hpe.com",
-            "LIFECYCLE_EVENT_KEY": null,
-            "LOCK_DELETE": false
+          "CREATED_BY": "security_admin@example.com",
+          "DESCRIPTION": "SSH keypair for production server access.",
+          "LAST_UPDATED_BY": "security_admin@example.com",
+          "LIFECYCLE_EVENT_KEY": "prod-ssh-key",
+          "LOCK_DELETE": true
         },
         "subclassifier": {
-            "name": "AZURE_SPCLIENT",
-            "properties": {
-                "CLIENT_ID": "app1",
-                "TENANT_ID": "tenant-uuid-1234"
-            }
+          "name": "SSH_KEYPAIR",
+          "properties": {
+            "PUBLIC_KEY": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQ..."
+          }
         },
-        "createdAt": "2024-03-10T12:00:00Z",
-        "updatedAt": "2024-03-10T12:00:00Z"
+        "createdAt": "2024-01-10T11:00:00Z",
+        "updatedAt": "2024-01-10T11:00:00Z"
+      }
+    ],
+    "count": 2,
+    "offset": 0,
+    "total": 2
+  },
+  "post_data_services_v1beta1_secrets": {
+    "id": "new-secret-uuid-123",
+    "type": "data-services/secret",
+    "customerId": "a7d8c2f2e5ab11eb996bd6f781f4ee4e",
+    "service": "MycorpIT",
+    "name": "Azure App 1",
+    "domain": {
+      "name": "CONFIGURATION"
     },
-    "patch_data_services_v1beta1_secrets_id": {
-        "id": "bdaadb98-e3a2-11ee-8542-0100afe933f4",
-        "type": "data-services/secret",
-        "customerId": "a7d8c2f2e5ab11eb996bd6f781f4ee4e",
-        "service": "MycorpIT",
-        "name": "Azure App 1",
-        "domain": {
-            "name": "CONFIGURATION"
-        },
-        "properties": {
-            "CREATED_BY": "admin@example.com",
-            "DESCRIPTION": "Rotated secret 29-Feb-2024",
-            "LAST_UPDATED_BY": "apiuser@hpe.com",
-            "LIFECYCLE_EVENT_KEY": "azure-app1-events",
-            "LOCK_DELETE": false
-        },
-        "subclassifier": {
-            "name": "AZURE_SPCLIENT",
-            "properties": {
-                "CLIENT_ID": "app1",
-                "TENANT_ID": "tenant-uuid-1234"
-            }
-        },
-        "createdAt": "2024-02-28T10:00:00Z",
-        "updatedAt": "2024-02-29T10:30:00Z"
+    "properties": {
+      "CREATED_BY": "apiuser@hpe.com",
+      "DESCRIPTION": null,
+      "LAST_UPDATED_BY": "apiuser@hpe.com",
+      "LIFECYCLE_EVENT_KEY": null,
+      "LOCK_DELETE": false
     },
-    "delete_data_services_v1beta1_secrets_id": {
-        "message": "Secret 'b253093a-a264-4185-b9f9-fc44d66e2841' and associated assignments deleted successfully."
+    "subclassifier": {
+      "name": "AZURE_SPCLIENT",
+      "properties": {
+        "CLIENT_ID": "app1",
+        "TENANT_ID": "tenant-uuid-1234"
+      }
     },
-    "get_data_services_v1beta1_secret_assignments_id": {
+    "createdAt": "2024-03-10T12:00:00Z",
+    "updatedAt": "2024-03-10T12:00:00Z"
+  },
+  "patch_data_services_v1beta1_secrets_id": {
+    "id": "bdaadb98-e3a2-11ee-8542-0100afe933f4",
+    "type": "data-services/secret",
+    "customerId": "a7d8c2f2e5ab11eb996bd6f781f4ee4e",
+    "service": "MycorpIT",
+    "name": "Azure App 1",
+    "domain": {
+      "name": "CONFIGURATION"
+    },
+    "properties": {
+      "CREATED_BY": "admin@example.com",
+      "DESCRIPTION": "Rotated secret 29-Feb-2024",
+      "LAST_UPDATED_BY": "apiuser@hpe.com",
+      "LIFECYCLE_EVENT_KEY": "azure-app1-events",
+      "LOCK_DELETE": false
+    },
+    "subclassifier": {
+      "name": "AZURE_SPCLIENT",
+      "properties": {
+        "CLIENT_ID": "app1",
+        "TENANT_ID": "tenant-uuid-1234"
+      }
+    },
+    "createdAt": "2024-02-28T10:00:00Z",
+    "updatedAt": "2024-02-29T10:30:00Z"
+  },
+  "delete_data_services_v1beta1_secrets_id": {
+    "message": "Secret 'b253093a-a264-4185-b9f9-fc44d66e2841' and associated assignments deleted successfully."
+  },
+  "get_data_services_v1beta1_secret_assignments_id": {
+    "id": "assign-uuid-001",
+    "secretId": "b253093a-a264-4185-b9f9-fc44d66e2841",
+    "applianceId": "appliance-id-abc",
+    "applicationGoal": "AZURE_CLOUD_INTEGRATION",
+    "progress": "COMPLETED",
+    "createdAt": "2024-03-01T11:00:00Z",
+    "updatedAt": "2024-03-01T11:05:00Z"
+  },
+  "get_data_services_v1beta1_secret_assignments": {
+    "items": [
+      {
         "id": "assign-uuid-001",
         "secretId": "b253093a-a264-4185-b9f9-fc44d66e2841",
         "applianceId": "appliance-id-abc",
@@ -445,82 +456,103 @@
         "progress": "COMPLETED",
         "createdAt": "2024-03-01T11:00:00Z",
         "updatedAt": "2024-03-01T11:05:00Z"
-    },
-    "get_data_services_v1beta1_secret_assignments": {
-        "items": [
-            {
-                "id": "assign-uuid-001",
-                "secretId": "b253093a-a264-4185-b9f9-fc44d66e2841",
-                "applianceId": "appliance-id-abc",
-                "applicationGoal": "AZURE_CLOUD_INTEGRATION",
-                "progress": "COMPLETED",
-                "createdAt": "2024-03-01T11:00:00Z",
-                "updatedAt": "2024-03-01T11:05:00Z"
-            },
-            {
-                "id": "assign-uuid-002",
-                "secretId": "c364104b-a375-5296-c000-fd55e77e3952",
-                "applianceId": "server-id-xyz",
-                "applicationGoal": "SSH_ACCESS",
-                "progress": "IN_PROGRESS",
-                "createdAt": "2024-03-05T09:00:00Z",
-                "updatedAt": "2024-03-05T09:10:00Z"
-            }
-        ],
-        "count": 2,
-        "offset": 0,
-        "total": 2
-    },
-    "get_data_services_v1beta1_settings": {
-        "items": [
-            {
-                "id": "setting-auth-001",
-                "name": "dualAuthorizationEnabled",
-                "value": true,
-                "description": "Enables or disables dual authorization for critical operations.",
-                "createdAt": "2024-01-01T08:00:00Z",
-                "updatedAt": "2024-01-05T10:00:00Z"
-            },
-            {
-                "id": "setting-retention-002",
-                "name": "defaultRetentionPeriodDays",
-                "value": 30,
-                "description": "Sets the default data retention period in days.",
-                "createdAt": "2024-01-01T08:00:00Z",
-                "updatedAt": "2024-02-10T14:00:00Z"
-            }
-        ],
-        "count": 2,
-        "offset": 0,
-        "total": 2
-    },
-    "get_data_services_v1beta1_settings_id": {
+      },
+      {
+        "id": "assign-uuid-002",
+        "secretId": "c364104b-a375-5296-c000-fd55e77e3952",
+        "applianceId": "server-id-xyz",
+        "applicationGoal": "SSH_ACCESS",
+        "progress": "IN_PROGRESS",
+        "createdAt": "2024-03-05T09:00:00Z",
+        "updatedAt": "2024-03-05T09:10:00Z"
+      }
+    ],
+    "count": 2,
+    "offset": 0,
+    "total": 2
+  },
+  "get_data_services_v1beta1_settings": {
+    "items": [
+      {
         "id": "setting-auth-001",
         "name": "dualAuthorizationEnabled",
         "value": true,
         "description": "Enables or disables dual authorization for critical operations.",
         "createdAt": "2024-01-01T08:00:00Z",
         "updatedAt": "2024-01-05T10:00:00Z"
-    },
-    "patch_data_services_v1beta1_settings_id": {
-        "id": "setting-auth-001",
-        "name": "dualAuthorizationEnabled",
-        "value": false,
-        "description": "Enables or disables dual authorization for critical operations.",
+      },
+      {
+        "id": "setting-retention-002",
+        "name": "defaultRetentionPeriodDays",
+        "value": 30,
+        "description": "Sets the default data retention period in days.",
         "createdAt": "2024-01-01T08:00:00Z",
-        "updatedAt": "2024-03-10T11:30:00Z"
+        "updatedAt": "2024-02-10T14:00:00Z"
+      }
+    ],
+    "count": 2,
+    "offset": 0,
+    "total": 2
+  },
+  "get_data_services_v1beta1_settings_id": {
+    "id": "setting-auth-001",
+    "name": "dualAuthorizationEnabled",
+    "value": true,
+    "description": "Enables or disables dual authorization for critical operations.",
+    "createdAt": "2024-01-01T08:00:00Z",
+    "updatedAt": "2024-01-05T10:00:00Z"
+  },
+  "patch_data_services_v1beta1_settings_id": {
+    "id": "setting-auth-001",
+    "name": "dualAuthorizationEnabled",
+    "value": false,
+    "description": "Enables or disables dual authorization for critical operations.",
+    "createdAt": "2024-01-01T08:00:00Z",
+    "updatedAt": "2024-03-10T11:30:00Z"
+  },
+  "get_data_services_v1beta1_software_components_id_install_release": {
+    "id": "install-release-comp-1",
+    "componentId": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+    "releaseId": "release-id-123",
+    "version": "1.0.0",
+    "status": "AVAILABLE",
+    "downloadUri": "/data-services/v1beta1/software-releases/release-id-123/download",
+    "createdAt": "2024-03-01T10:00:00Z",
+    "updatedAt": "2024-03-01T10:00:00Z"
+  },
+  "get_data_services_v1beta1_software_releases_id": {
+    "createdAt": "2019-08-24T14:15:22Z",
+    "customerId": "00000000000000000000000000000000",
+    "downloadable": true,
+    "generation": 1,
+    "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+    "name": "Example v1.0.0",
+    "resourceUri": "/data-services/v1beta1/software-releases/497f6eca-6276-4993-bfeb-53cbbbba6f08",
+    "signature": {
+      "filename": "example.ova.sig",
+      "sha256Checksum": "c6a73c39b2c0d1f91594f81d01f0b79f40f6cd7a939cb3b6f1775fcf939ab3e6",
+      "sizeInBytes": 1000
     },
-    "get_data_services_v1beta1_software_components_id_install_release": {
-        "id": "install-release-comp-1",
-        "componentId": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
-        "releaseId": "release-id-123",
-        "version": "1.0.0",
-        "status": "AVAILABLE",
-        "downloadUri": "/data-services/v1beta1/software-releases/release-id-123/download",
-        "createdAt": "2024-03-01T10:00:00Z",
-        "updatedAt": "2024-03-01T10:00:00Z"
+    "software": {
+      "filename": "example.ova",
+      "sha256Checksum": "d63c742ff2c761619914400c18f34d2368ae84babc7eac9ffcaea8f40b68b505",
+      "sizeInBytes": 10000
     },
-    "get_data_services_v1beta1_software_releases_id": {
+    "softwareComponent": {
+      "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+      "name": "Example",
+      "type": "data-services/software-component"
+    },
+    "stability": "GENERAL_AVAILABILITY",
+    "type": "data-services/software-release",
+    "updatedAt": "2019-08-24T14:15:22Z",
+    "usage": "INSTALL",
+    "version": "1.0.0"
+  },
+  "get_data_services_v1beta1_software_releases": {
+    "count": 2,
+    "items": [
+      {
         "createdAt": "2019-08-24T14:15:22Z",
         "customerId": "00000000000000000000000000000000",
         "downloadable": true,
@@ -529,190 +561,169 @@
         "name": "Example v1.0.0",
         "resourceUri": "/data-services/v1beta1/software-releases/497f6eca-6276-4993-bfeb-53cbbbba6f08",
         "signature": {
-            "filename": "example.ova.sig",
-            "sha256Checksum": "c6a73c39b2c0d1f91594f81d01f0b79f40f6cd7a939cb3b6f1775fcf939ab3e6",
-            "sizeInBytes": 1000
+          "filename": "example.ova.sig",
+          "sha256Checksum": "c6a73c39b2c0d1f91594f81d01f0b79f40f6cd7a939cb3b6f1775fcf939ab3e6",
+          "sizeInBytes": 1000
         },
         "software": {
-            "filename": "example.ova",
-            "sha256Checksum": "d63c742ff2c761619914400c18f34d2368ae84babc7eac9ffcaea8f40b68b505",
-            "sizeInBytes": 10000
+          "filename": "example.ova",
+          "sha256Checksum": "d63c742ff2c761619914400c18f34d2368ae84babc7eac9ffcaea8f40b68b505",
+          "sizeInBytes": 10000
         },
         "softwareComponent": {
-            "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
-            "name": "Example",
-            "type": "data-services/software-component"
+          "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+          "name": "Example",
+          "type": "data-services/software-component"
         },
         "stability": "GENERAL_AVAILABILITY",
         "type": "data-services/software-release",
         "updatedAt": "2019-08-24T14:15:22Z",
         "usage": "INSTALL",
         "version": "1.0.0"
-    },
-    "get_data_services_v1beta1_software_releases": {
-        "count": 2,
-        "items": [
-            {
-                "createdAt": "2019-08-24T14:15:22Z",
-                "customerId": "00000000000000000000000000000000",
-                "downloadable": true,
-                "generation": 1,
-                "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
-                "name": "Example v1.0.0",
-                "resourceUri": "/data-services/v1beta1/software-releases/497f6eca-6276-4993-bfeb-53cbbbba6f08",
-                "signature": {
-                    "filename": "example.ova.sig",
-                    "sha256Checksum": "c6a73c39b2c0d1f91594f81d01f0b79f40f6cd7a939cb3b6f1775fcf939ab3e6",
-                    "sizeInBytes": 1000
-                },
-                "software": {
-                    "filename": "example.ova",
-                    "sha256Checksum": "d63c742ff2c761619914400c18f34d2368ae84babc7eac9ffcaea8f40b68b505",
-                    "sizeInBytes": 10000
-                },
-                "softwareComponent": {
-                    "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
-                    "name": "Example",
-                    "type": "data-services/software-component"
-                },
-                "stability": "GENERAL_AVAILABILITY",
-                "type": "data-services/software-release",
-                "updatedAt": "2019-08-24T14:15:22Z",
-                "usage": "INSTALL",
-                "version": "1.0.0"
-            },
-            {
-                "createdAt": "2019-08-24T14:15:22Z",
-                "customerId": "00000000000000000000000000000000",
-                "downloadable": true,
-                "generation": 1,
-                "id": "e1a2d4a0-d5f1-429e-b10f-b4dc96e12b2c",
-                "name": "Example 2 v1.0.0",
-                "resourceUri": "/data-services/v1beta1/software-releases/e7a2d4a0-d5f1-429e-b10f-b4dc96e12b2c",
-                "signature": {
-                    "filename": "example_2.ova.sig",
-                    "sha256Checksum": "c86dabc8e2e05c527f77b2858769efddfbb31efd476703c832f4bfb45c2e1eb3",
-                    "sizeInBytes": 1000
-                },
-                "software": {
-                    "filename": "example_2.ova",
-                    "sha256Checksum": "553295e4b848bee781c30a0c86a5b731330806eaaca214de195e48761b8a61ee",
-                    "sizeInBytes": 10000
-                },
-                "softwareComponent": {
-                    "id": "531bdc02-b2db-4a13-b640-f346fa09fa57",
-                    "name": "Example 2",
-                    "type": "data-services/software-component"
-                },
-                "stability": "GENERAL_AVAILABILITY",
-                "type": "data-services/software-release",
-                "updatedAt": "2019-08-24T14:15:22Z",
-                "usage": "INSTALL",
-                "version": "1.0.0"
-            }
+      },
+      {
+        "createdAt": "2019-08-24T14:15:22Z",
+        "customerId": "00000000000000000000000000000000",
+        "downloadable": true,
+        "generation": 1,
+        "id": "e1a2d4a0-d5f1-429e-b10f-b4dc96e12b2c",
+        "name": "Example 2 v1.0.0",
+        "resourceUri": "/data-services/v1beta1/software-releases/e7a2d4a0-d5f1-429e-b10f-b4dc96e12b2c",
+        "signature": {
+          "filename": "example_2.ova.sig",
+          "sha256Checksum": "c86dabc8e2e05c527f77b2858769efddfbb31efd476703c832f4bfb45c2e1eb3",
+          "sizeInBytes": 1000
+        },
+        "software": {
+          "filename": "example_2.ova",
+          "sha256Checksum": "553295e4b848bee781c30a0c86a5b731330806eaaca214de195e48761b8a61ee",
+          "sizeInBytes": 10000
+        },
+        "softwareComponent": {
+          "id": "531bdc02-b2db-4a13-b640-f346fa09fa57",
+          "name": "Example 2",
+          "type": "data-services/software-component"
+        },
+        "stability": "GENERAL_AVAILABILITY",
+        "type": "data-services/software-release",
+        "updatedAt": "2019-08-24T14:15:22Z",
+        "usage": "INSTALL",
+        "version": "1.0.0"
+      }
+    ],
+    "offset": 0,
+    "total": 2
+  },
+  "post_data_services_v1beta1_software_releases_id_download": {
+    "message": "Redirecting to download URL",
+    "downloadUrl": "https://example.com/downloads/software-release-123.ova"
+  },
+  "get_data_services_v1beta1_software_upgrades": {
+    "items": [
+      {
+        "id": "upgrade-001",
+        "componentName": "HPE Data Protection Agent",
+        "currentVersion": "1.0.0",
+        "availableVersion": "1.0.1",
+        "releaseDate": "2024-03-01T08:00:00Z",
+        "status": "AVAILABLE",
+        "description": "Minor update with performance improvements.",
+        "downloadUri": "/data-services/v1beta1/software-releases/release-agent-101/download"
+      },
+      {
+        "id": "upgrade-002",
+        "componentName": "HPE Cloud Connector",
+        "currentVersion": "2.0.0",
+        "availableVersion": "2.1.0",
+        "releaseDate": "2024-02-15T10:00:00Z",
+        "status": "PENDING_INSTALL",
+        "description": "Major update with new cloud provider support.",
+        "downloadUri": "/data-services/v1beta1/software-releases/release-connector-210/download"
+      }
+    ],
+    "count": 2,
+    "offset": 0,
+    "total": 2
+  },
+  "get_data_services_v1beta1_storage_locations": {
+    "count": 2,
+    "items": [
+      {
+        "capabilities": [
+          "backup-and-recovery"
         ],
-        "offset": 0,
-        "total": 2
-    },
-    "post_data_services_v1beta1_software_releases_id_download": {
-        "message": "Redirecting to download URL",
-        "downloadUrl": "https://example.com/downloads/software-release-123.ova"
-    },
-    "get_data_services_v1beta1_software_upgrades": {
-        "items": [
-            {
-                "id": "upgrade-001",
-                "componentName": "HPE Data Protection Agent",
-                "currentVersion": "1.0.0",
-                "availableVersion": "1.0.1",
-                "releaseDate": "2024-03-01T08:00:00Z",
-                "status": "AVAILABLE",
-                "description": "Minor update with performance improvements.",
-                "downloadUri": "/data-services/v1beta1/software-releases/release-agent-101/download"
-            },
-            {
-                "id": "upgrade-002",
-                "componentName": "HPE Cloud Connector",
-                "currentVersion": "2.0.0",
-                "availableVersion": "2.1.0",
-                "releaseDate": "2024-02-15T10:00:00Z",
-                "status": "PENDING_INSTALL",
-                "description": "Major update with new cloud provider support.",
-                "downloadUri": "/data-services/v1beta1/software-releases/release-connector-210/download"
-            }
+        "city": "Washington",
+        "cloudServiceProvider": "AWS",
+        "cloudServiceProviderId": "us-east-1",
+        "createdAt": "2024-02-05T16:02:31.329685Z",
+        "generation": 1,
+        "geography": "North America",
+        "id": "aws:us-east-1",
+        "name": "N. Virginia - AWS",
+        "resourceUri": "/data-services/v1beta1/storage-locations/aws:us-east-1",
+        "timezone": "US/Eastern",
+        "type": "data-services/storage-location",
+        "updatedAt": "2024-02-05T16:02:31.329685Z"
+      },
+      {
+        "capabilities": [
+          "backup-and-recovery"
         ],
-        "count": 2,
-        "offset": 0,
-        "total": 2
-    },
-    "get_data_services_v1beta1_storage_locations": {
-        "count": 2,
-        "items": [
-            {
-                "capabilities": [
-                    "backup-and-recovery"
-                ],
-                "city": "Washington",
-                "cloudServiceProvider": "AWS",
-                "cloudServiceProviderId": "us-east-1",
-                "createdAt": "2024-02-05T16:02:31.329685Z",
-                "generation": 1,
-                "geography": "North America",
-                "id": "aws:us-east-1",
-                "name": "N. Virginia - AWS",
-                "resourceUri": "/data-services/v1beta1/storage-locations/aws:us-east-1",
-                "timezone": "US/Eastern",
-                "type": "data-services/storage-location",
-                "updatedAt": "2024-02-05T16:02:31.329685Z"
-            },
-            {
-                "capabilities": [
-                    "backup-and-recovery"
-                ],
-                "city": "Columbus",
-                "cloudServiceProvider": "AWS",
-                "cloudServiceProviderId": "us-east-2",
-                "createdAt": "2024-02-05T16:02:31.329685Z",
-                "generation": 1,
-                "geography": "North America",
-                "id": "aws:us-east-2",
-                "name": "Ohio - AWS",
-                "resourceUri": "/data-services/v1beta1/storage-locations/aws:us-east-2",
-                "timezone": "US/Eastern",
-                "type": "data-services/storage-location",
-                "updatedAt": "2024-02-05T16:02:31.329685Z"
-            }
-        ],
-        "offset": 0,
-        "total": 2
-    },
-    "get_data_services_v1beta1_tags": {
-        "items": [
-            {
-                "id": "053c447f-898f-41b0-9207-1464d90a7255",
-                "key": "backup-schedule",
-                "value": "daily",
-                "type": "data-services/tag",
-                "customerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-            },
-            {
-                "id": "d096962a-e2e2-4c47-86b9-625381508497",
-                "key": "region",
-                "value": "amr",
-                "type": "data-services/tag",
-                "customerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-            },
-            {
-                "id": "e1f2g3h4-i5j6-k7l8-m9n0-p1q2r3s4t5u6",
-                "key": "environment",
-                "value": "production",
-                "type": "data-services/tag",
-                "customerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-            }
-        ],
-        "count": 3,
-        "total": 3,
-        "limit": 100,
-        "offset": 0
+        "city": "Columbus",
+        "cloudServiceProvider": "AWS",
+        "cloudServiceProviderId": "us-east-2",
+        "createdAt": "2024-02-05T16:02:31.329685Z",
+        "generation": 1,
+        "geography": "North America",
+        "id": "aws:us-east-2",
+        "name": "Ohio - AWS",
+        "resourceUri": "/data-services/v1beta1/storage-locations/aws:us-east-2",
+        "timezone": "US/Eastern",
+        "type": "data-services/storage-location",
+        "updatedAt": "2024-02-05T16:02:31.329685Z"
+      }
+    ],
+    "offset": 0,
+    "total": 2
+  },
+  "get_data_services_v1beta1_tags": {
+    "items": [
+      {
+        "id": "053c447f-898f-41b0-9207-1464d90a7255",
+        "key": "backup-schedule",
+        "value": "daily",
+        "type": "data-services/tag",
+        "customerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "id": "d096962a-e2e2-4c47-86b9-625381508497",
+        "key": "region",
+        "value": "amr",
+        "type": "data-services/tag",
+        "customerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "id": "e1f2g3h4-i5j6-k7l8-m9n0-p1q2r3s4t5u6",
+        "key": "environment",
+        "value": "production",
+        "type": "data-services/tag",
+        "customerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "count": 3,
+    "total": 3,
+    "limit": 100,
+    "offset": 0
+  },
+  "dynamic_store": {
+    "/api/v1/host-initiator-groups": {
+      "test-group-id": {
+        "hostProximityValues": null,
+        "hostsToCreate": null,
+        "name": "test-group",
+        "removedHosts": null,
+        "updatedHosts": null
+      }
     }
+  }
 }
