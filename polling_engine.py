@@ -89,6 +89,66 @@ class PollingEngine:
         )
         return devices
 
+    def poll_mock_server(self, host: str) -> list[dict]:
+        """Fetch the current mock_server inventory from PostgreSQL."""
+        logger.info("[Polling][Mock Server] Starting collection | host=%s", host)
+        t0 = time.perf_counter()
+        rows = DeviceQueries.list_devices_by_management_source(
+            management_source="mock_server", source_host=host
+        )
+        devices = [DeviceRecord.from_row(row).to_dict() for row in rows]
+        elapsed_ms = int((time.perf_counter() - t0) * 1000)
+        logger.info(
+            "[Polling][Mock Server] Collection complete | host=%s devices=%d elapsed_ms=%d",
+            host, len(devices), elapsed_ms,
+        )
+        return devices
+
+    def poll_mock_storage(self, host: str) -> list[dict]:
+        """Fetch the current mock_storage inventory from PostgreSQL."""
+        logger.info("[Polling][Mock Storage] Starting collection | host=%s", host)
+        t0 = time.perf_counter()
+        rows = DeviceQueries.list_devices_by_management_source(
+            management_source="mock_storage", source_host=host
+        )
+        devices = [DeviceRecord.from_row(row).to_dict() for row in rows]
+        elapsed_ms = int((time.perf_counter() - t0) * 1000)
+        logger.info(
+            "[Polling][Mock Storage] Collection complete | host=%s devices=%d elapsed_ms=%d",
+            host, len(devices), elapsed_ms,
+        )
+        return devices
+
+    def poll_mock_network(self, host: str) -> list[dict]:
+        """Fetch the current mock_network inventory from PostgreSQL."""
+        logger.info("[Polling][Mock Network] Starting collection | host=%s", host)
+        t0 = time.perf_counter()
+        rows = DeviceQueries.list_devices_by_management_source(
+            management_source="mock_network", source_host=host
+        )
+        devices = [DeviceRecord.from_row(row).to_dict() for row in rows]
+        elapsed_ms = int((time.perf_counter() - t0) * 1000)
+        logger.info(
+            "[Polling][Mock Network] Collection complete | host=%s devices=%d elapsed_ms=%d",
+            host, len(devices), elapsed_ms,
+        )
+        return devices
+
+    def poll_mock_cloud(self, host: str) -> list[dict]:
+        """Fetch the current mock_cloud inventory from PostgreSQL."""
+        logger.info("[Polling][Mock Cloud] Starting collection | host=%s", host)
+        t0 = time.perf_counter()
+        rows = DeviceQueries.list_devices_by_management_source(
+            management_source="mock_cloud", source_host=host
+        )
+        devices = [DeviceRecord.from_row(row).to_dict() for row in rows]
+        elapsed_ms = int((time.perf_counter() - t0) * 1000)
+        logger.info(
+            "[Polling][Mock Cloud] Collection complete | host=%s devices=%d elapsed_ms=%d",
+            host, len(devices), elapsed_ms,
+        )
+        return devices
+
     # ------------------------------------------------------------------
     # Per-source sync + warm (called from worker threads)
     # ------------------------------------------------------------------
@@ -242,6 +302,10 @@ class PollingEngine:
             ("oneview", ov) for ov in ov_instances
         ] + [
             ("coms", coms_acid),
+            ("mock_server", "mock-server-manager.local"),
+            ("mock_storage", "mock-storage-manager.local"),
+            ("mock_network", "mock-network-manager.local"),
+            ("mock_cloud", "mock-cloud-manager.local"),
         ]
         logger.info(
             "[Polling] Sources scheduled | cycle=%s count=%d sources=%s",

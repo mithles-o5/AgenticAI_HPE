@@ -17,6 +17,10 @@ class CacheStatus(str, Enum):
 class ManagementSource(str, Enum):
     ONEVIEW = "oneview"
     COMS = "coms"
+    MOCK_SERVER = "mock_server"
+    MOCK_STORAGE = "mock_storage"
+    MOCK_NETWORK = "mock_network"
+    MOCK_CLOUD = "mock_cloud"
 
 
 class ActionCategory(str, Enum):
