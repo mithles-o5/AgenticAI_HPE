@@ -169,15 +169,10 @@ class ExecutionOrchestrator:
         source = normalize_management_source(device.management_source)
 
         # Base URL components
-        mock_port = os.getenv("MOCK_AGENT_PORT")
-        mock_host = os.getenv("MOCK_AGENT_HOST", "localhost")
-
-        if mock_port:
-            host   = f"{mock_host}:{mock_port}"
-            scheme = "http"
-        else:
-            host   = device.source_host or "localhost"
-            scheme = "https"
+        host = device.source_host
+        if not host:
+            raise ValueError(f"Missing source_host for device {device.id}")
+        scheme = "https"
 
         uuid        = device.source_device_id or device.id
         device_type = (device.device_type or "").strip().lower()

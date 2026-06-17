@@ -1,8 +1,7 @@
 """Quick smoke test — inject a local token and call all five MCP tools."""
 import sys
 import os
-import mock_db_cache
-mock_db_cache.setup()
+
 
 import asyncio
 import subprocess

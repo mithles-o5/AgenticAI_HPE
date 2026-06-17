@@ -13,51 +13,53 @@ class MockStorageAdapter(BaseStorageAdapter):
     def provider_name(self) -> str:
         return "mock"
 
+    # ── Dynamic Router ────────────────────────────────────────────────────────
+    def _dynamic_call(self, method: str, api_path: str, resource_id: str, payload: dict, base_url: str = "") -> Optional[Dict[str, Any]]:
+        import httpx
+        try:
+            url = f"{base_url}{api_path}".format(id=resource_id, systemId=resource_id, hostId=resource_id)
+            response = httpx.request(method, url, json=payload, timeout=10.0)
+            try:
+                return response.json()
+            except:
+                return {"status": "success", "status_code": response.status_code, "text": response.text}
+        except Exception as e:
+            return {"result": "failed", "detail": f"Dynamic mock API call failed: {e}"}
+
     def fetch_capacity(self, resource_id, resource_type, credentials, parameters) -> Dict[str, Any]:
-        rng = random.Random(hash(resource_id) & 0xFFFF)
-        total = round(rng.uniform(10.0, 500.0), 2)
-        used  = round(total * rng.uniform(0.1, 0.97), 2)
-        return {
-            "total_tb":       total,
-            "used_tb":        used,
-            "free_tb":        round(total - used, 2),
-            "utilization_pct": round(used / total * 100, 2),
-        }
+        api_path = parameters.get("api_path")
+        if not api_path:
+            return {"result": "failed", "detail": "Dynamic routing failed: No api_path provided by orchestrator. The agent is strictly dynamic."}
+        return self._dynamic_call(parameters.get("http_method", "GET"), api_path, resource_id, parameters.get("payload", {}), parameters.get("base_url", ""))
 
     def fetch_performance(self, resource_id, resource_type, credentials, parameters) -> Dict[str, Any]:
-        rng = random.Random(hash(resource_id + "perf") & 0xFFFF)
-        return {
-            "read_iops":         rng.randint(100, 100000),
-            "write_iops":        rng.randint(50, 80000),
-            "read_latency_ms":   round(rng.uniform(0.5, 80.0), 2),
-            "write_latency_ms":  round(rng.uniform(0.5, 60.0), 2),
-            "throughput_mbps":   round(rng.uniform(10.0, 2000.0), 1),
-        }
+        api_path = parameters.get("api_path")
+        if not api_path:
+            return {"result": "failed", "detail": "Dynamic routing failed: No api_path provided by orchestrator. The agent is strictly dynamic."}
+        return self._dynamic_call(parameters.get("http_method", "GET"), api_path, resource_id, parameters.get("payload", {}), parameters.get("base_url", ""))
 
     def execute_action(self, resource_id, resource_type, action, credentials, parameters) -> Dict[str, Any]:
-        supported = {"create_volume", "delete_volume", "snapshot", "resize", "clone", "mount", "unmount"}
-        if action.lower() not in supported:
-            return {"result": "failed", "detail": f"Action '{action}' not supported. Supported: {sorted(supported)}"}
-        return {"result": "success", "detail": f"[MOCK] Action '{action}' on {resource_type}/{resource_id}."}
+        api_path = parameters.get("api_path")
+        if not api_path:
+            return {"result": "failed", "detail": "Dynamic routing failed: No api_path provided by orchestrator. The agent is strictly dynamic."}
+        return self._dynamic_call(parameters.get("http_method", "POST"), api_path, resource_id, parameters.get("payload", {}), parameters.get("base_url", ""))
 
     def discover_arrays(self, credentials, parameters) -> List[Dict[str, Any]]:
-        count = parameters.get("limit", 3)
-        return [
-            {
-                "id":          f"mock-array-{i:03d}",
-                "name":        f"Mock-SAN-{i:03d}",
-                "type":        "SAN" if i % 2 == 0 else "NAS",
-                "status":      "online",
-                "capacity_tb": round(100.0 * i, 1),
-            }
-            for i in range(1, int(count) + 1)
-        ]
+        api_path = parameters.get("api_path")
+        if not api_path:
+            return [{"result": "failed", "detail": "Dynamic routing failed: No api_path provided by orchestrator. The agent is strictly dynamic."}]
+            
+        res = self._dynamic_call(parameters.get("http_method", "GET"), api_path, "", parameters.get("payload", {}), parameters.get("base_url", ""))
+        if isinstance(res, list):
+            return res
+        elif isinstance(res, dict) and "members" in res:
+            return res["members"]
+        elif isinstance(res, dict) and "items" in res:
+            return res["items"]
+        return [res]
 
     def health_check(self, resource_id, resource_type, credentials, parameters) -> Dict[str, Any]:
-        seed = sum(ord(c) for c in resource_id)
-        healthy = seed % 6 != 0
-        return {
-            "healthy": healthy,
-            "detail":  "All storage checks passed." if healthy else "Simulated storage fault.",
-            "checks":  {"connectivity": "ok", "disk_health": "ok" if healthy else "error", "replication": "ok"},
-        }
+        api_path = parameters.get("api_path")
+        if not api_path:
+            return {"result": "failed", "detail": "Dynamic routing failed: No api_path provided by orchestrator. The agent is strictly dynamic."}
+        return self._dynamic_call(parameters.get("http_method", "GET"), api_path, resource_id, parameters.get("payload", {}), parameters.get("base_url", ""))

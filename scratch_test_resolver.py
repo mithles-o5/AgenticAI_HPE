@@ -2,8 +2,7 @@ import sys
 sys.path.append('d:\\HPE CPP\\MCP_Integrated')
 sys.path.append('d:\\HPE CPP\\MCP_Integrated\\resource_resolver')
 
-import mock_db_cache
-mock_db_cache.setup()
+
 
 from resource_resolver.query_agent import QueryAgent
 from resource_resolver.resolver import ResourceResolver

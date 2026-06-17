@@ -5,8 +5,7 @@ import json
 # Setup sys.path to find mock_db_cache
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-import mock_db_cache
-mock_db_cache.setup()
+
 
 from resource_resolver.db_loader import load_registry_from_db
 registry = load_registry_from_db()

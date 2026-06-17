@@ -1,61 +1,58 @@
 from adapters.base import BaseAdapter
 
 class MockAdapter(BaseAdapter):
+    # ── Dynamic Router ────────────────────────────────────────────────────────
+    async def _dynamic_call(self, method: str, api_path: str, resource_id: str, payload: dict, base_url: str = "") -> dict | list | None:
+        import httpx
+        try:
+            url = f"{base_url}{api_path}".format(id=resource_id, systemId=resource_id, hostId=resource_id)
+            async with httpx.AsyncClient() as client:
+                response = await client.request(method, url, json=payload, timeout=10.0)
+                try:
+                    return response.json()
+                except:
+                    return {"status": "success", "status_code": response.status_code, "text": response.text}
+        except Exception as e:
+            return {"result": "failed", "detail": f"Dynamic mock API call failed: {e}"}
+
     async def health_check(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> dict:
-        return {
-            "resource_type": resource_type or "server_hardware",
-            "raw": {
-                "uuid": resource_id or "mock-uuid-1234",
-                "name": "MockServer-01",
-                "health": "OK",
-                "status": "Healthy",
-                "powerState": "On"
-            }
-        }
+        api_path = parameters.get("api_path")
+        if not api_path:
+            return {"result": "failed", "detail": "Dynamic routing failed: No api_path provided by orchestrator. The agent is strictly dynamic."}
+        return await self._dynamic_call(parameters.get("http_method", "GET"), api_path, resource_id, parameters.get("payload", {}), parameters.get("base_url", ""))
 
     async def fetch_metrics(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> dict:
-        return {
-            "cpu_utilization_percent": 12.5,
-            "memory_utilization_percent": 34.0,
-            "power_draw_watts": 120,
-            "temperature_celsius": 24.5
-        }
+        api_path = parameters.get("api_path")
+        if not api_path:
+            return {"result": "failed", "detail": "Dynamic routing failed: No api_path provided by orchestrator. The agent is strictly dynamic."}
+        return await self._dynamic_call(parameters.get("http_method", "GET"), api_path, resource_id, parameters.get("payload", {}), parameters.get("base_url", ""))
 
     async def fetch_alerts(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> list:
-        return [
-            {
-                "id": "mock-alert-001",
-                "severity": "Warning",
-                "description": "Mock Alert Description",
-                "created": "2026-06-09T00:00:00Z"
-            }
-        ]
+        api_path = parameters.get("api_path")
+        if not api_path:
+            return [{"result": "failed", "detail": "Dynamic routing failed: No api_path provided by orchestrator. The agent is strictly dynamic."}]
+        res = await self._dynamic_call(parameters.get("http_method", "GET"), api_path, resource_id, parameters.get("payload", {}), parameters.get("base_url", ""))
+        return res if isinstance(res, list) else [res]
 
     async def execute_action(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> dict:
-        action_type = parameters.get("action_type")
-        if action_type == "power":
-            state = parameters.get("state", "On")
-            return {"status": "success", "action_taken": f"Power state set to {state}"}
-        elif action_type == "firmware_update":
-            version = parameters.get("firmware_version", "1.0.0")
-            return {"status": "success", "action_taken": f"Triggered firmware upgrade to {version}"}
-        elif action_type == "profile_assign":
-            profile_id = parameters.get("profile_id", "mock-profile")
-            return {"status": "success", "action_taken": f"Assigned profile {profile_id}"}
-        return {"status": "failed", "error": "Unknown action"}
+        api_path = parameters.get("api_path")
+        if not api_path:
+            return {"result": "failed", "detail": "Dynamic routing failed: No api_path provided by orchestrator. The agent is strictly dynamic."}
+        return await self._dynamic_call(parameters.get("http_method", "POST"), api_path, resource_id, parameters.get("payload", {}), parameters.get("base_url", ""))
 
     async def discover_inventory(self, resource_type: str, credentials: dict, parameters: dict) -> list:
-        return [
-            {
-                "uuid": "mock-uuid-1",
-                "name": "Mock-Server-1",
-                "type": "server_hardware",
-                "model": "Mock-Model-A",
-                "ip_address": "127.0.0.1",
-                "power_state": "On",
-                "health": "OK"
-            }
-        ]
+        api_path = parameters.get("api_path")
+        if not api_path:
+            return [{"result": "failed", "detail": "Dynamic routing failed: No api_path provided by orchestrator. The agent is strictly dynamic."}]
+            
+        res = await self._dynamic_call(parameters.get("http_method", "GET"), api_path, "", parameters.get("payload", {}), parameters.get("base_url", ""))
+        if isinstance(res, list):
+            return res
+        elif isinstance(res, dict) and "members" in res:
+            return res["members"]
+        elif isinstance(res, dict) and "items" in res:
+            return res["items"]
+        return [res]
 
     async def sync_cmdb(self, credentials: dict, parameters: dict) -> dict:
         return {
