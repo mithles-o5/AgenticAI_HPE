@@ -715,15 +715,5 @@
     "limit": 100,
     "offset": 0
   },
-  "dynamic_store": {
-    "/api/v1/host-initiator-groups": {
-      "test-group-id": {
-        "hostProximityValues": null,
-        "hostsToCreate": null,
-        "name": "test-group",
-        "removedHosts": null,
-        "updatedHosts": null
-      }
-    }
-  }
+  "dynamic_store": {}
 }

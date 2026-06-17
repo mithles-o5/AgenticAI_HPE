@@ -1393,15 +1393,5 @@
     "created": "2025-01-01T08:00:00Z",
     "modified": "2025-09-10T18:45:00Z"
   },
-  "dynamic_store": {
-    "/api/v1/host-initiator-groups": {
-      "test-group-id": {
-        "hostProximityValues": null,
-        "hostsToCreate": null,
-        "name": "test-group",
-        "removedHosts": null,
-        "updatedHosts": null
-      }
-    }
-  }
+  "dynamic_store": {}
 }

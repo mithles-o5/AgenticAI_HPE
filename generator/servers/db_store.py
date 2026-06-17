@@ -321,27 +321,83 @@ if __name__ == "__main__":
     # The shared in‑memory data (the whole JSON blob stored in SQLite)
     shared_data = _db_store_cache["shared"]._data
 
+    # Helper to check if a collection path belongs to a server
+    def path_belongs_to_server(path, srv):
+        if srv == "compute_ops":
+            return path.startswith("/compute-ops") or path.startswith("/compute-ops-mgmt")
+        elif srv == "oneview":
+            return path.startswith("/rest")
+        elif srv == "Storage":
+            return path.startswith("/data-services")
+        elif srv == "Cloud":
+            return path.startswith("/api")
+        return False
+
+    # Load existing JSON files to map static keys
+    existing_data_map = {}
     for srv in server_folders:
         json_path = os.path.abspath(
             os.path.join(os.path.dirname(__file__), srv, "mock_data.json")
         )
-
-        # Load existing JSON (if any) and shallow‑merge with the shared data
         if os.path.exists(json_path):
             try:
                 with open(json_path, "r", encoding="utf-8") as f:
-                    existing = json.load(f)
-                if isinstance(existing, dict):
-                    merged = {**existing, **shared_data}
-                else:
-                    merged = shared_data
+                    existing_data_map[srv] = json.load(f)
             except Exception:
-                merged = shared_data
+                existing_data_map[srv] = {}
         else:
-            merged = shared_data
+            existing_data_map[srv] = {}
+
+    for srv in server_folders:
+        json_path = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), srv, "mock_data.json")
+        )
+        existing = existing_data_map[srv]
+
+        # Filter shared_data for this server
+        srv_shared = {}
+        
+        # 1. Filter static keys (keys other than "dynamic_store")
+        for k, v in shared_data.items():
+            if k == "dynamic_store":
+                continue
+            
+            # Check if this key was originally in this server's mock_data.json
+            in_this_server = k in existing
+            
+            # Check if it's in other servers' mock_data.json to avoid duplicate routing
+            in_other_servers = any(k in existing_data_map[other] for other in server_folders if other != srv)
+            
+            if in_this_server:
+                srv_shared[k] = v
+            elif not in_other_servers:
+                # Fallback based on name/prefix
+                kl = k.lower()
+                if srv == "compute_ops" and "compute_ops" in kl:
+                    srv_shared[k] = v
+                elif srv == "oneview" and "rest" in kl:
+                    srv_shared[k] = v
+                elif srv == "Storage" and "data_services" in kl:
+                    srv_shared[k] = v
+                elif srv == "Cloud" and ("api" in kl or not any(x in kl for x in ["compute_ops", "rest", "data_services"])):
+                    srv_shared[k] = v
+
+        # 2. Filter dynamic_store paths for this server
+        dynamic_store = shared_data.get("dynamic_store", {})
+        srv_dynamic_store = {
+            path: items for path, items in dynamic_store.items()
+            if path_belongs_to_server(path, srv)
+        }
+        
+        # Only add "dynamic_store" if there are filtered paths or if it was originally there
+        if srv_dynamic_store or "dynamic_store" in existing:
+            srv_shared["dynamic_store"] = srv_dynamic_store
+
+        # Shallow-merge with the existing content
+        merged = {**existing, **srv_shared}
 
         # Write back the merged content
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(merged, f, indent=2)
-        print(f"[db_store] Exported data for {srv} to {json_path}")
+        print(f"[db_store] Exported filtered data for {srv} to {json_path}")
 

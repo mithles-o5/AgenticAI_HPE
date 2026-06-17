@@ -1576,15 +1576,5 @@
   "get_compute_ops_mgmt_v1beta3_groups_group_id_external_storage_compliance": {},
   "get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance": {},
   "get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance_ilo_settings_compliance_id": {},
-  "dynamic_store": {
-    "/api/v1/host-initiator-groups": {
-      "test-group-id": {
-        "hostProximityValues": null,
-        "hostsToCreate": null,
-        "name": "test-group",
-        "removedHosts": null,
-        "updatedHosts": null
-      }
-    }
-  }
+  "dynamic_store": {}
 }
