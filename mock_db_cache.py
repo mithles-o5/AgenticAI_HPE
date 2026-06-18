@@ -433,7 +433,7 @@ def _seed_endpoints():
     
     if resolver_dir not in sys.path:
         sys.path.insert(0, resolver_dir)
-    from seed_endpoint_registry import _infer_vendor, _infer_device_type, _normalize_action_key
+    from resource_resolver.seed_endpoint_registry import _infer_vendor, _infer_device_type, _normalize_action_key
 
     for action, method, path in entries:
         vendor = _infer_vendor(path)
