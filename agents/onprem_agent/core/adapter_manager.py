@@ -25,7 +25,7 @@ class AdapterManager:
             return self._oneview
         elif prov == "com" or prov == "composable":
             return self._com
-        elif prov == "mock":
+        elif prov == "mock_onprem":
             return self._mock
         else:
             raise AdapterError(f"Unsupported provider '{provider}'")

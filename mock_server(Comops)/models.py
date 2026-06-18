@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Any
+BaseModel.model_config['extra'] = 'allow'
 
 class PostComputeOpsMgmtV1beta2ApprovalPoliciesRequest(BaseModel):
     name: str = None
@@ -204,4 +205,36 @@ class PostComputeOpsMgmtV1GroupsGroupIdDevicesRequest(BaseModel):
 
 class PostComputeOpsMgmtV1GroupsGroupIdDevicesUnassignRequest(BaseModel):
     devices: list = None
+
+
+class CustomServerCreateRequest(BaseModel):
+    name: str
+    status: str = "OK"
+    temperature: float = 25.0
+    powerState: str = "On"
+    serialNumber: str = None
+    firmwareVersion: str = None
+    memoryGiB: int = 128
+    cpuCores: int = 32
+
+
+class CustomServerUpdateRequest(BaseModel):
+    name: str = None
+    status: str = None
+    temperature: float = None
+    powerState: str = None
+    serialNumber: str = None
+    firmwareVersion: str = None
+    memoryGiB: int = None
+    cpuCores: int = None
+
+
+class ServerPowerActionRequest(BaseModel):
+    action: str
+
+
+class ServerFirmwareUpdateRequest(BaseModel):
+    firmware_version: str
+
+
 

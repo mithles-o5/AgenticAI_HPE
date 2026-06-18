@@ -185,6 +185,83 @@ def insert_coms_devices(coms_id: int, count: int = 500):
     logger.info(f"[Seed] Inserted {count} COMS-managed devices for source ID {coms_id}")
 
 
+def insert_mock_devices(count_per_source: int = 200) -> None:
+    """Insert mock_server, mock_storage, mock_network, and mock_cloud devices."""
+    logger.info(f"[Seed] Generating and inserting {count_per_source * 4} mock provider devices...")
+
+    # Define realistic resource types and naming examples
+    server_types = ["server", "blade_server", "rack_server", "compute_node", "hypervisor"]
+    server_prefixes = ["dl360-prod", "dl380-prod", "synergy-comp", "apollo-node", "esx-host"]
+
+    storage_types = ["storage_system", "storage_pool", "volume", "volume_set", "filesystem", "host", "host_group", "snapshot", "replication_group"]
+    storage_prefixes = ["alletra-array", "nimble-prod", "primera-san", "3par-array", "storeonce-backup", "nas-prod", "san-host"]
+
+    network_types = ["switch", "router", "firewall", "gateway", "wireless_controller", "access_point", "vlan", "port_channel"]
+    network_prefixes = ["aruba-cx", "core-sw", "edge-router", "wireless-ctrl", "net-gateway", "ap-floor", "vlan-cfg", "port-channel-cfg"]
+
+    cloud_types = ["virtual_machine", "kubernetes_cluster", "database_service", "storage_service", "virtual_network", "subnet", "load_balancer", "namespace"]
+    cloud_prefixes = ["gl-vm", "gl-k8s", "gl-db", "gl-storage", "gl-vnet", "gl-subnet", "gl-lb", "gl-ns"]
+
+    query = """
+        INSERT INTO devices (
+            serial_number, ip_address, fqdn,
+            management_source, source_host, source_device_id,
+            device_type, last_seen, created_at, updated_at
+        )
+        VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), NOW(), NOW())
+        ON CONFLICT (serial_number) DO NOTHING
+    """
+
+    batch_params = []
+    
+    # 1. mock_server
+    for i in range(count_per_source):
+        dev_type = server_types[i % len(server_types)]
+        prefix = server_prefixes[i % len(server_prefixes)]
+        serial = f"{prefix}-{i+1:03d}"
+        ip = f"10.11.{(i // 250) + 1}.{(i % 250) + 1}"
+        fqdn = f"{serial}.server.local"
+        host = "mock-server-manager.local"
+        uuid_val = str(_uuid.uuid4())
+        batch_params.append((serial, ip, fqdn, "mock_server", host, uuid_val, dev_type))
+
+    # 2. mock_storage
+    for i in range(count_per_source):
+        dev_type = storage_types[i % len(storage_types)]
+        prefix = storage_prefixes[i % len(storage_prefixes)]
+        serial = f"{prefix}-{i+1:03d}"
+        ip = f"10.12.{(i // 250) + 1}.{(i % 250) + 1}"
+        fqdn = f"{serial}.storage.local"
+        host = "mock-storage-manager.local"
+        uuid_val = str(_uuid.uuid4())
+        batch_params.append((serial, ip, fqdn, "mock_storage", host, uuid_val, dev_type))
+
+    # 3. mock_network
+    for i in range(count_per_source):
+        dev_type = network_types[i % len(network_types)]
+        prefix = network_prefixes[i % len(network_prefixes)]
+        serial = f"{prefix}-{i+1:03d}"
+        ip = f"10.13.{(i // 250) + 1}.{(i % 250) + 1}"
+        fqdn = f"{serial}.network.local"
+        host = "mock-network-manager.local"
+        uuid_val = str(_uuid.uuid4())
+        batch_params.append((serial, ip, fqdn, "mock_network", host, uuid_val, dev_type))
+
+    # 4. mock_cloud
+    for i in range(count_per_source):
+        dev_type = cloud_types[i % len(cloud_types)]
+        prefix = cloud_prefixes[i % len(cloud_prefixes)]
+        serial = f"{prefix}-{i+1:03d}"
+        ip = f"10.14.{(i // 250) + 1}.{(i % 250) + 1}"
+        fqdn = f"{serial}.cloud.local"
+        host = "mock-cloud-manager.local"
+        uuid_val = str(_uuid.uuid4())
+        batch_params.append((serial, ip, fqdn, "mock_cloud", host, uuid_val, dev_type))
+
+    db_manager.execute_many(query, batch_params)
+    logger.info(f"[Seed] Inserted {count_per_source * 4} mock provider devices successfully")
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Additional current-schema seed helpers
 # ─────────────────────────────────────────────────────────────────────────────
@@ -232,6 +309,8 @@ def seed_current_schema(seed_oneview_count: int = 1000, seed_com_count: int = 50
         """,
         testing_devices,
     )
+
+    insert_mock_devices()
 
 
 

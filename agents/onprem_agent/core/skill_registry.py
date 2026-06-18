@@ -93,7 +93,16 @@ class PowerActionSkill(BaseSkill):
     async def execute(self, adapter, request, credentials: dict) -> dict:
         state = request.parameters.get("state")
         if not state:
-            raise SkillError("Parameter 'state' (On/Off/Reset) is required for power_action.")
+            action_verb = request.parameters.get("action_verb")
+            if action_verb:
+                if action_verb.lower() in ("power-off", "power_off"):
+                    state = "PowerOff"
+                elif action_verb.lower() in ("power-on", "power_on"):
+                    state = "PowerOn"
+                else:
+                    state = action_verb.capitalize()
+        if not state:
+            raise SkillError("Parameter 'state' (On/Off/Reset/PowerOff) is required for power_action.")
         
         params = {"action_type": "power", "state": state}
         res = await adapter.execute_action(
@@ -304,13 +313,14 @@ def resolve_skill_name(action: str, parameters: dict = None) -> str:
         return "onprem.sync.cmdb"
     elif act == "execute_action":
         action_type = (parameters or {}).get("action_type", "").lower()
-        if action_type == "power":
+        action_verb = (parameters or {}).get("action_verb", "").lower()
+        if action_type in ("power", "power-off", "power_off") or action_verb in ("on", "off", "reset", "cold_boot", "power-off", "power_off"):
             return "onprem.execute.power_action"
         elif action_type == "profile_assign":
             return "onprem.execute.profile_assign"
         elif action_type == "firmware_update":
             return "onprem.execute.firmware_update"
         else:
-            raise SkillError(f"Unknown execute_action type: '{action_type}'")
+            raise SkillError(f"Unknown execute_action type: '{action_type}' or verb: '{action_verb}'")
     else:
         raise SkillError(f"Unsupported action: '{action}'")

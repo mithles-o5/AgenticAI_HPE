@@ -18,7 +18,7 @@
   "domains": ["server-infrastructure", "hardware-management", "observability"],
   "locators": [{"type": "openapi", "url": "http://server-agent:8009/openapi.json"}],
   "modules": {
-    "providers": ["redfish", "ipmi", "ilo", "mock"],
+    "providers": ["redfish", "ipmi", "ilo", "mock", "mock_server"],
     "resource_types": ["server", "bmc", "sensor", "firmware", "event_log"]
   }
 }

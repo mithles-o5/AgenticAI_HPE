@@ -13,6 +13,7 @@ REGISTRY: Dict[str, Type[ServerAdapter]] = {
     "redfish": RedfishAdapter,
     "ipmi": IPMIAdapter,
     "ilo": ILOAdapter,
+    "mock_server": MockAdapter,
     "default": MockAdapter,
 }
 

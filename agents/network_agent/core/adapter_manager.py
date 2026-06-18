@@ -10,7 +10,7 @@ from adapters.plugins.netconf_adapter import NetconfNetworkAdapter
 from adapters.plugins.cisco_rest_adapter import CiscoRESTNetworkAdapter
 
 REGISTRY: Dict[str, Type[BaseNetworkAdapter]] = {
-    "mock":    MockNetworkAdapter,
+    "mock_network": MockNetworkAdapter,
     "snmp":    SNMPNetworkAdapter,
     "netconf": NetconfNetworkAdapter,
     "rest":    CiscoRESTNetworkAdapter,

@@ -17,6 +17,8 @@ def normalize_management_source(source: str) -> str:
         return "manual"
     if normalized == "static":
         return "static"
+    if normalized in {"mock_server", "mock_storage", "mock_network", "mock_cloud"}:
+        return normalized
     return (source or "").strip()
 
 

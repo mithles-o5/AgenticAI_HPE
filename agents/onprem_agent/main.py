@@ -59,3 +59,8 @@ async def register_with_capability_registry():
         logger.error(f"Failed to publish OASF record to capability registry: {e}")
         # We do not raise the error here to ensure the microservice startup is resilient 
         # to external registration dependencies failing.
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host=settings.HOST, port=settings.PORT, reload=True)
+

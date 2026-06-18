@@ -76,6 +76,25 @@ class ComsHandler:
         }
 
 
+class MockHandler:
+    """Generic handler for mock operations."""
+
+    def execute(self, context: dict) -> dict:
+        logger.info(
+            "[Execution] Mock Handler invoking %s %s for action %s",
+            context["http_method"],
+            context["api_endpoint"],
+            context["action"],
+        )
+        return {
+            "status":       "success",
+            "handler":      "MOCK",
+            "action":       context["action"],
+            "http_method":  context["http_method"],
+            "api_endpoint": context["api_endpoint"],
+        }
+
+
 # ---------------------------------------------------------------------------
 # Execution Orchestrator
 # ---------------------------------------------------------------------------
@@ -93,6 +112,11 @@ class ExecutionOrchestrator:
         self._handlers: dict[str, object] = {}
         self.register_handler("oneview", OneViewHandler())
         self.register_handler("coms",    ComsHandler())
+        mock_handler = MockHandler()
+        self.register_handler("mock_server",  mock_handler)
+        self.register_handler("mock_storage", mock_handler)
+        self.register_handler("mock_network", mock_handler)
+        self.register_handler("mock_cloud",   mock_handler)
 
     def register_handler(self, name: str, handler: object) -> None:
         self._handlers[name.lower()] = handler

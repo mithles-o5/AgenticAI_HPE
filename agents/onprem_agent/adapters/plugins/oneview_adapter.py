@@ -134,12 +134,19 @@ class OneViewAdapter(BaseAdapter):
         return alerts
 
     async def execute_action(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> dict:
-        action_type = parameters.get("action_type")
+        action_type = parameters.get("action_type", "").lower()
+        action_verb = parameters.get("action_verb", "").lower()
+        import logging; log = logging.getLogger(__name__)
+        log.info(f"DEBUG: execute_action type={action_type} verb={action_verb}")
         async with await self._get_client(credentials) as client:
-            if action_type == "power":
-                state = parameters.get("state", "On")
+            if action_type in ("power", "power-off", "power_off") or action_verb in ("power-off", "off", "on", "power_off"):
+                state = parameters.get("state")
+                if not state:
+                    state = "Off" if action_verb in ("off", "power-off", "power_off") or action_type in ("power-off", "power_off") else "On"
                 payload = {"powerState": state}
+                log.info(f"DEBUG: payload={payload}")
                 resp = await client.put(f"/rest/server-hardware/{resource_id}/powerState", json=payload)
+                log.info(f"DEBUG: resp.status_code={resp.status_code} text={resp.text}")
                 if resp.status_code == 200:
                     return {"status": "success", "action_taken": f"Power state set to {state}", "raw": resp.json()}
                 else:

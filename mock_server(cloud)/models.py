@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Any
+BaseModel.model_config['extra'] = 'allow'
 
 class HostgroupcreateRequest(BaseModel):
     comment: str = None
@@ -1607,4 +1608,11 @@ class ProvisioningrecommendationsRequest(BaseModel):
     hostGroupId: str = None
     productFamily: str = None
     sizeMib: int = None
+
+
+class CloudVmCreateRequest(BaseModel):
+    vm_name: str
+    vcpu: int
+    ram_gb: int
+
 
