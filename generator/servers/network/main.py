@@ -1,0 +1,69 @@
+import uuid
+from fastapi import FastAPI, Query, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+import json
+import os
+from models import DeviceSchema
+
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from db_store import MOCK_DB
+
+app = FastAPI(title='Mock Network Server', description='Mock Network API Server')
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/network/v1/devices")
+def get_network_devices():
+    collection_path = "/network/v1/devices"
+    return list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
+
+@app.get("/network/v1/devices/{id}")
+def get_network_device_by_id(id: str):
+    collection_path = "/network/v1/devices"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    return store[id]
+
+@app.post("/network/v1/devices")
+def create_network_device(payload: DeviceSchema):
+    collection_path = "/network/v1/devices"
+    if "dynamic_store" not in MOCK_DB:
+        MOCK_DB["dynamic_store"] = {}
+    if collection_path not in MOCK_DB["dynamic_store"]:
+        MOCK_DB["dynamic_store"][collection_path] = {}
+    
+    payload_dict = payload.dict()
+    item_id = payload_dict.get("id") or payload_dict.get("serial_number") or str(uuid.uuid4())
+    payload_dict["id"] = item_id
+    MOCK_DB["dynamic_store"][collection_path][item_id] = payload_dict
+    return payload_dict
+
+@app.put("/network/v1/devices/{id}")
+def update_network_device(id: str, payload: DeviceSchema):
+    collection_path = "/network/v1/devices"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    existing = store[id]
+    payload_dict = {k: v for k, v in payload.dict().items() if v is not None}
+    existing.update(payload_dict)
+    MOCK_DB["dynamic_store"][collection_path][id] = existing
+    return existing
+
+@app.delete("/network/v1/devices/{id}")
+def delete_network_device(id: str):
+    collection_path = "/network/v1/devices"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    deleted = MOCK_DB["dynamic_store"][collection_path].pop(id)
+    return {"message": "Deleted successfully", "id": id, "item": deleted}

@@ -627,3 +627,72 @@ def get_data_services_v1beta1_tags():
                     res["total"] = len(res[key])
         return res
     return static_data
+
+
+# --- CRUD Endpoints for Storage Devices ---
+
+@app.get("/data-services/v1beta1/devices")
+def get_storage_devices():
+    """
+    CRUD Route: GET /data-services/v1beta1/devices
+    """
+    collection_path = "/data-services/v1beta1/devices"
+    return list(MOCK_DB.get("dynamic_store", {}).get(collection_path, {}).values())
+
+@app.get("/data-services/v1beta1/devices/{id}")
+def get_storage_device_by_id(id: str):
+    """
+    CRUD Route: GET /data-services/v1beta1/devices/{id}
+    """
+    from fastapi import HTTPException
+    collection_path = "/data-services/v1beta1/devices"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    return store[id]
+
+@app.post("/data-services/v1beta1/devices")
+def create_storage_device(payload: dict):
+    """
+    CRUD Route: POST /data-services/v1beta1/devices
+    """
+    collection_path = "/data-services/v1beta1/devices"
+    if "dynamic_store" not in MOCK_DB:
+        MOCK_DB["dynamic_store"] = {}
+    if collection_path not in MOCK_DB["dynamic_store"]:
+        MOCK_DB["dynamic_store"][collection_path] = {}
+    
+    item_id = payload.get("id") or payload.get("serial_number") or str(uuid.uuid4())
+    payload["id"] = item_id
+    MOCK_DB["dynamic_store"][collection_path][item_id] = payload
+    return payload
+
+@app.put("/data-services/v1beta1/devices/{id}")
+def update_storage_device(id: str, payload: dict):
+    """
+    CRUD Route: PUT /data-services/v1beta1/devices/{id}
+    """
+    from fastapi import HTTPException
+    collection_path = "/data-services/v1beta1/devices"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    existing = store[id]
+    payload_dict = {k: v for k, v in payload.items() if v is not None}
+    existing.update(payload_dict)
+    MOCK_DB["dynamic_store"][collection_path][id] = existing
+    return existing
+
+@app.delete("/data-services/v1beta1/devices/{id}")
+def delete_storage_device(id: str):
+    """
+    CRUD Route: DELETE /data-services/v1beta1/devices/{id}
+    """
+    from fastapi import HTTPException
+    collection_path = "/data-services/v1beta1/devices"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    deleted = MOCK_DB["dynamic_store"][collection_path].pop(id)
+    return {"message": "Deleted successfully", "id": id, "item": deleted}
