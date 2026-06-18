@@ -9,3 +9,13 @@ class InvalidIdentifierError(ResolverError):
 
 class EndpointNotFoundError(ResolverError):
     """No endpoint_registry row matches the requested (vendor, action_key) pair."""
+
+class UnsupportedManagementSourceError(ResolverError):
+    """The management source is unsupported or invalid."""
+    def __init__(self, management_source: str, message: str = ""):
+        self.management_source = management_source
+        super().__init__(message or f"Unsupported management source: {management_source}")
+
+class InvalidCMDBRecordError(ResolverError):
+    """The CMDB record has missing or invalid fields."""
+

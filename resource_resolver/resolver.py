@@ -9,7 +9,7 @@ from typing import Optional
 
 from cache import ResourceCache
 from enums import CacheStatus, IdentifierType
-from errors import InvalidIdentifierError, ResourceNotFoundError
+from errors import InvalidIdentifierError, ResourceNotFoundError, UnsupportedManagementSourceError, InvalidCMDBRecordError
 from records import RouteResolution
 from registry import ResourceRegistry
 from protocol_discovery import discover_route
@@ -74,6 +74,28 @@ class ResourceResolver:
             )
             raise ResourceNotFoundError(
                 f"No device found for {normalized_type.value} '{normalized_identifier}'"
+            )
+
+        # 1. CMDB Record Validation
+        if not device.serial_number or not device.management_source or not device.device_type:
+            logger.error(
+                "[Resolver] CMDB Record Validation failed: missing required fields for device (serial_number=%r, management_source=%r, device_type=%r)",
+                device.serial_number, device.management_source, device.device_type
+            )
+            raise InvalidCMDBRecordError(
+                f"CMDB record invalid: missing serial_number, management_source, or device_type"
+            )
+
+        # 2. Management Source Validation
+        supported_sources = {"oneview", "coms", "mock_server", "mock_storage", "mock_network", "mock_cloud"}
+        source_normalized = (device.management_source or "").strip().lower()
+        if source_normalized not in supported_sources:
+            logger.error(
+                "[Resolver] Unsupported management source: %r for device serial_number=%s",
+                device.management_source, device.serial_number
+            )
+            raise UnsupportedManagementSourceError(
+                management_source=device.management_source or ""
             )
 
         mcp_tool, credential_ref = discover_route(device.management_source, device.source_host)

@@ -32,14 +32,14 @@ class DatabaseManager:
         return cls._instance
 
     def __init__(
-        self,
-        host: str = os.getenv("DB_HOST", "localhost"),
-        port: int = int(os.getenv("DB_PORT", "5432")),
-        database: str = os.getenv("DB_NAME", "hpe_agentic_ai"),
-        user: str = os.getenv("DB_USER", "postgres"),
-        password: str = os.getenv("DB_PASSWORD", "Mithles"),
-        min_connections: int = 2,
-        max_connections: int = 10,
+            self,
+            host: str = os.getenv("DB_HOST", "localhost"),
+            port: int = int(os.getenv("DB_PORT", "5432")),
+            database: str = os.getenv("DB_NAME", "postgres"),
+            user: str = os.getenv("DB_USER", "postgres"),
+            password: str = os.getenv("DB_PASSWORD", "mithles"),
+            min_connections: int = 2,
+            max_connections: int = 10,
     ) -> None:
         """Initialize the database manager with connection pooling."""
         

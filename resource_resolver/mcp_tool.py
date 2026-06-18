@@ -23,7 +23,7 @@ from mcp.server.fastmcp import FastMCP
 from cache import ResourceCache
 from db_loader import load_registry_from_db
 from db_queries import DeviceQueries, get_statistics
-from errors import ResolverError
+from errors import ResolverError, UnsupportedManagementSourceError, InvalidCMDBRecordError
 from resolver import ResourceResolver
 from query_agent import QueryAgent
 
@@ -60,6 +60,26 @@ def resolve_resource(
         )
         payload = {"status": "resolved", **result.to_dict()}
         return json.dumps(payload, indent=2)
+    except UnsupportedManagementSourceError as exc:
+        logger.warning("resolve_resource unsupported management source: %s", exc)
+        return json.dumps(
+            {
+                "status": "error",
+                "error_code": "UNSUPPORTED_MANAGEMENT_SOURCE",
+                "management_source": exc.management_source,
+            },
+            indent=2,
+        )
+    except InvalidCMDBRecordError as exc:
+        logger.warning("resolve_resource invalid CMDB record: %s", exc)
+        return json.dumps(
+            {
+                "status": "error",
+                "error_code": "INVALID_CMDB_RECORD",
+                "error": str(exc),
+            },
+            indent=2,
+        )
     except ResolverError as exc:
         logger.warning("resolve_resource error: %s", exc)
         return json.dumps(
