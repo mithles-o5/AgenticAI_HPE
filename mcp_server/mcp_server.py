@@ -31,7 +31,6 @@ from datetime import datetime
 
 import httpx
 import time
-import psycopg2
 import uuid
 from mcp.server.fastmcp import FastMCP
 
@@ -53,6 +52,15 @@ sys.path.insert(0, AUTHZ_DIR)
 sys.path.insert(0, RESOLVER_DIR)
 sys.path.insert(0, PLANNER_DIR)
 sys.path.insert(0, ENGINE_DIR)
+
+if os.getenv("USE_REAL_DB", "false").lower() != "true":
+    try:
+        import mock_db_cache
+        mock_db_cache.setup()
+    except ImportError:
+        pass
+
+import psycopg2
 
 
 
@@ -76,7 +84,7 @@ from resolver    import ResourceResolver   # noqa: E402
 from cache       import ResourceCache     # noqa: E402
 from db_loader   import load_registry_from_db  # noqa: E402
 from query_agent import QueryAgent        # noqa: E402
-from planner     import TaskPlanner       # noqa: E402
+from planner     import TaskPlanner, Task  # noqa: E402
 from errors      import ResolverError     # noqa: E402
 from enum        import Enum              # noqa: E402
 
@@ -566,48 +574,25 @@ async def _execute_agent_command(
             "Wait for the user's reply before calling sso_login."
         )
 
-    # ── Step 2: Parse query with QueryAgent ───────────────────────────────────
-    parsed   = QueryAgent.parse_query(query)
-    action   = parsed.get("action", "STATUS")
-    identifier = parsed.get("identifier") or query.strip()
+    # ── Step 2: Task Planning & Preliminary Parsing ───────────────────────────
+    # Task Planner parses the request to determine actions and resource ID.
+    tasks = TaskPlanner.decompose_instruction(query)
+    if not tasks:
+        parsed = QueryAgent.parse_query(query)
+        tasks = [Task(
+            action=parsed.get("action", "STATUS"),
+            category=parsed.get("category", "Operational"),
+            identifier=parsed.get("identifier") or query.strip()
+        )]
+
+    task = tasks[0]
+    action = task.action
+    identifier = task.identifier
     if identifier.lower().startswith("of "):
         identifier = identifier[3:].strip()
 
-    # ── Step 2.5: Verify CMDB Resource Existence ─────────────────────────────
-    device = None
-    api_path = ""
-    try:
-        resolution = _resolver.resolve({
-            "identifier": identifier,
-            "action": action,
-            "category": "Operational"
-        })
-        device = resolution.device
-        api_path = resolution.api_endpoint
-    except Exception:
-        pass
-
-    # Conversational memory fallback
-    if not device:
-        try:
-            last_target = recall(SESSION_ID, "last_target_id")
-            if last_target:
-                resolution = _resolver.resolve({
-                    "identifier": last_target,
-                    "action": action,
-                    "category": "Operational"
-                })
-                device = resolution.device
-                api_path = resolution.api_endpoint
-                if device:
-                    identifier = last_target
-        except Exception:
-            pass
-
-    if not device:
-        return f"❌ Resource '{identifier}' not found in the CMDB registry. Unable to route task."
-
-    # ── Step 3: Authorization (RBAC + ABAC) ───────────────────────────────────
+    # ── Step 2.5: Authorization Engine ────────────────────────────────────────
+    # Run the Authorization check (RBAC + ABAC) before proceeding to resolution.
     action_verb_map = {
         "ON": "execute", "OFF": "execute", "RESET": "execute",
         "COLD_BOOT": "execute", "STATUS": "read",
@@ -629,7 +614,47 @@ async def _execute_agent_command(
     if not allowed:
         return f"Access Denied for {email} (Role: {role}) on '{identifier}'\nReason: {reason}"
 
-    # ── Step 4: Dispatch to OASF Agent microservice ───────────────────────────
+    # ── Step 3: Resource Resolver Validation ──────────────────────────────────
+    # Task Planner triggers Resource Resolver to query CMDB registry and lookup templates/routes.
+    device = None
+    api_path = ""
+    resolution = None
+    try:
+        resolution = _resolver.resolve({
+            "identifier": identifier,
+            "action": action,
+            "category": task.category
+        })
+        device = resolution.device
+        api_path = resolution.api_endpoint
+    except Exception:
+        pass
+
+    # Conversational memory fallback
+    if not device:
+        try:
+            last_target = recall(SESSION_ID, "last_target_id")
+            if last_target:
+                resolution = _resolver.resolve({
+                    "identifier": last_target,
+                    "action": action,
+                    "category": task.category
+                })
+                device = resolution.device
+                api_path = resolution.api_endpoint
+                if device:
+                    identifier = last_target
+        except Exception:
+            pass
+
+    if not device:
+        return f"❌ Resource '{identifier}' not found in the CMDB registry. Unable to route task."
+
+    # Use resolver-derived routing metadata, management source, and credentials ref.
+    resolved_provider = device.management_source
+    resolved_credentials_ref = resolution.credential_ref
+
+    # ── Step 4: Dispatch to Execution Engine / Storage Agent ──────────────────
     loop = asyncio.get_event_loop()
     result = await loop.run_in_executor(
         None,
@@ -638,8 +663,12 @@ async def _execute_agent_command(
             query_action=action,
             resource_type=resource_type,
             resource_id=identifier,
-            provider_or_protocol=provider_or_protocol,
-            parameters={"api_path": api_path} if api_path else None,
+            provider_or_protocol=resolved_provider,
+            parameters={
+                "api_path": api_path,
+                "user_email": email
+            } if api_path else {"user_email": email},
+            credentials_ref=resolved_credentials_ref,
         ),
     )
 

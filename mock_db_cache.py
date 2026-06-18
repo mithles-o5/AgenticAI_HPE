@@ -224,6 +224,9 @@ class MockRedis:
     def setex(self, key, ttl, value):
         self._cache[key] = (value, time.time() + ttl)
 
+    def set(self, key, value):
+        self._cache[key] = (value, time.time() + 999999999)
+
     def get(self, key):
         if key in self._cache:
             val, expires_at = self._cache[key]
@@ -243,6 +246,15 @@ class MockRedis:
         if key not in self._sets:
             self._sets[key] = set()
         self._sets[key].add(member)
+
+    def smembers(self, key):
+        return self._sets.get(key, set())
+
+    def srem(self, key, *members):
+        s = self._sets.get(key)
+        if s:
+            for m in members:
+                s.discard(m)
 
     def expire(self, key, ttl):
         pass
@@ -362,6 +374,12 @@ def _seed_devices():
         (str(uuid.uuid4()), "stg-array-02", "10.200.1.11", "stg-array-02.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-stgarray02", "storage"),
         (str(uuid.uuid4()), "nas-prod-01", "10.200.1.10", "nas-prod-01.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-np01", "storage"),
         (str(uuid.uuid4()), "backup-san-01", "10.200.1.22", "backup-san-01.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-backupsan01", "storage"),
+
+        # OASF Mock Testing Devices
+        (str(uuid.uuid4()), "demo-vm-001", "10.300.1.1", "demo-vm-001.cloud.local", "mock_cloud", "localhost:8003", "cloud-uuid-001", "vm"),
+        (str(uuid.uuid4()), "core-sw-01", "10.400.1.1", "core-sw-01.network.local", "mock_network", "localhost:8006", "net-uuid-001", "switch"),
+        (str(uuid.uuid4()), "core-switch-01", "10.400.1.2", "core-switch-01.network.local", "mock_network", "localhost:8006", "net-uuid-002", "switch"),
+        (str(uuid.uuid4()), "prod-vol-001", "10.500.1.1", "prod-vol-001.storage.local", "mock_storage", "localhost:8004", "storage-uuid-001", "volume"),
     ]
 
     cur = _shared_conn.cursor()

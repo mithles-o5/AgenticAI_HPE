@@ -34,6 +34,8 @@ LOCAL_USERS = {
     # ── Matches roles.json entries ──
     "dsksr19":   ("password123",  "Storage administrator",        "dsksr19@gmail.com"),
     "devasksr":  ("password123",  "Infrastructure administrator", "devasksr@gmail.com"),
+    "mithles2k05": ("password123", "Storage administrator", "mithles2k05@gmail.com"),
+    "mithles":   ("password123", "Infrastructure administrator", "mithles@student.tce.edu"),
 
     # ── Additional dev/test accounts (add to roles.json if needed) ──
     "infra_admin":  ("admin123",  "Infrastructure administrator", "infra_admin@local.dev"),

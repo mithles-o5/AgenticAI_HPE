@@ -18,7 +18,7 @@
   "domains": ["onprem-infrastructure", "composable-infrastructure", "observability"],
   "locators": [{"type": "openapi", "url": "http://onprem-agent:8005/openapi.json"}],
   "modules": {
-    "providers": ["oneview", "com"],
+    "providers": ["oneview", "com", "coms"],
     "resource_types": [
       "server_profile",
       "enclosure",

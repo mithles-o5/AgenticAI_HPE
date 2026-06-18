@@ -10,5 +10,13 @@
     "devasathish@student.tce.edu": {
         "name": "Deva Sathish",
         "role": "Network administrator"
+    },
+    "mithles2k05@gmail.com": {
+        "name": "Mithles ",
+        "role": "Storage administrator"
+    },
+    "mithles@student.tce.edu": {
+        "name": "Mithles Student",
+        "role": "Infrastructure administrator"
     }
 }

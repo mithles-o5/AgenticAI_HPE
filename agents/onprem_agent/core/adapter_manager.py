@@ -23,7 +23,7 @@ class AdapterManager:
         prov = provider.lower().strip()
         if prov == "oneview":
             return self._oneview
-        elif prov == "com" or prov == "composable":
+        elif prov in ("com", "composable", "coms"):
             return self._com
         elif prov == "mock":
             return self._mock

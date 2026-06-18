@@ -15,8 +15,6 @@ if sys.platform == "win32":
         pass
 
 from mcp_server.mcp_server import (
-    manage_oneview_resource,
-    manage_comops_resource,
     manage_cloud_resource,
     manage_network_resource,
     manage_storage_resource,
@@ -67,10 +65,10 @@ async def main():
 
     try:
         print("\n--- [1] Status: OneView Server ---")
-        print(await manage_oneview_resource("status OV1-RackServer-001"))
+        print(await manage_server_resource("status OV1-RackServer-001"))
 
         print("\n--- [2] Status: ComOps Server ---")
-        print(await manage_comops_resource("status CoM-CloudNode-001"))
+        print(await manage_server_resource("status CoM-CloudNode-001"))
 
         print("\n--- [3] Status: Cloud VM ---")
         print(await manage_cloud_resource("status demo-vm-001", provider="mock", resource_type="vm"))

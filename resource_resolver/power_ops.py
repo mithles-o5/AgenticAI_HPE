@@ -177,7 +177,10 @@ class ExecutionOrchestrator:
             scheme = "http"
         else:
             host   = device.source_host 
-            scheme = "https"
+            if ":" in host or "localhost" in host or "127.0.0.1" in host:
+                scheme = "http"
+            else:
+                scheme = "https"
 
         uuid        = device.source_device_id or device.id
         device_type = (device.device_type or "").strip().lower()

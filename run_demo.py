@@ -15,11 +15,10 @@ if sys.platform == "win32":
 
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 from mcp_server.mcp_server import (
-    manage_oneview_resource,
-    manage_comops_resource,
     manage_cloud_resource,
     manage_network_resource,
     manage_storage_resource,
+    manage_server_resource,
     _trigger_login,
     logout,
     check_access,
@@ -105,7 +104,7 @@ async def main():
         print("STEP 1: NON-AUTHORIZED USER ACTION (EXPECT FAILURE)")
         print("=" * 50)
         logout()
-        res1 = await manage_oneview_resource("turn on OV1-RackServer-001")
+        res1 = await manage_server_resource("turn on OV1-RackServer-001")
         print(f"Result:\n{res1}")
 
         # ── Step 2: SSO Login ─────────────────────────────────────────────────
@@ -120,14 +119,14 @@ async def main():
         print("\n" + "=" * 50)
         print("STEP 3: ONEVIEW — POWER ON SERVER")
         print("=" * 50)
-        ov_res = await manage_oneview_resource("power on OV1-RackServer-045")
+        ov_res = await manage_server_resource("power on OV1-RackServer-045")
         print(f"Result:\n{ov_res}")
 
         # ── Step 4: Compute Ops command ───────────────────────────────────────
         print("\n" + "=" * 50)
         print("STEP 4: COMPUTE OPS — POWER ON SERVER")
         print("=" * 50)
-        com_res = await manage_comops_resource("power on CoM-CloudNode-128")
+        com_res = await manage_server_resource("power on CoM-CloudNode-128")
         print(f"Result:\n{com_res}")
 
         # ── Step 5: Cloud Agent ───────────────────────────────────────────────
