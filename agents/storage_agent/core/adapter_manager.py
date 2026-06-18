@@ -9,7 +9,6 @@ from adapters.plugins.nas_adapter import NASStorageAdapter
 from adapters.plugins.s3_adapter import S3StorageAdapter
 
 REGISTRY: Dict[str, Type[BaseStorageAdapter]] = {
-    "mock": MockStorageAdapter,
     "mock_storage": MockStorageAdapter,
     "dscc": DSCCStorageAdapter,
     "coms": DSCCStorageAdapter,

@@ -41,6 +41,12 @@ def main():
             cwd=os.path.join(ROOT_DIR, "mock_server(Comops)")
         ))
 
+        print("[+] Starting Network Mock Server on port 8002...")
+        processes.append(subprocess.Popen(
+            [sys.executable, "-m", "uvicorn", "main:app", "--port", "8002", "--log-level", "error"],
+            cwd=os.path.join(ROOT_DIR, "mock_server(network)")
+        ))
+
         print("[+] Starting Cloud Mock API Server on port 8003...")
         processes.append(subprocess.Popen(
             [sys.executable, "-m", "uvicorn", "main:app", "--port", "8003", "--log-level", "error"],

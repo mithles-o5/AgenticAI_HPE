@@ -14,10 +14,16 @@ class MockNetworkAdapter(BaseNetworkAdapter):
         return "mock"
 
     # ── Dynamic Router ────────────────────────────────────────────────────────
-    def _dynamic_call(self, method: str, api_path: str, device_id: str, payload: dict, base_url: str = "") -> Optional[Dict[str, Any]]:
+    def _dynamic_call(self, method: str, api_path: str, resource_id: str, payload: dict, base_url: str = "") -> Optional[Dict[str, Any]]:
         import httpx
+        from urllib.parse import urlparse
         try:
-            url = f"{base_url}{api_path}".format(id=device_id, systemId=device_id, hostId=device_id)
+            parsed = urlparse(api_path)
+            api_path = f"http://127.0.0.1:8002{parsed.path}"
+            if parsed.query:
+                api_path += f"?{parsed.query}"
+
+            url = f"{base_url}{api_path}".format(id=resource_id, systemId=resource_id, hostId=resource_id)
             response = httpx.request(method, url, json=payload, timeout=10.0)
             try:
                 return response.json()

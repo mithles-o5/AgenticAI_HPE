@@ -133,24 +133,12 @@ mcp = FastMCP(
     instructions=f"""
     You are managing HPE infrastructure via MCP.
 
-    ── SERVER TOOLS (on-premises) ────────────────────────────────────────────
-    manage_server_resource(query, provider, resource_type, env)
-      Manage a bare-metal server (server, bmc, sensor, firmware, event_log) via the Server Agent.
-      provider: 'redfish' | 'ipmi' | 'ilo' | 'mock'
-      resource_type: 'server' | 'bmc' | 'sensor' | 'firmware' | 'event_log'
-
-    ── OASF AGENT TOOLS ─────────────────────────────────────────────────────
-    manage_cloud_resource(query, provider, resource_type)
-      Manage cloud VMs/containers. provider: aws | azure | gcp | mock
-      resource_type: vm | container | function
-
-    manage_network_resource(query, protocol, resource_type)
-      Manage network devices. protocol: snmp | netconf | rest | mock
-      resource_type: switch | router | interface
-
-    manage_storage_resource(query, provider, resource_type)
-      Manage storage. provider: dscc | nas | s3 | mock
-      resource_type: volume | array | pool | bucket
+    ── INFRASTRUCTURE MANAGEMENT TOOL ─────────────────────────────────────────
+    manage_infrastructure_resource(query)
+      USE THIS TOOL to manage or check the status of ANY resource (cloud VMs, network switches, storage volumes, bare-metal servers, etc.).
+      Pass the user's query exactly as written, or extract the target resource ID and action. 
+      The backend CMDB and Capability Registry will automatically route it to the correct specialized agent.
+      Example queries: "status of gl-ns-184", "reboot server-7", "check capacity of array dscc-01"
 
     ── FULL PIPELINE (all tools) ─────────────────────────────────────────────
       1. Authenticates the user
@@ -459,90 +447,17 @@ def logout() -> str:
 # ─────────────────────────────────────────────────────────────────────────────
 
 @mcp.tool()
-async def manage_cloud_resource(
-    query: str,
-    provider: str = "mock",
-    resource_type: str = "vm",
-    env: str = "dev",
-) -> str:
+async def manage_infrastructure_resource(query: str) -> str:
     """
-    USE THIS TOOL to manage or check the status of any cloud resource (VM, container, function).
-    If the user asks for the status of a cloud device, you MUST use this tool.
-    provider: 'aws' | 'azure' | 'gcp' | 'mock'
-    resource_type: 'vm' | 'container' | 'function'
+    USE THIS TOOL to manage or check the status of ANY resource (cloud, network, storage, server, onprem).
+    The backend CMDB and Capability Registry will automatically route it to the correct agent.
     """
     return await _execute_agent_command(
         query=query,
-        env=env,
-        agent_type="cloud",
-        provider_or_protocol=provider,
-        resource_type=resource_type,
-    )
-
-
-@mcp.tool()
-async def manage_network_resource(
-    query: str,
-    protocol: str = "mock",
-    resource_type: str = "switch",
-    env: str = "dev",
-) -> str:
-    """
-    USE THIS TOOL to manage or check the status of any network device (switch, router, interface, WAN devices).
-    If the user asks for the status of a router or network equipment (e.g., wan-r08-10367), you MUST use this tool.
-    protocol: 'snmp' | 'netconf' | 'rest' | 'mock'
-    resource_type: 'switch' | 'router' | 'interface'
-    """
-    return await _execute_agent_command(
-        query=query,
-        env=env,
-        agent_type="network",
-        provider_or_protocol=protocol,
-        resource_type=resource_type,
-    )
-
-
-@mcp.tool()
-async def manage_storage_resource(
-    query: str,
-    provider: str = "mock",
-    resource_type: str = "volume",
-    env: str = "dev",
-) -> str:
-    """
-    USE THIS TOOL to manage or check the status of any storage resource (volume, array, pool, bucket).
-    If the user asks for the status of a storage device, you MUST use this tool.
-    provider: 'dscc' | 'nas' | 's3' | 'mock'
-    resource_type: 'volume' | 'array' | 'pool' | 'bucket'
-    """
-    return await _execute_agent_command(
-        query=query,
-        env=env,
-        agent_type="storage",
-        provider_or_protocol=provider,
-        resource_type=resource_type,
-    )
-
-
-@mcp.tool()
-async def manage_server_resource(
-    query: str,
-    provider: str = "mock",
-    resource_type: str = "server",
-    env: str = "dev",
-) -> str:
-    """
-    USE THIS TOOL to manage or check the status of any bare-metal server (server, bmc, sensor, firmware).
-    If the user asks for the status of a server or physical hardware, you MUST use this tool.
-    provider: 'redfish' | 'ipmi' | 'ilo' | 'mock'
-    resource_type: 'server' | 'bmc' | 'sensor' | 'firmware' | 'event_log'
-    """
-    return await _execute_agent_command(
-        query=query,
-        env=env,
-        agent_type="server",
-        provider_or_protocol=provider,
-        resource_type=resource_type,
+        env="dev",
+        agent_type="unknown",
+        provider_or_protocol="unknown",
+        resource_type="unknown",
     )
 
 
@@ -591,8 +506,65 @@ async def _execute_agent_command(
     if identifier.lower().startswith("of "):
         identifier = identifier[3:].strip()
 
-    # ── Step 2.5: Authorization Engine ────────────────────────────────────────
-    # Run the Authorization check (RBAC + ABAC) before proceeding to resolution.
+    # ── Step 2.5: Verify CMDB Resource Existence ─────────────────────────────
+    device = None
+    api_path = ""
+    try:
+        resolution = _resolver.resolve({
+            "identifier": identifier,
+            "action": action,
+            "category": "Operational"
+        })
+        device = resolution.device
+        api_path = resolution.api_endpoint
+    except Exception:
+        pass
+
+    # Conversational memory fallback (ONLY if no explicit identifier was provided or generic)
+    if not device and identifier.lower() in {"", "it", "this", "that", "the device", "the resource"}:
+        try:
+            last_target = recall(SESSION_ID, "last_target_id")
+            if last_target:
+                resolution = _resolver.resolve({
+                    "identifier": last_target,
+                    "action": action,
+                    "category": "Operational"
+                })
+                device = resolution.device
+                api_path = resolution.api_endpoint
+                if device:
+                    identifier = last_target
+        except Exception:
+            pass
+
+    if not device:
+        return f"❌ Resource '{identifier}' not found in the CMDB registry. Unable to route task."
+
+    # OVERRIDE the LLM's guessed provider with the actual CMDB source
+    if device.management_source:
+        provider_or_protocol = device.management_source
+        
+        # Override the LLM's guessed agent type based on the Capability Registry
+        try:
+            async with httpx.AsyncClient() as client:
+                resp = await client.get(
+                    "http://127.0.0.1:8020/agents/lookup",
+                    params={
+                        "resource_type": device.device_type or resource_type,
+                        "provider": provider_or_protocol
+                    },
+                    timeout=5.0
+                )
+                if resp.is_success:
+                    agent_record = resp.json()
+                    agent_name = agent_record.get("name", "")
+                    if agent_name.endswith("-agent"):
+                        agent_type = agent_name[:-6]  # strip "-agent"
+        except Exception as e:
+            print(f"Warning: Failed to lookup agent in capability registry: {e}")
+
+
+    # ── Step 3: Authorization (RBAC + ABAC) ───────────────────────────────────
     action_verb_map = {
         "ON": "execute", "OFF": "execute", "RESET": "execute",
         "COLD_BOOT": "execute", "STATUS": "read",

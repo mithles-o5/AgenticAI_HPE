@@ -1,15 +1,14 @@
+import uuid
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 import json
 import os
 from models import *
 
-mock_file = os.path.join(os.path.dirname(__file__), "mock_data.json")
-try:
-    with open(mock_file, "r", encoding="utf-8") as f:
-        MOCK_DB = json.load(f)
-except Exception:
-    MOCK_DB = {}
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from database import db
 
 app = FastAPI(title='Generated Mock Server', description='Generated automatically from API docs.')
 
@@ -24,5167 +23,12854 @@ app.add_middleware(
 @app.get("/api/v1/access-controls")
 def get_access_controls():
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/access-controls
     """
-    return MOCK_DB.get("get_access_controls", dict())
+    collection_path = f"/api/v1/access-controls"
+    static_data = db.get_static("get_access_controls", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/audit-events")
 def AuditEventsGet():
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/audit-events
     """
-    return MOCK_DB.get("AuditEventsGet", dict())
+    collection_path = f"/api/v1/audit-events"
+    static_data = db.get_static("AuditEventsGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/host-initiator-groups")
 def HostGroupList():
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/host-initiator-groups
     """
-    return MOCK_DB.get("HostGroupList", dict())
+    collection_path = f"/api/v1/host-initiator-groups"
+    static_data = db.get_static("HostGroupList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/host-initiator-groups")
 def HostGroupCreate(payload: HostgroupcreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/host-initiator-groups
     """
-    return MOCK_DB.get("HostGroupCreate", dict())
+    collection_path = f"/api/v1/host-initiator-groups"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/host-initiator-groups/{hostGroupId}")
 def HostGroupDelete(hostGroupId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/host-initiator-groups/{hostGroupId}
     """
-    return MOCK_DB.get("HostGroupDelete", dict())
+    collection_path = f"/api/v1/host-initiator-groups"
+    item_id = hostGroupId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("HostGroupDelete", dict())
 
 @app.get("/api/v1/host-initiator-groups/{hostGroupId}")
 def HostGroupGetById(hostGroupId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/host-initiator-groups/{hostGroupId}
     """
-    return MOCK_DB.get("HostGroupGetById", dict())
+    collection_path = f"/api/v1/host-initiator-groups"
+    item_id = hostGroupId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("HostGroupGetById", dict())
+    return static_val
 
 @app.put("/api/v1/host-initiator-groups/{hostGroupId}")
 def HostGroupUpdateById(hostGroupId: str, payload: HostgroupupdatebyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/host-initiator-groups/{hostGroupId}
     """
-    return MOCK_DB.get("HostGroupUpdateById", dict())
+    collection_path = f"/api/v1/host-initiator-groups"
+    item_id = hostGroupId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/host-initiator-groups/{hostGroupId}/mappedDevices")
 def HostGroupMappedDevice(hostGroupId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/host-initiator-groups/{hostGroupId}/mappedDevices
     """
-    return MOCK_DB.get("HostGroupMappedDevice", dict())
+    collection_path = f"/api/v1/host-initiator-groups/{hostGroupId}/mappedDevices"
+    static_data = db.get_static("HostGroupMappedDevice", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/host-initiator-groups/bulkmerge")
 def findBulkMergeCandidatesForHostGroups():
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/host-initiator-groups/bulkmerge
     """
-    return MOCK_DB.get("findBulkMergeCandidatesForHostGroups", dict())
+    collection_path = f"/api/v1/host-initiator-groups/bulkmerge"
+    static_data = db.get_static("findBulkMergeCandidatesForHostGroups", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/host-initiator-groups/bulkmerge")
 def BulkMergeHostGroup(payload: BulkmergehostgroupRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/host-initiator-groups/bulkmerge
     """
-    return MOCK_DB.get("BulkMergeHostGroup", dict())
+    collection_path = f"/api/v1/host-initiator-groups/bulkmerge"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/host-initiator-groups/merge")
 def HostGroupMerge(payload: HostgroupmergeRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/host-initiator-groups/merge
     """
-    return MOCK_DB.get("HostGroupMerge", dict())
+    collection_path = f"/api/v1/host-initiator-groups/merge"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/host-initiators")
 def HostList():
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/host-initiators
     """
-    return MOCK_DB.get("HostList", dict())
+    collection_path = f"/api/v1/host-initiators"
+    static_data = db.get_static("HostList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/host-initiators")
 def HostCreate(payload: HostcreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/host-initiators
     """
-    return MOCK_DB.get("HostCreate", dict())
+    collection_path = f"/api/v1/host-initiators"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/host-initiators/{hostId}")
 def HostDelete(hostId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/host-initiators/{hostId}
     """
-    return MOCK_DB.get("HostDelete", dict())
+    collection_path = f"/api/v1/host-initiators"
+    item_id = hostId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("HostDelete", dict())
 
 @app.get("/api/v1/host-initiators/{hostId}")
 def HostGetById(hostId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/host-initiators/{hostId}
     """
-    return MOCK_DB.get("HostGetById", dict())
+    collection_path = f"/api/v1/host-initiators"
+    item_id = hostId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("HostGetById", dict())
+    return static_val
 
 @app.put("/api/v1/host-initiators/{hostId}")
 def HostUpdateById(hostId: str, payload: HostupdatebyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/host-initiators/{hostId}
     """
-    return MOCK_DB.get("HostUpdateById", dict())
+    collection_path = f"/api/v1/host-initiators"
+    item_id = hostId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/host-initiators/{hostId}/chap")
 def GetHostChapById(hostId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/host-initiators/{hostId}/chap
     """
-    return MOCK_DB.get("GetHostChapById", dict())
+    collection_path = f"/api/v1/host-initiators/{hostId}/chap"
+    static_data = db.get_static("GetHostChapById", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.put("/api/v1/host-initiators/{hostId}/chap")
 def UpdateHostChapById(hostId: str, payload: UpdatehostchapbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/host-initiators/{hostId}/chap
     """
-    return MOCK_DB.get("UpdateHostChapById", dict())
+    collection_path = f"/api/v1/host-initiators/{hostId}/chap"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/host-initiators/{hostId}/chapkey")
 def GenerateChapKeyById(hostId: str, payload: GeneratechapkeybyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/host-initiators/{hostId}/chapkey
     """
-    return MOCK_DB.get("GenerateChapKeyById", dict())
+    collection_path = f"/api/v1/host-initiators/{hostId}/chapkey"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/host-initiators/{hostId}/mappedDevices")
 def HostMappedDevice(hostId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/host-initiators/{hostId}/mappedDevices
     """
-    return MOCK_DB.get("HostMappedDevice", dict())
+    collection_path = f"/api/v1/host-initiators/{hostId}/mappedDevices"
+    static_data = db.get_static("HostMappedDevice", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/host-initiators/{hostId}/storage-performance-history")
 def HostVolumePerformanceHistoryGet(hostId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/host-initiators/{hostId}/storage-performance-history
     """
-    return MOCK_DB.get("HostVolumePerformanceHistoryGet", dict())
+    collection_path = f"/api/v1/host-initiators/{hostId}/storage-performance-history"
+    static_data = db.get_static("HostVolumePerformanceHistoryGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/host-initiators/{hostId}/volumes")
 def HostVolumesGet(hostId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/host-initiators/{hostId}/volumes
     """
-    return MOCK_DB.get("HostVolumesGet", dict())
+    collection_path = f"/api/v1/host-initiators/{hostId}/volumes"
+    static_data = db.get_static("HostVolumesGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/host-initiators/{hostId}/volumes-snapshots")
 def HostMappedVolSnaps(hostId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/host-initiators/{hostId}/volumes-snapshots
     """
-    return MOCK_DB.get("HostMappedVolSnaps", dict())
+    collection_path = f"/api/v1/host-initiators/{hostId}/volumes-snapshots"
+    static_data = db.get_static("HostMappedVolSnaps", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/host-initiators/bulkmerge")
 def findBulkMergeCandidatesForHosts():
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/host-initiators/bulkmerge
     """
-    return MOCK_DB.get("findBulkMergeCandidatesForHosts", dict())
+    collection_path = f"/api/v1/host-initiators/bulkmerge"
+    static_data = db.get_static("findBulkMergeCandidatesForHosts", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/host-initiators/bulkmerge")
 def BulkMergeHost(payload: BulkmergehostRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/host-initiators/bulkmerge
     """
-    return MOCK_DB.get("BulkMergeHost", dict())
+    collection_path = f"/api/v1/host-initiators/bulkmerge"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/host-initiators/merge")
 def MergeHost(payload: MergehostRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/host-initiators/merge
     """
-    return MOCK_DB.get("MergeHost", dict())
+    collection_path = f"/api/v1/host-initiators/merge"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/initiators")
 def HostInitiatorList():
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/initiators
     """
-    return MOCK_DB.get("HostInitiatorList", dict())
+    collection_path = f"/api/v1/initiators"
+    static_data = db.get_static("HostInitiatorList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/initiators")
 def HostInitiatorCreate(payload: HostinitiatorcreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/initiators
     """
-    return MOCK_DB.get("HostInitiatorCreate", dict())
+    collection_path = f"/api/v1/initiators"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/initiators/{initiatorId}")
 def HostInitiatorDelete(initiatorId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/initiators/{initiatorId}
     """
-    return MOCK_DB.get("HostInitiatorDelete", dict())
+    collection_path = f"/api/v1/initiators"
+    item_id = initiatorId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("HostInitiatorDelete", dict())
 
 @app.get("/api/v1/initiators/{initiatorId}")
 def HostInitiatorGetById(initiatorId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/initiators/{initiatorId}
     """
-    return MOCK_DB.get("HostInitiatorGetById", dict())
+    collection_path = f"/api/v1/initiators"
+    item_id = initiatorId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("HostInitiatorGetById", dict())
+    return static_val
 
 @app.get("/api/v1/issues")
 def ListIssues():
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/issues
     """
-    return MOCK_DB.get("ListIssues", dict())
+    collection_path = f"/api/v1/issues"
+    static_data = db.get_static("ListIssues", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/issues/{id}")
 def GetIssue(id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/issues/{id}
     """
-    return MOCK_DB.get("GetIssue", dict())
+    collection_path = f"/api/v1/issues"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("GetIssue", dict())
+    return static_val
 
 @app.get("/api/v1/resource-types")
 def get_resource_types():
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/resource-types
     """
-    return MOCK_DB.get("get_resource_types", dict())
+    collection_path = f"/api/v1/resource-types"
+    static_data = db.get_static("get_resource_types", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems")
 def SystemsList():
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems
     """
-    return MOCK_DB.get("SystemsList", dict())
+    collection_path = f"/api/v1/storage-systems"
+    static_data = db.get_static("SystemsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/{id}")
 def SystemGetById(id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/{id}
     """
-    return MOCK_DB.get("SystemGetById", dict())
+    collection_path = f"/api/v1/storage-systems"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("SystemGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/{systemId}/storage-pools")
 def StoragePoolsList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/{systemId}/storage-pools
     """
-    return MOCK_DB.get("StoragePoolsList", dict())
+    collection_path = f"/api/v1/storage-systems/{systemId}/storage-pools"
+    static_data = db.get_static("StoragePoolsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/{systemId}/storage-pools/{id}")
 def StoragePoolsGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/{systemId}/storage-pools/{id}
     """
-    return MOCK_DB.get("StoragePoolsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/{systemId}/storage-pools"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("StoragePoolsGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/{systemId}/storage-pools/{id}/volumes")
 def StoragePoolVolumesList(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/{systemId}/storage-pools/{id}/volumes
     """
-    return MOCK_DB.get("StoragePoolVolumesList", dict())
+    collection_path = f"/api/v1/storage-systems/{systemId}/storage-pools/{id}/volumes"
+    static_data = db.get_static("StoragePoolVolumesList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/{systemId}/volume-sets")
 def VolumesetListForSystemBySystemId(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/{systemId}/volume-sets
     """
-    return MOCK_DB.get("VolumesetListForSystemBySystemId", dict())
+    collection_path = f"/api/v1/storage-systems/{systemId}/volume-sets"
+    static_data = db.get_static("VolumesetListForSystemBySystemId", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/{systemId}/volume-sets/{id}")
 def VolumesetSystemGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/{systemId}/volume-sets/{id}
     """
-    return MOCK_DB.get("VolumesetSystemGetById", dict())
+    collection_path = f"/api/v1/storage-systems/{systemId}/volume-sets"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("VolumesetSystemGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/{systemId}/volumes")
 def VolumeListForSystemBySystemId(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/{systemId}/volumes
     """
-    return MOCK_DB.get("VolumeListForSystemBySystemId", dict())
+    collection_path = f"/api/v1/storage-systems/{systemId}/volumes"
+    static_data = db.get_static("VolumeListForSystemBySystemId", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1")
 def DeviceType1SystemsList():
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1
     """
-    return MOCK_DB.get("DeviceType1SystemsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1"
+    static_data = db.get_static("DeviceType1SystemsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{id}")
 def DeviceType1SystemGetById(id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{id}
     """
-    return MOCK_DB.get("DeviceType1SystemGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1SystemGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type1/{id}")
 def SystemLocate(id: str, payload: SystemlocateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{id}
     """
-    return MOCK_DB.get("SystemLocate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/alert-contacts")
 def DeviceType1AlertContactsList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/alert-contacts
     """
-    return MOCK_DB.get("DeviceType1AlertContactsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/alert-contacts"
+    static_data = db.get_static("DeviceType1AlertContactsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/alert-contacts")
 def AlertContactsCreate(systemId: str, payload: AlertcontactscreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/alert-contacts
     """
-    return MOCK_DB.get("AlertContactsCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/alert-contacts"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type1/{systemId}/alert-contacts/{id}")
 def AlertContactsDelete(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type1/{systemId}/alert-contacts/{id}
     """
-    return MOCK_DB.get("AlertContactsDelete", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/alert-contacts"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("AlertContactsDelete", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/alert-contacts/{id}")
 def DeviceType1AlertContactsGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/alert-contacts/{id}
     """
-    return MOCK_DB.get("DeviceType1AlertContactsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/alert-contacts"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1AlertContactsGetById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/alert-contacts/{id}")
 def AlertContactsUpdate(systemId: str, id: str, payload: AlertcontactsupdateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/alert-contacts/{id}
     """
-    return MOCK_DB.get("AlertContactsUpdate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/alert-contacts"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/application-summary")
 def DeviceType1ApplicationSummaryGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/application-summary
     """
-    return MOCK_DB.get("DeviceType1ApplicationSummaryGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/application-summary"
+    static_data = db.get_static("DeviceType1ApplicationSummaryGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/applicationsets")
 def DeviceType1VolumeSetsList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/applicationsets
     """
-    return MOCK_DB.get("DeviceType1VolumeSetsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets"
+    static_data = db.get_static("DeviceType1VolumeSetsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/applicationsets")
 def DeviceType1VolumeSetsCreate(systemId: str, payload: Devicetype1volumesetscreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/applicationsets
     """
-    return MOCK_DB.get("DeviceType1VolumeSetsCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{appsetId}/export")
 def DeviceType1VolumeSetExport(systemId: str, appsetId: str, payload: Devicetype1volumesetexportRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType1VolumeSetExport", dict())
+    return db.get_static("DeviceType1VolumeSetExport", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{appsetId}/replication-partners")
 def DeviceType1GetReplicationPartnersByAppSetId(systemId: str, appsetId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{appsetId}/replication-partners
     """
-    return MOCK_DB.get("DeviceType1GetReplicationPartnersByAppSetId", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{appsetId}/replication-partners"
+    static_data = db.get_static("DeviceType1GetReplicationPartnersByAppSetId", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{appsetId}/replication-partners/{replicationPartnerId}/volumes")
 def DeviceType1GetReplicationPartnerVolumesByAppSetId(systemId: str, appsetId: str, replicationPartnerId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{appsetId}/replication-partners/{replicationPartnerId}/volumes
     """
-    return MOCK_DB.get("DeviceType1GetReplicationPartnerVolumesByAppSetId", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{appsetId}/replication-partners/{replicationPartnerId}/volumes"
+    static_data = db.get_static("DeviceType1GetReplicationPartnerVolumesByAppSetId", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.delete("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{appsetId}/snapsets/{snapsetId}")
 def DeviceType1VolumeSetSnapshotDeleteById(systemId: str, appsetId: str, snapsetId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{appsetId}/snapsets/{snapsetId}
     """
-    return MOCK_DB.get("DeviceType1VolumeSetSnapshotDeleteById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{appsetId}/snapsets"
+    item_id = snapsetId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType1VolumeSetSnapshotDeleteById", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{appsetId}/snapsets/{snapsetId}")
 def DeviceType1SnapsetsGetById(systemId: str, appsetId: str, snapsetId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{appsetId}/snapsets/{snapsetId}
     """
-    return MOCK_DB.get("DeviceType1SnapsetsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{appsetId}/snapsets"
+    item_id = snapsetId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1SnapsetsGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{appsetId}/un-export")
 def DeviceType1VolumeSetUnexport(systemId: str, appsetId: str, payload: Devicetype1volumesetunexportRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType1VolumeSetUnexport", dict())
+    return db.get_static("DeviceType1VolumeSetUnexport", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{appsetId}/volumes")
 def DeviceType1VolumeSetVolumesList(systemId: str, appsetId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{appsetId}/volumes
     """
-    return MOCK_DB.get("DeviceType1VolumeSetVolumesList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{appsetId}/volumes"
+    static_data = db.get_static("DeviceType1VolumeSetVolumesList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.delete("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}")
 def DeviceType1VolumeSetsDeleteById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}
     """
-    return MOCK_DB.get("DeviceType1VolumeSetsDeleteById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType1VolumeSetsDeleteById", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}")
 def DeviceType1VolumeSetsGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}
     """
-    return MOCK_DB.get("DeviceType1VolumeSetsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1VolumeSetsGetById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}")
 def DeviceType1VolumeSetsEditById(systemId: str, id: str, payload: Devicetype1volumesetseditbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}
     """
-    return MOCK_DB.get("DeviceType1VolumeSetsEditById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/capacity-statistics")
 def DeviceType1VolumeSetCapacityStatisticsGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/capacity-statistics
     """
-    return MOCK_DB.get("DeviceType1VolumeSetCapacityStatisticsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/capacity-statistics"
+    static_data = db.get_static("DeviceType1VolumeSetCapacityStatisticsGetById", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/performance")
 def DeviceType1GetVolumeSetPerformanceHistory(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/performance
     """
-    return MOCK_DB.get("DeviceType1GetVolumeSetPerformanceHistory", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/performance"
+    static_data = db.get_static("DeviceType1GetVolumeSetPerformanceHistory", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/protection-policies")
 def DeviceType1GetProtectionPolicies(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/protection-policies
     """
-    return MOCK_DB.get("DeviceType1GetProtectionPolicies", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/protection-policies"
+    static_data = db.get_static("DeviceType1GetProtectionPolicies", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/protection-policies")
 def DeviceType1CreateProtectionPolicy(systemId: str, id: str, payload: Devicetype1createprotectionpolicyRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/protection-policies
     """
-    return MOCK_DB.get("DeviceType1CreateProtectionPolicy", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/protection-policies"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/protection-policies")
 def DeviceType1EditProtectionPolicies(systemId: str, id: str, payload: Devicetype1editprotectionpoliciesRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/protection-policies
     """
-    return MOCK_DB.get("DeviceType1EditProtectionPolicies", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/protection-policies"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/protection-policies/fix")
 def DeviceType1FixProtectionPolicy(systemId: str, id: str, payload: Devicetype1fixprotectionpolicyRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/protection-policies/fix
     """
-    return MOCK_DB.get("DeviceType1FixProtectionPolicy", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/protection-policies/fix"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/protection-policies/remove")
 def DeviceType1removeProtectionPolicies(systemId: str, id: str, payload: Devicetype1removeprotectionpoliciesRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType1removeProtectionPolicies", dict())
+    return db.get_static("DeviceType1removeProtectionPolicies", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/proximity-settings")
 def DeviceType1GetProximitySettings(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/proximity-settings
     """
-    return MOCK_DB.get("DeviceType1GetProximitySettings", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/proximity-settings"
+    static_data = db.get_static("DeviceType1GetProximitySettings", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/proximity-settings")
 def DeviceType1EditProximitySettings(systemId: str, id: str, payload: Devicetype1editproximitysettingsRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/proximity-settings
     """
-    return MOCK_DB.get("DeviceType1EditProximitySettings", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/proximity-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/remote-protection/actions")
 def DeviceType1actionOnVolumeSets(systemId: str, id: str, payload: Devicetype1actiononvolumesetsRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/remote-protection/actions
     """
-    return MOCK_DB.get("DeviceType1actionOnVolumeSets", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/remote-protection/actions"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/snapsets")
 def DeviceType1VolumeSetSnapshotsList(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/snapsets
     """
-    return MOCK_DB.get("DeviceType1VolumeSetSnapshotsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/snapsets"
+    static_data = db.get_static("DeviceType1VolumeSetSnapshotsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/snapsets")
 def DeviceType1VolumeSetsSnapshotCreate(systemId: str, id: str, payload: Devicetype1volumesetssnapshotcreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/snapsets
     """
-    return MOCK_DB.get("DeviceType1VolumeSetsSnapshotCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/snapsets"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/supported-protection")
 def DeviceType1getSupportedProtectionTypes(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/supported-protection
     """
-    return MOCK_DB.get("DeviceType1getSupportedProtectionTypes", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/applicationsets/{id}/supported-protection"
+    static_data = db.get_static("DeviceType1getSupportedProtectionTypes", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/capacity-history")
 def DeviceType1SystemCapacityHistoryGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/capacity-history
     """
-    return MOCK_DB.get("DeviceType1SystemCapacityHistoryGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/capacity-history"
+    static_data = db.get_static("DeviceType1SystemCapacityHistoryGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/capacity-summary")
 def DeviceType1SystemCapacitySummaryGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/capacity-summary
     """
-    return MOCK_DB.get("DeviceType1SystemCapacitySummaryGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/capacity-summary"
+    static_data = db.get_static("DeviceType1SystemCapacitySummaryGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/certificates")
 def DeviceType1CertificatesList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/certificates
     """
-    return MOCK_DB.get("DeviceType1CertificatesList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/certificates"
+    static_data = db.get_static("DeviceType1CertificatesList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/certificates")
 def PostCertificate(systemId: str, payload: PostcertificateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/certificates
     """
-    return MOCK_DB.get("PostCertificate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/certificates"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/certificates/{id}")
 def DeviceType1CertificatesGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/certificates/{id}
     """
-    return MOCK_DB.get("DeviceType1CertificatesGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/certificates"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1CertificatesGetById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/certificates/{id}")
 def PutCertificate(systemId: str, id: str, payload: PutcertificateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/certificates/{id}
     """
-    return MOCK_DB.get("PutCertificate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/certificates"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/certificates/remove")
 def RemoveCertificates(systemId: str, payload: RemovecertificatesRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("RemoveCertificates", dict())
+    return db.get_static("RemoveCertificates", dict())
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/collect-support-data")
 def DeviceType1SupportDataCollect(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/collect-support-data
     """
-    return MOCK_DB.get("DeviceType1SupportDataCollect", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/collect-support-data"
+    payload_dict = {}
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/component-performance-statistics")
 def DeviceType1SystemComponentPerformanceStatisticsGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/component-performance-statistics
     """
-    return MOCK_DB.get("DeviceType1SystemComponentPerformanceStatisticsGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/component-performance-statistics"
+    static_data = db.get_static("DeviceType1SystemComponentPerformanceStatisticsGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/enclosures")
 def DeviceType1EnclosuresList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/enclosures
     """
-    return MOCK_DB.get("DeviceType1EnclosuresList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures"
+    static_data = db.get_static("DeviceType1EnclosuresList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{cageId}/disks")
 def DeviceType1DisksList(systemId: str, cageId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/enclosures/{cageId}/disks
     """
-    return MOCK_DB.get("DeviceType1DisksList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{cageId}/disks"
+    static_data = db.get_static("DeviceType1DisksList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{cageId}/disks/{id}")
 def DeviceType1DisksGetById(systemId: str, cageId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/enclosures/{cageId}/disks/{id}
     """
-    return MOCK_DB.get("DeviceType1DisksGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{cageId}/disks"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1DisksGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-card-ports")
 def DeviceType1EnclosureCardPortsList(systemId: str, enclosureId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-card-ports
     """
-    return MOCK_DB.get("DeviceType1EnclosureCardPortsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-card-ports"
+    static_data = db.get_static("DeviceType1EnclosureCardPortsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-card-ports/{id}")
 def DeviceType1EnclosureCardPortsGetById(systemId: str, enclosureId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-card-ports/{id}
     """
-    return MOCK_DB.get("DeviceType1EnclosureCardPortsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-card-ports"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1EnclosureCardPortsGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-cards")
 def DeviceType1EnclosureCardsList(systemId: str, enclosureId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-cards
     """
-    return MOCK_DB.get("DeviceType1EnclosureCardsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-cards"
+    static_data = db.get_static("DeviceType1EnclosureCardsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-cards/{id}")
 def DeviceType1EnclosureCardsGetById(systemId: str, enclosureId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-cards/{id}
     """
-    return MOCK_DB.get("DeviceType1EnclosureCardsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-cards"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1EnclosureCardsGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-cards/{id}")
 def EnclosureCardsLocateIOById(systemId: str, enclosureId: str, id: str, payload: EnclosurecardslocateiobyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-cards/{id}
     """
-    return MOCK_DB.get("EnclosureCardsLocateIOById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-cards"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-disks")
 def DeviceType1EnclosureDisksList(systemId: str, enclosureId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-disks
     """
-    return MOCK_DB.get("DeviceType1EnclosureDisksList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-disks"
+    static_data = db.get_static("DeviceType1EnclosureDisksList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-disks/{id}")
 def DeviceType1EnclosureDisksGetById(systemId: str, enclosureId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-disks/{id}
     """
-    return MOCK_DB.get("DeviceType1EnclosureDisksGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-disks"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1EnclosureDisksGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-expanders")
 def DeviceType1EnclosureExpandersList(systemId: str, enclosureId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-expanders
     """
-    return MOCK_DB.get("DeviceType1EnclosureExpandersList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-expanders"
+    static_data = db.get_static("DeviceType1EnclosureExpandersList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-expanders/{id}")
 def DeviceType1EnclosureExpandersGetById(systemId: str, enclosureId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-expanders/{id}
     """
-    return MOCK_DB.get("DeviceType1EnclosureExpandersGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-expanders"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1EnclosureExpandersGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-fans")
 def DeviceType1EnclosureFansList(systemId: str, enclosureId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-fans
     """
-    return MOCK_DB.get("DeviceType1EnclosureFansList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-fans"
+    static_data = db.get_static("DeviceType1EnclosureFansList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-fans/{id}")
 def DeviceType1EnclosureFansGetById(systemId: str, enclosureId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-fans/{id}
     """
-    return MOCK_DB.get("DeviceType1EnclosureFansGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-fans"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1EnclosureFansGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-powers")
 def DeviceType1EnclosurePowersList(systemId: str, enclosureId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-powers
     """
-    return MOCK_DB.get("DeviceType1EnclosurePowersList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-powers"
+    static_data = db.get_static("DeviceType1EnclosurePowersList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-powers/{id}")
 def DeviceType1EnclosurePowersGetById(systemId: str, enclosureId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-powers/{id}
     """
-    return MOCK_DB.get("DeviceType1EnclosurePowersGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-powers"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1EnclosurePowersGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-powers/{id}")
 def EnclosurePowersLocatePCMById(systemId: str, enclosureId: str, id: str, payload: EnclosurepowerslocatepcmbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-powers/{id}
     """
-    return MOCK_DB.get("EnclosurePowersLocatePCMById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-powers"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-sleds")
 def DeviceType1EnclosureSledsList(systemId: str, enclosureId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-sleds
     """
-    return MOCK_DB.get("DeviceType1EnclosureSledsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-sleds"
+    static_data = db.get_static("DeviceType1EnclosureSledsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-sleds/{id}")
 def DeviceType1EnclosureSledsGetById(systemId: str, enclosureId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-sleds/{id}
     """
-    return MOCK_DB.get("DeviceType1EnclosureSledsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-sleds"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1EnclosureSledsGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-sleds/{id}")
 def EnclosureSledsLocateDriveById(systemId: str, enclosureId: str, id: str, payload: EnclosuresledslocatedrivebyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-sleds/{id}
     """
-    return MOCK_DB.get("EnclosureSledsLocateDriveById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures/{enclosureId}/enclosure-sleds"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{id}")
 def DeviceType1EnclosuresGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/enclosures/{id}
     """
-    return MOCK_DB.get("DeviceType1EnclosuresGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1EnclosuresGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{id}")
 def EnclosuresLocateById(systemId: str, id: str, payload: EnclosureslocatebyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/enclosures/{id}
     """
-    return MOCK_DB.get("EnclosuresLocateById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/enclosures/{id}")
 def EnclosuresEditById(systemId: str, id: str, payload: EnclosureseditbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/enclosures/{id}
     """
-    return MOCK_DB.get("EnclosuresEditById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/enclosures"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/encryption/backup")
 def DeviceType1backupActionOnEncryption(systemId: str, payload: Devicetype1backupactiononencryptionRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/encryption/backup
     """
-    return MOCK_DB.get("DeviceType1backupActionOnEncryption", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/encryption/backup"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/encryption/checkekm")
 def DeviceType1checkEKMConfiguration(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/encryption/checkekm
     """
-    return MOCK_DB.get("DeviceType1checkEKMConfiguration", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/encryption/checkekm"
+    payload_dict = {}
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/encryption/enable")
 def DeviceType1enableActionOnEncryption(systemId: str, payload: Devicetype1enableactiononencryptionRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/encryption/enable
     """
-    return MOCK_DB.get("DeviceType1enableActionOnEncryption", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/encryption/enable"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/encryption/rekey")
 def DeviceType1rekeyActionOnEncryption(systemId: str, payload: Devicetype1rekeyactiononencryptionRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/encryption/rekey
     """
-    return MOCK_DB.get("DeviceType1rekeyActionOnEncryption", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/encryption/rekey"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/encryption/restore")
 def DeviceType1restoreActionOnEncryption(systemId: str, payload: Devicetype1restoreactiononencryptionRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType1restoreActionOnEncryption", dict())
+    return db.get_static("DeviceType1restoreActionOnEncryption", dict())
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/encryption/setekm")
 def DeviceType1setEKMConfiguration(systemId: str, payload: Devicetype1setekmconfigurationRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/encryption/setekm
     """
-    return MOCK_DB.get("DeviceType1setEKMConfiguration", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/encryption/setekm"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/encryption/setekm/backup")
 def DeviceType1setekmbackupActionOnEncryption(systemId: str, payload: Devicetype1setekmbackupactiononencryptionRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/encryption/setekm/backup
     """
-    return MOCK_DB.get("DeviceType1setekmbackupActionOnEncryption", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/encryption/setekm/backup"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/headroom-utilization")
 def Device1headroomUtilizationGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/headroom-utilization
     """
-    return MOCK_DB.get("Device1headroomUtilizationGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/headroom-utilization"
+    static_data = db.get_static("Device1headroomUtilizationGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/host-paths")
 def DeviceType1GetAllHostPaths(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/host-paths
     """
-    return MOCK_DB.get("DeviceType1GetAllHostPaths", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/host-paths"
+    static_data = db.get_static("DeviceType1GetAllHostPaths", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/host-paths/{hostPathId}")
 def DeviceType1GetHostPathsById(systemId: str, hostPathId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/host-paths/{hostPathId}
     """
-    return MOCK_DB.get("DeviceType1GetHostPathsById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/host-paths"
+    item_id = hostPathId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1GetHostPathsById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/host-sets")
 def DeviceType1GetAllHostSets(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/host-sets
     """
-    return MOCK_DB.get("DeviceType1GetAllHostSets", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/host-sets"
+    static_data = db.get_static("DeviceType1GetAllHostSets", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/host-sets/{hostSetId}")
 def DeviceType1GetHostSetsById(systemId: str, hostSetId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/host-sets/{hostSetId}
     """
-    return MOCK_DB.get("DeviceType1GetHostSetsById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/host-sets"
+    item_id = hostSetId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1GetHostSetsById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/hosts")
 def DeviceType1GetAllHosts(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/hosts
     """
-    return MOCK_DB.get("DeviceType1GetAllHosts", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/hosts"
+    static_data = db.get_static("DeviceType1GetAllHosts", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/hosts/{hostId}")
 def DeviceType1GetHostById(systemId: str, hostId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/hosts/{hostId}
     """
-    return MOCK_DB.get("DeviceType1GetHostById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/hosts"
+    item_id = hostId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1GetHostById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/insights/latencyfactors")
 def Device1LatencyFactorsGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/insights/latencyfactors
     """
-    return MOCK_DB.get("Device1LatencyFactorsGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/insights/latencyfactors"
+    static_data = db.get_static("Device1LatencyFactorsGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.delete("/api/v1/storage-systems/device-type1/{systemId}/mail-settings")
 def MailSettingsDelete(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type1/{systemId}/mail-settings
     """
-    return MOCK_DB.get("MailSettingsDelete", dict())
+    return db.get_static("MailSettingsDelete", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/mail-settings")
 def DeviceType1MailSettingsGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/mail-settings
     """
-    return MOCK_DB.get("DeviceType1MailSettingsGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/mail-settings"
+    static_data = db.get_static("DeviceType1MailSettingsGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/mail-settings")
 def MailSettingsAssociate(systemId: str, payload: MailsettingsassociateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/mail-settings
     """
-    return MOCK_DB.get("MailSettingsAssociate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/mail-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/mail-settings")
 def MailSettingsUpdate(systemId: str, payload: MailsettingsupdateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/mail-settings
     """
-    return MOCK_DB.get("MailSettingsUpdate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/mail-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/network-services/cim")
 def DeviceType1NetworkServiceCimGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/network-services/cim
     """
-    return MOCK_DB.get("DeviceType1NetworkServiceCimGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/network-services/cim"
+    static_data = db.get_static("DeviceType1NetworkServiceCimGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/network-services/cim")
 def NetworkServiceCimUpdate(systemId: str, payload: NetworkservicecimupdateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/network-services/cim
     """
-    return MOCK_DB.get("NetworkServiceCimUpdate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/network-services/cim"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/network-services/snmp-mgr")
 def DeviceType1NetworkServiceSnmpMgrList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/network-services/snmp-mgr
     """
-    return MOCK_DB.get("DeviceType1NetworkServiceSnmpMgrList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/network-services/snmp-mgr"
+    static_data = db.get_static("DeviceType1NetworkServiceSnmpMgrList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/network-services/snmp-mgr")
 def NetworkServiceSnmpMgrCreate(systemId: str, payload: NetworkservicesnmpmgrcreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/network-services/snmp-mgr
     """
-    return MOCK_DB.get("NetworkServiceSnmpMgrCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/network-services/snmp-mgr"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type1/{systemId}/network-services/snmp-mgr/{id}")
 def NetworkServiceSnmpMgrDelete(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type1/{systemId}/network-services/snmp-mgr/{id}
     """
-    return MOCK_DB.get("NetworkServiceSnmpMgrDelete", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/network-services/snmp-mgr"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("NetworkServiceSnmpMgrDelete", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/network-services/snmp-mgr/{id}")
 def DeviceType1NetworkServiceSnmpMgrGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/network-services/snmp-mgr/{id}
     """
-    return MOCK_DB.get("DeviceType1NetworkServiceSnmpMgrGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/network-services/snmp-mgr"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1NetworkServiceSnmpMgrGetById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/network-services/snmp-mgr/{id}")
 def NetworkServiceSnmpMgrUpdate(systemId: str, id: str, payload: NetworkservicesnmpmgrupdateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/network-services/snmp-mgr/{id}
     """
-    return MOCK_DB.get("NetworkServiceSnmpMgrUpdate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/network-services/snmp-mgr"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/network-services/vasa")
 def DeviceType1NetworkServiceVasaGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/network-services/vasa
     """
-    return MOCK_DB.get("DeviceType1NetworkServiceVasaGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/network-services/vasa"
+    static_data = db.get_static("DeviceType1NetworkServiceVasaGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/network-services/vasa/{vasaId}")
 def DeviceType1NetworkServiceVasaConfigure(systemId: str, vasaId: str, payload: Devicetype1networkservicevasaconfigureRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/network-services/vasa/{vasaId}
     """
-    return MOCK_DB.get("DeviceType1NetworkServiceVasaConfigure", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/network-services/vasa"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/network-services/vasa/{vasaId}/services")
 def DeviceType1NetworkServiceConfigureVasaService(systemId: str, vasaId: str, payload: Devicetype1networkserviceconfigurevasaserviceRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/network-services/vasa/{vasaId}/services
     """
-    return MOCK_DB.get("DeviceType1NetworkServiceConfigureVasaService", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/network-services/vasa/{vasaId}/services"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/network-settings")
 def DeviceType1NetworkSettingsGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/network-settings
     """
-    return MOCK_DB.get("DeviceType1NetworkSettingsGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/network-settings"
+    static_data = db.get_static("DeviceType1NetworkSettingsGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/network-settings")
 def NetworkSettingsAssociate(systemId: str, payload: NetworksettingsassociateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/network-settings
     """
-    return MOCK_DB.get("NetworkSettingsAssociate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/network-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes")
 def DeviceType1NodesList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes
     """
-    return MOCK_DB.get("DeviceType1NodesList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes"
+    static_data = db.get_static("DeviceType1NodesList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes/{id}")
 def DeviceType1NodesGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes/{id}
     """
-    return MOCK_DB.get("DeviceType1NodesGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1NodesGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/nodes/{id}")
 def NodesLocateById(systemId: str, id: str, payload: NodeslocatebyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/nodes/{id}
     """
-    return MOCK_DB.get("NodesLocateById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/component-performance-statistics")
 def DeviceType1NodeComponentPerformanceStatisticsGet(systemId: str, nodeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/component-performance-statistics
     """
-    return MOCK_DB.get("DeviceType1NodeComponentPerformanceStatisticsGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/component-performance-statistics"
+    static_data = db.get_static("DeviceType1NodeComponentPerformanceStatisticsGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-cards")
 def DeviceType1NodeCardsList(systemId: str, nodeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-cards
     """
-    return MOCK_DB.get("DeviceType1NodeCardsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-cards"
+    static_data = db.get_static("DeviceType1NodeCardsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-cards/{id}")
 def DeviceType1NodeCardsGetById(systemId: str, nodeId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-cards/{id}
     """
-    return MOCK_DB.get("DeviceType1NodeCardsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-cards"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1NodeCardsGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-cards/{id}")
 def NodeCardLocateById(systemId: str, nodeId: str, id: str, payload: NodecardlocatebyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-cards/{id}
     """
-    return MOCK_DB.get("NodeCardLocateById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-cards"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-cpus")
 def DeviceType1NodeCpusList(systemId: str, nodeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-cpus
     """
-    return MOCK_DB.get("DeviceType1NodeCpusList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-cpus"
+    static_data = db.get_static("DeviceType1NodeCpusList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-cpus/{id}")
 def DeviceType1NodeCpusGetById(systemId: str, nodeId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-cpus/{id}
     """
-    return MOCK_DB.get("DeviceType1NodeCpusGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-cpus"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1NodeCpusGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-drives")
 def DeviceType1NodeDrivesList(systemId: str, nodeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-drives
     """
-    return MOCK_DB.get("DeviceType1NodeDrivesList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-drives"
+    static_data = db.get_static("DeviceType1NodeDrivesList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-drives/{id}")
 def DeviceType1NodeDrivesGetById(systemId: str, nodeId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-drives/{id}
     """
-    return MOCK_DB.get("DeviceType1NodeDrivesGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-drives"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1NodeDrivesGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-mcus")
 def DeviceType1NodeMcusList(systemId: str, nodeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-mcus
     """
-    return MOCK_DB.get("DeviceType1NodeMcusList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-mcus"
+    static_data = db.get_static("DeviceType1NodeMcusList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-mcus/{id}")
 def DeviceType1NodeMcusGetById(systemId: str, nodeId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-mcus/{id}
     """
-    return MOCK_DB.get("DeviceType1NodeMcusGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-mcus"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1NodeMcusGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-mems")
 def DeviceType1NodeMemsList(systemId: str, nodeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-mems
     """
-    return MOCK_DB.get("DeviceType1NodeMemsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-mems"
+    static_data = db.get_static("DeviceType1NodeMemsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-mems/{id}")
 def DeviceType1NodeMemsGetById(systemId: str, nodeId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-mems/{id}
     """
-    return MOCK_DB.get("DeviceType1NodeMemsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-mems"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1NodeMemsGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-powers")
 def DeviceType1NodePowersList(systemId: str, nodeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-powers
     """
-    return MOCK_DB.get("DeviceType1NodePowersList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-powers"
+    static_data = db.get_static("DeviceType1NodePowersList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-powers/{id}")
 def DeviceType1NodePowersGetById(systemId: str, nodeId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-powers/{id}
     """
-    return MOCK_DB.get("DeviceType1NodePowersGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-powers"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1NodePowersGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-powers/{id}")
 def NodePowersLocatePCMBById(systemId: str, nodeId: str, id: str, payload: NodepowerslocatepcmbbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-powers/{id}
     """
-    return MOCK_DB.get("NodePowersLocatePCMBById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/node-powers"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/nodes-batteries")
 def DeviceType1NodeBatteriesList(systemId: str, nodeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/nodes-batteries
     """
-    return MOCK_DB.get("DeviceType1NodeBatteriesList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/nodes-batteries"
+    static_data = db.get_static("DeviceType1NodeBatteriesList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/nodes-batteries/{id}")
 def DeviceType1NodeBatteriesGetById(systemId: str, nodeId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/nodes-batteries/{id}
     """
-    return MOCK_DB.get("DeviceType1NodeBatteriesGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/nodes-batteries"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1NodeBatteriesGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/service-ports")
 def DeviceType1NodeServicePortsGetById(systemId: str, nodeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/service-ports
     """
-    return MOCK_DB.get("DeviceType1NodeServicePortsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/{nodeId}/service-ports"
+    static_data = db.get_static("DeviceType1NodeServicePortsGetById", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/nodes/service-ports")
 def DeviceType1NodeServicePortsList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/nodes/service-ports
     """
-    return MOCK_DB.get("DeviceType1NodeServicePortsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/nodes/service-ports"
+    static_data = db.get_static("DeviceType1NodeServicePortsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/performance-history")
 def DeviceType1SystemPerformanceHistoryGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/performance-history
     """
-    return MOCK_DB.get("DeviceType1SystemPerformanceHistoryGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/performance-history"
+    static_data = db.get_static("DeviceType1SystemPerformanceHistoryGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/performance-statistics")
 def DeviceType1GetSystemPerformanceStatistics(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/performance-statistics
     """
-    return MOCK_DB.get("DeviceType1GetSystemPerformanceStatistics", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/performance-statistics"
+    static_data = db.get_static("DeviceType1GetSystemPerformanceStatistics", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/physicaldrives-performance")
 def DeviceType1PhysicalDrivePerformanceHistoryGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/physicaldrives-performance
     """
-    return MOCK_DB.get("DeviceType1PhysicalDrivePerformanceHistoryGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/physicaldrives-performance"
+    static_data = db.get_static("DeviceType1PhysicalDrivePerformanceHistoryGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/ports")
 def DeviceType1PortsList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/ports
     """
-    return MOCK_DB.get("DeviceType1PortsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/ports"
+    static_data = db.get_static("DeviceType1PortsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/ports-performance")
 def DeviceType1PortsPerformanceHistoryGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/ports-performance
     """
-    return MOCK_DB.get("DeviceType1PortsPerformanceHistoryGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/ports-performance"
+    static_data = db.get_static("DeviceType1PortsPerformanceHistoryGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/ports/{id}")
 def DeviceType1PortsGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/ports/{id}
     """
-    return MOCK_DB.get("DeviceType1PortsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/ports"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1PortsGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/ports/{id}")
 def PortEnable(systemId: str, id: str, payload: PortenableRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/ports/{id}
     """
-    return MOCK_DB.get("PortEnable", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/ports"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/ports/{id}/clear")
 def DeviceType1PortsClear(systemId: str, id: str, payload: Devicetype1portsclearRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType1PortsClear", dict())
+    return db.get_static("DeviceType1PortsClear", dict())
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/ports/{id}/edit-iscsi")
 def DeviceType1IscsiPortEdit(systemId: str, id: str, payload: Devicetype1iscsiporteditRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/ports/{id}/edit-iscsi
     """
-    return MOCK_DB.get("DeviceType1IscsiPortEdit", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/ports/{id}/edit-iscsi"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/ports/{id}/edit-rcip")
 def DeviceType1RcipPortEdit(systemId: str, id: str, payload: Devicetype1rcipporteditRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/ports/{id}/edit-rcip
     """
-    return MOCK_DB.get("DeviceType1RcipPortEdit", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/ports/{id}/edit-rcip"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/ports/{id}/fc")
 def DeviceType1FcPortEdit(systemId: str, id: str, payload: Devicetype1fcporteditRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/ports/{id}/fc
     """
-    return MOCK_DB.get("DeviceType1FcPortEdit", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/ports/{id}/fc"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/ports/{id}/initialize")
 def initialisePorts(systemId: str, id: str):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("initialisePorts", dict())
+    return db.get_static("initialisePorts", dict())
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/ports/{id}/ping-iscsi")
 def DeviceType1IscsiPortPing(systemId: str, id: str, payload: Devicetype1iscsiportpingRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType1IscsiPortPing", dict())
+    return db.get_static("DeviceType1IscsiPortPing", dict())
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/ports/{id}/ping-rcip")
 def DeviceType1RcipPortPing(systemId: str, id: str, payload: Devicetype1rcipportpingRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType1RcipPortPing", dict())
+    return db.get_static("DeviceType1RcipPortPing", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/qos-policy")
 def DeviceType1QoSPolicyGetBySystemId(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/qos-policy
     """
-    return MOCK_DB.get("DeviceType1QoSPolicyGetBySystemId", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/qos-policy"
+    static_data = db.get_static("DeviceType1QoSPolicyGetBySystemId", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/remotecopylinks-performance")
 def DeviceType1RemoteCopyLinksPerformanceHistoryGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/remotecopylinks-performance
     """
-    return MOCK_DB.get("DeviceType1RemoteCopyLinksPerformanceHistoryGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/remotecopylinks-performance"
+    static_data = db.get_static("DeviceType1RemoteCopyLinksPerformanceHistoryGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/snapshots/{snapshotId}/clone")
 def SnapshotCloneCreate(systemId: str, snapshotId: str, payload: SnapshotclonecreateRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("SnapshotCloneCreate", dict())
+    return db.get_static("SnapshotCloneCreate", dict())
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/snapshots/{snapshotId}/export")
 def DeviceType1VlunExportForSnapshot(systemId: str, snapshotId: str, payload: Devicetype1vlunexportforsnapshotRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType1VlunExportForSnapshot", dict())
+    return db.get_static("DeviceType1VlunExportForSnapshot", dict())
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/snapshots/{snapshotId}/un-export")
 def DeviceType1VlunUnexportForSnapshot(systemId: str, snapshotId: str, payload: Devicetype1vlununexportforsnapshotRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType1VlunUnexportForSnapshot", dict())
+    return db.get_static("DeviceType1VlunUnexportForSnapshot", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/snapshots/{snapshotId}/vluns")
 def DeviceType1GetSnapshotVlunsList(systemId: str, snapshotId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/snapshots/{snapshotId}/vluns
     """
-    return MOCK_DB.get("DeviceType1GetSnapshotVlunsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/snapshots/{snapshotId}/vluns"
+    static_data = db.get_static("DeviceType1GetSnapshotVlunsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/snapshots/{snapshotId}/vluns/{id}")
 def DeviceType1GetSnapshotVlunsById(systemId: str, snapshotId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/snapshots/{snapshotId}/vluns/{id}
     """
-    return MOCK_DB.get("DeviceType1GetSnapshotVlunsById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/snapshots/{snapshotId}/vluns"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1GetSnapshotVlunsById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/storage-pools")
 def DeviceType1StoragePoolList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/storage-pools
     """
-    return MOCK_DB.get("DeviceType1StoragePoolList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/storage-pools"
+    static_data = db.get_static("DeviceType1StoragePoolList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/storage-pools/{id}")
 def DeviceType1StoragePoolGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/storage-pools/{id}
     """
-    return MOCK_DB.get("DeviceType1StoragePoolGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/storage-pools"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1StoragePoolGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/storage-pools/{id}/volumes")
 def DeviceType1StoragePoolVolumeGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/storage-pools/{id}/volumes
     """
-    return MOCK_DB.get("DeviceType1StoragePoolVolumeGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/storage-pools/{id}/volumes"
+    static_data = db.get_static("DeviceType1StoragePoolVolumeGetById", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/support-settings")
 def DeviceType1SupportSettingsGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/support-settings
     """
-    return MOCK_DB.get("DeviceType1SupportSettingsGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/support-settings"
+    static_data = db.get_static("DeviceType1SupportSettingsGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/support-settings")
 def SupportSettingsAssociate(systemId: str, payload: SupportsettingsassociateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/support-settings
     """
-    return MOCK_DB.get("SupportSettingsAssociate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/support-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/support-settings")
 def SupportSettingsUpdate(systemId: str, payload: SupportsettingsupdateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/support-settings
     """
-    return MOCK_DB.get("SupportSettingsUpdate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/support-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/system-settings")
 def DeviceType1SystemSettingsList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/system-settings
     """
-    return MOCK_DB.get("DeviceType1SystemSettingsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/system-settings"
+    static_data = db.get_static("DeviceType1SystemSettingsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/system-settings")
 def SystemSettingsAssociate(systemId: str, payload: SystemsettingsassociateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/system-settings
     """
-    return MOCK_DB.get("SystemSettingsAssociate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/system-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/system-settings")
 def SystemSettingsUpdate(systemId: str, payload: SystemsettingsupdateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/system-settings
     """
-    return MOCK_DB.get("SystemSettingsUpdate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/system-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/system-settings/management-services/vvolscs")
 def DeviceType1StorageContainerGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/system-settings/management-services/vvolscs
     """
-    return MOCK_DB.get("DeviceType1StorageContainerGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/system-settings/management-services/vvolscs"
+    static_data = db.get_static("DeviceType1StorageContainerGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/system-settings/management-services/vvolscs")
 def DeviceType1CreatevVolSC(systemId: str, payload: Devicetype1createvvolscRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/system-settings/management-services/vvolscs
     """
-    return MOCK_DB.get("DeviceType1CreatevVolSC", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/system-settings/management-services/vvolscs"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type1/{systemId}/system-settings/management-services/vvolscs/{vvolscId}")
 def DeviceType1StorageContainerDeleteById(systemId: str, vvolscId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type1/{systemId}/system-settings/management-services/vvolscs/{vvolscId}
     """
-    return MOCK_DB.get("DeviceType1StorageContainerDeleteById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/system-settings/management-services/vvolscs"
+    item_id = vvolscId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType1StorageContainerDeleteById", dict())
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/system-settings/management-services/vvolscs/{vvolscId}")
 def DeviceType1EditVolSC(systemId: str, vvolscId: str, payload: Devicetype1editvolscRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/system-settings/management-services/vvolscs/{vvolscId}
     """
-    return MOCK_DB.get("DeviceType1EditVolSC", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/system-settings/management-services/vvolscs"
+    item_id = vvolscId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/system-settings/management-services/vvolscs/{vvolscId}/attach")
 def DeviceType1AttachDetachVolSC(systemId: str, vvolscId: str, payload: Devicetype1attachdetachvolscRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType1AttachDetachVolSC", dict())
+    return db.get_static("DeviceType1AttachDetachVolSC", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/system-settings/quorum-witness")
 def DeviceType1GetQuorumWitness(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/system-settings/quorum-witness
     """
-    return MOCK_DB.get("DeviceType1GetQuorumWitness", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/system-settings/quorum-witness"
+    static_data = db.get_static("DeviceType1GetQuorumWitness", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/system-settings/quorum-witness")
 def DeviceType1PostQuorumWitness(systemId: str, payload: Devicetype1postquorumwitnessRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/system-settings/quorum-witness
     """
-    return MOCK_DB.get("DeviceType1PostQuorumWitness", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/system-settings/quorum-witness"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type1/{systemId}/system-settings/quorum-witness/{replicationPartnerId}")
 def DeviceType1DeleteQuorumWitness(systemId: str, replicationPartnerId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type1/{systemId}/system-settings/quorum-witness/{replicationPartnerId}
     """
-    return MOCK_DB.get("DeviceType1DeleteQuorumWitness", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/system-settings/quorum-witness"
+    item_id = replicationPartnerId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType1DeleteQuorumWitness", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/system-settings/quorum-witness/{replicationPartnerId}")
 def DeviceType1GetQuorumWitnessWithId(systemId: str, replicationPartnerId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/system-settings/quorum-witness/{replicationPartnerId}
     """
-    return MOCK_DB.get("DeviceType1GetQuorumWitnessWithId", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/system-settings/quorum-witness"
+    item_id = replicationPartnerId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1GetQuorumWitnessWithId", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/system-settings/quorum-witness/{replicationPartnerId}")
 def DeviceType1PutQuorumWitness(systemId: str, replicationPartnerId: str, payload: Devicetype1putquorumwitnessRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/system-settings/quorum-witness/{replicationPartnerId}
     """
-    return MOCK_DB.get("DeviceType1PutQuorumWitness", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/system-settings/quorum-witness"
+    item_id = replicationPartnerId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/system-settings/replication-partners")
 def DeviceType1GetReplicationPartners(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/system-settings/replication-partners
     """
-    return MOCK_DB.get("DeviceType1GetReplicationPartners", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/system-settings/replication-partners"
+    static_data = db.get_static("DeviceType1GetReplicationPartners", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/system-settings/replication-partners")
 def DeviceType1PostReplicationPartners(systemId: str, payload: Devicetype1postreplicationpartnersRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/system-settings/replication-partners
     """
-    return MOCK_DB.get("DeviceType1PostReplicationPartners", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/system-settings/replication-partners"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/system-settings/replication-partners/{replicationPartnerId}")
 def DeviceType1GetReplicationPartnerWithId(systemId: str, replicationPartnerId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/system-settings/replication-partners/{replicationPartnerId}
     """
-    return MOCK_DB.get("DeviceType1GetReplicationPartnerWithId", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/system-settings/replication-partners"
+    item_id = replicationPartnerId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1GetReplicationPartnerWithId", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/system-settings/replication-partners/{replicationPartnerId}")
 def DeviceType1PutReplicationPartner(systemId: str, replicationPartnerId: str, payload: Devicetype1putreplicationpartnerRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/system-settings/replication-partners/{replicationPartnerId}
     """
-    return MOCK_DB.get("DeviceType1PutReplicationPartner", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/system-settings/replication-partners"
+    item_id = replicationPartnerId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/system-settings/replication-partners/remove")
 def DeviceType1PostRemoveReplicationPartners(systemId: str, payload: Devicetype1postremovereplicationpartnersRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType1PostRemoveReplicationPartners", dict())
+    return db.get_static("DeviceType1PostRemoveReplicationPartners", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/targets/{targetName}/performance-history")
 def DeviceType1QoSPerformanceStatisticsGetByTargetName(systemId: str, targetName: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/targets/{targetName}/performance-history
     """
-    return MOCK_DB.get("DeviceType1QoSPerformanceStatisticsGetByTargetName", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/targets/{targetName}/performance-history"
+    static_data = db.get_static("DeviceType1QoSPerformanceStatisticsGetByTargetName", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/telemetry")
 def DeviceType1TelemetryGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/telemetry
     """
-    return MOCK_DB.get("DeviceType1TelemetryGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/telemetry"
+    static_data = db.get_static("DeviceType1TelemetryGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/trust-certificates")
 def DeviceType1TrustedCertificatesList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/trust-certificates
     """
-    return MOCK_DB.get("DeviceType1TrustedCertificatesList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/trust-certificates"
+    static_data = db.get_static("DeviceType1TrustedCertificatesList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/trust-certificates")
 def AddTrustedCertificates(systemId: str, payload: AddtrustedcertificatesRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/trust-certificates
     """
-    return MOCK_DB.get("AddTrustedCertificates", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/trust-certificates"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/trust-certificates/{id}")
 def DeviceType1TrustedCertificatesGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/trust-certificates/{id}
     """
-    return MOCK_DB.get("DeviceType1TrustedCertificatesGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/trust-certificates"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1TrustedCertificatesGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/trust-certificates/remove")
 def RemoveTrustedCertificates(systemId: str, payload: RemovetrustedcertificatesRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("RemoveTrustedCertificates", dict())
+    return db.get_static("RemoveTrustedCertificates", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/vm-manager-settings")
 def DeviceType1VMManagerSettingsList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/vm-manager-settings
     """
-    return MOCK_DB.get("DeviceType1VMManagerSettingsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/vm-manager-settings"
+    static_data = db.get_static("DeviceType1VMManagerSettingsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/vm-manager-settings")
 def DeviceType1PostVCenterSettings(systemId: str, payload: Devicetype1postvcentersettingsRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/vm-manager-settings
     """
-    return MOCK_DB.get("DeviceType1PostVCenterSettings", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/vm-manager-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type1/{systemId}/vm-manager-settings/{vcenterSettingId}")
 def DeviceType1DeleteVCenterSettings(systemId: str, vcenterSettingId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type1/{systemId}/vm-manager-settings/{vcenterSettingId}
     """
-    return MOCK_DB.get("DeviceType1DeleteVCenterSettings", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/vm-manager-settings"
+    item_id = vcenterSettingId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType1DeleteVCenterSettings", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/vm-manager-settings/{vcenterSettingId}")
 def DeviceType1VMManagerSettingsGetById(systemId: str, vcenterSettingId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/vm-manager-settings/{vcenterSettingId}
     """
-    return MOCK_DB.get("DeviceType1VMManagerSettingsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/vm-manager-settings"
+    item_id = vcenterSettingId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1VMManagerSettingsGetById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/vm-manager-settings/{vcenterSettingId}")
 def DeviceType1PutVCenterSettings(systemId: str, vcenterSettingId: str, payload: Devicetype1putvcentersettingsRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/vm-manager-settings/{vcenterSettingId}
     """
-    return MOCK_DB.get("DeviceType1PutVCenterSettings", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/vm-manager-settings"
+    item_id = vcenterSettingId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/volumes")
 def DeviceType1VolumesList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/volumes
     """
-    return MOCK_DB.get("DeviceType1VolumesList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/volumes"
+    static_data = db.get_static("DeviceType1VolumesList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/volumes")
 def VolumeCreate(systemId: str, payload: VolumecreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/volumes
     """
-    return MOCK_DB.get("VolumeCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/volumes"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/volumes-performance")
 def DeviceType1GetVolumesPerformanceHistory(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/volumes-performance
     """
-    return MOCK_DB.get("DeviceType1GetVolumesPerformanceHistory", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/volumes-performance"
+    static_data = db.get_static("DeviceType1GetVolumesPerformanceHistory", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.delete("/api/v1/storage-systems/device-type1/{systemId}/volumes/{id}")
 def VolumeDelete(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type1/{systemId}/volumes/{id}
     """
-    return MOCK_DB.get("VolumeDelete", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/volumes"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("VolumeDelete", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/volumes/{id}")
 def DeviceType1VolumeGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/volumes/{id}
     """
-    return MOCK_DB.get("DeviceType1VolumeGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/volumes"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1VolumeGetById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type1/{systemId}/volumes/{id}")
 def VolumeEdit(systemId: str, id: str, payload: VolumeeditRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type1/{systemId}/volumes/{id}
     """
-    return MOCK_DB.get("VolumeEdit", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/volumes"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/capacity-history")
 def DeviceType1VolumeCapacityHistoryGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/capacity-history
     """
-    return MOCK_DB.get("DeviceType1VolumeCapacityHistoryGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/capacity-history"
+    static_data = db.get_static("DeviceType1VolumeCapacityHistoryGetById", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/clone")
 def VolumeCloneCreate(systemId: str, id: str, payload: VolumeclonecreateRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("VolumeCloneCreate", dict())
+    return db.get_static("VolumeCloneCreate", dict())
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/export")
 def DeviceType1VlunExport(systemId: str, id: str, payload: Devicetype1vlunexportRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType1VlunExport", dict())
+    return db.get_static("DeviceType1VlunExport", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/performance-history")
 def DeviceType1VolumePerformanceHistoryGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/performance-history
     """
-    return MOCK_DB.get("DeviceType1VolumePerformanceHistoryGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/performance-history"
+    static_data = db.get_static("DeviceType1VolumePerformanceHistoryGetById", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/performance-statistics")
 def DeviceType1VolumePerformanceStatisticsGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/performance-statistics
     """
-    return MOCK_DB.get("DeviceType1VolumePerformanceStatisticsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/performance-statistics"
+    static_data = db.get_static("DeviceType1VolumePerformanceStatisticsGetById", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/snapshots")
 def DeviceType1VolumeSnapshotsList(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/snapshots
     """
-    return MOCK_DB.get("DeviceType1VolumeSnapshotsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/snapshots"
+    static_data = db.get_static("DeviceType1VolumeSnapshotsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/snapshots")
 def VolumeSnapshotCreate(systemId: str, id: str, payload: VolumesnapshotcreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/snapshots
     """
-    return MOCK_DB.get("VolumeSnapshotCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/snapshots"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/un-export")
 def DeviceType1VlunUnexport(systemId: str, id: str, payload: Devicetype1vlununexportRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType1VlunUnexport", dict())
+    return db.get_static("DeviceType1VlunUnexport", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/vluns")
 def DeviceType1VlunsList(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/vluns
     """
-    return MOCK_DB.get("DeviceType1VlunsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/volumes/{id}/vluns"
+    static_data = db.get_static("DeviceType1VlunsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/clones")
 def DeviceType1GetClones(systemId: str, volumeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/clones
     """
-    return MOCK_DB.get("DeviceType1GetClones", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/clones"
+    static_data = db.get_static("DeviceType1GetClones", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/clones/{cloneId}/promote")
 def DeviceType1PromoteCloneVolume(systemId: str, volumeId: str, cloneId: str, payload: Devicetype1promoteclonevolumeRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType1PromoteCloneVolume", dict())
+    return db.get_static("DeviceType1PromoteCloneVolume", dict())
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/clones/{cloneId}/resync")
 def DeviceType1ResyncCloneVolume(systemId: str, volumeId: str, cloneId: str, payload: Devicetype1resyncclonevolumeRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType1ResyncCloneVolume", dict())
+    return db.get_static("DeviceType1ResyncCloneVolume", dict())
 
 @app.delete("/api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}")
 def VolumeSnapshotGetById(systemId: str, volumeId: str, snapshotId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}
     """
-    return MOCK_DB.get("VolumeSnapshotGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/snapshots"
+    item_id = snapshotId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("VolumeSnapshotGetById", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}")
 def DeviceType1SnapshotsGetById(systemId: str, volumeId: str, snapshotId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}
     """
-    return MOCK_DB.get("DeviceType1SnapshotsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/snapshots"
+    item_id = snapshotId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1SnapshotsGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}")
 def DeviceType1PromoteSnapshot(systemId: str, volumeId: str, snapshotId: str, payload: Devicetype1promotesnapshotRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}
     """
-    return MOCK_DB.get("DeviceType1PromoteSnapshot", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/snapshots"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/vluns/{id}")
 def VlunsDelete(systemId: str, volumeId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/vluns/{id}
     """
-    return MOCK_DB.get("VlunsDelete", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/vluns"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("VlunsDelete", dict())
 
 @app.get("/api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/vluns/{id}")
 def DeviceType1VlunsGetById(systemId: str, volumeId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/vluns/{id}
     """
-    return MOCK_DB.get("DeviceType1VlunsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type1/{systemId}/volumes/{volumeId}/vluns"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType1VlunsGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type2")
 def DeviceType2GetStorageSystem():
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2
     """
-    return MOCK_DB.get("DeviceType2GetStorageSystem", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2"
+    static_data = db.get_static("DeviceType2GetStorageSystem", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}")
 def DeviceType2GetStorageSystemById(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}
     """
-    return MOCK_DB.get("DeviceType2GetStorageSystemById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2"
+    item_id = systemId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetStorageSystemById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}")
 def DeviceType2EditStorageSystemSettingsById(systemId: str, payload: Devicetype2editstoragesystemsettingsbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}
     """
-    return MOCK_DB.get("DeviceType2EditStorageSystemSettingsById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2"
+    item_id = systemId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/access-control-records")
 def DeviceType2GetAllAccessControlRecords(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/access-control-records
     """
-    return MOCK_DB.get("DeviceType2GetAllAccessControlRecords", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/access-control-records"
+    static_data = db.get_static("DeviceType2GetAllAccessControlRecords", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/access-control-records")
 def DeviceType2AccessControlRecordCreate(systemId: str, payload: Devicetype2accesscontrolrecordcreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/access-control-records
     """
-    return MOCK_DB.get("DeviceType2AccessControlRecordCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/access-control-records"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type2/{systemId}/access-control-records/{accessControlRecordId}")
 def DeviceType2RemoveAccessControlRecordById(systemId: str, accessControlRecordId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type2/{systemId}/access-control-records/{accessControlRecordId}
     """
-    return MOCK_DB.get("DeviceType2RemoveAccessControlRecordById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/access-control-records"
+    item_id = accessControlRecordId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType2RemoveAccessControlRecordById", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/access-control-records/{accessControlRecordId}")
 def DeviceType2GetAccessControlRecordById(systemId: str, accessControlRecordId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/access-control-records/{accessControlRecordId}
     """
-    return MOCK_DB.get("DeviceType2GetAccessControlRecordById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/access-control-records"
+    item_id = accessControlRecordId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetAccessControlRecordById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/access-control-records/{accessControlRecordId}")
 def DeviceType2EditAccessControlRecordById(systemId: str, accessControlRecordId: str, payload: Devicetype2editaccesscontrolrecordbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/access-control-records/{accessControlRecordId}
     """
-    return MOCK_DB.get("DeviceType2EditAccessControlRecordById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/access-control-records"
+    item_id = accessControlRecordId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/actions/merge")
 def DeviceType2MergeGroups(systemId: str, payload: Devicetype2mergegroupsRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/actions/merge
     """
-    return MOCK_DB.get("DeviceType2MergeGroups", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/actions/merge"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/alarms")
 def DeviceType2GetAlarms(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/alarms
     """
-    return MOCK_DB.get("DeviceType2GetAlarms", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/alarms"
+    static_data = db.get_static("DeviceType2GetAlarms", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/alarms/{alarmId}")
 def DeviceType2GetAlarmsUsingAlarmId(systemId: str, alarmId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/alarms/{alarmId}
     """
-    return MOCK_DB.get("DeviceType2GetAlarmsUsingAlarmId", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/alarms"
+    item_id = alarmId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetAlarmsUsingAlarmId", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/application-servers")
 def DeviceType2GetAllApplicationServers(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/application-servers
     """
-    return MOCK_DB.get("DeviceType2GetAllApplicationServers", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/application-servers"
+    static_data = db.get_static("DeviceType2GetAllApplicationServers", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/application-servers")
 def DeviceType2ApplicationServerCreate(systemId: str, payload: Devicetype2applicationservercreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/application-servers
     """
-    return MOCK_DB.get("DeviceType2ApplicationServerCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/application-servers"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type2/{systemId}/application-servers/{applicationServerId}")
 def DeviceType2RemoveApplicationServerById(systemId: str, applicationServerId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type2/{systemId}/application-servers/{applicationServerId}
     """
-    return MOCK_DB.get("DeviceType2RemoveApplicationServerById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/application-servers"
+    item_id = applicationServerId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType2RemoveApplicationServerById", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/application-servers/{applicationServerId}")
 def DeviceType2GetApplicationServerById(systemId: str, applicationServerId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/application-servers/{applicationServerId}
     """
-    return MOCK_DB.get("DeviceType2GetApplicationServerById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/application-servers"
+    item_id = applicationServerId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetApplicationServerById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/application-servers/{applicationServerId}")
 def DeviceType2ApplicationServerEdit(systemId: str, applicationServerId: str, payload: Devicetype2applicationservereditRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/application-servers/{applicationServerId}
     """
-    return MOCK_DB.get("DeviceType2ApplicationServerEdit", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/application-servers"
+    item_id = applicationServerId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/application-summary")
 def DeviceType2GetApplicationSummary(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/application-summary
     """
-    return MOCK_DB.get("DeviceType2GetApplicationSummary", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/application-summary"
+    static_data = db.get_static("DeviceType2GetApplicationSummary", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/applications/{id}/capacity-stats")
 def DeviceType2GetApplicationCapacityStatisticsById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/applications/{id}/capacity-stats
     """
-    return MOCK_DB.get("DeviceType2GetApplicationCapacityStatisticsById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/applications/{id}/capacity-stats"
+    static_data = db.get_static("DeviceType2GetApplicationCapacityStatisticsById", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/applications/capacity-stats")
 def DeviceType2GetApplicationsCapacityStatistics(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/applications/capacity-stats
     """
-    return MOCK_DB.get("DeviceType2GetApplicationsCapacityStatistics", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/applications/capacity-stats"
+    static_data = db.get_static("DeviceType2GetApplicationsCapacityStatistics", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/arrays")
 def GetDeviceType2Arrays(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/arrays
     """
-    return MOCK_DB.get("GetDeviceType2Arrays", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/arrays"
+    static_data = db.get_static("GetDeviceType2Arrays", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/arrays")
 def DeviceType2CreateArray(systemId: str, payload: Devicetype2createarrayRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/arrays
     """
-    return MOCK_DB.get("DeviceType2CreateArray", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/arrays"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type2/{systemId}/arrays/{arrayId}")
 def DeviceType2DeleteArrayById(systemId: str, arrayId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type2/{systemId}/arrays/{arrayId}
     """
-    return MOCK_DB.get("DeviceType2DeleteArrayById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/arrays"
+    item_id = arrayId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType2DeleteArrayById", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/arrays/{arrayId}")
 def GetDeviceType2ArrayById(systemId: str, arrayId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/arrays/{arrayId}
     """
-    return MOCK_DB.get("GetDeviceType2ArrayById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/arrays"
+    item_id = arrayId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("GetDeviceType2ArrayById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/arrays/{arrayId}")
 def DeviceType2EditArrayById(systemId: str, arrayId: str, payload: Devicetype2editarraybyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/arrays/{arrayId}
     """
-    return MOCK_DB.get("DeviceType2EditArrayById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/arrays"
+    item_id = arrayId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/arrays/{arrayId}/actions/failover")
 def DeviceType2ArrayFailover(systemId: str, arrayId: str, payload: Devicetype2arrayfailoverRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/arrays/{arrayId}/actions/failover
     """
-    return MOCK_DB.get("DeviceType2ArrayFailover", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/arrays/{arrayId}/actions/failover"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/autosupport/actions/send")
 def DeviceType2SendAutoSupport(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/autosupport/actions/send
     """
-    return MOCK_DB.get("DeviceType2SendAutoSupport", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/autosupport/actions/send"
+    payload_dict = {}
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/capacity-history")
 def DeviceType2GetStorageSystemCapacityHistory(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/capacity-history
     """
-    return MOCK_DB.get("DeviceType2GetStorageSystemCapacityHistory", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/capacity-history"
+    static_data = db.get_static("DeviceType2GetStorageSystemCapacityHistory", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/controllers")
 def DeviceType2GetAllControllers(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/controllers
     """
-    return MOCK_DB.get("DeviceType2GetAllControllers", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/controllers"
+    static_data = db.get_static("DeviceType2GetAllControllers", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/controllers/{controllerId}")
 def DeviceType2GetControllerById(systemId: str, controllerId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/controllers/{controllerId}
     """
-    return MOCK_DB.get("DeviceType2GetControllerById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/controllers"
+    item_id = controllerId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetControllerById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/controllers/{controllerId}/actions/halt")
 def DeviceType2ControllerHalt(systemId: str, controllerId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/controllers/{controllerId}/actions/halt
     """
-    return MOCK_DB.get("DeviceType2ControllerHalt", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/controllers/{controllerId}/actions/halt"
+    payload_dict = {}
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/disks")
 def DeviceType2GetAllDisks(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/disks
     """
-    return MOCK_DB.get("DeviceType2GetAllDisks", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/disks"
+    static_data = db.get_static("DeviceType2GetAllDisks", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/disks/{diskId}")
 def DeviceType2GetDiskById(systemId: str, diskId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/disks/{diskId}
     """
-    return MOCK_DB.get("DeviceType2GetDiskById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/disks"
+    item_id = diskId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetDiskById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/disks/{diskId}")
 def DeviceType2DiskEdit(systemId: str, diskId: str, payload: Devicetype2diskeditRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/disks/{diskId}
     """
-    return MOCK_DB.get("DeviceType2DiskEdit", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/disks"
+    item_id = diskId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/events")
 def DeviceType2GetEvents(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/events
     """
-    return MOCK_DB.get("DeviceType2GetEvents", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/events"
+    static_data = db.get_static("DeviceType2GetEvents", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/events/{eventId}")
 def DeviceType2GetEventsUsingEventId(systemId: str, eventId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/events/{eventId}
     """
-    return MOCK_DB.get("DeviceType2GetEventsUsingEventId", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/events"
+    item_id = eventId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetEventsUsingEventId", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/external-key-manager")
 def DeviceType2GetExternalKeyManager(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/external-key-manager
     """
-    return MOCK_DB.get("DeviceType2GetExternalKeyManager", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/external-key-manager"
+    static_data = db.get_static("DeviceType2GetExternalKeyManager", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/external-key-manager")
 def DeviceType2CreateExternalKeyManager(systemId: str, payload: Devicetype2createexternalkeymanagerRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/external-key-manager
     """
-    return MOCK_DB.get("DeviceType2CreateExternalKeyManager", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/external-key-manager"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type2/{systemId}/external-key-manager/{externalKeyManagerId}")
 def DeviceType2DeleteExternalKeyManagerById(systemId: str, externalKeyManagerId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type2/{systemId}/external-key-manager/{externalKeyManagerId}
     """
-    return MOCK_DB.get("DeviceType2DeleteExternalKeyManagerById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/external-key-manager"
+    item_id = externalKeyManagerId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType2DeleteExternalKeyManagerById", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/external-key-manager/{externalKeyManagerId}")
 def DeviceType2GetExternalKeyManagerById(systemId: str, externalKeyManagerId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/external-key-manager/{externalKeyManagerId}
     """
-    return MOCK_DB.get("DeviceType2GetExternalKeyManagerById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/external-key-manager"
+    item_id = externalKeyManagerId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetExternalKeyManagerById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/external-key-manager/{externalKeyManagerId}")
 def DeviceType2EditExternalKeyManagerById(systemId: str, externalKeyManagerId: str, payload: Devicetype2editexternalkeymanagerbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/external-key-manager/{externalKeyManagerId}
     """
-    return MOCK_DB.get("DeviceType2EditExternalKeyManagerById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/external-key-manager"
+    item_id = externalKeyManagerId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/external-key-manager/{externalKeyManagerId}/actions/migrate")
 def DeviceType2MigrateExternalKeyManagerById(systemId: str, externalKeyManagerId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/external-key-manager/{externalKeyManagerId}/actions/migrate
     """
-    return MOCK_DB.get("DeviceType2MigrateExternalKeyManagerById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/external-key-manager/{externalKeyManagerId}/actions/migrate"
+    payload_dict = {}
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/external-key-manager/{externalKeyManagerId}/actions/remove")
 def DeviceType2RemoveExternalKeyManagerById(systemId: str, externalKeyManagerId: str, payload: Devicetype2removeexternalkeymanagerbyidRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType2RemoveExternalKeyManagerById", dict())
+    return db.get_static("DeviceType2RemoveExternalKeyManagerById", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/fibre-channel-configs")
 def DeviceType2GetAllFibreChannelConfigs(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/fibre-channel-configs
     """
-    return MOCK_DB.get("DeviceType2GetAllFibreChannelConfigs", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/fibre-channel-configs"
+    static_data = db.get_static("DeviceType2GetAllFibreChannelConfigs", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/fibre-channel-configs/{fcConfigId}")
 def DeviceType2GetFibreChannelConfigById(systemId: str, fcConfigId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/fibre-channel-configs/{fcConfigId}
     """
-    return MOCK_DB.get("DeviceType2GetFibreChannelConfigById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/fibre-channel-configs"
+    item_id = fcConfigId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetFibreChannelConfigById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/fibre-channel-interfaces")
 def GetDeviceType2FibreChannelInterfaces(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/fibre-channel-interfaces
     """
-    return MOCK_DB.get("GetDeviceType2FibreChannelInterfaces", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/fibre-channel-interfaces"
+    static_data = db.get_static("GetDeviceType2FibreChannelInterfaces", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/fibre-channel-sessions")
 def DeviceType2GetAllFibreChannelSessions(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/fibre-channel-sessions
     """
-    return MOCK_DB.get("DeviceType2GetAllFibreChannelSessions", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/fibre-channel-sessions"
+    static_data = db.get_static("DeviceType2GetAllFibreChannelSessions", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/fibre-channel-sessions/{fcSessionId}")
 def DeviceType2GetFibreChannelSessionById(systemId: str, fcSessionId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/fibre-channel-sessions/{fcSessionId}
     """
-    return MOCK_DB.get("DeviceType2GetFibreChannelSessionById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/fibre-channel-sessions"
+    item_id = fcSessionId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetFibreChannelSessionById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/folders")
 def DeviceType2GetAllFolders(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/folders
     """
-    return MOCK_DB.get("DeviceType2GetAllFolders", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/folders"
+    static_data = db.get_static("DeviceType2GetAllFolders", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/folders")
 def DeviceType2FolderCreate(systemId: str, payload: Devicetype2foldercreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/folders
     """
-    return MOCK_DB.get("DeviceType2FolderCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/folders"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type2/{systemId}/folders/{folderId}")
 def DeviceType2RemoveFolderById(systemId: str, folderId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type2/{systemId}/folders/{folderId}
     """
-    return MOCK_DB.get("DeviceType2RemoveFolderById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/folders"
+    item_id = folderId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType2RemoveFolderById", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/folders/{folderId}")
 def DeviceType2GetFolderById(systemId: str, folderId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/folders/{folderId}
     """
-    return MOCK_DB.get("DeviceType2GetFolderById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/folders"
+    item_id = folderId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetFolderById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/folders/{folderId}")
 def DeviceType2FolderEdit(systemId: str, folderId: str, payload: Devicetype2foldereditRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/folders/{folderId}
     """
-    return MOCK_DB.get("DeviceType2FolderEdit", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/folders"
+    item_id = folderId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/folders/{folderId}/attach")
 def DeviceType2AttachDetachVvolbyID(systemId: str, folderId: str, payload: Devicetype2attachdetachvvolbyidRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType2AttachDetachVvolbyID", dict())
+    return db.get_static("DeviceType2AttachDetachVvolbyID", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/health-status")
 def DeviceType2GetHealthStatus(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/health-status
     """
-    return MOCK_DB.get("DeviceType2GetHealthStatus", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/health-status"
+    static_data = db.get_static("DeviceType2GetHealthStatus", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/health-status/{healthStatusId}")
 def DeviceType2GetHealthStatusUsingHealthId(systemId: str, healthStatusId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/health-status/{healthStatusId}
     """
-    return MOCK_DB.get("DeviceType2GetHealthStatusUsingHealthId", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/health-status"
+    item_id = healthStatusId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetHealthStatusUsingHealthId", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/host-groups")
 def DeviceType2GetAllHostInitiatorGroups(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/host-groups
     """
-    return MOCK_DB.get("DeviceType2GetAllHostInitiatorGroups", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/host-groups"
+    static_data = db.get_static("DeviceType2GetAllHostInitiatorGroups", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/host-groups")
 def DeviceType2HostInitiatorGroupCreate(systemId: str, payload: Devicetype2hostinitiatorgroupcreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/host-groups
     """
-    return MOCK_DB.get("DeviceType2HostInitiatorGroupCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/host-groups"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type2/{systemId}/host-groups/{hostInitiatorGroupId}")
 def DeviceType2RemoveHostInitiatorGroupById(systemId: str, hostInitiatorGroupId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type2/{systemId}/host-groups/{hostInitiatorGroupId}
     """
-    return MOCK_DB.get("DeviceType2RemoveHostInitiatorGroupById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/host-groups"
+    item_id = hostInitiatorGroupId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType2RemoveHostInitiatorGroupById", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/host-groups/{hostInitiatorGroupId}")
 def DeviceType2GetHostInitiatorGroupById(systemId: str, hostInitiatorGroupId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/host-groups/{hostInitiatorGroupId}
     """
-    return MOCK_DB.get("DeviceType2GetHostInitiatorGroupById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/host-groups"
+    item_id = hostInitiatorGroupId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetHostInitiatorGroupById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/host-groups/{hostInitiatorGroupId}")
 def DeviceType2UpdateHostInitiatorGroupById(systemId: str, hostInitiatorGroupId: str, payload: Devicetype2updatehostinitiatorgroupbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/host-groups/{hostInitiatorGroupId}
     """
-    return MOCK_DB.get("DeviceType2UpdateHostInitiatorGroupById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/host-groups"
+    item_id = hostInitiatorGroupId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/host-initiators")
 def DeviceType2GetAllInitiators(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/host-initiators
     """
-    return MOCK_DB.get("DeviceType2GetAllInitiators", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/host-initiators"
+    static_data = db.get_static("DeviceType2GetAllInitiators", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/host-initiators")
 def DeviceType2InitiatorsCreate(systemId: str, payload: Devicetype2initiatorscreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/host-initiators
     """
-    return MOCK_DB.get("DeviceType2InitiatorsCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/host-initiators"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type2/{systemId}/host-initiators/{hostInitiatorId}")
 def DeviceType2RemoveInitiatorsById(systemId: str, hostInitiatorId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type2/{systemId}/host-initiators/{hostInitiatorId}
     """
-    return MOCK_DB.get("DeviceType2RemoveInitiatorsById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/host-initiators"
+    item_id = hostInitiatorId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType2RemoveInitiatorsById", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/host-initiators/{hostInitiatorId}")
 def DeviceType2GetInitiatorsById(systemId: str, hostInitiatorId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/host-initiators/{hostInitiatorId}
     """
-    return MOCK_DB.get("DeviceType2GetInitiatorsById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/host-initiators"
+    item_id = hostInitiatorId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetInitiatorsById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/local-key-manager")
 def DeviceType2GetLocalKeyManager(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/local-key-manager
     """
-    return MOCK_DB.get("DeviceType2GetLocalKeyManager", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/local-key-manager"
+    static_data = db.get_static("DeviceType2GetLocalKeyManager", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/local-key-manager")
 def DeviceType2CreateLocalKeyManager(systemId: str, payload: Devicetype2createlocalkeymanagerRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/local-key-manager
     """
-    return MOCK_DB.get("DeviceType2CreateLocalKeyManager", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/local-key-manager"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type2/{systemId}/local-key-manager/{localKeyManagerId}")
 def DeviceType2DeleteLocalKeyManagerById(systemId: str, localKeyManagerId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type2/{systemId}/local-key-manager/{localKeyManagerId}
     """
-    return MOCK_DB.get("DeviceType2DeleteLocalKeyManagerById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/local-key-manager"
+    item_id = localKeyManagerId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType2DeleteLocalKeyManagerById", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/local-key-manager/{localKeyManagerId}")
 def DeviceType2GetLocalKeyManagerById(systemId: str, localKeyManagerId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/local-key-manager/{localKeyManagerId}
     """
-    return MOCK_DB.get("DeviceType2GetLocalKeyManagerById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/local-key-manager"
+    item_id = localKeyManagerId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetLocalKeyManagerById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/local-key-manager/{localKeyManagerId}")
 def DeviceType2EditLocalKeyManagerById(systemId: str, localKeyManagerId: str, payload: Devicetype2editlocalkeymanagerbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/local-key-manager/{localKeyManagerId}
     """
-    return MOCK_DB.get("DeviceType2EditLocalKeyManagerById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/local-key-manager"
+    item_id = localKeyManagerId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/mail-settings")
 def DeviceType2EditMailSettings(systemId: str, payload: Devicetype2editmailsettingsRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/mail-settings
     """
-    return MOCK_DB.get("DeviceType2EditMailSettings", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/mail-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/network-interfaces")
 def GetDeviceType2NetworkInterfaces(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/network-interfaces
     """
-    return MOCK_DB.get("GetDeviceType2NetworkInterfaces", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/network-interfaces"
+    static_data = db.get_static("GetDeviceType2NetworkInterfaces", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/network-interfaces/{networkInterfaceId}")
 def GetDeviceType2NetworkInterfaceById(systemId: str, networkInterfaceId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/network-interfaces/{networkInterfaceId}
     """
-    return MOCK_DB.get("GetDeviceType2NetworkInterfaceById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/network-interfaces"
+    item_id = networkInterfaceId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("GetDeviceType2NetworkInterfaceById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/network-settings")
 def DeviceType2GetAllNetworkSettings(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/network-settings
     """
-    return MOCK_DB.get("DeviceType2GetAllNetworkSettings", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/network-settings"
+    static_data = db.get_static("DeviceType2GetAllNetworkSettings", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/network-settings/{networkSettingId}")
 def DeviceType2GetNetworkSettingById(systemId: str, networkSettingId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/network-settings/{networkSettingId}
     """
-    return MOCK_DB.get("DeviceType2GetNetworkSettingById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/network-settings"
+    item_id = networkSettingId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetNetworkSettingById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/network-settings/{networkSettingId}")
 def DeviceType2EditNetworkSettingById(systemId: str, networkSettingId: str, payload: Devicetype2editnetworksettingbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/network-settings/{networkSettingId}
     """
-    return MOCK_DB.get("DeviceType2EditNetworkSettingById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/network-settings"
+    item_id = networkSettingId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/performance-history")
 def DeviceType2GetStorageSystemPerformanceHistory(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/performance-history
     """
-    return MOCK_DB.get("DeviceType2GetStorageSystemPerformanceHistory", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/performance-history"
+    static_data = db.get_static("DeviceType2GetStorageSystemPerformanceHistory", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/performance-policies")
 def DeviceType2GetAllPerformancePolicies(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/performance-policies
     """
-    return MOCK_DB.get("DeviceType2GetAllPerformancePolicies", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/performance-policies"
+    static_data = db.get_static("DeviceType2GetAllPerformancePolicies", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/performance-policies")
 def DeviceType2PerformancePolicyCreate(systemId: str, payload: Devicetype2performancepolicycreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/performance-policies
     """
-    return MOCK_DB.get("DeviceType2PerformancePolicyCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/performance-policies"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type2/{systemId}/performance-policies/{performancePolicyId}")
 def DeviceType2RemovePerfPolicyId(systemId: str, performancePolicyId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type2/{systemId}/performance-policies/{performancePolicyId}
     """
-    return MOCK_DB.get("DeviceType2RemovePerfPolicyId", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/performance-policies"
+    item_id = performancePolicyId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType2RemovePerfPolicyId", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/performance-policies/{performancePolicyId}")
 def DeviceType2GetPerformancePolicyById(systemId: str, performancePolicyId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/performance-policies/{performancePolicyId}
     """
-    return MOCK_DB.get("DeviceType2GetPerformancePolicyById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/performance-policies"
+    item_id = performancePolicyId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetPerformancePolicyById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/performance-policies/{performancePolicyId}")
 def DeviceType2PerformancePolicyEdit(systemId: str, performancePolicyId: str, payload: Devicetype2performancepolicyeditRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/performance-policies/{performancePolicyId}
     """
-    return MOCK_DB.get("DeviceType2PerformancePolicyEdit", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/performance-policies"
+    item_id = performancePolicyId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/pools-performance")
 def DeviceType2GetPoolsPerformanceHistory(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/pools-performance
     """
-    return MOCK_DB.get("DeviceType2GetPoolsPerformanceHistory", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/pools-performance"
+    static_data = db.get_static("DeviceType2GetPoolsPerformanceHistory", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/ports")
 def DeviceType2GetAllPorts(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/ports
     """
-    return MOCK_DB.get("DeviceType2GetAllPorts", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/ports"
+    static_data = db.get_static("DeviceType2GetAllPorts", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/ports/{portId}")
 def DeviceType2GetPortById(systemId: str, portId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/ports/{portId}
     """
-    return MOCK_DB.get("DeviceType2GetPortById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/ports"
+    item_id = portId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetPortById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/ports/{portId}")
 def DeviceType2EditFCPort(systemId: str, portId: str, payload: Devicetype2editfcportRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/ports/{portId}
     """
-    return MOCK_DB.get("DeviceType2EditFCPort", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/ports"
+    item_id = portId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/protection-templates")
 def DeviceType2GetAllProtectionTemplates(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/protection-templates
     """
-    return MOCK_DB.get("DeviceType2GetAllProtectionTemplates", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/protection-templates"
+    static_data = db.get_static("DeviceType2GetAllProtectionTemplates", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/protection-templates")
 def DeviceType2CreateProtectionTemplate(systemId: str, payload: Devicetype2createprotectiontemplateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/protection-templates
     """
-    return MOCK_DB.get("DeviceType2CreateProtectionTemplate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/protection-templates"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/protection-templates/{protectionTemplateId}")
 def DeviceType2GetProtectionTemplateById(systemId: str, protectionTemplateId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/protection-templates/{protectionTemplateId}
     """
-    return MOCK_DB.get("DeviceType2GetProtectionTemplateById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/protection-templates"
+    item_id = protectionTemplateId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetProtectionTemplateById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/protection-templates/{protectionTemplateId}")
 def DeviceType2EditProtectionTemplate(systemId: str, protectionTemplateId: str, payload: Devicetype2editprotectiontemplateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/protection-templates/{protectionTemplateId}
     """
-    return MOCK_DB.get("DeviceType2EditProtectionTemplate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/protection-templates"
+    item_id = protectionTemplateId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/protection-templates/remove")
 def DeviceType2RemoveProtectionTemplate(systemId: str, payload: Devicetype2removeprotectiontemplateRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType2RemoveProtectionTemplate", dict())
+    return db.get_static("DeviceType2RemoveProtectionTemplate", dict())
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/provisioning")
 def DeviceType2ProvisioningWorklow(systemId: str, payload: Devicetype2provisioningworklowRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/provisioning
     """
-    return MOCK_DB.get("DeviceType2ProvisioningWorklow", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/provisioning"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/provisioning-review")
 def DeviceType2ProvisioningReview(systemId: str, payload: Devicetype2provisioningreviewRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/provisioning-review
     """
-    return MOCK_DB.get("DeviceType2ProvisioningReview", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/provisioning-review"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/shelves")
 def DeviceType2GetAllShelves(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/shelves
     """
-    return MOCK_DB.get("DeviceType2GetAllShelves", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/shelves"
+    static_data = db.get_static("DeviceType2GetAllShelves", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/shelves/{shelfId}")
 def DeviceType2GetShelfById(systemId: str, shelfId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/shelves/{shelfId}
     """
-    return MOCK_DB.get("DeviceType2GetShelfById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/shelves"
+    item_id = shelfId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetShelfById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/shelves/{shelfId}/actions/locate")
 def DeviceType2LocateShelfChassis(systemId: str, shelfId: str, payload: Devicetype2locateshelfchassisRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType2LocateShelfChassis", dict())
+    return db.get_static("DeviceType2LocateShelfChassis", dict())
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/shelves/actions/activate")
 def DeviceType2ActivateShelf(systemId: str, payload: Devicetype2activateshelfRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/shelves/actions/activate
     """
-    return MOCK_DB.get("DeviceType2ActivateShelf", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/shelves/actions/activate"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/snapshot-collections/{snapshotCollectionId}/actions/clone")
 def DeviceType2CloneActionOnSnapshotCollections(systemId: str, snapshotCollectionId: str, payload: Devicetype2cloneactiononsnapshotcollectionsRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType2CloneActionOnSnapshotCollections", dict())
+    return db.get_static("DeviceType2CloneActionOnSnapshotCollections", dict())
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/snapshots/actions/update")
 def DeviceType2EditSnapshotById(systemId: str, payload: Devicetype2editsnapshotbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/snapshots/actions/update
     """
-    return MOCK_DB.get("DeviceType2EditSnapshotById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/snapshots/actions/update"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/storage-pools")
 def DeviceType2GetAllPoolDetails(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/storage-pools
     """
-    return MOCK_DB.get("DeviceType2GetAllPoolDetails", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/storage-pools"
+    static_data = db.get_static("DeviceType2GetAllPoolDetails", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/storage-pools")
 def DeviceType2CreatePool(systemId: str, payload: Devicetype2createpoolRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/storage-pools
     """
-    return MOCK_DB.get("DeviceType2CreatePool", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/storage-pools"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type2/{systemId}/storage-pools/{storagePoolId}")
 def DeviceType2RemovePoolById(systemId: str, storagePoolId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type2/{systemId}/storage-pools/{storagePoolId}
     """
-    return MOCK_DB.get("DeviceType2RemovePoolById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/storage-pools"
+    item_id = storagePoolId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType2RemovePoolById", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/storage-pools/{storagePoolId}")
 def DeviceType2GetPoolDetailById(systemId: str, storagePoolId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/storage-pools/{storagePoolId}
     """
-    return MOCK_DB.get("DeviceType2GetPoolDetailById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/storage-pools"
+    item_id = storagePoolId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetPoolDetailById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/storage-pools/{storagePoolId}")
 def DeviceType2EditPoolDetailById(systemId: str, storagePoolId: str, payload: Devicetype2editpooldetailbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/storage-pools/{storagePoolId}
     """
-    return MOCK_DB.get("DeviceType2EditPoolDetailById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/storage-pools"
+    item_id = storagePoolId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/storage-pools/{storagePoolId}/actions/merge")
 def DeviceType2MergePoolById(systemId: str, storagePoolId: str, payload: Devicetype2mergepoolbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/storage-pools/{storagePoolId}/actions/merge
     """
-    return MOCK_DB.get("DeviceType2MergePoolById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/storage-pools/{storagePoolId}/actions/merge"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/storage-pools/{storagePoolId}/capacity-history")
 def DeviceType2GetPoolCapacityHistory(systemId: str, storagePoolId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/storage-pools/{storagePoolId}/capacity-history
     """
-    return MOCK_DB.get("DeviceType2GetPoolCapacityHistory", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/storage-pools/{storagePoolId}/capacity-history"
+    static_data = db.get_static("DeviceType2GetPoolCapacityHistory", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/storage-pools/{storagePoolId}/performance-history")
 def DeviceType2GetPoolPerformanceHistory(systemId: str, storagePoolId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/storage-pools/{storagePoolId}/performance-history
     """
-    return MOCK_DB.get("DeviceType2GetPoolPerformanceHistory", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/storage-pools/{storagePoolId}/performance-history"
+    static_data = db.get_static("DeviceType2GetPoolPerformanceHistory", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/storage-pools/{storagePoolId}/performance-statistics")
 def DeviceType2GetPoolPerformanceStatistics(systemId: str, storagePoolId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/storage-pools/{storagePoolId}/performance-statistics
     """
-    return MOCK_DB.get("DeviceType2GetPoolPerformanceStatistics", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/storage-pools/{storagePoolId}/performance-statistics"
+    static_data = db.get_static("DeviceType2GetPoolPerformanceStatistics", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/system-settings")
 def DeviceType2EditSystemSettings(systemId: str, payload: Devicetype2editsystemsettingsRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/system-settings
     """
-    return MOCK_DB.get("DeviceType2EditSystemSettings", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/system-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners")
 def DeviceType2GetReplicationPartners(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners
     """
-    return MOCK_DB.get("DeviceType2GetReplicationPartners", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners"
+    static_data = db.get_static("DeviceType2GetReplicationPartners", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners")
 def DeviceType2CreateReplicationPartners(systemId: str, payload: Devicetype2createreplicationpartnersRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners
     """
-    return MOCK_DB.get("DeviceType2CreateReplicationPartners", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners/{replicationpartnerId}")
 def DeviceType2GetReplicationPartnersById(systemId: str, replicationpartnerId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners/{replicationpartnerId}
     """
-    return MOCK_DB.get("DeviceType2GetReplicationPartnersById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners"
+    item_id = replicationpartnerId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetReplicationPartnersById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners/{replicationpartnerId}")
 def DeviceType2EditReplicationPartnersById(systemId: str, replicationpartnerId: str, payload: Devicetype2editreplicationpartnersbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners/{replicationpartnerId}
     """
-    return MOCK_DB.get("DeviceType2EditReplicationPartnersById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners"
+    item_id = replicationpartnerId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners/actions/pause")
 def DeviceType2PauseReplicationPartner(systemId: str, payload: Devicetype2pausereplicationpartnerRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners/actions/pause
     """
-    return MOCK_DB.get("DeviceType2PauseReplicationPartner", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners/actions/pause"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners/actions/resume")
 def DeviceType2ResumeReplicationPartner(systemId: str, payload: Devicetype2resumereplicationpartnerRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners/actions/resume
     """
-    return MOCK_DB.get("DeviceType2ResumeReplicationPartner", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners/actions/resume"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners/actions/test")
 def DeviceType2TestReplicationConfiguration(systemId: str, payload: Devicetype2testreplicationconfigurationRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners/actions/test
     """
-    return MOCK_DB.get("DeviceType2TestReplicationConfiguration", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners/actions/test"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/system-settings/replication-partners/remove")
 def DeviceType2RemoveReplicationPartner(systemId: str, payload: Devicetype2removereplicationpartnerRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType2RemoveReplicationPartner", dict())
+    return db.get_static("DeviceType2RemoveReplicationPartner", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/system-settings/witnesses")
 def DeviceType2GetWitnesses(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/system-settings/witnesses
     """
-    return MOCK_DB.get("DeviceType2GetWitnesses", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/system-settings/witnesses"
+    static_data = db.get_static("DeviceType2GetWitnesses", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/system-settings/witnesses")
 def DeviceType2CreateWitness(systemId: str, payload: Devicetype2createwitnessRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/system-settings/witnesses
     """
-    return MOCK_DB.get("DeviceType2CreateWitness", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/system-settings/witnesses"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type2/{systemId}/system-settings/witnesses/{witnessId}")
 def DeviceType2RemoveWitnessesById(systemId: str, witnessId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type2/{systemId}/system-settings/witnesses/{witnessId}
     """
-    return MOCK_DB.get("DeviceType2RemoveWitnessesById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/system-settings/witnesses"
+    item_id = witnessId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType2RemoveWitnessesById", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/system-settings/witnesses/{witnessId}")
 def DeviceType2GetWitnessesById(systemId: str, witnessId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/system-settings/witnesses/{witnessId}
     """
-    return MOCK_DB.get("DeviceType2GetWitnessesById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/system-settings/witnesses"
+    item_id = witnessId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetWitnessesById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/system-settings/witnesses/{witnessId}/actions/test")
 def DeviceType2TestWitnessesById(systemId: str, witnessId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/system-settings/witnesses/{witnessId}/actions/test
     """
-    return MOCK_DB.get("DeviceType2TestWitnessesById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/system-settings/witnesses/{witnessId}/actions/test"
+    payload_dict = {}
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/uninitialized-arrays")
 def GetDeviceType2UninitializedArrays(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/uninitialized-arrays
     """
-    return MOCK_DB.get("GetDeviceType2UninitializedArrays", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/uninitialized-arrays"
+    payload_dict = {}
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/uninitialized-arrays/{uninitializedArrayId}")
 def GetDeviceType2UninitializedArrayById(systemId: str, uninitializedArrayId: str, payload: Getdevicetype2uninitializedarraybyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/uninitialized-arrays/{uninitializedArrayId}
     """
-    return MOCK_DB.get("GetDeviceType2UninitializedArrayById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/uninitialized-arrays"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/volume-collections")
 def DeviceType2GetAllVolumeCollections(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/volume-collections
     """
-    return MOCK_DB.get("DeviceType2GetAllVolumeCollections", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volume-collections"
+    static_data = db.get_static("DeviceType2GetAllVolumeCollections", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volume-collections")
 def DeviceType2VolumeCollectionCreate(systemId: str, payload: Devicetype2volumecollectioncreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/volume-collections
     """
-    return MOCK_DB.get("DeviceType2VolumeCollectionCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volume-collections"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}")
 def DeviceType2RemoveVolumeCollectionById(systemId: str, volumeCollectionId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}
     """
-    return MOCK_DB.get("DeviceType2RemoveVolumeCollectionById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volume-collections"
+    item_id = volumeCollectionId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType2RemoveVolumeCollectionById", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}")
 def DeviceType2GetVolumeCollectionById(systemId: str, volumeCollectionId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}
     """
-    return MOCK_DB.get("DeviceType2GetVolumeCollectionById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volume-collections"
+    item_id = volumeCollectionId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetVolumeCollectionById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}")
 def DeviceType2EditVolumeCollectionById(systemId: str, volumeCollectionId: str, payload: Devicetype2editvolumecollectionbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}
     """
-    return MOCK_DB.get("DeviceType2EditVolumeCollectionById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volume-collections"
+    item_id = volumeCollectionId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/actions/abort-handover")
 def DeviceType2ActiononVolumeCollection(systemId: str, volumeCollectionId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/actions/abort-handover
     """
-    return MOCK_DB.get("DeviceType2ActiononVolumeCollection", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/actions/abort-handover"
+    payload_dict = {}
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/actions/add-volumes")
 def DeviceType2AddVolumesToVolumeCollections(systemId: str, volumeCollectionId: str, payload: Devicetype2addvolumestovolumecollectionsRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/actions/add-volumes
     """
-    return MOCK_DB.get("DeviceType2AddVolumesToVolumeCollections", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/actions/add-volumes"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/actions/demote")
 def DeviceType2ActionOnVolumeCollectionId(systemId: str, volumeCollectionId: str, payload: Devicetype2actiononvolumecollectionidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/actions/demote
     """
-    return MOCK_DB.get("DeviceType2ActionOnVolumeCollectionId", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/actions/demote"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/actions/handover")
 def DeviceType2ActionOnVolumeCollection(systemId: str, volumeCollectionId: str, payload: Devicetype2actiononvolumecollectionRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/actions/handover
     """
-    return MOCK_DB.get("DeviceType2ActionOnVolumeCollection", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/actions/handover"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/actions/promote")
 def DeviceType2PromoteActionOnVolumeCollection(systemId: str, volumeCollectionId: str):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType2PromoteActionOnVolumeCollection", dict())
+    return db.get_static("DeviceType2PromoteActionOnVolumeCollection", dict())
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/actions/remove-volumes")
 def DeviceType2RemoveVolumesFromVolumeCollection(systemId: str, volumeCollectionId: str, payload: Devicetype2removevolumesfromvolumecollectionRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/actions/remove-volumes
     """
-    return MOCK_DB.get("DeviceType2RemoveVolumesFromVolumeCollection", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/actions/remove-volumes"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/snapshot-collections")
 def DeviceType2GetSnapshotsByVolumeCollectionId(systemId: str, volumeCollectionId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/snapshot-collections
     """
-    return MOCK_DB.get("DeviceType2GetSnapshotsByVolumeCollectionId", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/snapshot-collections"
+    static_data = db.get_static("DeviceType2GetSnapshotsByVolumeCollectionId", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/snapshot-collections")
 def DeviceType2CreateSnapshotCollections(systemId: str, volumeCollectionId: str, payload: Devicetype2createsnapshotcollectionsRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/snapshot-collections
     """
-    return MOCK_DB.get("DeviceType2CreateSnapshotCollections", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/snapshot-collections"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/snapshot-collections/{snapshotCollectionId}")
 def DeviceType2GetSnapshotCollectionsById(systemId: str, volumeCollectionId: str, snapshotCollectionId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/snapshot-collections/{snapshotCollectionId}
     """
-    return MOCK_DB.get("DeviceType2GetSnapshotCollectionsById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/snapshot-collections"
+    item_id = snapshotCollectionId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetSnapshotCollectionsById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/snapshot-collections/remove")
 def DeviceType2RemoveSnapShotCollection(systemId: str, volumeCollectionId: str, payload: Devicetype2removesnapshotcollectionRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType2RemoveSnapShotCollection", dict())
+    return db.get_static("DeviceType2RemoveSnapShotCollection", dict())
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/snapshot-collections/update")
 def DeviceType2ActionOnSnapshotCollection(systemId: str, volumeCollectionId: str, payload: Devicetype2actiononsnapshotcollectionRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/snapshot-collections/update
     """
-    return MOCK_DB.get("DeviceType2ActionOnSnapshotCollection", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volume-collections/{volumeCollectionId}/snapshot-collections/update"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/volumes")
 def DeviceType2GetAllVolumes(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/volumes
     """
-    return MOCK_DB.get("DeviceType2GetAllVolumes", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volumes"
+    static_data = db.get_static("DeviceType2GetAllVolumes", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volumes")
 def DeviceType2VolumesCreate(systemId: str, payload: Devicetype2volumescreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/volumes
     """
-    return MOCK_DB.get("DeviceType2VolumesCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volumes"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/volumes-performance")
 def DeviceType2GetVolumesPerformanceHistory(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/volumes-performance
     """
-    return MOCK_DB.get("DeviceType2GetVolumesPerformanceHistory", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volumes-performance"
+    static_data = db.get_static("DeviceType2GetVolumesPerformanceHistory", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.delete("/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}")
 def DeviceType2RemoveVolumeById(systemId: str, volumeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}
     """
-    return MOCK_DB.get("DeviceType2RemoveVolumeById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volumes"
+    item_id = volumeId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType2RemoveVolumeById", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}")
 def DeviceType2GetVolumeById(systemId: str, volumeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}
     """
-    return MOCK_DB.get("DeviceType2GetVolumeById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volumes"
+    item_id = volumeId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetVolumeById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}")
 def DeviceType2EditVolumeById(systemId: str, volumeId: str, payload: Devicetype2editvolumebyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}
     """
-    return MOCK_DB.get("DeviceType2EditVolumeById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volumes"
+    item_id = volumeId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/actions/move")
 def DeviceType2MoveVolume(systemId: str, volumeId: str, payload: Devicetype2movevolumeRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/actions/move
     """
-    return MOCK_DB.get("DeviceType2MoveVolume", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/actions/move"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/actions/restore")
 def DeviceType2RestoreVolumeById(systemId: str, volumeId: str, payload: Devicetype2restorevolumebyidRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType2RestoreVolumeById", dict())
+    return db.get_static("DeviceType2RestoreVolumeById", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/capacity-history")
 def DeviceType2GetVolumeCapacityHistory(systemId: str, volumeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/capacity-history
     """
-    return MOCK_DB.get("DeviceType2GetVolumeCapacityHistory", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/capacity-history"
+    static_data = db.get_static("DeviceType2GetVolumeCapacityHistory", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/clone")
 def DeviceType2CloneVolumeById(systemId: str, volumeId: str, payload: Devicetype2clonevolumebyidRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType2CloneVolumeById", dict())
+    return db.get_static("DeviceType2CloneVolumeById", dict())
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/export")
 def DeviceType2VolumesExport(systemId: str, volumeId: str, payload: Devicetype2volumesexportRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType2VolumesExport", dict())
+    return db.get_static("DeviceType2VolumesExport", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/performance-history")
 def DeviceType2GetVolumePerformanceHistory(systemId: str, volumeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/performance-history
     """
-    return MOCK_DB.get("DeviceType2GetVolumePerformanceHistory", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/performance-history"
+    static_data = db.get_static("DeviceType2GetVolumePerformanceHistory", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/performance-statistics")
 def DeviceType2GetVolumePerformanceStatistics(systemId: str, volumeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/performance-statistics
     """
-    return MOCK_DB.get("DeviceType2GetVolumePerformanceStatistics", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/performance-statistics"
+    static_data = db.get_static("DeviceType2GetVolumePerformanceStatistics", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/snapshots")
 def DeviceType2GetAllSnapshotsByVolumeId(systemId: str, volumeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/snapshots
     """
-    return MOCK_DB.get("DeviceType2GetAllSnapshotsByVolumeId", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/snapshots"
+    static_data = db.get_static("DeviceType2GetAllSnapshotsByVolumeId", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/snapshots")
 def DeviceType2SnapshotCreate(systemId: str, volumeId: str, payload: Devicetype2snapshotcreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/snapshots
     """
-    return MOCK_DB.get("DeviceType2SnapshotCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/snapshots"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}")
 def DeviceType2RemoveSnapshotById(systemId: str, volumeId: str, snapshotId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}
     """
-    return MOCK_DB.get("DeviceType2RemoveSnapshotById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/snapshots"
+    item_id = snapshotId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType2RemoveSnapshotById", dict())
 
 @app.get("/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}")
 def DeviceType2GetSnapshotById(systemId: str, volumeId: str, snapshotId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}
     """
-    return MOCK_DB.get("DeviceType2GetSnapshotById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/snapshots"
+    item_id = snapshotId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType2GetSnapshotById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}/export")
 def DeviceType2SnapshotExport(systemId: str, volumeId: str, snapshotId: str, payload: Devicetype2snapshotexportRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType2SnapshotExport", dict())
+    return db.get_static("DeviceType2SnapshotExport", dict())
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}/un-export")
 def DeviceType2DeleteSnapshotAccessById(systemId: str, volumeId: str, snapshotId: str, payload: Devicetype2deletesnapshotaccessbyidRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType2DeleteSnapshotAccessById", dict())
+    return db.get_static("DeviceType2DeleteSnapshotAccessById", dict())
 
 @app.post("/api/v1/storage-systems/device-type2/{systemId}/volumes/{volumeId}/un-export")
 def DeviceType2DeleteVolumeAccessById(systemId: str, volumeId: str, payload: Devicetype2deletevolumeaccessbyidRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType2DeleteVolumeAccessById", dict())
+    return db.get_static("DeviceType2DeleteVolumeAccessById", dict())
 
 @app.get("/api/v1/storage-systems/device-type4")
 def DeviceType4SystemsList():
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4
     """
-    return MOCK_DB.get("DeviceType4SystemsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4"
+    static_data = db.get_static("DeviceType4SystemsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{id}")
 def DeviceType4SystemGetById(id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{id}
     """
-    return MOCK_DB.get("DeviceType4SystemGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4SystemGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type4/{id}")
 def DeviceType4SystemLocate(id: str, payload: Devicetype4systemlocateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{id}
     """
-    return MOCK_DB.get("DeviceType4SystemLocate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/alert-contacts")
 def DeviceType4AlertContactsList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/alert-contacts
     """
-    return MOCK_DB.get("DeviceType4AlertContactsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/alert-contacts"
+    static_data = db.get_static("DeviceType4AlertContactsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/alert-contacts")
 def DeviceType4AlertContactsCreate(systemId: str, payload: Devicetype4alertcontactscreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/alert-contacts
     """
-    return MOCK_DB.get("DeviceType4AlertContactsCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/alert-contacts"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type4/{systemId}/alert-contacts/{id}")
 def DeviceType4AlertContactsDelete(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type4/{systemId}/alert-contacts/{id}
     """
-    return MOCK_DB.get("DeviceType4AlertContactsDelete", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/alert-contacts"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType4AlertContactsDelete", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/alert-contacts/{id}")
 def DeviceType4AlertContactsGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/alert-contacts/{id}
     """
-    return MOCK_DB.get("DeviceType4AlertContactsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/alert-contacts"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4AlertContactsGetById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/alert-contacts/{id}")
 def DeviceType4AlertContactsUpdate(systemId: str, id: str, payload: Devicetype4alertcontactsupdateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/alert-contacts/{id}
     """
-    return MOCK_DB.get("DeviceType4AlertContactsUpdate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/alert-contacts"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/application-summary")
 def DeviceType4ApplicationSummaryGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/application-summary
     """
-    return MOCK_DB.get("DeviceType4ApplicationSummaryGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/application-summary"
+    static_data = db.get_static("DeviceType4ApplicationSummaryGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/applicationsets")
 def DeviceType4VolumeSetsList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/applicationsets
     """
-    return MOCK_DB.get("DeviceType4VolumeSetsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets"
+    static_data = db.get_static("DeviceType4VolumeSetsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/applicationsets")
 def DeviceType4VolumeSetsCreate(systemId: str, payload: Devicetype4volumesetscreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/applicationsets
     """
-    return MOCK_DB.get("DeviceType4VolumeSetsCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{appsetId}/export")
 def DeviceType4VolumeSetExport(systemId: str, appsetId: str, payload: Devicetype4volumesetexportRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4VolumeSetExport", dict())
+    return db.get_static("DeviceType4VolumeSetExport", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{appsetId}/replication-partners")
 def DeviceType4GetReplicationPartnersByAppSetId(systemId: str, appsetId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{appsetId}/replication-partners
     """
-    return MOCK_DB.get("DeviceType4GetReplicationPartnersByAppSetId", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{appsetId}/replication-partners"
+    static_data = db.get_static("DeviceType4GetReplicationPartnersByAppSetId", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{appsetId}/replication-partners/{replicationPartnerId}/volumes")
 def DeviceType4GetReplicationPartnerVolumesByAppSetId(systemId: str, appsetId: str, replicationPartnerId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{appsetId}/replication-partners/{replicationPartnerId}/volumes
     """
-    return MOCK_DB.get("DeviceType4GetReplicationPartnerVolumesByAppSetId", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{appsetId}/replication-partners/{replicationPartnerId}/volumes"
+    static_data = db.get_static("DeviceType4GetReplicationPartnerVolumesByAppSetId", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.delete("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{appsetId}/snapsets/{snapsetId}")
 def DeviceType4VolumeSetSnapshotGetById(systemId: str, appsetId: str, snapsetId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{appsetId}/snapsets/{snapsetId}
     """
-    return MOCK_DB.get("DeviceType4VolumeSetSnapshotGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{appsetId}/snapsets"
+    item_id = snapsetId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType4VolumeSetSnapshotGetById", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{appsetId}/snapsets/{snapsetId}")
 def DeviceType4SnapsetsGetById(systemId: str, appsetId: str, snapsetId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{appsetId}/snapsets/{snapsetId}
     """
-    return MOCK_DB.get("DeviceType4SnapsetsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{appsetId}/snapsets"
+    item_id = snapsetId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4SnapsetsGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{appsetId}/un-export")
 def DeviceType4VolumeSetUnexport(systemId: str, appsetId: str, payload: Devicetype4volumesetunexportRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4VolumeSetUnexport", dict())
+    return db.get_static("DeviceType4VolumeSetUnexport", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{appsetId}/volumes")
 def DeviceType4VolumeSetVolumesList(systemId: str, appsetId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{appsetId}/volumes
     """
-    return MOCK_DB.get("DeviceType4VolumeSetVolumesList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{appsetId}/volumes"
+    static_data = db.get_static("DeviceType4VolumeSetVolumesList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.delete("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}")
 def DeviceType4VolumeSetsDeleteById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}
     """
-    return MOCK_DB.get("DeviceType4VolumeSetsDeleteById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType4VolumeSetsDeleteById", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}")
 def DeviceType4VolumeSetsGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}
     """
-    return MOCK_DB.get("DeviceType4VolumeSetsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4VolumeSetsGetById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}")
 def DeviceType4VolumeSetsEditById(systemId: str, id: str, payload: Devicetype4volumesetseditbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}
     """
-    return MOCK_DB.get("DeviceType4VolumeSetsEditById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/capacity-statistics")
 def DeviceType4VolumeSetCapacityStatisticsGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/capacity-statistics
     """
-    return MOCK_DB.get("DeviceType4VolumeSetCapacityStatisticsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/capacity-statistics"
+    static_data = db.get_static("DeviceType4VolumeSetCapacityStatisticsGetById", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/performance")
 def DeviceType4GetAppSetVolumesPerformanceHistory(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/performance
     """
-    return MOCK_DB.get("DeviceType4GetAppSetVolumesPerformanceHistory", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/performance"
+    static_data = db.get_static("DeviceType4GetAppSetVolumesPerformanceHistory", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/protection-policies")
 def DeviceType4GetProtectionPolicies(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/protection-policies
     """
-    return MOCK_DB.get("DeviceType4GetProtectionPolicies", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/protection-policies"
+    static_data = db.get_static("DeviceType4GetProtectionPolicies", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/protection-policies")
 def DeviceType4CreateProtectionPolicy(systemId: str, id: str, payload: Devicetype4createprotectionpolicyRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/protection-policies
     """
-    return MOCK_DB.get("DeviceType4CreateProtectionPolicy", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/protection-policies"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/protection-policies")
 def DeviceType4EditProtectionPolicies(systemId: str, id: str, payload: Devicetype4editprotectionpoliciesRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/protection-policies
     """
-    return MOCK_DB.get("DeviceType4EditProtectionPolicies", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/protection-policies"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/protection-policies/fix")
 def DeviceType4FixProtectionPolicy(systemId: str, id: str, payload: Devicetype4fixprotectionpolicyRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/protection-policies/fix
     """
-    return MOCK_DB.get("DeviceType4FixProtectionPolicy", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/protection-policies/fix"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/protection-policies/remove")
 def DeviceType4removeProtectionPolicies(systemId: str, id: str, payload: Devicetype4removeprotectionpoliciesRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4removeProtectionPolicies", dict())
+    return db.get_static("DeviceType4removeProtectionPolicies", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/proximity-settings")
 def DeviceType4GetProximitySettings(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/proximity-settings
     """
-    return MOCK_DB.get("DeviceType4GetProximitySettings", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/proximity-settings"
+    static_data = db.get_static("DeviceType4GetProximitySettings", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/proximity-settings")
 def DeviceType4EditProximitySettings(systemId: str, id: str, payload: Devicetype4editproximitysettingsRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/proximity-settings
     """
-    return MOCK_DB.get("DeviceType4EditProximitySettings", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/proximity-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/remote-protection/actions")
 def DeviceType4actionOnVolumeSets(systemId: str, id: str, payload: Devicetype4actiononvolumesetsRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/remote-protection/actions
     """
-    return MOCK_DB.get("DeviceType4actionOnVolumeSets", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/remote-protection/actions"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/snapsets")
 def DeviceType4VolumeSetSnapshotsList(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/snapsets
     """
-    return MOCK_DB.get("DeviceType4VolumeSetSnapshotsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/snapsets"
+    static_data = db.get_static("DeviceType4VolumeSetSnapshotsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/snapsets")
 def DeviceType4VolumeSetsSnapshotCreate(systemId: str, id: str, payload: Devicetype4volumesetssnapshotcreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/snapsets
     """
-    return MOCK_DB.get("DeviceType4VolumeSetsSnapshotCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/snapsets"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/supported-protection")
 def DeviceType4getSupportedProtectionTypes(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/supported-protection
     """
-    return MOCK_DB.get("DeviceType4getSupportedProtectionTypes", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/applicationsets/{id}/supported-protection"
+    static_data = db.get_static("DeviceType4getSupportedProtectionTypes", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/capacity-forecast")
 def DeviceType4SystemCapacityForecastGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/capacity-forecast
     """
-    return MOCK_DB.get("DeviceType4SystemCapacityForecastGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/capacity-forecast"
+    static_data = db.get_static("DeviceType4SystemCapacityForecastGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/capacity-history")
 def DeviceType4SystemCapacityHistoryGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/capacity-history
     """
-    return MOCK_DB.get("DeviceType4SystemCapacityHistoryGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/capacity-history"
+    static_data = db.get_static("DeviceType4SystemCapacityHistoryGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/capacity-summary")
 def DeviceType4SystemCapacitySummaryGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/capacity-summary
     """
-    return MOCK_DB.get("DeviceType4SystemCapacitySummaryGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/capacity-summary"
+    static_data = db.get_static("DeviceType4SystemCapacitySummaryGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/capacity-timeuntilfull")
 def DeviceType4SystemCapacityTimeUntilFull(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/capacity-timeuntilfull
     """
-    return MOCK_DB.get("DeviceType4SystemCapacityTimeUntilFull", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/capacity-timeuntilfull"
+    static_data = db.get_static("DeviceType4SystemCapacityTimeUntilFull", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/certificates")
 def DeviceType4CertificatesList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/certificates
     """
-    return MOCK_DB.get("DeviceType4CertificatesList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/certificates"
+    static_data = db.get_static("DeviceType4CertificatesList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/certificates")
 def DeviceType4PostCertificate(systemId: str, payload: Devicetype4postcertificateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/certificates
     """
-    return MOCK_DB.get("DeviceType4PostCertificate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/certificates"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/certificates/{id}")
 def DeviceType4CertificatesGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/certificates/{id}
     """
-    return MOCK_DB.get("DeviceType4CertificatesGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/certificates"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4CertificatesGetById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/certificates/{id}")
 def DeviceType4PutCertificate(systemId: str, id: str, payload: Devicetype4putcertificateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/certificates/{id}
     """
-    return MOCK_DB.get("DeviceType4PutCertificate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/certificates"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/certificates/remove")
 def DeviceType4RemoveCertificates(systemId: str, payload: Devicetype4removecertificatesRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4RemoveCertificates", dict())
+    return db.get_static("DeviceType4RemoveCertificates", dict())
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/collect-support-data")
 def DeviceType4SupportDataCollect(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/collect-support-data
     """
-    return MOCK_DB.get("DeviceType4SupportDataCollect", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/collect-support-data"
+    payload_dict = {}
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/component-performance-statistics")
 def DeviceType4SystemComponentPerformanceStatisticsGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/component-performance-statistics
     """
-    return MOCK_DB.get("DeviceType4SystemComponentPerformanceStatisticsGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/component-performance-statistics"
+    static_data = db.get_static("DeviceType4SystemComponentPerformanceStatisticsGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/enclosure-cards")
 def DeviceType4EnclosureCardList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/enclosure-cards
     """
-    return MOCK_DB.get("DeviceType4EnclosureCardList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosure-cards"
+    static_data = db.get_static("DeviceType4EnclosureCardList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/enclosure-connectors")
 def DeviceType4EnclosureConnectorsList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/enclosure-connectors
     """
-    return MOCK_DB.get("DeviceType4EnclosureConnectorsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosure-connectors"
+    static_data = db.get_static("DeviceType4EnclosureConnectorsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/enclosures")
 def DeviceType4EnclosuresList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/enclosures
     """
-    return MOCK_DB.get("DeviceType4EnclosuresList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures"
+    static_data = db.get_static("DeviceType4EnclosuresList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{cageId}/disks")
 def DeviceType4DisksList(systemId: str, cageId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/enclosures/{cageId}/disks
     """
-    return MOCK_DB.get("DeviceType4DisksList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures/{cageId}/disks"
+    static_data = db.get_static("DeviceType4DisksList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{cageId}/disks/{id}")
 def DeviceType4DisksGetById(systemId: str, cageId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/enclosures/{cageId}/disks/{id}
     """
-    return MOCK_DB.get("DeviceType4DisksGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures/{cageId}/disks"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4DisksGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-card-ports")
 def DeviceType4EnclosureCardPortsList(systemId: str, enclosureId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-card-ports
     """
-    return MOCK_DB.get("DeviceType4EnclosureCardPortsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-card-ports"
+    static_data = db.get_static("DeviceType4EnclosureCardPortsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-card-ports/{id}")
 def DeviceType4EnclosureCardPortsGetById(systemId: str, enclosureId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-card-ports/{id}
     """
-    return MOCK_DB.get("DeviceType4EnclosureCardPortsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-card-ports"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4EnclosureCardPortsGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-cards")
 def DeviceType4EnclosureCardsList(systemId: str, enclosureId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-cards
     """
-    return MOCK_DB.get("DeviceType4EnclosureCardsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-cards"
+    static_data = db.get_static("DeviceType4EnclosureCardsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-cards/{id}")
 def DeviceType4EnclosureCardsGetById(systemId: str, enclosureId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-cards/{id}
     """
-    return MOCK_DB.get("DeviceType4EnclosureCardsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-cards"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4EnclosureCardsGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-cards/{id}")
 def DeviceType4EnclosureCardsLocateIOById(systemId: str, enclosureId: str, id: str, payload: Devicetype4enclosurecardslocateiobyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-cards/{id}
     """
-    return MOCK_DB.get("DeviceType4EnclosureCardsLocateIOById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-cards"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-connectors")
 def DeviceType4EnclosureConnectorList(systemId: str, enclosureId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-connectors
     """
-    return MOCK_DB.get("DeviceType4EnclosureConnectorList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-connectors"
+    static_data = db.get_static("DeviceType4EnclosureConnectorList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-connectors/{enclosureConnectorId}")
 def DeviceType4EnclosureConnectorsGetById(systemId: str, enclosureId: str, enclosureConnectorId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-connectors/{enclosureConnectorId}
     """
-    return MOCK_DB.get("DeviceType4EnclosureConnectorsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-connectors"
+    item_id = enclosureConnectorId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4EnclosureConnectorsGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-disks")
 def DeviceType4EnclosureDisksList(systemId: str, enclosureId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-disks
     """
-    return MOCK_DB.get("DeviceType4EnclosureDisksList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-disks"
+    static_data = db.get_static("DeviceType4EnclosureDisksList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-disks/{id}")
 def DeviceType4EnclosureDisksGetById(systemId: str, enclosureId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-disks/{id}
     """
-    return MOCK_DB.get("DeviceType4EnclosureDisksGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-disks"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4EnclosureDisksGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-powers")
 def DeviceType4EnclosurePowersList(systemId: str, enclosureId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-powers
     """
-    return MOCK_DB.get("DeviceType4EnclosurePowersList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-powers"
+    static_data = db.get_static("DeviceType4EnclosurePowersList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-powers/{id}")
 def DeviceType4EnclosurePowersGetById(systemId: str, enclosureId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-powers/{id}
     """
-    return MOCK_DB.get("DeviceType4EnclosurePowersGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-powers"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4EnclosurePowersGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-sleds")
 def DeviceType4EnclosureSledsList(systemId: str, enclosureId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-sleds
     """
-    return MOCK_DB.get("DeviceType4EnclosureSledsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-sleds"
+    static_data = db.get_static("DeviceType4EnclosureSledsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-sleds/{id}")
 def DeviceType4EnclosureSledsGetById(systemId: str, enclosureId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-sleds/{id}
     """
-    return MOCK_DB.get("DeviceType4EnclosureSledsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-sleds"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4EnclosureSledsGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-sleds/{id}")
 def DeviceType4EnclosureSledsLocateDriveById(systemId: str, enclosureId: str, id: str, payload: Devicetype4enclosuresledslocatedrivebyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-sleds/{id}
     """
-    return MOCK_DB.get("DeviceType4EnclosureSledsLocateDriveById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures/{enclosureId}/enclosure-sleds"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{id}")
 def DeviceType4EnclosuresGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/enclosures/{id}
     """
-    return MOCK_DB.get("DeviceType4EnclosuresGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4EnclosuresGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{id}")
 def DeviceType4EnclosuresLocateById(systemId: str, id: str, payload: Devicetype4enclosureslocatebyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/enclosures/{id}
     """
-    return MOCK_DB.get("DeviceType4EnclosuresLocateById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/enclosures/{id}")
 def DeviceType4EnclosuresEditById(systemId: str, id: str, payload: Devicetype4enclosureseditbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/enclosures/{id}
     """
-    return MOCK_DB.get("DeviceType4EnclosuresEditById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/enclosures"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/encryption/backup")
 def DeviceType4backupActionOnEncryption(systemId: str, payload: Devicetype4backupactiononencryptionRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/encryption/backup
     """
-    return MOCK_DB.get("DeviceType4backupActionOnEncryption", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/encryption/backup"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/encryption/checkekm")
 def DeviceType4checkEKMConfiguration(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/encryption/checkekm
     """
-    return MOCK_DB.get("DeviceType4checkEKMConfiguration", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/encryption/checkekm"
+    payload_dict = {}
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/encryption/enable")
 def DeviceType4enableActionOnEncryption(systemId: str, payload: Devicetype4enableactiononencryptionRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/encryption/enable
     """
-    return MOCK_DB.get("DeviceType4enableActionOnEncryption", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/encryption/enable"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/encryption/rekey")
 def DeviceType4rekeyActionOnEncryption(systemId: str, payload: Devicetype4rekeyactiononencryptionRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/encryption/rekey
     """
-    return MOCK_DB.get("DeviceType4rekeyActionOnEncryption", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/encryption/rekey"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/encryption/restore")
 def DeviceType4restoreActionOnEncryption(systemId: str, payload: Devicetype4restoreactiononencryptionRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4restoreActionOnEncryption", dict())
+    return db.get_static("DeviceType4restoreActionOnEncryption", dict())
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/encryption/setekm")
 def DeviceType4setEKMConfiguration(systemId: str, payload: Devicetype4setekmconfigurationRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/encryption/setekm
     """
-    return MOCK_DB.get("DeviceType4setEKMConfiguration", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/encryption/setekm"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/encryption/setekm/backup")
 def DeviceType4setekmbackupActionOnEncryption(systemId: str, payload: Devicetype4setekmbackupactiononencryptionRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/encryption/setekm/backup
     """
-    return MOCK_DB.get("DeviceType4setekmbackupActionOnEncryption", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/encryption/setekm/backup"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/file-shares")
 def DeviceType4FileSharesList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/file-shares
     """
-    return MOCK_DB.get("DeviceType4FileSharesList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/file-shares"
+    static_data = db.get_static("DeviceType4FileSharesList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/file-shares")
 def DeviceType4FileshareCreate(systemId: str, payload: Devicetype4filesharecreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/file-shares
     """
-    return MOCK_DB.get("DeviceType4FileshareCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/file-shares"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type4/{systemId}/file-shares/{fileShareId}")
 def DeviceType4FileShareDeleteById(systemId: str, fileShareId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type4/{systemId}/file-shares/{fileShareId}
     """
-    return MOCK_DB.get("DeviceType4FileShareDeleteById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/file-shares"
+    item_id = fileShareId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType4FileShareDeleteById", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/file-shares/{fileShareId}")
 def DeviceType4FileShareGetById(systemId: str, fileShareId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/file-shares/{fileShareId}
     """
-    return MOCK_DB.get("DeviceType4FileShareGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/file-shares"
+    item_id = fileShareId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4FileShareGetById", dict())
+    return static_val
 
 @app.patch("/api/v1/storage-systems/device-type4/{systemId}/file-shares/{fileShareId}")
 def DeviceType4FileshareUpdate(systemId: str, fileShareId: str, payload: Devicetype4fileshareupdateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PATCH /api/v1/storage-systems/device-type4/{systemId}/file-shares/{fileShareId}
     """
-    return MOCK_DB.get("DeviceType4FileshareUpdate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/file-shares"
+    item_id = fileShareId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/filesystems")
 def DeviceType4FilesystemsList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/filesystems
     """
-    return MOCK_DB.get("DeviceType4FilesystemsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/filesystems"
+    static_data = db.get_static("DeviceType4FilesystemsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.delete("/api/v1/storage-systems/device-type4/{systemId}/filesystems/{filesystemId}")
 def FilesystemsDelete(systemId: str, filesystemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type4/{systemId}/filesystems/{filesystemId}
     """
-    return MOCK_DB.get("FilesystemsDelete", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/filesystems"
+    item_id = filesystemId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("FilesystemsDelete", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/filesystems/{filesystemId}")
 def DeviceType4FilesystemGetById(systemId: str, filesystemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/filesystems/{filesystemId}
     """
-    return MOCK_DB.get("DeviceType4FilesystemGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/filesystems"
+    item_id = filesystemId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4FilesystemGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/filesystems/{filesystemId}/capacity-history")
 def DeviceType4FilesystemCapacityHistory(systemId: str, filesystemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/filesystems/{filesystemId}/capacity-history
     """
-    return MOCK_DB.get("DeviceType4FilesystemCapacityHistory", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/filesystems/{filesystemId}/capacity-history"
+    static_data = db.get_static("DeviceType4FilesystemCapacityHistory", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/filesystems/{filesystemId}/performance-history")
 def DeviceType4FilesystemPerformanceHistory(systemId: str, filesystemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/filesystems/{filesystemId}/performance-history
     """
-    return MOCK_DB.get("DeviceType4FilesystemPerformanceHistory", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/filesystems/{filesystemId}/performance-history"
+    static_data = db.get_static("DeviceType4FilesystemPerformanceHistory", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/host-paths")
 def DeviceType4GetAllHostPaths(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/host-paths
     """
-    return MOCK_DB.get("DeviceType4GetAllHostPaths", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/host-paths"
+    static_data = db.get_static("DeviceType4GetAllHostPaths", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/host-paths/{hostPathId}")
 def DeviceType4GetHostPathsById(systemId: str, hostPathId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/host-paths/{hostPathId}
     """
-    return MOCK_DB.get("DeviceType4GetHostPathsById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/host-paths"
+    item_id = hostPathId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4GetHostPathsById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/host-sets")
 def DeviceType4GetAllHostSets(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/host-sets
     """
-    return MOCK_DB.get("DeviceType4GetAllHostSets", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/host-sets"
+    static_data = db.get_static("DeviceType4GetAllHostSets", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/host-sets/{hostSetId}")
 def DeviceType4GetHostSetsById(systemId: str, hostSetId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/host-sets/{hostSetId}
     """
-    return MOCK_DB.get("DeviceType4GetHostSetsById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/host-sets"
+    item_id = hostSetId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4GetHostSetsById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/hosts")
 def DeviceType4GetAllHosts(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/hosts
     """
-    return MOCK_DB.get("DeviceType4GetAllHosts", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/hosts"
+    static_data = db.get_static("DeviceType4GetAllHosts", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/hosts/{hostId}")
 def DeviceType4GetHostById(systemId: str, hostId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/hosts/{hostId}
     """
-    return MOCK_DB.get("DeviceType4GetHostById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/hosts"
+    item_id = hostId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4GetHostById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/insights/headroom-contribution")
 def DeviceType4GetHeadroomContribution(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/insights/headroom-contribution
     """
-    return MOCK_DB.get("DeviceType4GetHeadroomContribution", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/insights/headroom-contribution"
+    static_data = db.get_static("DeviceType4GetHeadroomContribution", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/insights/hotspots")
 def DeviceType4GetHotspots(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/insights/hotspots
     """
-    return MOCK_DB.get("DeviceType4GetHotspots", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/insights/hotspots"
+    static_data = db.get_static("DeviceType4GetHotspots", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/insights/latencyfactors")
 def Device4LatencyFactorsGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/insights/latencyfactors
     """
-    return MOCK_DB.get("Device4LatencyFactorsGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/insights/latencyfactors"
+    static_data = db.get_static("Device4LatencyFactorsGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/insights/resource-contention")
 def DeviceType4GetResourceContentionData(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/insights/resource-contention
     """
-    return MOCK_DB.get("DeviceType4GetResourceContentionData", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/insights/resource-contention"
+    static_data = db.get_static("DeviceType4GetResourceContentionData", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/inventory-history")
 def DeviceType4GetAllInventoryHistory(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/inventory-history
     """
-    return MOCK_DB.get("DeviceType4GetAllInventoryHistory", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/inventory-history"
+    static_data = db.get_static("DeviceType4GetAllInventoryHistory", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/inventory-history/{inventoryUpdateId}")
 def DeviceType4GetInventoryUpdateById(systemId: str, inventoryUpdateId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/inventory-history/{inventoryUpdateId}
     """
-    return MOCK_DB.get("DeviceType4GetInventoryUpdateById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/inventory-history"
+    item_id = inventoryUpdateId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4GetInventoryUpdateById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/licenses")
 def DeviceType4LicensesGetById(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/licenses
     """
-    return MOCK_DB.get("DeviceType4LicensesGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/licenses"
+    static_data = db.get_static("DeviceType4LicensesGetById", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/licenses")
 def DeviceType4SetLicense(systemId: str, payload: Devicetype4setlicenseRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/licenses
     """
-    return MOCK_DB.get("DeviceType4SetLicense", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/licenses"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type4/{systemId}/mail-settings")
 def DeviceType4MailSettingsDelete(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type4/{systemId}/mail-settings
     """
-    return MOCK_DB.get("DeviceType4MailSettingsDelete", dict())
+    return db.get_static("DeviceType4MailSettingsDelete", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/mail-settings")
 def DeviceType4MailSettingsGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/mail-settings
     """
-    return MOCK_DB.get("DeviceType4MailSettingsGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/mail-settings"
+    static_data = db.get_static("DeviceType4MailSettingsGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/mail-settings")
 def DeviceType4MailSettingsAssociate(systemId: str, payload: Devicetype4mailsettingsassociateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/mail-settings
     """
-    return MOCK_DB.get("DeviceType4MailSettingsAssociate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/mail-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/mail-settings")
 def DeviceType4MailSettingsUpdate(systemId: str, payload: Devicetype4mailsettingsupdateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/mail-settings
     """
-    return MOCK_DB.get("DeviceType4MailSettingsUpdate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/mail-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/network-services/cim")
 def DeviceType4NetworkServiceCimGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/network-services/cim
     """
-    return MOCK_DB.get("DeviceType4NetworkServiceCimGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/network-services/cim"
+    static_data = db.get_static("DeviceType4NetworkServiceCimGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/network-services/cim")
 def DeviceType4NetworkServiceCimUpdate(systemId: str, payload: Devicetype4networkservicecimupdateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/network-services/cim
     """
-    return MOCK_DB.get("DeviceType4NetworkServiceCimUpdate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/network-services/cim"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-mgr")
 def DeviceType4NetworkServiceSnmpMgrList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-mgr
     """
-    return MOCK_DB.get("DeviceType4NetworkServiceSnmpMgrList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-mgr"
+    static_data = db.get_static("DeviceType4NetworkServiceSnmpMgrList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-mgr")
 def DeviceType4NetworkServiceSnmpMgrCreate(systemId: str, payload: Devicetype4networkservicesnmpmgrcreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-mgr
     """
-    return MOCK_DB.get("DeviceType4NetworkServiceSnmpMgrCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-mgr"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-mgr/{id}")
 def DeviceType4NetworkServiceSnmpMgrDelete(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-mgr/{id}
     """
-    return MOCK_DB.get("DeviceType4NetworkServiceSnmpMgrDelete", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-mgr"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType4NetworkServiceSnmpMgrDelete", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-mgr/{id}")
 def DeviceType4NetworkServiceSnmpMgrGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-mgr/{id}
     """
-    return MOCK_DB.get("DeviceType4NetworkServiceSnmpMgrGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-mgr"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4NetworkServiceSnmpMgrGetById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-mgr/{id}")
 def DeviceType4NetworkServiceSnmpMgrUpdate(systemId: str, id: str, payload: Devicetype4networkservicesnmpmgrupdateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-mgr/{id}
     """
-    return MOCK_DB.get("DeviceType4NetworkServiceSnmpMgrUpdate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-mgr"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-users")
 def DeviceType4SnmpUsersList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-users
     """
-    return MOCK_DB.get("DeviceType4SnmpUsersList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-users"
+    static_data = db.get_static("DeviceType4SnmpUsersList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-users/{id}")
 def DeviceType4SnmpUsersGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-users/{id}
     """
-    return MOCK_DB.get("DeviceType4SnmpUsersGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/network-services/snmp-users"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4SnmpUsersGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/network-services/vasa")
 def DeviceType4NetworkServiceVasaGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/network-services/vasa
     """
-    return MOCK_DB.get("DeviceType4NetworkServiceVasaGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/network-services/vasa"
+    static_data = db.get_static("DeviceType4NetworkServiceVasaGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/network-services/vasa/{vasaId}")
 def DeviceType4NetworkServiceVasaConfigure(systemId: str, vasaId: str, payload: Devicetype4networkservicevasaconfigureRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/network-services/vasa/{vasaId}
     """
-    return MOCK_DB.get("DeviceType4NetworkServiceVasaConfigure", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/network-services/vasa"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/network-services/vasa/{vasaId}/services")
 def DeviceType4NetworkServiceConfigureVasaService(systemId: str, vasaId: str, payload: Devicetype4networkserviceconfigurevasaserviceRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/network-services/vasa/{vasaId}/services
     """
-    return MOCK_DB.get("DeviceType4NetworkServiceConfigureVasaService", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/network-services/vasa/{vasaId}/services"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/network-settings")
 def DeviceType4NetworkSettingsGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/network-settings
     """
-    return MOCK_DB.get("DeviceType4NetworkSettingsGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/network-settings"
+    static_data = db.get_static("DeviceType4NetworkSettingsGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/network-settings")
 def DeviceType4NetworkSettingsAssociate(systemId: str, payload: Devicetype4networksettingsassociateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/network-settings
     """
-    return MOCK_DB.get("DeviceType4NetworkSettingsAssociate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/network-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/network-settings/vasaprovider")
 def DeviceType4VasaProviderAddressConfigure(systemId: str, payload: Devicetype4vasaprovideraddressconfigureRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/network-settings/vasaprovider
     """
-    return MOCK_DB.get("DeviceType4VasaProviderAddressConfigure", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/network-settings/vasaprovider"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/network-settings/vasaprovider/clear")
 def DeviceType4VasaProviderAddressClear(systemId: str, payload: Devicetype4vasaprovideraddressclearRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4VasaProviderAddressClear", dict())
+    return db.get_static("DeviceType4VasaProviderAddressClear", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/nodes")
 def DeviceType4NodesList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/nodes
     """
-    return MOCK_DB.get("DeviceType4NodesList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/nodes"
+    static_data = db.get_static("DeviceType4NodesList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/nodes/{id}")
 def DeviceType4NodesGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/nodes/{id}
     """
-    return MOCK_DB.get("DeviceType4NodesGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/nodes"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4NodesGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/nodes/{id}")
 def DeviceType4NodesLocateById(systemId: str, id: str, payload: Devicetype4nodeslocatebyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/nodes/{id}
     """
-    return MOCK_DB.get("DeviceType4NodesLocateById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/nodes"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/nodes/{nodeId}/component-performance-statistics")
 def DeviceType4NodeComponentPerformanceStatisticsGet(systemId: str, nodeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/nodes/{nodeId}/component-performance-statistics
     """
-    return MOCK_DB.get("DeviceType4NodeComponentPerformanceStatisticsGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/nodes/{nodeId}/component-performance-statistics"
+    static_data = db.get_static("DeviceType4NodeComponentPerformanceStatisticsGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/nodes/{nodeId}/service-ports")
 def DeviceType4NodeServicePortsGetById(systemId: str, nodeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/nodes/{nodeId}/service-ports
     """
-    return MOCK_DB.get("DeviceType4NodeServicePortsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/nodes/{nodeId}/service-ports"
+    static_data = db.get_static("DeviceType4NodeServicePortsGetById", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/nodes/service-ports")
 def DeviceType4NodeServicePortsList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/nodes/service-ports
     """
-    return MOCK_DB.get("DeviceType4NodeServicePortsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/nodes/service-ports"
+    static_data = db.get_static("DeviceType4NodeServicePortsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/performance-history")
 def DeviceType4SystemPerformanceHistoryGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/performance-history
     """
-    return MOCK_DB.get("DeviceType4SystemPerformanceHistoryGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/performance-history"
+    static_data = db.get_static("DeviceType4SystemPerformanceHistoryGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/performance-statistics")
 def DeviceType4GetSystemPerformanceStatistics(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/performance-statistics
     """
-    return MOCK_DB.get("DeviceType4GetSystemPerformanceStatistics", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/performance-statistics"
+    static_data = db.get_static("DeviceType4GetSystemPerformanceStatistics", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/physicaldrives-performance")
 def DeviceType4PhysicalDrivePerformanceHistoryGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/physicaldrives-performance
     """
-    return MOCK_DB.get("DeviceType4PhysicalDrivePerformanceHistoryGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/physicaldrives-performance"
+    static_data = db.get_static("DeviceType4PhysicalDrivePerformanceHistoryGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/ports")
 def DeviceType4PortsList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/ports
     """
-    return MOCK_DB.get("DeviceType4PortsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/ports"
+    static_data = db.get_static("DeviceType4PortsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/ports-performance")
 def DeviceType4PortsPerformanceHistoryGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/ports-performance
     """
-    return MOCK_DB.get("DeviceType4PortsPerformanceHistoryGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/ports-performance"
+    static_data = db.get_static("DeviceType4PortsPerformanceHistoryGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/ports/{id}")
 def DeviceType4PortsGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/ports/{id}
     """
-    return MOCK_DB.get("DeviceType4PortsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/ports"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4PortsGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/ports/{id}")
 def DeviceType4PortEnable(systemId: str, id: str, payload: Devicetype4portenableRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/ports/{id}
     """
-    return MOCK_DB.get("DeviceType4PortEnable", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/ports"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/ports/{id}/clear")
 def DeviceType4PortsClear(systemId: str, id: str, payload: Devicetype4portsclearRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4PortsClear", dict())
+    return db.get_static("DeviceType4PortsClear", dict())
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/ports/{id}/edit-file")
 def DeviceType4FilePortEdit(systemId: str, id: str, payload: Devicetype4fileporteditRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/ports/{id}/edit-file
     """
-    return MOCK_DB.get("DeviceType4FilePortEdit", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/ports/{id}/edit-file"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/ports/{id}/edit-iscsi")
 def DeviceType4IscsiPortEdit(systemId: str, id: str, payload: Devicetype4iscsiporteditRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/ports/{id}/edit-iscsi
     """
-    return MOCK_DB.get("DeviceType4IscsiPortEdit", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/ports/{id}/edit-iscsi"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/ports/{id}/edit-nvme")
 def DeviceType4NVMePortEdit(systemId: str, id: str, payload: Devicetype4nvmeporteditRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/ports/{id}/edit-nvme
     """
-    return MOCK_DB.get("DeviceType4NVMePortEdit", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/ports/{id}/edit-nvme"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/ports/{id}/edit-rcip")
 def DeviceType4RcipPortEdit(systemId: str, id: str, payload: Devicetype4rcipporteditRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/ports/{id}/edit-rcip
     """
-    return MOCK_DB.get("DeviceType4RcipPortEdit", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/ports/{id}/edit-rcip"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/ports/{id}/fc")
 def DeviceType4FcPortEdit(systemId: str, id: str, payload: Devicetype4fcporteditRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/ports/{id}/fc
     """
-    return MOCK_DB.get("DeviceType4FcPortEdit", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/ports/{id}/fc"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/ports/{id}/initialize")
 def DeviceType4initialisePorts(systemId: str, id: str):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4initialisePorts", dict())
+    return db.get_static("DeviceType4initialisePorts", dict())
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/ports/{id}/ping-file")
 def DeviceType4FilePortPing(systemId: str, id: str, payload: Devicetype4fileportpingRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4FilePortPing", dict())
+    return db.get_static("DeviceType4FilePortPing", dict())
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/ports/{id}/ping-iscsi")
 def DeviceType4IscsiPortPing(systemId: str, id: str, payload: Devicetype4iscsiportpingRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4IscsiPortPing", dict())
+    return db.get_static("DeviceType4IscsiPortPing", dict())
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/ports/{id}/ping-nvme")
 def DeviceType4NVMePortPing(systemId: str, id: str, payload: Devicetype4nvmeportpingRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4NVMePortPing", dict())
+    return db.get_static("DeviceType4NVMePortPing", dict())
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/ports/{id}/ping-rcip")
 def DeviceType4RcipPortPing(systemId: str, id: str, payload: Devicetype4rcipportpingRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4RcipPortPing", dict())
+    return db.get_static("DeviceType4RcipPortPing", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/remotecopylinks-performance")
 def DeviceType4RemoteCopyLinksPerformanceHistoryGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/remotecopylinks-performance
     """
-    return MOCK_DB.get("DeviceType4RemoteCopyLinksPerformanceHistoryGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/remotecopylinks-performance"
+    static_data = db.get_static("DeviceType4RemoteCopyLinksPerformanceHistoryGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/share-settings")
 def DeviceType4ShareSettingsList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/share-settings
     """
-    return MOCK_DB.get("DeviceType4ShareSettingsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/share-settings"
+    static_data = db.get_static("DeviceType4ShareSettingsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/share-settings/{sharesettingsId}")
 def DeviceType4ShareSettingsGetById(systemId: str, sharesettingsId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/share-settings/{sharesettingsId}
     """
-    return MOCK_DB.get("DeviceType4ShareSettingsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/share-settings"
+    item_id = sharesettingsId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4ShareSettingsGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/snapshots/{childSnapshotId}/restore-options")
 def DeviceType4GetSnapshotRestoreOptions(systemId: str, childSnapshotId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/snapshots/{childSnapshotId}/restore-options
     """
-    return MOCK_DB.get("DeviceType4GetSnapshotRestoreOptions", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/snapshots/{childSnapshotId}/restore-options"
+    static_data = db.get_static("DeviceType4GetSnapshotRestoreOptions", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/snapshots/{parentSnapshotId}/snapshots/{childSnapshotId}/restore")
 def DeviceType4RestoreSnapshotOfSnapshot(systemId: str, parentSnapshotId: str, childSnapshotId: str, payload: Devicetype4restoresnapshotofsnapshotRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4RestoreSnapshotOfSnapshot", dict())
+    return db.get_static("DeviceType4RestoreSnapshotOfSnapshot", dict())
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/snapshots/{snapshotId}/clone")
 def DeviceType4SnapshotCloneCreate(systemId: str, snapshotId: str, payload: Devicetype4snapshotclonecreateRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4SnapshotCloneCreate", dict())
+    return db.get_static("DeviceType4SnapshotCloneCreate", dict())
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/snapshots/{snapshotId}/export")
 def DeviceType4VlunExportForSnapshot(systemId: str, snapshotId: str, payload: Devicetype4vlunexportforsnapshotRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4VlunExportForSnapshot", dict())
+    return db.get_static("DeviceType4VlunExportForSnapshot", dict())
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/snapshots/{snapshotId}/snapshots")
 def DeviceType4SnapshotOfSnapshotCreate(systemId: str, snapshotId: str, payload: Devicetype4snapshotofsnapshotcreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/snapshots/{snapshotId}/snapshots
     """
-    return MOCK_DB.get("DeviceType4SnapshotOfSnapshotCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/snapshots/{snapshotId}/snapshots"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/snapshots/{snapshotId}/un-export")
 def DeviceType4VlunUnexportForSnapshot(systemId: str, snapshotId: str, payload: Devicetype4vlununexportforsnapshotRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4VlunUnexportForSnapshot", dict())
+    return db.get_static("DeviceType4VlunUnexportForSnapshot", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/snapshots/{snapshotId}/vluns")
 def DeviceType4GetSnapshotVlunsList(systemId: str, snapshotId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/snapshots/{snapshotId}/vluns
     """
-    return MOCK_DB.get("DeviceType4GetSnapshotVlunsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/snapshots/{snapshotId}/vluns"
+    static_data = db.get_static("DeviceType4GetSnapshotVlunsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/snapshots/{snapshotId}/vluns/{id}")
 def DeviceType4GetsnapshotVlunsById(systemId: str, snapshotId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/snapshots/{snapshotId}/vluns/{id}
     """
-    return MOCK_DB.get("DeviceType4GetsnapshotVlunsById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/snapshots/{snapshotId}/vluns"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4GetsnapshotVlunsById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/storage-pools")
 def DeviceType4StoragePoolList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/storage-pools
     """
-    return MOCK_DB.get("DeviceType4StoragePoolList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/storage-pools"
+    static_data = db.get_static("DeviceType4StoragePoolList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/storage-pools/{id}")
 def DeviceType4StoragePoolGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/storage-pools/{id}
     """
-    return MOCK_DB.get("DeviceType4StoragePoolGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/storage-pools"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4StoragePoolGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/storage-pools/{id}/volumes")
 def DeviceType4StoragePoolVolumeGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/storage-pools/{id}/volumes
     """
-    return MOCK_DB.get("DeviceType4StoragePoolVolumeGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/storage-pools/{id}/volumes"
+    static_data = db.get_static("DeviceType4StoragePoolVolumeGetById", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/support-settings")
 def DeviceType4SupportSettingsGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/support-settings
     """
-    return MOCK_DB.get("DeviceType4SupportSettingsGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/support-settings"
+    static_data = db.get_static("DeviceType4SupportSettingsGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/support-settings")
 def DeviceType4SupportSettingsAssociate(systemId: str, payload: Devicetype4supportsettingsassociateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/support-settings
     """
-    return MOCK_DB.get("DeviceType4SupportSettingsAssociate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/support-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/support-settings")
 def DeviceType4SupportSettingsUpdate(systemId: str, payload: Devicetype4supportsettingsupdateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/support-settings
     """
-    return MOCK_DB.get("DeviceType4SupportSettingsUpdate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/support-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/sustainabilityMetrics")
 def DeviceType4EnclosurePowersSustainability(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/sustainabilityMetrics
     """
-    return MOCK_DB.get("DeviceType4EnclosurePowersSustainability", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/sustainabilityMetrics"
+    static_data = db.get_static("DeviceType4EnclosurePowersSustainability", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/switch-ports")
 def DeviceType4SwitchPortsList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/switch-ports
     """
-    return MOCK_DB.get("DeviceType4SwitchPortsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/switch-ports"
+    static_data = db.get_static("DeviceType4SwitchPortsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/switches")
 def DeviceType4SwitchesList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/switches
     """
-    return MOCK_DB.get("DeviceType4SwitchesList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/switches"
+    static_data = db.get_static("DeviceType4SwitchesList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/switches/{id}")
 def DeviceType4SwitchesGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/switches/{id}
     """
-    return MOCK_DB.get("DeviceType4SwitchesGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/switches"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4SwitchesGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/switches/{id}")
 def DeviceType4SwitchLocateById(systemId: str, id: str, payload: Devicetype4switchlocatebyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/switches/{id}
     """
-    return MOCK_DB.get("DeviceType4SwitchLocateById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/switches"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/switches/{switchId}/switch-fans")
 def DeviceType4SwitchFanList(systemId: str, switchId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/switches/{switchId}/switch-fans
     """
-    return MOCK_DB.get("DeviceType4SwitchFanList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/switches/{switchId}/switch-fans"
+    static_data = db.get_static("DeviceType4SwitchFanList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/switches/{switchId}/switch-fans/{id}")
 def DeviceType4SwitchFanGetById(systemId: str, switchId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/switches/{switchId}/switch-fans/{id}
     """
-    return MOCK_DB.get("DeviceType4SwitchFanGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/switches/{switchId}/switch-fans"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4SwitchFanGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/switches/{switchId}/switch-ports")
 def DeviceType4SwitchPortList(systemId: str, switchId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/switches/{switchId}/switch-ports
     """
-    return MOCK_DB.get("DeviceType4SwitchPortList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/switches/{switchId}/switch-ports"
+    static_data = db.get_static("DeviceType4SwitchPortList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/switches/{switchId}/switch-ports/{id}")
 def DeviceType4SwitchPortGetById(systemId: str, switchId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/switches/{switchId}/switch-ports/{id}
     """
-    return MOCK_DB.get("DeviceType4SwitchPortGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/switches/{switchId}/switch-ports"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4SwitchPortGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/switches/{switchId}/switch-ps")
 def DeviceType4SwitchPSList(systemId: str, switchId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/switches/{switchId}/switch-ps
     """
-    return MOCK_DB.get("DeviceType4SwitchPSList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/switches/{switchId}/switch-ps"
+    static_data = db.get_static("DeviceType4SwitchPSList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/switches/{switchId}/switch-ps/{id}")
 def DeviceType4SwitchPSGetById(systemId: str, switchId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/switches/{switchId}/switch-ps/{id}
     """
-    return MOCK_DB.get("DeviceType4SwitchPSGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/switches/{switchId}/switch-ps"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4SwitchPSGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/system-settings")
 def DeviceType4SystemSettingsList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/system-settings
     """
-    return MOCK_DB.get("DeviceType4SystemSettingsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/system-settings"
+    static_data = db.get_static("DeviceType4SystemSettingsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/system-settings")
 def DeviceType4SystemSettingsAssociate(systemId: str, payload: Devicetype4systemsettingsassociateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/system-settings
     """
-    return MOCK_DB.get("DeviceType4SystemSettingsAssociate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/system-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/system-settings")
 def DeviceType4SystemSettingsUpdate(systemId: str, payload: Devicetype4systemsettingsupdateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/system-settings
     """
-    return MOCK_DB.get("DeviceType4SystemSettingsUpdate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/system-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/system-settings/management-services/vvol")
 def DeviceType4vVolGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/system-settings/management-services/vvol
     """
-    return MOCK_DB.get("DeviceType4vVolGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/system-settings/management-services/vvol"
+    static_data = db.get_static("DeviceType4vVolGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/system-settings/management-services/vvolscs")
 def DeviceType4StorageContainerGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/system-settings/management-services/vvolscs
     """
-    return MOCK_DB.get("DeviceType4StorageContainerGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/system-settings/management-services/vvolscs"
+    static_data = db.get_static("DeviceType4StorageContainerGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/system-settings/management-services/vvolscs")
 def DeviceType4CreatevVolSC(systemId: str, payload: Devicetype4createvvolscRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/system-settings/management-services/vvolscs
     """
-    return MOCK_DB.get("DeviceType4CreatevVolSC", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/system-settings/management-services/vvolscs"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type4/{systemId}/system-settings/management-services/vvolscs/{vvolscId}")
 def DeviceType4StorageContainerDeleteById(systemId: str, vvolscId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type4/{systemId}/system-settings/management-services/vvolscs/{vvolscId}
     """
-    return MOCK_DB.get("DeviceType4StorageContainerDeleteById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/system-settings/management-services/vvolscs"
+    item_id = vvolscId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType4StorageContainerDeleteById", dict())
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/system-settings/management-services/vvolscs/{vvolscId}")
 def DeviceType4StorageContainerEditById(systemId: str, vvolscId: str, payload: Devicetype4storagecontainereditbyidRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/system-settings/management-services/vvolscs/{vvolscId}
     """
-    return MOCK_DB.get("DeviceType4StorageContainerEditById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/system-settings/management-services/vvolscs"
+    item_id = vvolscId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/system-settings/management-services/vvolscs/{vvolscId}/attach")
 def DeviceType4AttachVolSC(systemId: str, vvolscId: str, payload: Devicetype4attachvolscRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4AttachVolSC", dict())
+    return db.get_static("DeviceType4AttachVolSC", dict())
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/system-settings/management-services/vvolscs/{vvolscId}/detach")
 def DeviceType4DetachVolSC(systemId: str, vvolscId: str, payload: Devicetype4detachvolscRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4DetachVolSC", dict())
+    return db.get_static("DeviceType4DetachVolSC", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/system-settings/quorum-witness")
 def DeviceType4GetQuorumWitness(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/system-settings/quorum-witness
     """
-    return MOCK_DB.get("DeviceType4GetQuorumWitness", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/system-settings/quorum-witness"
+    static_data = db.get_static("DeviceType4GetQuorumWitness", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/system-settings/quorum-witness")
 def DeviceType4PostQuorumWitness(systemId: str, payload: Devicetype4postquorumwitnessRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/system-settings/quorum-witness
     """
-    return MOCK_DB.get("DeviceType4PostQuorumWitness", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/system-settings/quorum-witness"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type4/{systemId}/system-settings/quorum-witness/{replicationPartnerId}")
 def DeviceType4DeleteQuorumWitness(systemId: str, replicationPartnerId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type4/{systemId}/system-settings/quorum-witness/{replicationPartnerId}
     """
-    return MOCK_DB.get("DeviceType4DeleteQuorumWitness", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/system-settings/quorum-witness"
+    item_id = replicationPartnerId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType4DeleteQuorumWitness", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/system-settings/quorum-witness/{replicationPartnerId}")
 def DeviceType4GetQuorumWitnessWithId(systemId: str, replicationPartnerId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/system-settings/quorum-witness/{replicationPartnerId}
     """
-    return MOCK_DB.get("DeviceType4GetQuorumWitnessWithId", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/system-settings/quorum-witness"
+    item_id = replicationPartnerId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4GetQuorumWitnessWithId", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/system-settings/quorum-witness/{replicationPartnerId}")
 def DeviceType4PutQuorumWitness(systemId: str, replicationPartnerId: str, payload: Devicetype4putquorumwitnessRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/system-settings/quorum-witness/{replicationPartnerId}
     """
-    return MOCK_DB.get("DeviceType4PutQuorumWitness", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/system-settings/quorum-witness"
+    item_id = replicationPartnerId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/system-settings/replication-partners")
 def DeviceType4GetReplicationPartners(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/system-settings/replication-partners
     """
-    return MOCK_DB.get("DeviceType4GetReplicationPartners", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/system-settings/replication-partners"
+    static_data = db.get_static("DeviceType4GetReplicationPartners", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/system-settings/replication-partners")
 def DeviceType4PostReplicationPartners(systemId: str, payload: Devicetype4postreplicationpartnersRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/system-settings/replication-partners
     """
-    return MOCK_DB.get("DeviceType4PostReplicationPartners", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/system-settings/replication-partners"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/system-settings/replication-partners/{replicationPartnerId}")
 def DeviceType4GetReplicationPartnerWithId(systemId: str, replicationPartnerId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/system-settings/replication-partners/{replicationPartnerId}
     """
-    return MOCK_DB.get("DeviceType4GetReplicationPartnerWithId", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/system-settings/replication-partners"
+    item_id = replicationPartnerId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4GetReplicationPartnerWithId", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/system-settings/replication-partners/{replicationPartnerId}")
 def DeviceType4PutReplicationPartner(systemId: str, replicationPartnerId: str, payload: Devicetype4putreplicationpartnerRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/system-settings/replication-partners/{replicationPartnerId}
     """
-    return MOCK_DB.get("DeviceType4PutReplicationPartner", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/system-settings/replication-partners"
+    item_id = replicationPartnerId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/system-settings/replication-partners/remove")
 def DeviceType4PostRemoveReplicationPartners(systemId: str, payload: Devicetype4postremovereplicationpartnersRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4PostRemoveReplicationPartners", dict())
+    return db.get_static("DeviceType4PostRemoveReplicationPartners", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/telemetry")
 def DeviceType4TelemetryGet(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/telemetry
     """
-    return MOCK_DB.get("DeviceType4TelemetryGet", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/telemetry"
+    static_data = db.get_static("DeviceType4TelemetryGet", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/trust-certificates")
 def DeviceType4TrustedCertificatesList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/trust-certificates
     """
-    return MOCK_DB.get("DeviceType4TrustedCertificatesList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/trust-certificates"
+    static_data = db.get_static("DeviceType4TrustedCertificatesList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/trust-certificates")
 def DeviceType4AddTrustedCertificates(systemId: str, payload: Devicetype4addtrustedcertificatesRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/trust-certificates
     """
-    return MOCK_DB.get("DeviceType4AddTrustedCertificates", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/trust-certificates"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/trust-certificates/{id}")
 def DeviceType4TrustedCertificatesGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/trust-certificates/{id}
     """
-    return MOCK_DB.get("DeviceType4TrustedCertificatesGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/trust-certificates"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4TrustedCertificatesGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/trust-certificates/remove")
 def DeviceType4RemoveTrustedCertificates(systemId: str, payload: Devicetype4removetrustedcertificatesRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4RemoveTrustedCertificates", dict())
+    return db.get_static("DeviceType4RemoveTrustedCertificates", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/vm-manager-settings")
 def DeviceType4VMManagerSettingsList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/vm-manager-settings
     """
-    return MOCK_DB.get("DeviceType4VMManagerSettingsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/vm-manager-settings"
+    static_data = db.get_static("DeviceType4VMManagerSettingsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/vm-manager-settings")
 def DeviceType4PostVCenterSettings(systemId: str, payload: Devicetype4postvcentersettingsRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/vm-manager-settings
     """
-    return MOCK_DB.get("DeviceType4PostVCenterSettings", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/vm-manager-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type4/{systemId}/vm-manager-settings/{vcenterSettingId}")
 def DeviceType4DeleteVCenterSettings(systemId: str, vcenterSettingId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type4/{systemId}/vm-manager-settings/{vcenterSettingId}
     """
-    return MOCK_DB.get("DeviceType4DeleteVCenterSettings", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/vm-manager-settings"
+    item_id = vcenterSettingId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType4DeleteVCenterSettings", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/vm-manager-settings/{vcenterSettingId}")
 def DeviceType4VMManagerSettingsGetById(systemId: str, vcenterSettingId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/vm-manager-settings/{vcenterSettingId}
     """
-    return MOCK_DB.get("DeviceType4VMManagerSettingsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/vm-manager-settings"
+    item_id = vcenterSettingId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4VMManagerSettingsGetById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/vm-manager-settings/{vcenterSettingId}")
 def DeviceType4PutVCenterSettings(systemId: str, vcenterSettingId: str, payload: Devicetype4putvcentersettingsRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/vm-manager-settings/{vcenterSettingId}
     """
-    return MOCK_DB.get("DeviceType4PutVCenterSettings", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/vm-manager-settings"
+    item_id = vcenterSettingId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/vme-manager-settings")
 def DeviceType4VMEManagerSettingsList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/vme-manager-settings
     """
-    return MOCK_DB.get("DeviceType4VMEManagerSettingsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/vme-manager-settings"
+    static_data = db.get_static("DeviceType4VMEManagerSettingsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/vme-manager-settings")
 def DeviceType4PostVMESettings(systemId: str, payload: Devicetype4postvmesettingsRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/vme-manager-settings
     """
-    return MOCK_DB.get("DeviceType4PostVMESettings", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/vme-manager-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type4/{systemId}/vme-manager-settings/{vmeSettingId}")
 def DeviceType4DeleteVMESettings(systemId: str, vmeSettingId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type4/{systemId}/vme-manager-settings/{vmeSettingId}
     """
-    return MOCK_DB.get("DeviceType4DeleteVMESettings", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/vme-manager-settings"
+    item_id = vmeSettingId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType4DeleteVMESettings", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/vme-manager-settings/{vmeSettingId}")
 def DeviceType4VMEManagerSettingsGetById(systemId: str, vmeSettingId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/vme-manager-settings/{vmeSettingId}
     """
-    return MOCK_DB.get("DeviceType4VMEManagerSettingsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/vme-manager-settings"
+    item_id = vmeSettingId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4VMEManagerSettingsGetById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/vme-manager-settings/{vmeSettingId}")
 def DeviceType4PutVMESettings(systemId: str, vmeSettingId: str, payload: Devicetype4putvmesettingsRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/vme-manager-settings/{vmeSettingId}
     """
-    return MOCK_DB.get("DeviceType4PutVMESettings", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/vme-manager-settings"
+    item_id = vmeSettingId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/volumes")
 def DeviceType4VolumesList(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/volumes
     """
-    return MOCK_DB.get("DeviceType4VolumesList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes"
+    static_data = db.get_static("DeviceType4VolumesList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/volumes")
 def DeviceType4VolumeCreate(systemId: str, payload: Devicetype4volumecreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/volumes
     """
-    return MOCK_DB.get("DeviceType4VolumeCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/volumes-performance")
 def DeviceType4GetVolumesPerformanceHistory(systemId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/volumes-performance
     """
-    return MOCK_DB.get("DeviceType4GetVolumesPerformanceHistory", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes-performance"
+    static_data = db.get_static("DeviceType4GetVolumesPerformanceHistory", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.delete("/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}")
 def DeviceType4VolumeDelete(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type4/{systemId}/volumes/{id}
     """
-    return MOCK_DB.get("DeviceType4VolumeDelete", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType4VolumeDelete", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}")
 def DeviceType4VolumeGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/volumes/{id}
     """
-    return MOCK_DB.get("DeviceType4VolumeGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4VolumeGetById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}")
 def DeviceType4VolumeEdit(systemId: str, id: str, payload: Devicetype4volumeeditRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/volumes/{id}
     """
-    return MOCK_DB.get("DeviceType4VolumeEdit", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/capacity-history")
 def DeviceType4VolumeCapacityHistoryGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/capacity-history
     """
-    return MOCK_DB.get("DeviceType4VolumeCapacityHistoryGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/capacity-history"
+    static_data = db.get_static("DeviceType4VolumeCapacityHistoryGetById", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/clone")
 def DeviceType4VolumeCloneCreate(systemId: str, id: str, payload: Devicetype4volumeclonecreateRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4VolumeCloneCreate", dict())
+    return db.get_static("DeviceType4VolumeCloneCreate", dict())
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/export")
 def DeviceType4VlunExport(systemId: str, id: str, payload: Devicetype4vlunexportRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4VlunExport", dict())
+    return db.get_static("DeviceType4VlunExport", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/performance-histogram")
 def DeviceType4GetPerformanceHistogram(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/performance-histogram
     """
-    return MOCK_DB.get("DeviceType4GetPerformanceHistogram", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/performance-histogram"
+    static_data = db.get_static("DeviceType4GetPerformanceHistogram", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/performance-history")
 def DeviceType4VolumePerformanceHistoryGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/performance-history
     """
-    return MOCK_DB.get("DeviceType4VolumePerformanceHistoryGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/performance-history"
+    static_data = db.get_static("DeviceType4VolumePerformanceHistoryGetById", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/performance-statistics")
 def DeviceType4VolumePerformanceStatisticsGetById(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/performance-statistics
     """
-    return MOCK_DB.get("DeviceType4VolumePerformanceStatisticsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/performance-statistics"
+    static_data = db.get_static("DeviceType4VolumePerformanceStatisticsGetById", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/snapshots")
 def DeviceType4VolumeSnapshotsList(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/snapshots
     """
-    return MOCK_DB.get("DeviceType4VolumeSnapshotsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/snapshots"
+    static_data = db.get_static("DeviceType4VolumeSnapshotsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/snapshots")
 def DeviceType4VolumeSnapshotCreate(systemId: str, id: str, payload: Devicetype4volumesnapshotcreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/snapshots
     """
-    return MOCK_DB.get("DeviceType4VolumeSnapshotCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/snapshots"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/un-export")
 def DeviceType4VlunUnexport(systemId: str, id: str, payload: Devicetype4vlununexportRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4VlunUnexport", dict())
+    return db.get_static("DeviceType4VlunUnexport", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/vluns")
 def DeviceType4VlunsList(systemId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/vluns
     """
-    return MOCK_DB.get("DeviceType4VlunsList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{id}/vluns"
+    static_data = db.get_static("DeviceType4VlunsList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/clones")
 def DeviceType4GetClones(systemId: str, volumeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/clones
     """
-    return MOCK_DB.get("DeviceType4GetClones", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/clones"
+    static_data = db.get_static("DeviceType4GetClones", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/clones/{cloneId}")
 def DeviceType4EditCloneVolume(systemId: str, volumeId: str, cloneId: str, payload: Devicetype4editclonevolumeRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/clones/{cloneId}
     """
-    return MOCK_DB.get("DeviceType4EditCloneVolume", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/clones"
+    item_id = cloneId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/clones/{cloneId}/promote")
 def DeviceType4PromoteCloneVolume(systemId: str, volumeId: str, cloneId: str, payload: Devicetype4promoteclonevolumeRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4PromoteCloneVolume", dict())
+    return db.get_static("DeviceType4PromoteCloneVolume", dict())
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/clones/{cloneId}/resync")
 def DeviceType4ResyncCloneVolume(systemId: str, volumeId: str, cloneId: str, payload: Devicetype4resyncclonevolumeRequest):
-    """
-    Auto-generated Route
-    Original Doc: Unknown
-    """
-    return MOCK_DB.get("DeviceType4ResyncCloneVolume", dict())
+    return db.get_static("DeviceType4ResyncCloneVolume", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/insights/latency-annotations")
 def DeviceType4GetVolumeLatencyAnnotations(systemId: str, volumeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/insights/latency-annotations
     """
-    return MOCK_DB.get("DeviceType4GetVolumeLatencyAnnotations", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/insights/latency-annotations"
+    static_data = db.get_static("DeviceType4GetVolumeLatencyAnnotations", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/insights/performance-drifts")
 def DeviceType4GetPerformanceDrifts(systemId: str, volumeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/insights/performance-drifts
     """
-    return MOCK_DB.get("DeviceType4GetPerformanceDrifts", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/insights/performance-drifts"
+    static_data = db.get_static("DeviceType4GetPerformanceDrifts", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/schedules")
 def DeviceType4VolumeSnapshotSchedulesList(systemId: str, volumeId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/schedules
     """
-    return MOCK_DB.get("DeviceType4VolumeSnapshotSchedulesList", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/schedules"
+    static_data = db.get_static("DeviceType4VolumeSnapshotSchedulesList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/schedules")
 def DeviceType4VolumeSnapshotScheduleCreate(systemId: str, volumeId: str, payload: Devicetype4volumesnapshotschedulecreateRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/schedules
     """
-    return MOCK_DB.get("DeviceType4VolumeSnapshotScheduleCreate", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/schedules"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/schedules/{scheduleId}")
 def DeviceType4VolumeSnapshotScheduleDelete(systemId: str, volumeId: str, scheduleId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/schedules/{scheduleId}
     """
-    return MOCK_DB.get("DeviceType4VolumeSnapshotScheduleDelete", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/schedules"
+    item_id = scheduleId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType4VolumeSnapshotScheduleDelete", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/schedules/{scheduleId}")
 def DeviceType4VolumeSnapshotScheduleGetById(systemId: str, volumeId: str, scheduleId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/schedules/{scheduleId}
     """
-    return MOCK_DB.get("DeviceType4VolumeSnapshotScheduleGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/schedules"
+    item_id = scheduleId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4VolumeSnapshotScheduleGetById", dict())
+    return static_val
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/schedules/{scheduleId}")
 def arcusEditVolumeSnapshotSchedule(systemId: str, volumeId: str, scheduleId: str, payload: ArcuseditvolumesnapshotscheduleRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/schedules/{scheduleId}
     """
-    return MOCK_DB.get("arcusEditVolumeSnapshotSchedule", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/schedules"
+    item_id = scheduleId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}")
 def DeviceType4VolumeSnapshotGetById(systemId: str, volumeId: str, snapshotId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}
     """
-    return MOCK_DB.get("DeviceType4VolumeSnapshotGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/snapshots"
+    item_id = snapshotId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType4VolumeSnapshotGetById", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}")
 def DeviceType4SnapshotsGetById(systemId: str, volumeId: str, snapshotId: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}
     """
-    return MOCK_DB.get("DeviceType4SnapshotsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/snapshots"
+    item_id = snapshotId
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4SnapshotsGetById", dict())
+    return static_val
 
 @app.post("/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}")
 def DeviceType4PromoteSnapshot(systemId: str, volumeId: str, snapshotId: str, payload: Devicetype4promotesnapshotRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}
     """
-    return MOCK_DB.get("DeviceType4PromoteSnapshot", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/snapshots"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.put("/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}")
 def DeviceType4EditSnapshot(systemId: str, volumeId: str, snapshotId: str, payload: Devicetype4editsnapshotRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: PUT /api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/snapshots/{snapshotId}
     """
-    return MOCK_DB.get("DeviceType4EditSnapshot", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/snapshots"
+    item_id = snapshotId
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/vluns/{id}")
 def DeviceType4VlunsDelete(systemId: str, volumeId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: DELETE /api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/vluns/{id}
     """
-    return MOCK_DB.get("DeviceType4VlunsDelete", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/vluns"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("DeviceType4VlunsDelete", dict())
 
 @app.get("/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/vluns/{id}")
 def DeviceType4VlunsGetById(systemId: str, volumeId: str, id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/vluns/{id}
     """
-    return MOCK_DB.get("DeviceType4VlunsGetById", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/{systemId}/volumes/{volumeId}/vluns"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("DeviceType4VlunsGetById", dict())
+    return static_val
 
 @app.get("/api/v1/storage-systems/device-type4/systemInsights/insights")
 def DeviceType4Insights():
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/device-type4/systemInsights/insights
     """
-    return MOCK_DB.get("DeviceType4Insights", dict())
+    collection_path = f"/api/v1/storage-systems/device-type4/systemInsights/insights"
+    static_data = db.get_static("DeviceType4Insights", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/api/v1/storage-systems/provisioning-recommendations")
 def ProvisioningRecommendations(payload: ProvisioningrecommendationsRequest):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: POST /api/v1/storage-systems/provisioning-recommendations
     """
-    return MOCK_DB.get("ProvisioningRecommendations", dict())
+    collection_path = f"/api/v1/storage-systems/provisioning-recommendations"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/api/v1/storage-systems/storage-types")
 def GetDeviceType():
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/storage-systems/storage-types
     """
-    return MOCK_DB.get("GetDeviceType", dict())
+    collection_path = f"/api/v1/storage-systems/storage-types"
+    static_data = db.get_static("GetDeviceType", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/tasks")
 def ListTasks():
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/tasks
     """
-    return MOCK_DB.get("ListTasks", dict())
+    collection_path = f"/api/v1/tasks"
+    static_data = db.get_static("ListTasks", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/tasks/{id}")
 def GetTask(id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/tasks/{id}
     """
-    return MOCK_DB.get("GetTask", dict())
+    collection_path = f"/api/v1/tasks"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("GetTask", dict())
+    return static_val
 
 @app.get("/api/v1/volume-sets")
 def VolumesetList():
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/volume-sets
     """
-    return MOCK_DB.get("VolumesetList", dict())
+    collection_path = f"/api/v1/volume-sets"
+    static_data = db.get_static("VolumesetList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/volume-sets/{id}")
 def VolumesetGetById(id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/volume-sets/{id}
     """
-    return MOCK_DB.get("VolumesetGetById", dict())
+    collection_path = f"/api/v1/volume-sets"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("VolumesetGetById", dict())
+    return static_val
 
 @app.get("/api/v1/volume-sets/{id}/volumes")
 def VolumesetGetByvolumesetId(id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/volume-sets/{id}/volumes
     """
-    return MOCK_DB.get("VolumesetGetByvolumesetId", dict())
+    collection_path = f"/api/v1/volume-sets/{id}/volumes"
+    static_data = db.get_static("VolumesetGetByvolumesetId", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/volumes")
 def VolumesList():
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/volumes
     """
-    return MOCK_DB.get("VolumesList", dict())
+    collection_path = f"/api/v1/volumes"
+    static_data = db.get_static("VolumesList", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/api/v1/volumes/{id}")
 def VolumeGetById(id: str):
     """
-    Auto-generated Route
-    Original Doc: Unknown
+    Dynamic CRUD Route: GET /api/v1/volumes/{id}
     """
-    return MOCK_DB.get("VolumeGetById", dict())
+    collection_path = f"/api/v1/volumes"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("VolumeGetById", dict())
+    return static_val
+
+
+# --- CRUD Endpoints for Cloud Devices ---
+
+@app.get("/api/v1/devices")
+def get_cloud_devices():
+    """
+    CRUD Route: GET /api/v1/devices
+    """
+    collection_path = "/api/v1/devices"
+    return db.get_all(collection_path)
+
+@app.get("/api/v1/devices/{id}")
+def get_cloud_device_by_id(id: str):
+    """
+    CRUD Route: GET /api/v1/devices/{id}
+    """
+    from fastapi import HTTPException
+    collection_path = "/api/v1/devices"
+    store = db.get_collection(collection_path)
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    return store[id]
+
+@app.post("/api/v1/devices")
+def create_cloud_device(payload: dict):
+    """
+    CRUD Route: POST /api/v1/devices
+    """
+    collection_path = "/api/v1/devices"
+    
+    item_id = payload.get("id") or payload.get("serial_number") or str(uuid.uuid4())
+    payload["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload)
+    return payload
+
+@app.put("/api/v1/devices/{id}")
+def update_cloud_device(id: str, payload: dict):
+    """
+    CRUD Route: PUT /api/v1/devices/{id}
+    """
+    from fastapi import HTTPException
+    collection_path = "/api/v1/devices"
+    store = db.get_collection(collection_path)
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    existing = store[id]
+    payload_dict = {k: v for k, v in payload.items() if v is not None}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, id, existing)
+    return existing
+
+@app.delete("/api/v1/devices/{id}")
+def delete_cloud_device(id: str):
+    """
+    CRUD Route: DELETE /api/v1/devices/{id}
+    """
+    from fastapi import HTTPException
+    collection_path = "/api/v1/devices"
+    store = db.get_collection(collection_path)
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    deleted = db.delete_item(collection_path, id)
+    return {"message": "Deleted successfully", "id": id, "item": deleted}
+
+
+@app.post("/api/v1/devices/{id}/vms")
+def post_cloud_device_vms(id: str, payload: CloudVmCreateRequest):
+    """
+    Action Route: POST /api/v1/devices/{id}/vms
+    """
+    from fastapi import HTTPException
+    import uuid
+    device_path = "/api/v1/devices"
+    vm_path = "/api/v1/vms"
+    
+    device_store = MOCK_DB.get("dynamic_store", {}).get(device_path, {})
+    if id not in device_store:
+        raise HTTPException(status_code=404, detail="Device not found")
+        
+    device = dict(device_store[id])
+    
+    # Initialize resource allocation fields if they don't exist or are None
+    if device.get("active_vms") is None:
+        device["active_vms"] = 0
+    if device.get("allocated_vcpu") is None:
+        device["allocated_vcpu"] = 0
+    if device.get("allocated_ram_gb") is None:
+        device["allocated_ram_gb"] = 0
+        
+    device["active_vms"] += 1
+    device["allocated_vcpu"] += payload.vcpu
+    device["allocated_ram_gb"] += payload.ram_gb
+    MOCK_DB["dynamic_store"][device_path][id] = device
+    
+    # Create VM record
+    vm_id = str(uuid.uuid4())
+    vm = {
+        "id": vm_id,
+        "device_id": id,
+        "vm_name": payload.vm_name,
+        "vcpu": payload.vcpu,
+        "ram_gb": payload.ram_gb,
+        "status": "RUNNING"
+    }
+    
+    if vm_path not in MOCK_DB["dynamic_store"]:
+        MOCK_DB["dynamic_store"][vm_path] = {}
+        
+    MOCK_DB["dynamic_store"][vm_path][vm_id] = vm
+    return vm
+
+
+@app.delete("/api/v1/devices/{id}/vms/{vm_id}")
+def delete_cloud_device_vm(id: str, vm_id: str):
+    """
+    Action Route: DELETE /api/v1/devices/{id}/vms/{vm_id}
+    """
+    from fastapi import HTTPException
+    device_path = "/api/v1/devices"
+    vm_path = "/api/v1/vms"
+    
+    device_store = MOCK_DB.get("dynamic_store", {}).get(device_path, {})
+    if id not in device_store:
+        raise HTTPException(status_code=404, detail="Device not found")
+        
+    vm_store = MOCK_DB.get("dynamic_store", {}).get(vm_path, {})
+    if vm_id not in vm_store:
+        raise HTTPException(status_code=404, detail="VM not found")
+        
+    vm = vm_store[vm_id]
+    if vm.get("device_id") != id:
+        raise HTTPException(status_code=400, detail="VM does not belong to this cloud device")
+        
+    vcpu = vm.get("vcpu") or 0
+    ram_gb = vm.get("ram_gb") or 0
+    
+    device = dict(device_store[id])
+    if device.get("active_vms") is not None and device["active_vms"] > 0:
+        device["active_vms"] -= 1
+    if device.get("allocated_vcpu") is not None:
+        device["allocated_vcpu"] = max(0, device["allocated_vcpu"] - vcpu)
+    if device.get("allocated_ram_gb") is not None:
+        device["allocated_ram_gb"] = max(0, device["allocated_ram_gb"] - ram_gb)
+        
+    MOCK_DB["dynamic_store"][device_path][id] = device
+    MOCK_DB["dynamic_store"][vm_path].pop(vm_id)
+    return {"message": "VM terminated successfully", "vm_id": vm_id}
+
+
+@app.patch("/api/v1/devices/{id}")
+def patch_cloud_device(id: str, payload: dict):
+    """
+    CRUD Route: PATCH /api/v1/devices/{id}
+    """
+    from fastapi import HTTPException
+    collection_path = "/api/v1/devices"
+    store = db.get_collection(collection_path)
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    existing = dict(store[id])
+    payload_dict = {k: v for k, v in payload.items() if v is not None}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, id, existing)
+    return existing
+
+
+class CloudPowerRequest(BaseModel):
+    action: str
+
+
+@app.post("/api/v1/devices/{id}/power")
+def post_cloud_device_power(id: str, payload: CloudPowerRequest):
+    """
+    Action Route: POST /api/v1/devices/{id}/power
+    """
+    from fastapi import HTTPException
+    import datetime
+    collection_path = "/api/v1/devices"
+    store = db.get_collection(collection_path)
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+        
+    action_upper = payload.action.upper()
+    if action_upper not in ["ON", "OFF"]:
+        raise HTTPException(status_code=400, detail="Invalid action. Only 'ON' or 'OFF' are allowed.")
+        
+    device = dict(store[id])
+    device["power_state"] = action_upper
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(collection_path, id, device)
+    return device
+
+

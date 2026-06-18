@@ -15,7 +15,7 @@
     {"type": "openapi", "url": "http://network-agent:8006/openapi.json"}
   ],
   "modules": {
-    "protocols": ["snmp", "netconf", "rest", "mock"],
+    "protocols": ["snmp", "netconf", "rest", "mock", "mock_network"],
     "resource_types": ["switch", "router", "interface", "vlan", "bgp_session", "access_point"]
   }
 }

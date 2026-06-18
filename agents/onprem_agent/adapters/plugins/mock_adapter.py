@@ -4,7 +4,16 @@ class MockAdapter(BaseAdapter):
     # ── Dynamic Router ────────────────────────────────────────────────────────
     async def _dynamic_call(self, method: str, api_path: str, resource_id: str, payload: dict, base_url: str = "") -> dict | list | None:
         import httpx
+        from urllib.parse import urlparse
         try:
+            parsed = urlparse(api_path)
+            if "compute-ops-mgmt" in parsed.path:
+                api_path = f"http://127.0.0.1:8001{parsed.path}"
+            else:
+                api_path = f"http://127.0.0.1:8000{parsed.path}"
+            if parsed.query:
+                api_path += f"?{parsed.query}"
+
             url = f"{base_url}{api_path}".format(id=resource_id, systemId=resource_id, hostId=resource_id)
             async with httpx.AsyncClient() as client:
                 response = await client.request(method, url, json=payload, timeout=10.0)

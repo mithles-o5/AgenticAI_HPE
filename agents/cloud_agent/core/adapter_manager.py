@@ -18,7 +18,6 @@ from adapters.plugins.gcp_adapter import GCPCloudAdapter
 # Key: provider label as sent in TaskRequest.provider (lower-case)
 # Value: adapter class (instantiated lazily)
 REGISTRY: Dict[str, Type[BaseCloudAdapter]] = {
-    "mock":       MockCloudAdapter,
     "mock_cloud": MockCloudAdapter,
     "aws":        AWSCloudAdapter,
     "azure":      AzureCloudAdapter,

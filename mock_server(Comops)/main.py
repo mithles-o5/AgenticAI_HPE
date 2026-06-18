@@ -1,15 +1,14 @@
-from fastapi import FastAPI, Query
+import uuid
+from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import json
 import os
 from models import *
 
-mock_file = os.path.join(os.path.dirname(__file__), "mock_data.json")
-try:
-    with open(mock_file, "r", encoding="utf-8") as f:
-        MOCK_DB = json.load(f)
-except Exception:
-    MOCK_DB = {}
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from database import db
 
 app = FastAPI(title='Generated Mock Server', description='Generated automatically from API docs.')
 
@@ -21,1535 +20,3457 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+
 @app.get("/compute-ops-mgmt/v1beta2/appliances/{device_id}")
 def get_compute_ops_mgmt_v1beta2_appliances_device_id(device_id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/appliances/{device_id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_appliances_device_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/appliances"
+    item_id = device_id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta2_appliances_device_id", dict())
+    return static_val
 
 @app.delete("/compute-ops-mgmt/v1beta2/appliances/{device_id}")
 def delete_compute_ops_mgmt_v1beta2_appliances_device_id(device_id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: DELETE /compute-ops-mgmt/v1beta2/appliances/{device_id}
     """
-    return MOCK_DB.get("delete_compute_ops_mgmt_v1beta2_appliances_device_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/appliances"
+    item_id = device_id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("delete_compute_ops_mgmt_v1beta2_appliances_device_id", dict())
 
 @app.get("/compute-ops-mgmt/v1beta2/appliances/{device_id}/certificate")
 def get_compute_ops_mgmt_v1beta2_appliances_device_id_certificate(device_id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/appliances/{device_id}/certificate
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_appliances_device_id_certificate", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/appliances/{device_id}/certificate"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta2_appliances_device_id_certificate", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1/appliance-firmware-bundles")
 def get_compute_ops_mgmt_v1_appliance_firmware_bundles():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/appliance-firmware-bundles
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_appliance_firmware_bundles", dict())
+    collection_path = f"/compute-ops-mgmt/v1/appliance-firmware-bundles"
+    static_data = db.get_static("get_compute_ops_mgmt_v1_appliance_firmware_bundles", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1/appliance-firmware-bundles/{id}")
 def get_compute_ops_mgmt_v1_appliance_firmware_bundles_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/appliance-firmware-bundles/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_appliance_firmware_bundles_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1/appliance-firmware-bundles"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1_appliance_firmware_bundles_id", dict())
+    return static_val
 
 @app.get("/compute-ops-mgmt/v1beta1/appliance-firmware-bundles")
 def get_compute_ops_mgmt_v1beta1_appliance_firmware_bundles():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/appliance-firmware-bundles
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_appliance_firmware_bundles", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/appliance-firmware-bundles"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_appliance_firmware_bundles", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta1/appliance-firmware-bundles/{id}")
 def get_compute_ops_mgmt_v1beta1_appliance_firmware_bundles_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/appliance-firmware-bundles/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_appliance_firmware_bundles_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/appliance-firmware-bundles"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta1_appliance_firmware_bundles_id", dict())
+    return static_val
 
 @app.post("/compute-ops-mgmt/v1beta2/approval-policies")
 def post_compute_ops_mgmt_v1beta2_approval_policies(payload: PostComputeOpsMgmtV1beta2ApprovalPoliciesRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta2/approval-policies
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta2_approval_policies", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/approval-policies"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1beta2/approval-policies")
 def get_compute_ops_mgmt_v1beta2_approval_policies():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/approval-policies
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_approval_policies", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/approval-policies"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta2_approval_policies", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta2/approval-policies/{policy_id}")
 def get_compute_ops_mgmt_v1beta2_approval_policies_policy_id(policy_id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/approval-policies/{policy_id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_approval_policies_policy_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/approval-policies"
+    item_id = policy_id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta2_approval_policies_policy_id", dict())
+    return static_val
 
 @app.patch("/compute-ops-mgmt/v1beta2/approval-policies/{policy_id}")
 def patch_compute_ops_mgmt_v1beta2_approval_policies_policy_id(policy_id: str, payload: PatchComputeOpsMgmtV1beta2ApprovalPoliciesPolicyIdRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PATCH /compute-ops-mgmt/v1beta2/approval-policies/{policy_id}
     """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1beta2_approval_policies_policy_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/approval-policies"
+    item_id = policy_id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.delete("/compute-ops-mgmt/v1beta2/approval-policies/{policy_id}")
 def delete_compute_ops_mgmt_v1beta2_approval_policies_policy_id(policy_id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: DELETE /compute-ops-mgmt/v1beta2/approval-policies/{policy_id}
     """
-    return MOCK_DB.get("delete_compute_ops_mgmt_v1beta2_approval_policies_policy_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/approval-policies"
+    item_id = policy_id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("delete_compute_ops_mgmt_v1beta2_approval_policies_policy_id", dict())
 
 @app.get("/compute-ops-mgmt/v1beta2/approval-requests")
 def get_compute_ops_mgmt_v1beta2_approval_requests():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/approval-requests
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_approval_requests", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/approval-requests"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta2_approval_requests", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta2/approval-requests/{request_id}")
 def get_compute_ops_mgmt_v1beta2_approval_requests_request_id(request_id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/approval-requests/{request_id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_approval_requests_request_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/approval-requests"
+    item_id = request_id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta2_approval_requests_request_id", dict())
+    return static_val
 
 @app.patch("/compute-ops-mgmt/v1beta2/approval-requests/{request_id}")
 def patch_compute_ops_mgmt_v1beta2_approval_requests_request_id(request_id: str, payload: PatchComputeOpsMgmtV1beta2ApprovalRequestsRequestIdRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PATCH /compute-ops-mgmt/v1beta2/approval-requests/{request_id}
     """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1beta2_approval_requests_request_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/approval-requests"
+    item_id = request_id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.post("/compute-ops-mgmt/v1beta2/approval-requests/{request_id}/approve")
 def post_compute_ops_mgmt_v1beta2_approval_requests_request_id_approve(request_id: str, payload: PostComputeOpsMgmtV1beta2ApprovalRequestsRequestIdApproveRequest):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta2_approval_requests_request_id_approve", dict())
+    return db.get_static("post_compute_ops_mgmt_v1beta2_approval_requests_request_id_approve", dict())
 
 @app.get("/compute-ops-mgmt/v1/async-operations")
 def get_compute_ops_mgmt_v1_async_operations():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/async-operations
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_async_operations", dict())
+    collection_path = f"/compute-ops-mgmt/v1/async-operations"
+    static_data = db.get_static("get_compute_ops_mgmt_v1_async_operations", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1/async-operations/{id}")
 def get_compute_ops_mgmt_v1_async_operations_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/async-operations/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_async_operations_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1/async-operations"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1_async_operations_id", dict())
+    return static_val
 
 @app.get("/compute-ops-mgmt/v1beta1/async-operations")
 def get_compute_ops_mgmt_v1beta1_async_operations():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/async-operations
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_async_operations", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/async-operations"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_async_operations", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta1/async-operations/{id}")
 def get_compute_ops_mgmt_v1beta1_async_operations_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/async-operations/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_async_operations_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/async-operations"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta1_async_operations_id", dict())
+    return static_val
 
 @app.get("/compute-ops-mgmt/v1beta1/accounts/{id}")
 def get_compute_ops_mgmt_v1beta1_accounts_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/accounts/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_accounts_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/accounts"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta1_accounts_id", dict())
+    return static_val
 
 @app.get("/compute-ops-mgmt/v1beta1/accounts/{id}/tenants")
 def get_compute_ops_mgmt_v1beta1_accounts_id_tenants(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/accounts/{id}/tenants
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_accounts_id_tenants", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/accounts/{id}/tenants"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_accounts_id_tenants", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1beta1/activation-keys")
 def post_compute_ops_mgmt_v1beta1_activation_keys(payload: PostComputeOpsMgmtV1beta1ActivationKeysRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta1/activation-keys
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta1_activation_keys", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/activation-keys"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1beta1/activation-keys")
 def get_compute_ops_mgmt_v1beta1_activation_keys():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/activation-keys
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_activation_keys", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/activation-keys"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_activation_keys", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.delete("/compute-ops-mgmt/v1beta1/activation-keys/{activation_key}")
 def delete_compute_ops_mgmt_v1beta1_activation_keys_activation_key(activation_key: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: DELETE /compute-ops-mgmt/v1beta1/activation-keys/{activation_key}
     """
-    return MOCK_DB.get("delete_compute_ops_mgmt_v1beta1_activation_keys_activation_key", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/activation-keys"
+    item_id = activation_key
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("delete_compute_ops_mgmt_v1beta1_activation_keys_activation_key", dict())
 
 @app.post("/compute-ops-mgmt/v1beta1/activation-tokens")
 def post_compute_ops_mgmt_v1beta1_activation_tokens(payload: PostComputeOpsMgmtV1beta1ActivationTokensRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta1/activation-tokens
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta1_activation_tokens", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/activation-tokens"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1beta2/activities")
 def get_compute_ops_mgmt_v1beta2_activities():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/activities
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_activities", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/activities"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta2_activities", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1beta1/ahs-files")
 def post_compute_ops_mgmt_v1beta1_ahs_files(payload: PostComputeOpsMgmtV1beta1AhsFilesRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta1/ahs-files
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta1_ahs_files", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/ahs-files"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1beta1/ahs-files")
 def get_compute_ops_mgmt_v1beta1_ahs_files():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/ahs-files
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_ahs_files", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/ahs-files"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_ahs_files", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta1/ahs-files/{id}")
 def get_compute_ops_mgmt_v1beta1_ahs_files_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/ahs-files/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_ahs_files_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/ahs-files"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta1_ahs_files_id", dict())
+    return static_val
 
 @app.patch("/compute-ops-mgmt/v1beta1/ahs-files/{id}")
 def patch_compute_ops_mgmt_v1beta1_ahs_files_id(id: str, payload: PatchComputeOpsMgmtV1beta1AhsFilesIdRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PATCH /compute-ops-mgmt/v1beta1/ahs-files/{id}
     """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1beta1_ahs_files_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/ahs-files"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.post("/compute-ops-mgmt/v1beta1/ahs-files/{id}/parse")
 def post_compute_ops_mgmt_v1beta1_ahs_files_id_parse(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta1/ahs-files/{id}/parse
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta1_ahs_files_id_parse", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/ahs-files/{id}/parse"
+    payload_dict = {}
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1beta1/ahs-files/{id}/download")
 def get_compute_ops_mgmt_v1beta1_ahs_files_id_download(id: str):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_ahs_files_id_download", dict())
+    return db.get_static("get_compute_ops_mgmt_v1beta1_ahs_files_id_download", dict())
 
 @app.get("/compute-ops-mgmt/v1beta2/appliances")
 def get_compute_ops_mgmt_v1beta2_appliances():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/appliances
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_appliances", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/appliances"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta2_appliances", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta1/energy-over-time")
-def get_compute_ops_mgmt_v1beta1_energy_over_time(serverId: str = None):
+def get_compute_ops_mgmt_v1beta1_energy_over_time():
     """
-    Returns energy utilization. Returns standby energy if server is off.
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/energy-over-time
     """
-    if serverId:
-        server = find_server(serverId)
-        if server and server.get("powerState") == "Off":
-            return {"averagePowerWatts": 5.2}
-    return {
-        "averagePowerWatts": 205.5
-    }
+    collection_path = f"/compute-ops-mgmt/v1beta1/energy-over-time"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_energy_over_time", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta1/energy-by-entity")
-def get_compute_ops_mgmt_v1beta1_energy_by_entity(serverId: str = None):
+def get_compute_ops_mgmt_v1beta1_energy_by_entity():
     """
-    Returns energy consumption by server.
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/energy-by-entity
     """
-    if serverId:
-        server = find_server(serverId)
-        if server and server.get("powerState") == "Off":
-            return {"entityPowerWatts": 5.2}
-    return {
-        "entityPowerWatts": 205.5
-    }
+    collection_path = f"/compute-ops-mgmt/v1beta1/energy-by-entity"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_energy_by_entity", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta1/external-services")
 def get_compute_ops_mgmt_v1beta1_external_services():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/external-services
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_external_services", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/external-services"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_external_services", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1beta1/external-services")
 def post_compute_ops_mgmt_v1beta1_external_services(payload: PostComputeOpsMgmtV1beta1ExternalServicesRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta1/external-services
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta1_external_services", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/external-services"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1beta1/external-services/{id}")
 def get_compute_ops_mgmt_v1beta1_external_services_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/external-services/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_external_services_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/external-services"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta1_external_services_id", dict())
+    return static_val
 
 @app.delete("/compute-ops-mgmt/v1beta1/external-services/{id}")
 def delete_compute_ops_mgmt_v1beta1_external_services_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: DELETE /compute-ops-mgmt/v1beta1/external-services/{id}
     """
-    return MOCK_DB.get("delete_compute_ops_mgmt_v1beta1_external_services_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/external-services"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("delete_compute_ops_mgmt_v1beta1_external_services_id", dict())
 
 @app.patch("/compute-ops-mgmt/v1beta1/external-services/{id}")
 def patch_compute_ops_mgmt_v1beta1_external_services_id(id: str, payload: PatchComputeOpsMgmtV1beta1ExternalServicesIdRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PATCH /compute-ops-mgmt/v1beta1/external-services/{id}
     """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1beta1_external_services_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/external-services"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.post("/compute-ops-mgmt/v1beta1/external-services/{id}/test")
 def post_compute_ops_mgmt_v1beta1_external_services_id_test(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta1/external-services/{id}/test
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta1_external_services_id_test", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/external-services/{id}/test"
+    payload_dict = {}
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1beta1/filters")
 def get_compute_ops_mgmt_v1beta1_filters():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/filters
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_filters", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/filters"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_filters", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1beta1/filters")
 def post_compute_ops_mgmt_v1beta1_filters(payload: PostComputeOpsMgmtV1beta1FiltersRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta1/filters
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta1_filters", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/filters"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1beta1/filters/properties")
 def get_compute_ops_mgmt_v1beta1_filters_properties():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/filters/properties
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_filters_properties", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/filters/properties"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_filters_properties", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta1/filters/{id}")
 def get_compute_ops_mgmt_v1beta1_filters_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/filters/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_filters_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/filters"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta1_filters_id", dict())
+    return static_val
 
 @app.delete("/compute-ops-mgmt/v1beta1/filters/{id}")
 def delete_compute_ops_mgmt_v1beta1_filters_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: DELETE /compute-ops-mgmt/v1beta1/filters/{id}
     """
-    return MOCK_DB.get("delete_compute_ops_mgmt_v1beta1_filters_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/filters"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("delete_compute_ops_mgmt_v1beta1_filters_id", dict())
 
 @app.patch("/compute-ops-mgmt/v1beta1/filters/{id}")
 def patch_compute_ops_mgmt_v1beta1_filters_id(id: str, payload: PatchComputeOpsMgmtV1beta1FiltersIdRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PATCH /compute-ops-mgmt/v1beta1/filters/{id}
     """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1beta1_filters_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/filters"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.get("/compute-ops-mgmt/v1beta1/filters/{id}/matches")
 def get_compute_ops_mgmt_v1beta1_filters_id_matches(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/filters/{id}/matches
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_filters_id_matches", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/filters/{id}/matches"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_filters_id_matches", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1/firmware-bundles")
 def get_compute_ops_mgmt_v1_firmware_bundles():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/firmware-bundles
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_firmware_bundles", dict())
+    collection_path = f"/compute-ops-mgmt/v1/firmware-bundles"
+    static_data = db.get_static("get_compute_ops_mgmt_v1_firmware_bundles", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1/firmware-bundles/{id}")
 def get_compute_ops_mgmt_v1_firmware_bundles_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/firmware-bundles/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_firmware_bundles_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1/firmware-bundles"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1_firmware_bundles_id", dict())
+    return static_val
 
 @app.get("/compute-ops-mgmt/v1/firmware-bundles/{id}/bundle-details")
 def get_compute_ops_mgmt_v1_firmware_bundles_id_bundle_details(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/firmware-bundles/{id}/bundle-details
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_firmware_bundles_id_bundle_details", dict())
+    collection_path = f"/compute-ops-mgmt/v1/firmware-bundles/{id}/bundle-details"
+    static_data = db.get_static("get_compute_ops_mgmt_v1_firmware_bundles_id_bundle_details", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta2/firmware-bundles")
 def get_compute_ops_mgmt_v1beta2_firmware_bundles():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/firmware-bundles
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_firmware_bundles", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/firmware-bundles"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta2_firmware_bundles", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta2/firmware-bundles/{id}")
 def get_compute_ops_mgmt_v1beta2_firmware_bundles_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/firmware-bundles/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_firmware_bundles_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/firmware-bundles"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta2_firmware_bundles_id", dict())
+    return static_val
 
 @app.get("/compute-ops-mgmt/v1/groups")
 def get_compute_ops_mgmt_v1_groups():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/groups
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_groups", dict())
+    collection_path = f"/compute-ops-mgmt/v1/groups"
+    static_data = db.get_static("get_compute_ops_mgmt_v1_groups", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1/groups")
 def post_compute_ops_mgmt_v1_groups(payload: PostComputeOpsMgmtV1GroupsRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1/groups
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1_groups", dict())
+    collection_path = f"/compute-ops-mgmt/v1/groups"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
-@app.get("/compute-ops-mgmt/v1/groups/{group_id}")
-def get_compute_ops_mgmt_v1_groups_group_id(group_id: str):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_groups_group_id", dict())
+@app.get("/compute-ops-mgmt/v1/groups/{group-id}")
+def get_compute_ops_mgmt_v1_groups_group_id():
+    return db.get_static("get_compute_ops_mgmt_v1_groups_group_id", dict())
 
-@app.delete("/compute-ops-mgmt/v1/groups/{group_id}")
-def delete_compute_ops_mgmt_v1_groups_group_id(group_id: str):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("delete_compute_ops_mgmt_v1_groups_group_id", dict())
+@app.delete("/compute-ops-mgmt/v1/groups/{group-id}")
+def delete_compute_ops_mgmt_v1_groups_group_id():
+    return db.get_static("delete_compute_ops_mgmt_v1_groups_group_id", dict())
 
-@app.patch("/compute-ops-mgmt/v1/groups/{group_id}")
-def patch_compute_ops_mgmt_v1_groups_group_id(group_id: str, payload: PatchComputeOpsMgmtV1GroupsGroupIdRequest):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1_groups_group_id", dict())
+@app.patch("/compute-ops-mgmt/v1/groups/{group-id}")
+def patch_compute_ops_mgmt_v1_groups_group_id(payload: PatchComputeOpsMgmtV1GroupsGroupIdRequest):
+    return db.get_static("patch_compute_ops_mgmt_v1_groups_group_id", dict())
 
-@app.get("/compute-ops-mgmt/v1/groups/{group_id}/compliance")
-def get_compute_ops_mgmt_v1_groups_group_id_compliance(group_id: str):
+@app.get("/compute-ops-mgmt/v1/groups/{group-id}/compliance")
+def get_compute_ops_mgmt_v1_groups_group_id_compliance():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/groups/{group-id}/compliance
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_groups_group_id_compliance", dict())
+    collection_path = f"/compute-ops-mgmt/v1/groups/{{group-id}}/compliance"
+    static_data = db.get_static("get_compute_ops_mgmt_v1_groups_group_id_compliance", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
-@app.get("/compute-ops-mgmt/v1/groups/{group_id}/compliance/{compliance_id}")
-def get_compute_ops_mgmt_v1_groups_group_id_compliance_compliance_id(group_id: str, compliance_id: str):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_groups_group_id_compliance_compliance_id", dict())
+@app.get("/compute-ops-mgmt/v1/groups/{group-id}/compliance/{compliance-id}")
+def get_compute_ops_mgmt_v1_groups_group_id_compliance_compliance_id():
+    return db.get_static("get_compute_ops_mgmt_v1_groups_group_id_compliance_compliance_id", dict())
 
-@app.get("/compute-ops-mgmt/v1/groups/{group_id}/devices")
-def get_compute_ops_mgmt_v1_groups_group_id_devices(group_id: str):
+@app.get("/compute-ops-mgmt/v1/groups/{group-id}/devices")
+def get_compute_ops_mgmt_v1_groups_group_id_devices():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/groups/{group-id}/devices
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_groups_group_id_devices", dict())
+    collection_path = f"/compute-ops-mgmt/v1/groups/{{group-id}}/devices"
+    static_data = db.get_static("get_compute_ops_mgmt_v1_groups_group_id_devices", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta3/groups")
 def get_compute_ops_mgmt_v1beta3_groups():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta3/groups
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta3_groups", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta3/groups"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta3_groups", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1beta3/groups")
 def post_compute_ops_mgmt_v1beta3_groups(payload: PostComputeOpsMgmtV1beta3GroupsRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta3/groups
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta3_groups", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta3/groups"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
-@app.get("/compute-ops-mgmt/v1beta3/groups/{group_id}")
-def get_compute_ops_mgmt_v1beta3_groups_group_id(group_id: str):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta3_groups_group_id", dict())
+@app.get("/compute-ops-mgmt/v1beta3/groups/{group-id}")
+def get_compute_ops_mgmt_v1beta3_groups_group_id():
+    return db.get_static("get_compute_ops_mgmt_v1beta3_groups_group_id", dict())
 
-@app.delete("/compute-ops-mgmt/v1beta3/groups/{group_id}")
-def delete_compute_ops_mgmt_v1beta3_groups_group_id(group_id: str):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("delete_compute_ops_mgmt_v1beta3_groups_group_id", dict())
+@app.delete("/compute-ops-mgmt/v1beta3/groups/{group-id}")
+def delete_compute_ops_mgmt_v1beta3_groups_group_id():
+    return db.get_static("delete_compute_ops_mgmt_v1beta3_groups_group_id", dict())
 
-@app.patch("/compute-ops-mgmt/v1beta3/groups/{group_id}")
-def patch_compute_ops_mgmt_v1beta3_groups_group_id(group_id: str, payload: PatchComputeOpsMgmtV1beta3GroupsGroupIdRequest):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1beta3_groups_group_id", dict())
+@app.patch("/compute-ops-mgmt/v1beta3/groups/{group-id}")
+def patch_compute_ops_mgmt_v1beta3_groups_group_id(payload: PatchComputeOpsMgmtV1beta3GroupsGroupIdRequest):
+    return db.get_static("patch_compute_ops_mgmt_v1beta3_groups_group_id", dict())
 
-@app.get("/compute-ops-mgmt/v1beta3/groups/{group_id}/compliance")
-def get_compute_ops_mgmt_v1beta3_groups_group_id_compliance(group_id: str):
+@app.get("/compute-ops-mgmt/v1beta3/groups/{group-id}/compliance")
+def get_compute_ops_mgmt_v1beta3_groups_group_id_compliance():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta3/groups/{group-id}/compliance
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta3_groups_group_id_compliance", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta3/groups/{{group-id}}/compliance"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta3_groups_group_id_compliance", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
-@app.get("/compute-ops-mgmt/v1beta3/groups/{group_id}/compliance/{compliance_id}")
-def get_compute_ops_mgmt_v1beta3_groups_group_id_compliance_compliance_id(group_id: str, compliance_id: str):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta3_groups_group_id_compliance_compliance_id", dict())
+@app.get("/compute-ops-mgmt/v1beta3/groups/{group-id}/compliance/{compliance-id}")
+def get_compute_ops_mgmt_v1beta3_groups_group_id_compliance_compliance_id():
+    return db.get_static("get_compute_ops_mgmt_v1beta3_groups_group_id_compliance_compliance_id", dict())
 
-@app.get("/compute-ops-mgmt/v1beta3/groups/{group_id}/devices")
-def get_compute_ops_mgmt_v1beta3_groups_group_id_devices(group_id: str):
+@app.get("/compute-ops-mgmt/v1beta3/groups/{group-id}/devices")
+def get_compute_ops_mgmt_v1beta3_groups_group_id_devices():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta3/groups/{group-id}/devices
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta3_groups_group_id_devices", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta3/groups/{{group-id}}/devices"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta3_groups_group_id_devices", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops/v1beta2/groups")
 def get_compute_ops_v1beta2_groups():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops/v1beta2/groups
     """
-    return MOCK_DB.get("get_compute_ops_v1beta2_groups", dict())
+    collection_path = f"/compute-ops/v1beta2/groups"
+    static_data = db.get_static("get_compute_ops_v1beta2_groups", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops/v1beta2/groups")
 def post_compute_ops_v1beta2_groups(payload: PostComputeOpsV1beta2GroupsRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops/v1beta2/groups
     """
-    return MOCK_DB.get("post_compute_ops_v1beta2_groups", dict())
+    collection_path = f"/compute-ops/v1beta2/groups"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
-@app.get("/compute-ops/v1beta2/groups/{group_id}")
-def get_compute_ops_v1beta2_groups_group_id(group_id: str):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("get_compute_ops_v1beta2_groups_group_id", dict())
+@app.get("/compute-ops/v1beta2/groups/{group-id}")
+def get_compute_ops_v1beta2_groups_group_id():
+    return db.get_static("get_compute_ops_v1beta2_groups_group_id", dict())
 
-@app.delete("/compute-ops/v1beta2/groups/{group_id}")
-def delete_compute_ops_v1beta2_groups_group_id(group_id: str):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("delete_compute_ops_v1beta2_groups_group_id", dict())
+@app.delete("/compute-ops/v1beta2/groups/{group-id}")
+def delete_compute_ops_v1beta2_groups_group_id():
+    return db.get_static("delete_compute_ops_v1beta2_groups_group_id", dict())
 
-@app.patch("/compute-ops/v1beta2/groups/{group_id}")
-def patch_compute_ops_v1beta2_groups_group_id(group_id: str, payload: PatchComputeOpsV1beta2GroupsGroupIdRequest):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("patch_compute_ops_v1beta2_groups_group_id", dict())
+@app.patch("/compute-ops/v1beta2/groups/{group-id}")
+def patch_compute_ops_v1beta2_groups_group_id(payload: PatchComputeOpsV1beta2GroupsGroupIdRequest):
+    return db.get_static("patch_compute_ops_v1beta2_groups_group_id", dict())
 
-@app.get("/compute-ops/v1beta2/groups/{group_id}/compliance")
-def get_compute_ops_v1beta2_groups_group_id_compliance(group_id: str):
+@app.get("/compute-ops/v1beta2/groups/{group-id}/compliance")
+def get_compute_ops_v1beta2_groups_group_id_compliance():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops/v1beta2/groups/{group-id}/compliance
     """
-    return MOCK_DB.get("get_compute_ops_v1beta2_groups_group_id_compliance", dict())
+    collection_path = f"/compute-ops/v1beta2/groups/{{group-id}}/compliance"
+    static_data = db.get_static("get_compute_ops_v1beta2_groups_group_id_compliance", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
-@app.get("/compute-ops/v1beta2/groups/{group_id}/compliance/{compliance_id}")
-def get_compute_ops_v1beta2_groups_group_id_compliance_compliance_id(group_id: str, compliance_id: str):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("get_compute_ops_v1beta2_groups_group_id_compliance_compliance_id", dict())
+@app.get("/compute-ops/v1beta2/groups/{group-id}/compliance/{compliance-id}")
+def get_compute_ops_v1beta2_groups_group_id_compliance_compliance_id():
+    return db.get_static("get_compute_ops_v1beta2_groups_group_id_compliance_compliance_id", dict())
 
-@app.get("/compute-ops/v1beta2/groups/{group_id}/devices")
-def get_compute_ops_v1beta2_groups_group_id_devices(group_id: str):
+@app.get("/compute-ops/v1beta2/groups/{group-id}/devices")
+def get_compute_ops_v1beta2_groups_group_id_devices():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops/v1beta2/groups/{group-id}/devices
     """
-    return MOCK_DB.get("get_compute_ops_v1beta2_groups_group_id_devices", dict())
+    collection_path = f"/compute-ops/v1beta2/groups/{{group-id}}/devices"
+    static_data = db.get_static("get_compute_ops_v1beta2_groups_group_id_devices", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta2/job-templates")
 def get_compute_ops_mgmt_v1beta2_job_templates():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/job-templates
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_job_templates", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/job-templates"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta2_job_templates", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta2/job-templates/{id}")
 def get_compute_ops_mgmt_v1beta2_job_templates_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/job-templates/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_job_templates_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/job-templates"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta2_job_templates_id", dict())
+    return static_val
 
 @app.get("/compute-ops-mgmt/v1/jobs")
 def get_compute_ops_mgmt_v1_jobs():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/jobs
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_jobs", dict())
+    collection_path = f"/compute-ops-mgmt/v1/jobs"
+    static_data = db.get_static("get_compute_ops_mgmt_v1_jobs", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1/jobs")
 def post_compute_ops_mgmt_v1_jobs(payload: PostComputeOpsMgmtV1JobsRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1/jobs
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1_jobs", dict())
+    collection_path = f"/compute-ops-mgmt/v1/jobs"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1/jobs/{id}")
 def get_compute_ops_mgmt_v1_jobs_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/jobs/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_jobs_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1/jobs"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1_jobs_id", dict())
+    return static_val
 
 @app.patch("/compute-ops-mgmt/v1/jobs/{id}")
 def patch_compute_ops_mgmt_v1_jobs_id(id: str, payload: PatchComputeOpsMgmtV1JobsIdRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PATCH /compute-ops-mgmt/v1/jobs/{id}
     """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1_jobs_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1/jobs"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.get("/compute-ops-mgmt/v1beta3/jobs")
 def get_compute_ops_mgmt_v1beta3_jobs():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta3/jobs
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta3_jobs", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta3/jobs"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta3_jobs", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1beta3/jobs")
 def post_compute_ops_mgmt_v1beta3_jobs(payload: PostComputeOpsMgmtV1beta3JobsRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta3/jobs
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta3_jobs", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta3/jobs"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1beta3/jobs/{id}")
 def get_compute_ops_mgmt_v1beta3_jobs_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta3/jobs/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta3_jobs_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta3/jobs"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta3_jobs_id", dict())
+    return static_val
 
 @app.patch("/compute-ops-mgmt/v1beta3/jobs/{id}")
 def patch_compute_ops_mgmt_v1beta3_jobs_id(id: str, payload: PatchComputeOpsMgmtV1beta3JobsIdRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PATCH /compute-ops-mgmt/v1beta3/jobs/{id}
     """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1beta3_jobs_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta3/jobs"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.get("/compute-ops-mgmt/v1beta2/jobs")
 def get_compute_ops_mgmt_v1beta2_jobs():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/jobs
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_jobs", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/jobs"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta2_jobs", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1beta2/jobs")
 def post_compute_ops_mgmt_v1beta2_jobs(payload: PostComputeOpsMgmtV1beta2JobsRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta2/jobs
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta2_jobs", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/jobs"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1beta2/jobs/{id}")
 def get_compute_ops_mgmt_v1beta2_jobs_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/jobs/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_jobs_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/jobs"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta2_jobs_id", dict())
+    return static_val
 
 @app.patch("/compute-ops-mgmt/v1beta2/jobs/{id}")
 def patch_compute_ops_mgmt_v1beta2_jobs_id(id: str, payload: PatchComputeOpsMgmtV1beta2JobsIdRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PATCH /compute-ops-mgmt/v1beta2/jobs/{id}
     """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1beta2_jobs_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/jobs"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.get("/compute-ops-mgmt/v1/metrics-configurations")
 def get_compute_ops_mgmt_v1_metrics_configurations():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/metrics-configurations
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_metrics_configurations", dict())
+    collection_path = f"/compute-ops-mgmt/v1/metrics-configurations"
+    static_data = db.get_static("get_compute_ops_mgmt_v1_metrics_configurations", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1/metrics-configurations")
 def post_compute_ops_mgmt_v1_metrics_configurations(payload: PostComputeOpsMgmtV1MetricsConfigurationsRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1/metrics-configurations
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1_metrics_configurations", dict())
+    collection_path = f"/compute-ops-mgmt/v1/metrics-configurations"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1/metrics-configurations/{id}")
 def get_compute_ops_mgmt_v1_metrics_configurations_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/metrics-configurations/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_metrics_configurations_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1/metrics-configurations"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1_metrics_configurations_id", dict())
+    return static_val
 
 @app.delete("/compute-ops-mgmt/v1/metrics-configurations/{id}")
 def delete_compute_ops_mgmt_v1_metrics_configurations_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: DELETE /compute-ops-mgmt/v1/metrics-configurations/{id}
     """
-    return MOCK_DB.get("delete_compute_ops_mgmt_v1_metrics_configurations_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1/metrics-configurations"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("delete_compute_ops_mgmt_v1_metrics_configurations_id", dict())
 
 @app.patch("/compute-ops-mgmt/v1/metrics-configurations/{id}")
 def patch_compute_ops_mgmt_v1_metrics_configurations_id(id: str, payload: PatchComputeOpsMgmtV1MetricsConfigurationsIdRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PATCH /compute-ops-mgmt/v1/metrics-configurations/{id}
     """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1_metrics_configurations_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1/metrics-configurations"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.get("/compute-ops-mgmt/v1beta1/oneview-appliances")
 def get_compute_ops_mgmt_v1beta1_oneview_appliances():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/oneview-appliances
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_oneview_appliances", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/oneview-appliances"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_oneview_appliances", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1beta1/oneview-appliances")
 def post_compute_ops_mgmt_v1beta1_oneview_appliances(payload: PostComputeOpsMgmtV1beta1OneviewAppliancesRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta1/oneview-appliances
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta1_oneview_appliances", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/oneview-appliances"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
-@app.get("/compute-ops-mgmt/v1beta1/oneview-appliances/{device_id}")
-def get_compute_ops_mgmt_v1beta1_oneview_appliances_device_id(device_id: str):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_oneview_appliances_device_id", dict())
+@app.get("/compute-ops-mgmt/v1beta1/oneview-appliances/{device-id}")
+def get_compute_ops_mgmt_v1beta1_oneview_appliances_device_id():
+    return db.get_static("get_compute_ops_mgmt_v1beta1_oneview_appliances_device_id", dict())
 
-@app.delete("/compute-ops-mgmt/v1beta1/oneview-appliances/{device_id}")
-def delete_compute_ops_mgmt_v1beta1_oneview_appliances_device_id(device_id: str):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("delete_compute_ops_mgmt_v1beta1_oneview_appliances_device_id", dict())
+@app.delete("/compute-ops-mgmt/v1beta1/oneview-appliances/{device-id}")
+def delete_compute_ops_mgmt_v1beta1_oneview_appliances_device_id():
+    return db.get_static("delete_compute_ops_mgmt_v1beta1_oneview_appliances_device_id", dict())
 
 @app.get("/compute-ops-mgmt/v1beta1/oneview-settings")
 def get_compute_ops_mgmt_v1beta1_oneview_settings():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/oneview-settings
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_oneview_settings", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/oneview-settings"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_oneview_settings", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta1/oneview-server-templates")
 def get_compute_ops_mgmt_v1beta1_oneview_server_templates():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/oneview-server-templates
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_oneview_server_templates", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/oneview-server-templates"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_oneview_server_templates", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta1/oneview-server-templates/{id}")
 def get_compute_ops_mgmt_v1beta1_oneview_server_templates_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/oneview-server-templates/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_oneview_server_templates_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/oneview-server-templates"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta1_oneview_server_templates_id", dict())
+    return static_val
 
 @app.get("/compute-ops-mgmt/v1beta2/reports")
 def get_compute_ops_mgmt_v1beta2_reports():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/reports
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_reports", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/reports"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta2_reports", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1beta2/reports")
 def post_compute_ops_mgmt_v1beta2_reports(payload: PostComputeOpsMgmtV1beta2ReportsRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta2/reports
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta2_reports", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/reports"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1beta2/reports/{id}")
 def get_compute_ops_mgmt_v1beta2_reports_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/reports/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_reports_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/reports"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta2_reports_id", dict())
+    return static_val
 
 @app.get("/compute-ops-mgmt/v1beta2/reports/{id}/data")
 def get_compute_ops_mgmt_v1beta2_reports_id_data(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/reports/{id}/data
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_reports_id_data", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/reports/{id}/data"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta2_reports_id_data", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta2/schedules")
 def get_compute_ops_mgmt_v1beta2_schedules():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/schedules
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_schedules", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/schedules"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta2_schedules", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1beta2/schedules")
 def post_compute_ops_mgmt_v1beta2_schedules(payload: PostComputeOpsMgmtV1beta2SchedulesRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta2/schedules
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta2_schedules", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/schedules"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1beta2/schedules/{id}")
 def get_compute_ops_mgmt_v1beta2_schedules_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/schedules/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_schedules_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/schedules"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta2_schedules_id", dict())
+    return static_val
 
 @app.delete("/compute-ops-mgmt/v1beta2/schedules/{id}")
 def delete_compute_ops_mgmt_v1beta2_schedules_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: DELETE /compute-ops-mgmt/v1beta2/schedules/{id}
     """
-    return MOCK_DB.get("delete_compute_ops_mgmt_v1beta2_schedules_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/schedules"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("delete_compute_ops_mgmt_v1beta2_schedules_id", dict())
 
 @app.patch("/compute-ops-mgmt/v1beta2/schedules/{id}")
 def patch_compute_ops_mgmt_v1beta2_schedules_id(id: str, payload: PatchComputeOpsMgmtV1beta2SchedulesIdRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PATCH /compute-ops-mgmt/v1beta2/schedules/{id}
     """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1beta2_schedules_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/schedules"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.get("/compute-ops-mgmt/v1beta2/schedules/{id}/history")
 def get_compute_ops_mgmt_v1beta2_schedules_id_history(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/schedules/{id}/history
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_schedules_id_history", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/schedules/{id}/history"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta2_schedules_id_history", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
-@app.get("/compute-ops-mgmt/v1beta2/schedules/{id}/history/{history_id}")
-def get_compute_ops_mgmt_v1beta2_schedules_id_history_history_id(history_id: str, id: str):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_schedules_id_history_history_id", dict())
+@app.get("/compute-ops-mgmt/v1beta2/schedules/{id}/history/{history-id}")
+def get_compute_ops_mgmt_v1beta2_schedules_id_history_history_id(id: str):
+    return db.get_static("get_compute_ops_mgmt_v1beta2_schedules_id_history_history_id", dict())
 
 @app.get("/compute-ops-mgmt/v1beta1/server-locations/{location_id}")
 def get_compute_ops_mgmt_v1beta1_server_locations_location_id(location_id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/server-locations/{location_id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_server_locations_location_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/server-locations"
+    item_id = location_id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta1_server_locations_location_id", dict())
+    return static_val
 
 @app.post("/compute-ops-mgmt/v1beta1/server-locations/{location_id}/servers")
 def post_compute_ops_mgmt_v1beta1_server_locations_location_id_servers(location_id: str, payload: PostComputeOpsMgmtV1beta1ServerLocationsLocationIdServersRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta1/server-locations/{location_id}/servers
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta1_server_locations_location_id_servers", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/server-locations/{location_id}/servers"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.delete("/compute-ops-mgmt/v1beta1/server-locations/{location_id}/servers")
 def delete_compute_ops_mgmt_v1beta1_server_locations_location_id_servers(location_id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: DELETE /compute-ops-mgmt/v1beta1/server-locations/{location_id}/servers
     """
-    return MOCK_DB.get("delete_compute_ops_mgmt_v1beta1_server_locations_location_id_servers", dict())
+    return db.get_static("delete_compute_ops_mgmt_v1beta1_server_locations_location_id_servers", dict())
 
 @app.get("/compute-ops/v1beta1/server-settings")
 def get_compute_ops_v1beta1_server_settings():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops/v1beta1/server-settings
     """
-    return MOCK_DB.get("get_compute_ops_v1beta1_server_settings", dict())
+    collection_path = f"/compute-ops/v1beta1/server-settings"
+    static_data = db.get_static("get_compute_ops_v1beta1_server_settings", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops/v1beta1/server-settings")
 def post_compute_ops_v1beta1_server_settings(payload: PostComputeOpsV1beta1ServerSettingsRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops/v1beta1/server-settings
     """
-    return MOCK_DB.get("post_compute_ops_v1beta1_server_settings", dict())
+    collection_path = f"/compute-ops/v1beta1/server-settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops/v1beta1/server-settings/{id}")
 def get_compute_ops_v1beta1_server_settings_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops/v1beta1/server-settings/{id}
     """
-    return MOCK_DB.get("get_compute_ops_v1beta1_server_settings_id", dict())
+    collection_path = f"/compute-ops/v1beta1/server-settings"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_v1beta1_server_settings_id", dict())
+    return static_val
 
 @app.delete("/compute-ops/v1beta1/server-settings/{id}")
 def delete_compute_ops_v1beta1_server_settings_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: DELETE /compute-ops/v1beta1/server-settings/{id}
     """
-    return MOCK_DB.get("delete_compute_ops_v1beta1_server_settings_id", dict())
+    collection_path = f"/compute-ops/v1beta1/server-settings"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("delete_compute_ops_v1beta1_server_settings_id", dict())
 
 @app.patch("/compute-ops/v1beta1/server-settings/{id}")
 def patch_compute_ops_v1beta1_server_settings_id(id: str, payload: PatchComputeOpsV1beta1ServerSettingsIdRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PATCH /compute-ops/v1beta1/server-settings/{id}
     """
-    return MOCK_DB.get("patch_compute_ops_v1beta1_server_settings_id", dict())
-
-def find_server(id: str):
-    servers = MOCK_DB.get("servers", {})
-    if id in servers:
-        return servers[id]
-    
-    import re
-    match = re.search(r"(\d+)$", id)
-    if match:
-        suffix = match.group(1)
-        suffix_val = int(suffix)
-        for s_id, s_data in servers.items():
-            name = s_data.get("name", "")
-            if name.endswith(f"-{suffix}") or name.endswith(f"-{suffix_val}"):
-                return s_data
-            if s_id.startswith(id) or id.startswith(s_id):
-                return s_data
-
-    for s_id, s_data in servers.items():
-        if s_data.get("name", "").lower() == id.lower():
-            return s_data
-        if s_data.get("ip_address") == id:
-            return s_data
-
-    return None
-
-@app.get("/compute-ops-mgmt/v1/servers/{id}")
-def get_compute_ops_mgmt_v1_servers_id(id: str):
-    server = find_server(id)
-    if server:
-        return server
-    from fastapi import HTTPException
-    raise HTTPException(status_code=404, detail="Resource not found")
-
-# --- Added specifically for 1500-server scaling Demo ---
-@app.post("/compute-ops-mgmt/v1/servers/{id}/power-on")
-def post_compute_ops_mgmt_v1_servers_id_power_on(id: str):
-    """
-    Handles power-on commands for ANY dynamically generated ComOps server.
-    """
-    server = find_server(id)
-    if server:
-        server["powerState"] = "On"
-        try:
-            with open(mock_file, "w", encoding="utf-8") as f:
-                json.dump(MOCK_DB, f, indent=4)
-        except Exception as e:
-            print(f"Error writing to mock_data.json: {e}")
-            
-        return {
-            "status": "success",
-            "message": f"Cloud Node {id} powered ON successfully.",
-            "action": "power-on",
-            "uuid": server.get("uuid", id),
-            "server_details": server
-        }
-    return {
-        "status": "success",
-        "message": f"Cloud Node {id} powered ON successfully.",
-        "action": "power-on",
-        "uuid": id
-    }
-
-@app.post("/compute-ops-mgmt/v1/servers/{id}/power-off")
-def post_compute_ops_mgmt_v1_servers_id_power_off(id: str):
-    """
-    Handles power-off commands for ANY dynamically generated ComOps server.
-    """
-    server = find_server(id)
-    if server:
-        server["powerState"] = "Off"
-        try:
-            with open(mock_file, "w", encoding="utf-8") as f:
-                json.dump(MOCK_DB, f, indent=4)
-        except Exception as e:
-            print(f"Error writing to mock_data.json: {e}")
-            
-        return {
-            "status": "success",
-            "message": f"Cloud Node {id} powered OFF successfully.",
-            "action": "power-off",
-            "uuid": server.get("uuid", id),
-            "server_details": server
-        }
-    return {
-        "status": "success",
-        "message": f"Cloud Node {id} powered OFF successfully.",
-        "action": "power-off",
-        "uuid": id
-    }
+    collection_path = f"/compute-ops/v1beta1/server-settings"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.get("/compute-ops-mgmt/v1/settings")
 def get_compute_ops_mgmt_v1_settings():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/settings
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_settings", dict())
+    collection_path = f"/compute-ops-mgmt/v1/settings"
+    static_data = db.get_static("get_compute_ops_mgmt_v1_settings", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1/settings")
 def post_compute_ops_mgmt_v1_settings(payload: PostComputeOpsMgmtV1SettingsRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1/settings
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1_settings", dict())
+    collection_path = f"/compute-ops-mgmt/v1/settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1/settings/{id}")
 def get_compute_ops_mgmt_v1_settings_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/settings/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_settings_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1/settings"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1_settings_id", dict())
+    return static_val
 
 @app.delete("/compute-ops-mgmt/v1/settings/{id}")
 def delete_compute_ops_mgmt_v1_settings_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: DELETE /compute-ops-mgmt/v1/settings/{id}
     """
-    return MOCK_DB.get("delete_compute_ops_mgmt_v1_settings_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1/settings"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("delete_compute_ops_mgmt_v1_settings_id", dict())
 
 @app.patch("/compute-ops-mgmt/v1/settings/{id}")
 def patch_compute_ops_mgmt_v1_settings_id(id: str, payload: PatchComputeOpsMgmtV1SettingsIdRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PATCH /compute-ops-mgmt/v1/settings/{id}
     """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1_settings_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1/settings"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.get("/compute-ops-mgmt/v1beta1/settings")
 def get_compute_ops_mgmt_v1beta1_settings():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/settings
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_settings", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/settings"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_settings", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1beta1/settings")
 def post_compute_ops_mgmt_v1beta1_settings(payload: PostComputeOpsMgmtV1beta1SettingsRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta1/settings
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta1_settings", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/settings"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1beta1/settings/{id}")
 def get_compute_ops_mgmt_v1beta1_settings_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/settings/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_settings_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/settings"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta1_settings_id", dict())
+    return static_val
 
 @app.delete("/compute-ops-mgmt/v1beta1/settings/{id}")
 def delete_compute_ops_mgmt_v1beta1_settings_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: DELETE /compute-ops-mgmt/v1beta1/settings/{id}
     """
-    return MOCK_DB.get("delete_compute_ops_mgmt_v1beta1_settings_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/settings"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("delete_compute_ops_mgmt_v1beta1_settings_id", dict())
 
 @app.patch("/compute-ops-mgmt/v1beta1/settings/{id}")
 def patch_compute_ops_mgmt_v1beta1_settings_id(id: str, payload: PatchComputeOpsMgmtV1beta1SettingsIdRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PATCH /compute-ops-mgmt/v1beta1/settings/{id}
     """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1beta1_settings_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/settings"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.get("/compute-ops-mgmt/v1/servers")
 def get_compute_ops_mgmt_v1_servers():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/servers
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_servers", dict())
+    collection_path = f"/compute-ops-mgmt/v1/servers"
+    static_data = db.get_static("get_compute_ops_mgmt_v1_servers", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.patch("/compute-ops-mgmt/v1/servers")
 def patch_compute_ops_mgmt_v1_servers(payload: PatchComputeOpsMgmtV1ServersRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PATCH /compute-ops-mgmt/v1/servers
     """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1_servers", dict())
+    collection_path = f"/compute-ops-mgmt/v1/servers"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.post("/compute-ops-mgmt/v1/servers")
 def post_compute_ops_mgmt_v1_servers(payload: PostComputeOpsMgmtV1ServersRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1/servers
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1_servers", dict())
+    collection_path = f"/compute-ops-mgmt/v1/servers"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1/servers/{id}")
 def get_compute_ops_mgmt_v1_servers_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/servers/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_servers_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1/servers"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1_servers_id", dict())
+    return static_val
 
 @app.patch("/compute-ops-mgmt/v1/servers/{id}")
 def patch_compute_ops_mgmt_v1_servers_id(id: str, payload: PatchComputeOpsMgmtV1ServersIdRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PATCH /compute-ops-mgmt/v1/servers/{id}
     """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1_servers_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1/servers"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.delete("/compute-ops-mgmt/v1/servers/{id}")
 def delete_compute_ops_mgmt_v1_servers_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: DELETE /compute-ops-mgmt/v1/servers/{id}
     """
-    return MOCK_DB.get("delete_compute_ops_mgmt_v1_servers_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1/servers"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("delete_compute_ops_mgmt_v1_servers_id", dict())
 
 @app.get("/compute-ops-mgmt/v1/servers/{id}/alerts")
 def get_compute_ops_mgmt_v1_servers_id_alerts(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/servers/{id}/alerts
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_servers_id_alerts", dict())
+    collection_path = f"/compute-ops-mgmt/v1/servers/{id}/alerts"
+    static_data = db.get_static("get_compute_ops_mgmt_v1_servers_id_alerts", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1/servers/{id}/clear-alert")
 def post_compute_ops_mgmt_v1_servers_id_clear_alert(id: str, payload: PostComputeOpsMgmtV1ServersIdClearAlertRequest):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1_servers_id_clear_alert", dict())
+    return db.get_static("post_compute_ops_mgmt_v1_servers_id_clear_alert", dict())
 
 @app.get("/compute-ops-mgmt/v1beta2/servers")
 def get_compute_ops_mgmt_v1beta2_servers():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/servers
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_servers", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/servers"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta2_servers", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.patch("/compute-ops-mgmt/v1beta2/servers")
 def patch_compute_ops_mgmt_v1beta2_servers(payload: PatchComputeOpsMgmtV1beta2ServersRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PATCH /compute-ops-mgmt/v1beta2/servers
     """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1beta2_servers", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/servers"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.post("/compute-ops-mgmt/v1beta2/servers")
 def post_compute_ops_mgmt_v1beta2_servers(payload: PostComputeOpsMgmtV1beta2ServersRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta2/servers
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta2_servers", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/servers"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1beta2/servers/{id}")
 def get_compute_ops_mgmt_v1beta2_servers_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/servers/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_servers_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/servers"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta2_servers_id", dict())
+    return static_val
 
 @app.patch("/compute-ops-mgmt/v1beta2/servers/{id}")
 def patch_compute_ops_mgmt_v1beta2_servers_id(id: str, payload: PatchComputeOpsMgmtV1beta2ServersIdRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PATCH /compute-ops-mgmt/v1beta2/servers/{id}
     """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1beta2_servers_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/servers"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.delete("/compute-ops-mgmt/v1beta2/servers/{id}")
 def delete_compute_ops_mgmt_v1beta2_servers_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: DELETE /compute-ops-mgmt/v1beta2/servers/{id}
     """
-    return MOCK_DB.get("delete_compute_ops_mgmt_v1beta2_servers_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/servers"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("delete_compute_ops_mgmt_v1beta2_servers_id", dict())
 
 @app.get("/compute-ops-mgmt/v1beta2/servers/{id}/alerts")
 def get_compute_ops_mgmt_v1beta2_servers_id_alerts(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/servers/{id}/alerts
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_servers_id_alerts", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/servers/{id}/alerts"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta2_servers_id_alerts", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1beta2/servers/{id}/clear-alert")
 def post_compute_ops_mgmt_v1beta2_servers_id_clear_alert(id: str, payload: PostComputeOpsMgmtV1beta2ServersIdClearAlertRequest):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta2_servers_id_clear_alert", dict())
+    return db.get_static("post_compute_ops_mgmt_v1beta2_servers_id_clear_alert", dict())
 
 @app.get("/compute-ops-mgmt/v1beta2/server-warranty")
 def get_compute_ops_mgmt_v1beta2_server_warranty():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/server-warranty
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_server_warranty", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/server-warranty"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta2_server_warranty", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta2/server-warranty/{id}")
 def get_compute_ops_mgmt_v1beta2_server_warranty_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta2/server-warranty/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta2_server_warranty_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta2/server-warranty"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta2_server_warranty_id", dict())
+    return static_val
 
 @app.get("/compute-ops-mgmt/v1/user-preferences")
 def get_compute_ops_mgmt_v1_user_preferences():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/user-preferences
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_user_preferences", dict())
+    collection_path = f"/compute-ops-mgmt/v1/user-preferences"
+    static_data = db.get_static("get_compute_ops_mgmt_v1_user_preferences", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1/user-preferences")
 def post_compute_ops_mgmt_v1_user_preferences(payload: PostComputeOpsMgmtV1UserPreferencesRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1/user-preferences
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1_user_preferences", dict())
+    collection_path = f"/compute-ops-mgmt/v1/user-preferences"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1/user-preferences/{id}")
 def get_compute_ops_mgmt_v1_user_preferences_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/user-preferences/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_user_preferences_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1/user-preferences"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1_user_preferences_id", dict())
+    return static_val
 
 @app.put("/compute-ops-mgmt/v1/user-preferences/{id}")
 def put_compute_ops_mgmt_v1_user_preferences_id(id: str, payload: PutComputeOpsMgmtV1UserPreferencesIdRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PUT /compute-ops-mgmt/v1/user-preferences/{id}
     """
-    return MOCK_DB.get("put_compute_ops_mgmt_v1_user_preferences_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1/user-preferences"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.post("/compute-ops-mgmt/v1/user-preferences/subscribe")
 def post_compute_ops_mgmt_v1_user_preferences_subscribe(payload: PostComputeOpsMgmtV1UserPreferencesSubscribeRequest):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1_user_preferences_subscribe", dict())
+    return db.get_static("post_compute_ops_mgmt_v1_user_preferences_subscribe", dict())
 
 @app.post("/compute-ops-mgmt/v1/user-preferences/unsubscribe")
 def post_compute_ops_mgmt_v1_user_preferences_unsubscribe(payload: PostComputeOpsMgmtV1UserPreferencesUnsubscribeRequest):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1_user_preferences_unsubscribe", dict())
+    return db.get_static("post_compute_ops_mgmt_v1_user_preferences_unsubscribe", dict())
 
 @app.get("/compute-ops-mgmt/v1beta1/user-preferences")
 def get_compute_ops_mgmt_v1beta1_user_preferences():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/user-preferences
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_user_preferences", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/user-preferences"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_user_preferences", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1beta1/user-preferences")
 def post_compute_ops_mgmt_v1beta1_user_preferences(payload: PostComputeOpsMgmtV1beta1UserPreferencesRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta1/user-preferences
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta1_user_preferences", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/user-preferences"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1beta1/user-preferences/{id}")
 def get_compute_ops_mgmt_v1beta1_user_preferences_id(id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/user-preferences/{id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_user_preferences_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/user-preferences"
+    item_id = id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta1_user_preferences_id", dict())
+    return static_val
 
 @app.put("/compute-ops-mgmt/v1beta1/user-preferences/{id}")
 def put_compute_ops_mgmt_v1beta1_user_preferences_id(id: str, payload: PutComputeOpsMgmtV1beta1UserPreferencesIdRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PUT /compute-ops-mgmt/v1beta1/user-preferences/{id}
     """
-    return MOCK_DB.get("put_compute_ops_mgmt_v1beta1_user_preferences_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/user-preferences"
+    item_id = id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1beta1/utilization-over-time")
-def get_compute_ops_mgmt_v1beta1_utilization_over_time(serverId: str = None):
+def get_compute_ops_mgmt_v1beta1_utilization_over_time():
     """
-    Returns utilization over time. If server is off, utilization averages are 0.
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/utilization-over-time
     """
-    if serverId:
-        server = find_server(serverId)
-        if server and server.get("powerState") == "Off":
-            return {
-                "cpuAveragePercent": 0.0,
-                "memoryAveragePercent": 0.0
-            }
-    return {
-        "cpuAveragePercent": 40.5,
-        "memoryAveragePercent": 55.2
-    }
+    collection_path = f"/compute-ops-mgmt/v1beta1/utilization-over-time"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_utilization_over_time", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta1/utilization-by-entity")
 def get_compute_ops_mgmt_v1beta1_utilization_by_entity():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/utilization-by-entity
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_utilization_by_entity", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/utilization-by-entity"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_utilization_by_entity", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta1/webhooks")
 def get_compute_ops_mgmt_v1beta1_webhooks():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/webhooks
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_webhooks", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/webhooks"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_webhooks", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.post("/compute-ops-mgmt/v1beta1/webhooks")
 def post_compute_ops_mgmt_v1beta1_webhooks(payload: PostComputeOpsMgmtV1beta1WebhooksRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta1/webhooks
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta1_webhooks", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/webhooks"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
 @app.get("/compute-ops-mgmt/v1beta1/webhooks/{webhook_id}")
 def get_compute_ops_mgmt_v1beta1_webhooks_webhook_id(webhook_id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/webhooks/{webhook_id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_webhooks_webhook_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/webhooks"
+    item_id = webhook_id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta1_webhooks_webhook_id", dict())
+    return static_val
 
 @app.patch("/compute-ops-mgmt/v1beta1/webhooks/{webhook_id}")
 def patch_compute_ops_mgmt_v1beta1_webhooks_webhook_id(webhook_id: str, payload: PatchComputeOpsMgmtV1beta1WebhooksWebhookIdRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: PATCH /compute-ops-mgmt/v1beta1/webhooks/{webhook_id}
     """
-    return MOCK_DB.get("patch_compute_ops_mgmt_v1beta1_webhooks_webhook_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/webhooks"
+    item_id = webhook_id
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    existing = db.get_item(collection_path, item_id) or {}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, item_id, existing)
+    return existing
 
 @app.delete("/compute-ops-mgmt/v1beta1/webhooks/{webhook_id}")
 def delete_compute_ops_mgmt_v1beta1_webhooks_webhook_id(webhook_id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: DELETE /compute-ops-mgmt/v1beta1/webhooks/{webhook_id}
     """
-    return MOCK_DB.get("delete_compute_ops_mgmt_v1beta1_webhooks_webhook_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/webhooks"
+    item_id = webhook_id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        deleted = db.delete_item(collection_path, item_id)
+        return {"message": "Deleted successfully", "id": item_id, "item": deleted}
+    return db.get_static("delete_compute_ops_mgmt_v1beta1_webhooks_webhook_id", dict())
 
 @app.get("/compute-ops-mgmt/v1beta1/webhooks/{webhook_id}/deliveries")
 def get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries(webhook_id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/webhooks/{webhook_id}/deliveries
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/webhooks/{webhook_id}/deliveries"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
 @app.get("/compute-ops-mgmt/v1beta1/webhooks/{webhook_id}/deliveries/{delivery_id}")
 def get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries_delivery_id(webhook_id: str, delivery_id: str):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta1/webhooks/{webhook_id}/deliveries/{delivery_id}
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries_delivery_id", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta1/webhooks/{webhook_id}/deliveries"
+    item_id = delivery_id
+    item = db.get_item(collection_path, item_id)
+    if item:
+        return item
+    static_val = db.get_static("get_compute_ops_mgmt_v1beta1_webhooks_webhook_id_deliveries_delivery_id", dict())
+    return static_val
 
-@app.post("/compute-ops-mgmt/v1/groups/{group_id}/devices")
-def post_compute_ops_mgmt_v1_groups_group_id_devices(group_id: str, payload: PostComputeOpsMgmtV1GroupsGroupIdDevicesRequest):
+@app.post("/compute-ops-mgmt/v1/groups/{group-id}/devices")
+def post_compute_ops_mgmt_v1_groups_group_id_devices(payload: PostComputeOpsMgmtV1GroupsGroupIdDevicesRequest):
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1/groups/{group-id}/devices
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1_groups_group_id_devices", dict())
+    collection_path = f"/compute-ops-mgmt/v1/groups/{{group-id}}/devices"
+    payload_dict = payload.dict() if hasattr(payload, "dict") else (payload if isinstance(payload, dict) else {})
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
-@app.post("/compute-ops-mgmt/v1/groups/{group_id}/devices/unassign")
-def post_compute_ops_mgmt_v1_groups_group_id_devices_unassign(group_id: str, payload: PostComputeOpsMgmtV1GroupsGroupIdDevicesUnassignRequest):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1_groups_group_id_devices_unassign", dict())
+@app.post("/compute-ops-mgmt/v1/groups/{group-id}/devices/unassign")
+def post_compute_ops_mgmt_v1_groups_group_id_devices_unassign(payload: PostComputeOpsMgmtV1GroupsGroupIdDevicesUnassignRequest):
+    return db.get_static("post_compute_ops_mgmt_v1_groups_group_id_devices_unassign", dict())
 
-@app.get("/compute-ops-mgmt/v1/groups/{group_id}/external-storage-compliance")
-def get_compute_ops_mgmt_v1_groups_group_id_external_storage_compliance(group_id: str):
+@app.get("/compute-ops-mgmt/v1/groups/{group-id}/external-storage-compliance")
+def get_compute_ops_mgmt_v1_groups_group_id_external_storage_compliance():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1/groups/{group-id}/external-storage-compliance
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1_groups_group_id_external_storage_compliance", dict())
+    collection_path = f"/compute-ops-mgmt/v1/groups/{{group-id}}/external-storage-compliance"
+    static_data = db.get_static("get_compute_ops_mgmt_v1_groups_group_id_external_storage_compliance", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
-@app.post("/compute-ops-mgmt/v1beta3/groups/{group_id}/devices")
-def post_compute_ops_mgmt_v1beta3_groups_group_id_devices(group_id: str):
+@app.post("/compute-ops-mgmt/v1beta3/groups/{group-id}/devices")
+def post_compute_ops_mgmt_v1beta3_groups_group_id_devices():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: POST /compute-ops-mgmt/v1beta3/groups/{group-id}/devices
     """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta3_groups_group_id_devices", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta3/groups/{{group-id}}/devices"
+    payload_dict = {}
+    item_id = payload_dict.get("id") or payload_dict.get("uuid") or payload_dict.get("name") or str(uuid.uuid4())
+    if "id" not in payload_dict and "uuid" not in payload_dict:
+        payload_dict["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload_dict)
+    return payload_dict
 
-@app.post("/compute-ops-mgmt/v1beta3/groups/{group_id}/devices/unassign")
-def post_compute_ops_mgmt_v1beta3_groups_group_id_devices_unassign(group_id: str):
-    """
-    Auto-generated Route
-    Original Doc: Batch Extracted
-    """
-    return MOCK_DB.get("post_compute_ops_mgmt_v1beta3_groups_group_id_devices_unassign", dict())
+@app.post("/compute-ops-mgmt/v1beta3/groups/{group-id}/devices/unassign")
+def post_compute_ops_mgmt_v1beta3_groups_group_id_devices_unassign():
+    return db.get_static("post_compute_ops_mgmt_v1beta3_groups_group_id_devices_unassign", dict())
 
-@app.get("/compute-ops-mgmt/v1beta3/groups/{group_id}/external-storage-compliance")
-def get_compute_ops_mgmt_v1beta3_groups_group_id_external_storage_compliance(group_id: str):
+@app.get("/compute-ops-mgmt/v1beta3/groups/{group-id}/external-storage-compliance")
+def get_compute_ops_mgmt_v1beta3_groups_group_id_external_storage_compliance():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta3/groups/{group-id}/external-storage-compliance
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta3_groups_group_id_external_storage_compliance", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta3/groups/{{group-id}}/external-storage-compliance"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta3_groups_group_id_external_storage_compliance", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
-@app.get("/compute-ops-mgmt/v1beta3/groups/{group_id}/ilo-settings-compliance")
-def get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance(group_id: str):
+@app.get("/compute-ops-mgmt/v1beta3/groups/{group-id}/ilo-settings-compliance")
+def get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    Dynamic CRUD Route: GET /compute-ops-mgmt/v1beta3/groups/{group-id}/ilo-settings-compliance
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance", dict())
+    collection_path = f"/compute-ops-mgmt/v1beta3/groups/{{group-id}}/ilo-settings-compliance"
+    static_data = db.get_static("get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance", dict())
+    dynamic_items = db.get_all(collection_path)
+    if not dynamic_items:
+        return static_data
+    if isinstance(static_data, list):
+        res = list(static_data)
+        existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
+        for item in dynamic_items:
+            iid = item.get("id") or item.get("uuid") or item.get("name")
+            if iid not in existing:
+                res.append(item)
+        return res
+    elif isinstance(static_data, dict):
+        res = dict(static_data)
+        for key in ["items", "members"]:
+            if key in res and isinstance(res[key], list):
+                res[key] = list(res[key])
+                existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
+                for item in dynamic_items:
+                    iid = item.get("id") or item.get("uuid") or item.get("name")
+                    if iid not in existing:
+                        res[key].append(item)
+                res["count"] = len(res[key])
+                if "total" in res:
+                    res["total"] = len(res[key])
+        return res
+    return static_data
 
-@app.get("/compute-ops-mgmt/v1beta3/groups/{group_id}/ilo-settings-compliance/{ilo_settings_compliance_id}")
-def get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance_ilo_settings_compliance_id(group_id: str, ilo_settings_compliance_id: str):
+@app.get("/compute-ops-mgmt/v1beta3/groups/{group-id}/ilo-settings-compliance/{ilo-settings-compliance-id}")
+def get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance_ilo_settings_compliance_id():
+    return db.get_static("get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance_ilo_settings_compliance_id", dict())
+
+
+# --- CRUD Endpoints for Compute Ops Devices ---
+
+@app.get("/compute-ops-mgmt/v1/devices")
+def get_compute_ops_devices():
     """
-    Auto-generated Route
-    Original Doc: Batch Extracted
+    CRUD Route: GET /compute-ops-mgmt/v1/devices
     """
-    return MOCK_DB.get("get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance_ilo_settings_compliance_id", dict())
+    collection_path = "/compute-ops-mgmt/v1/devices"
+    return db.get_all(collection_path)
+
+@app.get("/compute-ops-mgmt/v1/devices/{id}")
+def get_compute_ops_device_by_id(id: str):
+    """
+    CRUD Route: GET /compute-ops-mgmt/v1/devices/{id}
+    """
+    from fastapi import HTTPException
+    collection_path = "/compute-ops-mgmt/v1/devices"
+    store = db.get_collection(collection_path)
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    return store[id]
+
+@app.post("/compute-ops-mgmt/v1/devices")
+def create_compute_ops_device(payload: dict):
+    """
+    CRUD Route: POST /compute-ops-mgmt/v1/devices
+    """
+    collection_path = "/compute-ops-mgmt/v1/devices"
+    
+    item_id = payload.get("id") or payload.get("serial_number") or str(uuid.uuid4())
+    payload["id"] = item_id
+    db.upsert_item(collection_path, item_id, payload)
+    return payload
+
+@app.put("/compute-ops-mgmt/v1/devices/{id}")
+def update_compute_ops_device(id: str, payload: dict):
+    """
+    CRUD Route: PUT /compute-ops-mgmt/v1/devices/{id}
+    """
+    from fastapi import HTTPException
+    collection_path = "/compute-ops-mgmt/v1/devices"
+    store = db.get_collection(collection_path)
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    existing = store[id]
+    payload_dict = {k: v for k, v in payload.items() if v is not None}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, id, existing)
+    return existing
+
+@app.delete("/compute-ops-mgmt/v1/devices/{id}")
+def delete_compute_ops_device(id: str):
+    """
+    CRUD Route: DELETE /compute-ops-mgmt/v1/devices/{id}
+    """
+    from fastapi import HTTPException
+    collection_path = "/compute-ops-mgmt/v1/devices"
+    store = db.get_collection(collection_path)
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    deleted = db.delete_item(collection_path, id)
+    return {"message": "Deleted successfully", "id": id, "item": deleted}
+
+
+@app.post("/compute-ops-mgmt/v1/devices/{id}/power")
+def post_compute_ops_device_power(id: str, payload: ServerPowerActionRequest):
+    """
+    Action Route: POST /compute-ops-mgmt/v1/devices/{id}/power
+    """
+    collection_path = "/compute-ops-mgmt/v1/devices"
+    store = db.get_collection(collection_path)
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    action_upper = payload.action.upper()
+    if action_upper not in ["ON", "OFF"]:
+         raise HTTPException(status_code=400, detail="Invalid action. Only 'ON' or 'OFF' are allowed.")
+         
+    device = dict(store[id])
+    device["power_state"] = action_upper
+    import datetime
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(collection_path, id, device)
+    return device
+
+
+@app.post("/compute-ops-mgmt/v1/devices/{id}/firmware")
+def post_compute_ops_device_firmware(id: str, payload: ServerFirmwareUpdateRequest):
+    """
+    Action Route: POST /compute-ops-mgmt/v1/devices/{id}/firmware
+    """
+    collection_path = "/compute-ops-mgmt/v1/devices"
+    store = db.get_collection(collection_path)
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    device = dict(store[id])
+    device["firmware_version"] = payload.firmware_version
+    import datetime
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(collection_path, id, device)
+    return device
+
+
+@app.patch("/compute-ops-mgmt/v1/devices/{id}")
+def patch_compute_ops_device(id: str, payload: dict):
+    """
+    CRUD Route: PATCH /compute-ops-mgmt/v1/devices/{id}
+    """
+    from fastapi import HTTPException
+    collection_path = "/compute-ops-mgmt/v1/devices"
+    store = db.get_collection(collection_path)
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    existing = dict(store[id])
+    payload_dict = {k: v for k, v in payload.items() if v is not None}
+    existing.update(payload_dict)
+    db.upsert_item(collection_path, id, existing)
+    return existing
+
