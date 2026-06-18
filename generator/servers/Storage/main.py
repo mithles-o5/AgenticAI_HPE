@@ -774,4 +774,50 @@ def delete_storage_device_volume(id: str, volume_id: str):
         
     MOCK_DB["dynamic_store"][volume_path].pop(volume_id)
     return {"message": "Volume deleted successfully", "volume_id": volume_id}
+
+
+@app.patch("/data-services/v1beta1/devices/{id}")
+def patch_storage_device(id: str, payload: dict):
+    """
+    CRUD Route: PATCH /data-services/v1beta1/devices/{id}
+    """
+    from fastapi import HTTPException
+    collection_path = "/data-services/v1beta1/devices"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    existing = dict(store[id])
+    payload_dict = {k: v for k, v in payload.items() if v is not None}
+    existing.update(payload_dict)
+    MOCK_DB["dynamic_store"][collection_path][id] = existing
+    return existing
+
+
+class StoragePowerRequest(BaseModel):
+    action: str
+
+
+@app.post("/data-services/v1beta1/devices/{id}/power")
+def post_storage_device_power(id: str, payload: StoragePowerRequest):
+    """
+    Action Route: POST /data-services/v1beta1/devices/{id}/power
+    """
+    from fastapi import HTTPException
+    import datetime
+    collection_path = "/data-services/v1beta1/devices"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+        
+    action_upper = payload.action.upper()
+    if action_upper not in ["ON", "OFF"]:
+        raise HTTPException(status_code=400, detail="Invalid action. Only 'ON' or 'OFF' are allowed.")
+        
+    device = dict(store[id])
+    device["power_state"] = action_upper
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    MOCK_DB["dynamic_store"][collection_path][id] = device
+    return device
+
 

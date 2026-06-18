@@ -13462,4 +13462,50 @@ def delete_cloud_device_vm(id: str, vm_id: str):
     MOCK_DB["dynamic_store"][device_path][id] = device
     MOCK_DB["dynamic_store"][vm_path].pop(vm_id)
     return {"message": "VM terminated successfully", "vm_id": vm_id}
+
+
+@app.patch("/api/v1/devices/{id}")
+def patch_cloud_device(id: str, payload: dict):
+    """
+    CRUD Route: PATCH /api/v1/devices/{id}
+    """
+    from fastapi import HTTPException
+    collection_path = "/api/v1/devices"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    existing = dict(store[id])
+    payload_dict = {k: v for k, v in payload.items() if v is not None}
+    existing.update(payload_dict)
+    MOCK_DB["dynamic_store"][collection_path][id] = existing
+    return existing
+
+
+class CloudPowerRequest(BaseModel):
+    action: str
+
+
+@app.post("/api/v1/devices/{id}/power")
+def post_cloud_device_power(id: str, payload: CloudPowerRequest):
+    """
+    Action Route: POST /api/v1/devices/{id}/power
+    """
+    from fastapi import HTTPException
+    import datetime
+    collection_path = "/api/v1/devices"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+        
+    action_upper = payload.action.upper()
+    if action_upper not in ["ON", "OFF"]:
+        raise HTTPException(status_code=400, detail="Invalid action. Only 'ON' or 'OFF' are allowed.")
+        
+    device = dict(store[id])
+    device["power_state"] = action_upper
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    MOCK_DB["dynamic_store"][collection_path][id] = device
+    return device
+
 

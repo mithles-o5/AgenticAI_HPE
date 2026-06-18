@@ -3582,8 +3582,12 @@ def post_compute_ops_device_power(id: str, payload: ServerPowerActionRequest):
     if id not in store:
         raise HTTPException(status_code=404, detail="Device not found")
     
+    action_upper = payload.action.upper()
+    if action_upper not in ["ON", "OFF"]:
+         raise HTTPException(status_code=400, detail="Invalid action. Only 'ON' or 'OFF' are allowed.")
+         
     device = dict(store[id])
-    device["power_state"] = payload.action
+    device["power_state"] = action_upper
     import datetime
     device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
     MOCK_DB["dynamic_store"][collection_path][id] = device
@@ -3606,4 +3610,22 @@ def post_compute_ops_device_firmware(id: str, payload: ServerFirmwareUpdateReque
     device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
     MOCK_DB["dynamic_store"][collection_path][id] = device
     return device
+
+
+@app.patch("/compute-ops-mgmt/v1/devices/{id}")
+def patch_compute_ops_device(id: str, payload: dict):
+    """
+    CRUD Route: PATCH /compute-ops-mgmt/v1/devices/{id}
+    """
+    from fastapi import HTTPException
+    collection_path = "/compute-ops-mgmt/v1/devices"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    existing = dict(store[id])
+    payload_dict = {k: v for k, v in payload.items() if v is not None}
+    existing.update(payload_dict)
+    MOCK_DB["dynamic_store"][collection_path][id] = existing
+    return existing
 

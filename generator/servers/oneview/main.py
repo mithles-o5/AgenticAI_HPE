@@ -1238,3 +1238,157 @@ def get_rest_server_hardware_id(id: str):
         return MOCK_DB["dynamic_store"][collection_path][item_id]
     static_val = MOCK_DB.get("get_rest_server_hardware_id", dict())
     return static_val
+
+
+@app.put("/rest/server-hardware/{id}")
+def put_rest_server_hardware_id(id: str, payload: dict):
+    """
+    Dynamic CRUD Route: PUT /rest/server-hardware/{id}
+    """
+    collection_path = f"/rest/server-hardware"
+    if "dynamic_store" not in MOCK_DB:
+        MOCK_DB["dynamic_store"] = {}
+    if collection_path not in MOCK_DB["dynamic_store"]:
+        MOCK_DB["dynamic_store"][collection_path] = {}
+        
+    store = MOCK_DB["dynamic_store"][collection_path]
+    if id not in store:
+        static_list = MOCK_DB.get("get_rest_server_hardware", {}).get("members", [])
+        static_item = None
+        for item in static_list:
+            if item.get("id") == id:
+                static_item = item
+                break
+        if not static_item and MOCK_DB.get("get_rest_server_hardware_id", {}).get("id") == id:
+            static_item = MOCK_DB.get("get_rest_server_hardware_id")
+            
+        if static_item:
+            MOCK_DB._save_item("dynamic_store", collection_path, id, dict(static_item))
+            store = MOCK_DB["dynamic_store"][collection_path]
+        else:
+            raise HTTPException(status_code=404, detail="Server hardware not found")
+            
+    existing = store[id]
+    payload_dict = {k: v for k, v in payload.items() if v is not None}
+    existing.update(payload_dict)
+    MOCK_DB["dynamic_store"][collection_path][id] = existing
+    return existing
+
+
+@app.patch("/rest/server-hardware/{id}")
+def patch_rest_server_hardware_id(id: str, payload: dict):
+    """
+    Dynamic CRUD Route: PATCH /rest/server-hardware/{id}
+    """
+    collection_path = f"/rest/server-hardware"
+    if "dynamic_store" not in MOCK_DB:
+        MOCK_DB["dynamic_store"] = {}
+    if collection_path not in MOCK_DB["dynamic_store"]:
+        MOCK_DB["dynamic_store"][collection_path] = {}
+        
+    store = MOCK_DB["dynamic_store"][collection_path]
+    if id not in store:
+        static_list = MOCK_DB.get("get_rest_server_hardware", {}).get("members", [])
+        static_item = None
+        for item in static_list:
+            if item.get("id") == id:
+                static_item = item
+                break
+        if not static_item and MOCK_DB.get("get_rest_server_hardware_id", {}).get("id") == id:
+            static_item = MOCK_DB.get("get_rest_server_hardware_id")
+            
+        if static_item:
+            MOCK_DB._save_item("dynamic_store", collection_path, id, dict(static_item))
+            store = MOCK_DB["dynamic_store"][collection_path]
+        else:
+            raise HTTPException(status_code=404, detail="Server hardware not found")
+            
+    existing = dict(store[id])
+    payload_dict = {k: v for k, v in payload.items() if v is not None}
+    existing.update(payload_dict)
+    MOCK_DB["dynamic_store"][collection_path][id] = existing
+    return existing
+
+
+@app.delete("/rest/server-hardware/{id}")
+def delete_rest_server_hardware_id(id: str):
+    """
+    Dynamic CRUD Route: DELETE /rest/server-hardware/{id}
+    """
+    collection_path = f"/rest/server-hardware"
+    if "dynamic_store" not in MOCK_DB:
+        MOCK_DB["dynamic_store"] = {}
+    if collection_path not in MOCK_DB["dynamic_store"]:
+        MOCK_DB["dynamic_store"][collection_path] = {}
+        
+    store = MOCK_DB["dynamic_store"][collection_path]
+    if id not in store:
+        static_list = MOCK_DB.get("get_rest_server_hardware", {}).get("members", [])
+        static_item = None
+        for item in static_list:
+            if item.get("id") == id:
+                static_item = item
+                break
+        if not static_item and MOCK_DB.get("get_rest_server_hardware_id", {}).get("id") == id:
+            static_item = MOCK_DB.get("get_rest_server_hardware_id")
+            
+        if static_item:
+            return {"message": "Deleted successfully", "id": id, "item": static_item}
+        else:
+            raise HTTPException(status_code=404, detail="Server hardware not found")
+            
+    deleted = MOCK_DB["dynamic_store"][collection_path].pop(id)
+    return {"message": "Deleted successfully", "id": id, "item": deleted}
+
+
+class OneViewPowerRequest(BaseModel):
+    powerState: str = None
+    powerControl: str = None
+    action: str = None
+
+
+@app.put("/rest/server-hardware/{id}/powerState")
+@app.post("/rest/server-hardware/{id}/power")
+def post_oneview_device_power(id: str, payload: OneViewPowerRequest):
+    """
+    Action Route: PUT/POST to change power state of a server
+    """
+    collection_path = f"/rest/server-hardware"
+    if "dynamic_store" not in MOCK_DB:
+        MOCK_DB["dynamic_store"] = {}
+    if collection_path not in MOCK_DB["dynamic_store"]:
+        MOCK_DB["dynamic_store"][collection_path] = {}
+        
+    store = MOCK_DB["dynamic_store"][collection_path]
+    if id not in store:
+        static_list = MOCK_DB.get("get_rest_server_hardware", {}).get("members", [])
+        static_item = None
+        for item in static_list:
+            if item.get("id") == id:
+                static_item = item
+                break
+        if not static_item and MOCK_DB.get("get_rest_server_hardware_id", {}).get("id") == id:
+            static_item = MOCK_DB.get("get_rest_server_hardware_id")
+            
+        if static_item:
+            MOCK_DB._save_item("dynamic_store", collection_path, id, dict(static_item))
+            store = MOCK_DB["dynamic_store"][collection_path]
+        else:
+            raise HTTPException(status_code=404, detail="Server hardware not found")
+            
+    device = dict(store[id])
+    state = payload.powerState or payload.action or "On"
+    if state.upper() in ["ON", "POWERON"]:
+        device["power_state"] = "ON"
+        device["powerState"] = "On"
+    elif state.upper() in ["OFF", "POWEROFF"]:
+        device["power_state"] = "OFF"
+        device["powerState"] = "Off"
+    else:
+        raise HTTPException(status_code=400, detail="Invalid power state. Only 'ON', 'OFF', 'PowerOn', or 'PowerOff' are allowed.")
+        
+    import datetime
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    MOCK_DB["dynamic_store"][collection_path][id] = device
+    return device
+
