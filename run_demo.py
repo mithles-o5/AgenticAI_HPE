@@ -1,7 +1,6 @@
 import sys
 import os
-import mock_db_cache
-mock_db_cache.setup()
+
 
 import asyncio
 import subprocess

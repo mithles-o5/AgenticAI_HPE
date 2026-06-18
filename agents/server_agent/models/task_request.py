@@ -30,7 +30,7 @@ class TaskRequest(BaseModel):
     resource_type: ResourceType
     resource_id: str
     region: Optional[str] = None
-    provider: Provider = Provider.DEFAULT
+    provider: str = "default"
     action: Action
     parameters: dict = Field(default_factory=dict)
-    credentials_ref: str
+    credentials_ref: Optional[str] = "mock"

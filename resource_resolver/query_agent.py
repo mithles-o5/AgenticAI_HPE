@@ -56,14 +56,14 @@ _ACTION_MAPPINGS: tuple[_Mapping, ...] = (
 
 # Noise words stripped from the leading edge of the extracted identifier
 _PREFIX_NOISE: frozenset[str] = frozenset({
-    "the", "a", "an",
+    "the", "a", "an", "of", "for", "on", "at", "to", "my", "our", "their", "is", "was", "be", "about",
     "device", "resource",
     "server", "switch", "router", "firewall", "storage",
 })
 
 # Noise words stripped from the trailing edge of the extracted identifier
 _SUFFIX_NOISE: frozenset[str] = frozenset({
-    "the",
+    "the", "of", "for", "on", "at", "to", "my", "our", "their", "is", "was", "be", "about",
     "device", "resource",
     "server", "switch", "router", "firewall", "storage",
 })

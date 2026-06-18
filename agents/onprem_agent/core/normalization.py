@@ -61,7 +61,8 @@ def normalize_metrics(raw_metrics: dict) -> dict:
         "cpu_utilization_percent": float(raw_metrics.get("cpu_utilization_percent", 0.0)),
         "memory_utilization_percent": float(raw_metrics.get("memory_utilization_percent", 0.0)),
         "power_draw_watts": float(raw_metrics.get("power_draw_watts", 0.0)),
-        "temperature_celsius": float(raw_metrics.get("temperature_celsius", 0.0))
+        "temperature_celsius": float(raw_metrics.get("temperature_celsius", 0.0)),
+        "power_state": raw_metrics.get("power_state", "On")
     }
 
 def normalize_alerts(provider: str, raw_alerts: list) -> list:

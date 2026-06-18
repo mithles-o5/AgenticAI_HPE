@@ -77,51 +77,6 @@ class AgentDispatcher:
         """
         Query Capability Registry, resolve agent url, format and send task request.
         """
-        # Resolve the OASF skill name dynamically
-        action_upper = query_action.upper()
-        skill_name = None
-        if agent_type == "storage":
-            if action_upper in {"STATUS", "CAPACITY"}:
-                skill_name = "storage.monitoring.capacity"
-            elif action_upper in {"CREATE", "ALLOCATE", "DEALLOCATE", "DELETE", "CREATE_VOLUME", "DELETE_VOLUME", "ON", "OFF", "RESET"}:
-                skill_name = "storage.execute.volume_action"
-            elif action_upper in {"RESCAN"}:
-                skill_name = "storage.discover.arrays"
-            else:
-                skill_name = f"storage.execute.{query_action.lower()}"
-        elif agent_type == "network":
-            if action_upper in {"STATUS"}:
-                skill_name = "network.monitoring.interface"
-            elif action_upper in {"RESCAN"}:
-                skill_name = "network.topology.discover"
-            elif action_upper in {"ON", "OFF", "RESET"}:
-                skill_name = "network.execute.config_push"
-            else:
-                skill_name = f"network.execute.{query_action.lower()}"
-        elif agent_type == "cloud":
-            if action_upper in {"STATUS"}:
-                skill_name = "cloud.monitoring.metrics"
-            elif action_upper in {"RESCAN"}:
-                skill_name = "cloud.discover.resources"
-            elif action_upper in {"ON", "OFF", "RESET"}:
-                skill_name = "cloud.execute.action"
-            else:
-                skill_name = f"cloud.execute.{query_action.lower()}"
-        elif agent_type == "server":
-            if action_upper in {"STATUS"}:
-                skill_name = "server.monitoring.health"
-            elif action_upper in {"ON", "OFF", "RESET"}:
-                skill_name = "server.execute.power_action"
-            else:
-                skill_name = f"server.execute.{query_action.lower()}"
-        elif agent_type == "onprem":
-            if action_upper in {"STATUS"}:
-                skill_name = "onprem.monitoring.health"
-            elif action_upper in {"ON", "OFF", "RESET"}:
-                skill_name = "onprem.execute.power_action"
-            else:
-                skill_name = f"onprem.execute.{query_action.lower()}"
-
         # ── Step 1: Query Capability Registry ──────────────────────────────
         registry_url = "http://127.0.0.1:8020/agents/lookup"
         try:
@@ -131,7 +86,6 @@ class AgentDispatcher:
                     params={
                         "resource_type": resource_type,
                         "provider": provider_or_protocol,
-                        "skill": skill_name,
                     }
                 )
                 resp.raise_for_status()
@@ -149,23 +103,8 @@ class AgentDispatcher:
             agent_port = fallback_ports.get(agent_type, 8005)
             agent_record = {
                 "name": f"{agent_type}-agent",
-                "skills": [
-                    {"name": "storage.monitoring.capacity"},
-                    {"name": "storage.monitoring.performance"},
-                    {"name": "storage.execute.volume_action"},
-                    {"name": "storage.discover.arrays"},
-                    {"name": "storage.diagnose.fault"}
-                ] if agent_type == "storage" else [],
                 "locators": [{"url": f"http://127.0.0.1:{agent_port}/openapi.json"}]
             }
-
-        # Verify dynamic capability via Capability Registry
-        if skill_name:
-            agent_skills = [s.get("name").lower() for s in agent_record.get("skills", [])]
-            if skill_name.lower() not in agent_skills:
-                msg = f"Capability error: Operation '{query_action}' (OASF skill '{skill_name}') is not registered for {agent_type}-agent."
-                logger.error("[AgentDispatcher] %s", msg)
-                return {"status": "failed", "errors": [msg]}
 
         # Resolve locator URL
         locator_url = agent_record["locators"][0]["url"]

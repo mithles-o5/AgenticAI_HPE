@@ -1037,7 +1037,7 @@ def find_server(id: str):
             return s_data
         if s_data.get("ip_address") == id:
             return s_data
-            
+
     return None
 
 @app.get("/compute-ops-mgmt/v1/servers/{id}")
@@ -1057,6 +1057,12 @@ def post_compute_ops_mgmt_v1_servers_id_power_on(id: str):
     server = find_server(id)
     if server:
         server["powerState"] = "On"
+        try:
+            with open(mock_file, "w", encoding="utf-8") as f:
+                json.dump(MOCK_DB, f, indent=4)
+        except Exception as e:
+            print(f"Error writing to mock_data.json: {e}")
+            
         return {
             "status": "success",
             "message": f"Cloud Node {id} powered ON successfully.",
@@ -1079,6 +1085,12 @@ def post_compute_ops_mgmt_v1_servers_id_power_off(id: str):
     server = find_server(id)
     if server:
         server["powerState"] = "Off"
+        try:
+            with open(mock_file, "w", encoding="utf-8") as f:
+                json.dump(MOCK_DB, f, indent=4)
+        except Exception as e:
+            print(f"Error writing to mock_data.json: {e}")
+            
         return {
             "status": "success",
             "message": f"Cloud Node {id} powered OFF successfully.",

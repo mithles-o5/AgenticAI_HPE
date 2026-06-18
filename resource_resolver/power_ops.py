@@ -176,7 +176,7 @@ class ExecutionOrchestrator:
             host   = f"{mock_host}:{mock_port}"
             scheme = "http"
         else:
-            host   = device.source_host or "localhost"
+            host   = device.source_host 
             scheme = "https"
 
         uuid        = device.source_device_id or device.id
