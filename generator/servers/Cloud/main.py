@@ -13375,4 +13375,91 @@ def delete_cloud_device(id: str):
     if id not in store:
         raise HTTPException(status_code=404, detail="Device not found")
     deleted = MOCK_DB["dynamic_store"][collection_path].pop(id)
-    return {"message": "Deleted successfully", "id": id, "item": deleted}
+    return {"message": "Deleted successfully", "id": id, "item": deleted}
+
+
+@app.post("/api/v1/devices/{id}/vms")
+def post_cloud_device_vms(id: str, payload: CloudVmCreateRequest):
+    """
+    Action Route: POST /api/v1/devices/{id}/vms
+    """
+    from fastapi import HTTPException
+    import uuid
+    device_path = "/api/v1/devices"
+    vm_path = "/api/v1/vms"
+    
+    device_store = MOCK_DB.get("dynamic_store", {}).get(device_path, {})
+    if id not in device_store:
+        raise HTTPException(status_code=404, detail="Device not found")
+        
+    device = dict(device_store[id])
+    
+    # Initialize resource allocation fields if they don't exist or are None
+    if device.get("active_vms") is None:
+        device["active_vms"] = 0
+    if device.get("allocated_vcpu") is None:
+        device["allocated_vcpu"] = 0
+    if device.get("allocated_ram_gb") is None:
+        device["allocated_ram_gb"] = 0
+        
+    device["active_vms"] += 1
+    device["allocated_vcpu"] += payload.vcpu
+    device["allocated_ram_gb"] += payload.ram_gb
+    MOCK_DB["dynamic_store"][device_path][id] = device
+    
+    # Create VM record
+    vm_id = str(uuid.uuid4())
+    vm = {
+        "id": vm_id,
+        "device_id": id,
+        "vm_name": payload.vm_name,
+        "vcpu": payload.vcpu,
+        "ram_gb": payload.ram_gb,
+        "status": "RUNNING"
+    }
+    
+    if "dynamic_store" not in MOCK_DB:
+        MOCK_DB["dynamic_store"] = {}
+    if vm_path not in MOCK_DB["dynamic_store"]:
+        MOCK_DB["dynamic_store"][vm_path] = {}
+        
+    MOCK_DB["dynamic_store"][vm_path][vm_id] = vm
+    return vm
+
+
+@app.delete("/api/v1/devices/{id}/vms/{vm_id}")
+def delete_cloud_device_vm(id: str, vm_id: str):
+    """
+    Action Route: DELETE /api/v1/devices/{id}/vms/{vm_id}
+    """
+    from fastapi import HTTPException
+    device_path = "/api/v1/devices"
+    vm_path = "/api/v1/vms"
+    
+    device_store = MOCK_DB.get("dynamic_store", {}).get(device_path, {})
+    if id not in device_store:
+        raise HTTPException(status_code=404, detail="Device not found")
+        
+    vm_store = MOCK_DB.get("dynamic_store", {}).get(vm_path, {})
+    if vm_id not in vm_store:
+        raise HTTPException(status_code=404, detail="VM not found")
+        
+    vm = vm_store[vm_id]
+    if vm.get("device_id") != id:
+        raise HTTPException(status_code=400, detail="VM does not belong to this cloud device")
+        
+    vcpu = vm.get("vcpu") or 0
+    ram_gb = vm.get("ram_gb") or 0
+    
+    device = dict(device_store[id])
+    if device.get("active_vms") is not None and device["active_vms"] > 0:
+        device["active_vms"] -= 1
+    if device.get("allocated_vcpu") is not None:
+        device["allocated_vcpu"] = max(0, device["allocated_vcpu"] - vcpu)
+    if device.get("allocated_ram_gb") is not None:
+        device["allocated_ram_gb"] = max(0, device["allocated_ram_gb"] - ram_gb)
+        
+    MOCK_DB["dynamic_store"][device_path][id] = device
+    MOCK_DB["dynamic_store"][vm_path].pop(vm_id)
+    return {"message": "VM terminated successfully", "vm_id": vm_id}
+

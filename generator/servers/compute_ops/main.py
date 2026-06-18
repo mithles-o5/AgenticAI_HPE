@@ -3569,4 +3569,41 @@ def delete_compute_ops_device(id: str):
     if id not in store:
         raise HTTPException(status_code=404, detail="Device not found")
     deleted = MOCK_DB["dynamic_store"][collection_path].pop(id)
-    return {"message": "Deleted successfully", "id": id, "item": deleted}
+    return {"message": "Deleted successfully", "id": id, "item": deleted}
+
+
+@app.post("/compute-ops-mgmt/v1/devices/{id}/power")
+def post_compute_ops_device_power(id: str, payload: ServerPowerActionRequest):
+    """
+    Action Route: POST /compute-ops-mgmt/v1/devices/{id}/power
+    """
+    collection_path = "/compute-ops-mgmt/v1/devices"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    device = dict(store[id])
+    device["power_state"] = payload.action
+    import datetime
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    MOCK_DB["dynamic_store"][collection_path][id] = device
+    return device
+
+
+@app.post("/compute-ops-mgmt/v1/devices/{id}/firmware")
+def post_compute_ops_device_firmware(id: str, payload: ServerFirmwareUpdateRequest):
+    """
+    Action Route: POST /compute-ops-mgmt/v1/devices/{id}/firmware
+    """
+    collection_path = "/compute-ops-mgmt/v1/devices"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    device = dict(store[id])
+    device["firmware_version"] = payload.firmware_version
+    import datetime
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    MOCK_DB["dynamic_store"][collection_path][id] = device
+    return device
+

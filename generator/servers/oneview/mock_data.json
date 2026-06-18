@@ -1393,5 +1393,261 @@
     "created": "2025-01-01T08:00:00Z",
     "modified": "2025-09-10T18:45:00Z"
   },
-  "dynamic_store": {}
+  "dynamic_store": {
+    "/rest/custom-servers": {
+      "463eb50b-fabf-4382-896d-993a622e3828": {
+        "id": "463eb50b-fabf-4382-896d-993a622e3828",
+        "name": "test_val",
+        "status": "test_val",
+        "temperature": 1.0,
+        "powerState": "test_val",
+        "serialNumber": "test_val",
+        "firmwareVersion": "test_val",
+        "memoryGiB": 1,
+        "cpuCores": 1
+      },
+      "22260eeb-d15d-4602-8ef2-bc45be0f520c": {
+        "id": "22260eeb-d15d-4602-8ef2-bc45be0f520c",
+        "name": "test_val",
+        "status": "test_val",
+        "temperature": 1.0,
+        "powerState": "test_val",
+        "serialNumber": "test_val",
+        "firmwareVersion": "test_val",
+        "memoryGiB": 1,
+        "cpuCores": 1
+      },
+      "a04924cd-57e4-40d9-90dd-f5d7822fdcba": {
+        "id": "a04924cd-57e4-40d9-90dd-f5d7822fdcba",
+        "name": "test_val",
+        "status": "test_val",
+        "temperature": 1.0,
+        "powerState": "test_val",
+        "serialNumber": "test_val",
+        "firmwareVersion": "test_val",
+        "memoryGiB": 1,
+        "cpuCores": 1
+      }
+    },
+    "/rest/custom-switches": {
+      "2b3187f1-07de-4516-8fd3-5d09d933d481": {
+        "id": "2b3187f1-07de-4516-8fd3-5d09d933d481",
+        "name": "test_val",
+        "status": "test_val",
+        "temperature": 1.0,
+        "powerState": "test_val",
+        "serialNumber": "test_val",
+        "firmwareVersion": "test_val",
+        "model": "test_val",
+        "ipAddress": "test_val",
+        "portCount": 1
+      },
+      "16a865d8-49ec-457e-a93e-d1b0191ce7f8": {
+        "id": "16a865d8-49ec-457e-a93e-d1b0191ce7f8",
+        "name": "test_val",
+        "status": "test_val",
+        "temperature": 1.0,
+        "powerState": "test_val",
+        "serialNumber": "test_val",
+        "firmwareVersion": "test_val",
+        "model": "test_val",
+        "ipAddress": "test_val",
+        "portCount": 1
+      },
+      "78715823-7101-40c3-9872-15f6ddbbdfd6": {
+        "id": "78715823-7101-40c3-9872-15f6ddbbdfd6",
+        "name": "test_val",
+        "status": "test_val",
+        "temperature": 1.0,
+        "powerState": "test_val",
+        "serialNumber": "test_val",
+        "firmwareVersion": "test_val",
+        "model": "test_val",
+        "ipAddress": "test_val",
+        "portCount": 1
+      }
+    },
+    "/rest/login-sessions": {
+      "e98ecb57-355e-4ee5-8f75-9098c4ad05b9": {
+        "id": "e98ecb57-355e-4ee5-8f75-9098c4ad05b9",
+        "userName": "test_val",
+        "password": "test_val"
+      },
+      "23567393-5281-4080-8824-d2ecfbc930ae": {
+        "id": "23567393-5281-4080-8824-d2ecfbc930ae",
+        "userName": "test_val",
+        "password": "test_val"
+      },
+      "7b1b9b13-1942-4ab3-9203-3a5df32d79ed": {
+        "id": "7b1b9b13-1942-4ab3-9203-3a5df32d79ed",
+        "userName": "test_val",
+        "password": "test_val"
+      }
+    },
+    "/rest/login-sessions/auth-token": {
+      "71a77eea-aff7-458f-9fc8-bca54bc2ef7f": {
+        "id": "71a77eea-aff7-458f-9fc8-bca54bc2ef7f",
+        "sessionID": "test_val",
+        "enabledPermissions": []
+      },
+      "cb01047d-ca36-4728-a339-d8f57d14ee40": {
+        "id": "cb01047d-ca36-4728-a339-d8f57d14ee40",
+        "sessionID": "test_val",
+        "enabledPermissions": []
+      },
+      "55fe56db-abb1-4da9-af99-20a59679552a": {
+        "id": "55fe56db-abb1-4da9-af99-20a59679552a",
+        "sessionID": "test_val",
+        "enabledPermissions": []
+      }
+    },
+    "/rest/certificates/client/rabbitmq": {
+      "58bf84fe-c4a0-41ca-bfdd-d8eefc46b651": {
+        "id": "58bf84fe-c4a0-41ca-bfdd-d8eefc46b651",
+        "type": "test_val",
+        "commonName": "test_val",
+        "alternativeNames": []
+      },
+      "2b2f6c51-e08e-4923-abd4-e1980aa56688": {
+        "id": "2b2f6c51-e08e-4923-abd4-e1980aa56688",
+        "type": "test_val",
+        "commonName": "test_val",
+        "alternativeNames": []
+      },
+      "309a6a16-5b3f-4e62-8006-666a7236ede7": {
+        "id": "309a6a16-5b3f-4e62-8006-666a7236ede7",
+        "type": "test_val",
+        "commonName": "test_val",
+        "alternativeNames": []
+      }
+    },
+    "/rest/ethernet-networks/bulk": {
+      "a2aba78b-9042-4798-8b26-81541e281036": {
+        "id": "a2aba78b-9042-4798-8b26-81541e281036",
+        "type": "test_val",
+        "namePrefix": "test_val",
+        "vlanIdRange": "test_val",
+        "purpose": "test_val",
+        "privateNetwork": 1,
+        "connectionTemplateUri": "test_val",
+        "ipv6SubnetUri": "test_val",
+        "subnetUri": "test_val",
+        "initialScopeUris": [],
+        "smartLink": 1
+      },
+      "b9153fda-e90c-44ca-95c7-f0bdd995ec2c": {
+        "id": "b9153fda-e90c-44ca-95c7-f0bdd995ec2c",
+        "type": "test_val",
+        "namePrefix": "test_val",
+        "vlanIdRange": "test_val",
+        "purpose": "test_val",
+        "privateNetwork": 1,
+        "connectionTemplateUri": "test_val",
+        "ipv6SubnetUri": "test_val",
+        "subnetUri": "test_val",
+        "initialScopeUris": [],
+        "smartLink": 1
+      },
+      "c9f64acd-e76d-4684-90d6-a25e3898a7fd": {
+        "id": "c9f64acd-e76d-4684-90d6-a25e3898a7fd",
+        "type": "test_val",
+        "namePrefix": "test_val",
+        "vlanIdRange": "test_val",
+        "purpose": "test_val",
+        "privateNetwork": 1,
+        "connectionTemplateUri": "test_val",
+        "ipv6SubnetUri": "test_val",
+        "subnetUri": "test_val",
+        "initialScopeUris": [],
+        "smartLink": 1
+      }
+    },
+    "/rest/storage-volumes": {
+      "test-id-999": {
+        "id": "test-id-999",
+        "name": "test_val",
+        "description": "test_val",
+        "capacityBytes": 1,
+        "provisioningType": "test_val",
+        "isShareable": 1
+      }
+    },
+    "/rest/rack-managers": {
+      "test_val": {
+        "id": "test_val",
+        "hostname": "test_val",
+        "username": "test_val",
+        "password": "test_val",
+        "force": 1,
+        "fwBaselineUri": "test_val",
+        "fwExcludeNpars": 1,
+        "fwReinstall": 1,
+        "initialScopeUris": [],
+        "licensingIntent": "test_val",
+        "name": "test_val"
+      }
+    },
+    "/rest/server-hardware": {
+      "test_val": {
+        "id": "test_val",
+        "hostname": "test_val",
+        "username": "test_val",
+        "password": "test_val",
+        "force": 1,
+        "licensingIntent": "test_val",
+        "configurationState": "test_val",
+        "initialScopeUris": [],
+        "name": "test_val"
+      }
+    },
+    "/rest/server-hardware/discovery": {
+      "e52437fd-45e7-4c7d-a0a0-02129819b01a": {
+        "id": "e52437fd-45e7-4c7d-a0a0-02129819b01a",
+        "mpHostsAndRanges": [],
+        "username": "test_val",
+        "password": "test_val",
+        "licensingIntent": "test_val",
+        "configurationState": "test_val",
+        "initialScopeUris": [],
+        "force": 1
+      },
+      "c96dac7d-dc7e-441b-91bf-7f7d56373903": {
+        "id": "c96dac7d-dc7e-441b-91bf-7f7d56373903",
+        "mpHostsAndRanges": [],
+        "username": "test_val",
+        "password": "test_val",
+        "licensingIntent": "test_val",
+        "configurationState": "test_val",
+        "initialScopeUris": [],
+        "force": 1
+      },
+      "66080e7b-4522-4ff9-bdf0-6fbf73e04275": {
+        "id": "66080e7b-4522-4ff9-bdf0-6fbf73e04275",
+        "mpHostsAndRanges": [],
+        "username": "test_val",
+        "password": "test_val",
+        "licensingIntent": "test_val",
+        "configurationState": "test_val",
+        "initialScopeUris": [],
+        "force": 1
+      }
+    },
+    "/rest/server-hardware/firmware-compliance": {
+      "704d657b-1670-4248-9ed0-3c159b0b1f39": {
+        "id": "704d657b-1670-4248-9ed0-3c159b0b1f39",
+        "firmwareBaselineId": "test_val",
+        "serverUUID": "test_val"
+      },
+      "4c069a13-d4e1-444d-8379-39af1b17d964": {
+        "id": "4c069a13-d4e1-444d-8379-39af1b17d964",
+        "firmwareBaselineId": "test_val",
+        "serverUUID": "test_val"
+      },
+      "b40e6f5f-03f7-47e5-8152-9b679197a05c": {
+        "id": "b40e6f5f-03f7-47e5-8152-9b679197a05c",
+        "firmwareBaselineId": "test_val",
+        "serverUUID": "test_val"
+      }
+    }
+  }
 }

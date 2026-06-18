@@ -1609,3 +1609,10 @@ class ProvisioningrecommendationsRequest(BaseModel):
     productFamily: str = None
     sizeMib: int = None
 
+
+class CloudVmCreateRequest(BaseModel):
+    vm_name: str
+    vcpu: int
+    ram_gb: int
+
+

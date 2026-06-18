@@ -10,3 +10,13 @@ class DeviceSchema(BaseModel):
     source_host: str = None
     source_device_id: str = None
     device_type: str = None
+
+
+class NetworkVlanRequest(BaseModel):
+    vlan_id: int
+    name: str
+
+
+class NetworkPortStatusRequest(BaseModel):
+    status: str
+

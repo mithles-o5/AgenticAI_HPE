@@ -2601,6 +2601,4023 @@
         "created_at": "2026-06-18 09:00:00+05:30",
         "updated_at": "2026-06-18 09:00:00+05:30"
       }
-    }
+    },
+    "/compute-ops-mgmt/v1beta2/approval-policies": {
+      "test_val": {
+        "id": "test_val",
+        "name": "test_val",
+        "description": "test_val",
+        "policyData": {}
+      }
+    },
+    "/compute-ops-mgmt/v1beta2/approval-requests": {
+      "test-id-999": {
+        "id": "test-id-999",
+        "approvalState": "test_val",
+        "requestRemarks": "test_val"
+      }
+    },
+    "/compute-ops-mgmt/v1beta1/activation-keys": {
+      "fcf0b7b7-541f-4ac7-b342-0e43d9064624": {
+        "id": "fcf0b7b7-541f-4ac7-b342-0e43d9064624",
+        "description": "test_val"
+      },
+      "6c5e0bd7-4f73-43f8-81f0-8a9d61af5831": {
+        "id": "6c5e0bd7-4f73-43f8-81f0-8a9d61af5831",
+        "description": "test_val"
+      },
+      "91462201-fa5a-4942-85b1-1cd4a4333e4f": {
+        "id": "91462201-fa5a-4942-85b1-1cd4a4333e4f",
+        "description": "test_val"
+      }
+    },
+    "/compute-ops-mgmt/v1beta1/activation-tokens": {
+      "38224371-8e63-4732-aeca-e77c93b1ffdb": {
+        "id": "38224371-8e63-4732-aeca-e77c93b1ffdb",
+        "deviceId": "test_val",
+        "durationMinutes": 1
+      },
+      "f7c94b7e-aacb-474e-9ca8-e9e853949cfc": {
+        "id": "f7c94b7e-aacb-474e-9ca8-e9e853949cfc",
+        "deviceId": "test_val",
+        "durationMinutes": 1
+      },
+      "782bd339-1ec5-44ea-a4fd-e51b469bb205": {
+        "id": "782bd339-1ec5-44ea-a4fd-e51b469bb205",
+        "deviceId": "test_val",
+        "durationMinutes": 1
+      }
+    },
+    "/compute-ops-mgmt/v1beta1/ahs-files": {
+      "6042837a-d08f-4166-bcfc-c1564da5433c": {
+        "id": "6042837a-d08f-4166-bcfc-c1564da5433c",
+        "filename": "test_val",
+        "description": "test_val"
+      },
+      "b0946546-bb16-441f-b8ab-0f0c9ac2f91c": {
+        "id": "b0946546-bb16-441f-b8ab-0f0c9ac2f91c",
+        "filename": "test_val",
+        "description": "test_val"
+      },
+      "f4db4e4c-a69b-4571-9e41-6c1725452910": {
+        "id": "f4db4e4c-a69b-4571-9e41-6c1725452910",
+        "filename": "test_val",
+        "description": "test_val"
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "filename": null,
+        "description": "test_val"
+      }
+    },
+    "/compute-ops-mgmt/v1beta1/ahs-files/test-id-999/parse": {
+      "540c063f-e98d-4496-8f3c-2ce6d4b8f0fc": {
+        "id": "540c063f-e98d-4496-8f3c-2ce6d4b8f0fc"
+      },
+      "a11501ac-fa00-4ff5-bbc1-f9ef18e3c4f0": {
+        "id": "a11501ac-fa00-4ff5-bbc1-f9ef18e3c4f0"
+      },
+      "3b29faec-0809-4eed-a65f-bfde15d5d437": {
+        "id": "3b29faec-0809-4eed-a65f-bfde15d5d437"
+      }
+    },
+    "/compute-ops-mgmt/v1beta1/external-services": {
+      "test_val": {
+        "id": "test_val",
+        "name": "test_val",
+        "endpoint": "test_val",
+        "apiKey": "test_val",
+        "status": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "name": null,
+        "endpoint": null,
+        "apiKey": null,
+        "status": "test_val"
+      }
+    },
+    "/compute-ops-mgmt/v1beta1/external-services/test-id-999/test": {
+      "f42cbc0e-40bc-4d21-9ab2-18a12cb7f361": {
+        "id": "f42cbc0e-40bc-4d21-9ab2-18a12cb7f361"
+      },
+      "4a4089b4-49cb-4039-b9c0-1078a0f6313f": {
+        "id": "4a4089b4-49cb-4039-b9c0-1078a0f6313f"
+      },
+      "95ac9311-57eb-4c33-860f-d822938e72f8": {
+        "id": "95ac9311-57eb-4c33-860f-d822938e72f8"
+      }
+    },
+    "/compute-ops-mgmt/v1beta1/filters": {
+      "test_val": {
+        "id": "test_val",
+        "name": "test_val",
+        "criteria": {}
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "name": "test_val",
+        "criteria": null
+      }
+    },
+    "/compute-ops-mgmt/v1/groups": {
+      "test_val": {
+        "id": "test_val",
+        "name": "test_val"
+      }
+    },
+    "/compute-ops-mgmt/v1beta3/groups": {
+      "test_val": {
+        "id": "test_val",
+        "name": "test_val"
+      }
+    },
+    "/compute-ops/v1beta2/groups": {
+      "test_val": {
+        "id": "test_val",
+        "name": "test_val"
+      }
+    },
+    "/compute-ops-mgmt/v1/jobs": {
+      "test_val": {
+        "id": "test_val",
+        "name": "test_val",
+        "targetResource": {},
+        "status": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "name": null,
+        "targetResource": null,
+        "status": "test_val"
+      }
+    },
+    "/compute-ops-mgmt/v1beta3/jobs": {
+      "test_val": {
+        "id": "test_val",
+        "name": "test_val",
+        "status": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "name": null,
+        "status": "test_val"
+      }
+    },
+    "/compute-ops-mgmt/v1beta2/jobs": {
+      "test_val": {
+        "id": "test_val",
+        "name": "test_val",
+        "status": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "name": null,
+        "status": "test_val"
+      }
+    },
+    "/compute-ops-mgmt/v1/metrics-configurations": {
+      "test_val": {
+        "id": "test_val",
+        "name": "test_val",
+        "enabled": 1,
+        "intervalSeconds": 1
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "name": null,
+        "enabled": 1,
+        "intervalSeconds": null
+      }
+    },
+    "/compute-ops-mgmt/v1beta1/oneview-appliances": {
+      "test_val": {
+        "id": "test_val",
+        "name": "test_val",
+        "ipAddress": "test_val",
+        "username": "test_val",
+        "password": "test_val"
+      }
+    },
+    "/compute-ops-mgmt/v1beta2/reports": {
+      "test_val": {
+        "id": "test_val",
+        "name": "test_val",
+        "reportType": "test_val",
+        "schedule": "test_val"
+      }
+    },
+    "/compute-ops-mgmt/v1beta2/schedules": {
+      "test_val": {
+        "id": "test_val",
+        "name": "test_val",
+        "frequency": "test_val",
+        "target": {},
+        "status": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "name": null,
+        "frequency": null,
+        "target": null,
+        "status": "test_val"
+      }
+    },
+    "/compute-ops-mgmt/v1beta1/server-locations/test-id-999/servers": {
+      "c529c8f5-3e5d-455e-9c7a-11cfc06d176c": {
+        "id": "c529c8f5-3e5d-455e-9c7a-11cfc06d176c",
+        "serverId": "test_val"
+      },
+      "45557eb7-ac42-480a-b6dd-1c88bf333693": {
+        "id": "45557eb7-ac42-480a-b6dd-1c88bf333693",
+        "serverId": "test_val"
+      },
+      "6871ebf0-a1bb-4eea-96d6-e9028e88c58e": {
+        "id": "6871ebf0-a1bb-4eea-96d6-e9028e88c58e",
+        "serverId": "test_val"
+      }
+    },
+    "/compute-ops/v1beta1/server-settings": {
+      "test_val": {
+        "id": "test_val",
+        "name": "test_val",
+        "settings": {}
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "name": null,
+        "settings": {}
+      }
+    },
+    "/compute-ops-mgmt/v1/settings": {
+      "test_val": {
+        "id": "test_val",
+        "name": "test_val",
+        "value": {}
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "name": null,
+        "value": "1"
+      }
+    },
+    "/compute-ops-mgmt/v1beta1/settings": {
+      "test_val": {
+        "id": "test_val",
+        "name": "test_val",
+        "value": "test_val"
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "name": null,
+        "value": "1"
+      }
+    },
+    "/compute-ops-mgmt/v1/servers": {
+      "65557980-562e-44f8-8cc0-261c08bc16f2": {
+        "id": "65557980-562e-44f8-8cc0-261c08bc16f2",
+        "filter": "test_val",
+        "updates": {},
+        "name": null,
+        "ipAddress": null,
+        "credentials": null
+      },
+      "5fda57d1-99c8-4835-9ac1-80cd66f123d6": {
+        "id": "5fda57d1-99c8-4835-9ac1-80cd66f123d6",
+        "filter": "test_val",
+        "updates": {},
+        "name": null,
+        "ipAddress": null,
+        "credentials": null
+      },
+      "9db6238a-7183-4805-abba-3edbc0466a05": {
+        "id": "9db6238a-7183-4805-abba-3edbc0466a05",
+        "filter": "test_val",
+        "updates": {},
+        "name": null,
+        "ipAddress": null,
+        "credentials": null
+      },
+      "test_val": {
+        "id": "test_val",
+        "filter": null,
+        "updates": null,
+        "name": "test_val",
+        "ipAddress": "test_val",
+        "credentials": {}
+      }
+    },
+    "/compute-ops-mgmt/v1beta2/servers": {
+      "d4a338d3-d5c5-4433-aba0-70556ac1af55": {
+        "id": "d4a338d3-d5c5-4433-aba0-70556ac1af55",
+        "filter": "test_val",
+        "updates": {},
+        "name": null,
+        "ipAddress": null,
+        "credentials": null
+      },
+      "39219ad4-95a2-4117-b238-0a0989d9367f": {
+        "id": "39219ad4-95a2-4117-b238-0a0989d9367f",
+        "filter": "test_val",
+        "updates": {},
+        "name": null,
+        "ipAddress": null,
+        "credentials": null
+      },
+      "43940c89-cae3-4023-834c-5e0103b2b34a": {
+        "id": "43940c89-cae3-4023-834c-5e0103b2b34a",
+        "filter": "test_val",
+        "updates": {},
+        "name": null,
+        "ipAddress": null,
+        "credentials": null
+      },
+      "test_val": {
+        "id": "test_val",
+        "filter": null,
+        "updates": null,
+        "name": "test_val",
+        "ipAddress": "test_val",
+        "credentials": {}
+      }
+    },
+    "/compute-ops-mgmt/v1/user-preferences": {
+      "58dfb48e-5fba-4f29-b354-ed44f07e3a83": {
+        "id": "58dfb48e-5fba-4f29-b354-ed44f07e3a83",
+        "emailNotifications": 1,
+        "theme": "test_val"
+      },
+      "bda0a7e1-7358-4943-b51c-547b10312199": {
+        "id": "bda0a7e1-7358-4943-b51c-547b10312199",
+        "emailNotifications": 1,
+        "theme": "test_val"
+      },
+      "60371f94-8252-4be2-9183-c80fe1b893f2": {
+        "id": "60371f94-8252-4be2-9183-c80fe1b893f2",
+        "emailNotifications": 1,
+        "theme": "test_val"
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "emailNotifications": 1,
+        "theme": "test_val"
+      }
+    },
+    "/compute-ops-mgmt/v1beta1/user-preferences": {
+      "ad725412-de10-4361-bcda-958c4bc5c368": {
+        "id": "ad725412-de10-4361-bcda-958c4bc5c368",
+        "emailNotifications": 1
+      },
+      "145fb13f-8f75-40eb-b687-42a9a2280802": {
+        "id": "145fb13f-8f75-40eb-b687-42a9a2280802",
+        "emailNotifications": 1
+      },
+      "4014f8fd-dbb2-41bb-8531-4206e9fc6926": {
+        "id": "4014f8fd-dbb2-41bb-8531-4206e9fc6926",
+        "emailNotifications": 1
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "emailNotifications": 1
+      }
+    },
+    "/compute-ops-mgmt/v1beta1/webhooks": {
+      "test_val": {
+        "id": "test_val",
+        "name": "test_val",
+        "url": "test_val",
+        "events": []
+      }
+    },
+    "/compute-ops-mgmt/v1/devices": {},
+    "/api/v1/host-initiator-groups": {
+      "test_val": {
+        "id": "test_val",
+        "comment": "test_val",
+        "hostIds": [],
+        "hostsToCreate": [],
+        "name": "test_val",
+        "userCreated": 1,
+        "hostProximityValues": null,
+        "removedHosts": null,
+        "updatedHosts": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "comment": null,
+        "hostIds": null,
+        "hostsToCreate": [],
+        "name": "test_val",
+        "userCreated": null,
+        "hostProximityValues": [],
+        "removedHosts": [],
+        "updatedHosts": []
+      }
+    },
+    "/api/v1/host-initiator-groups/bulkmerge": {
+      "228e4e06-33ff-4e20-aff4-3f7ffc58174f": {
+        "id": "228e4e06-33ff-4e20-aff4-3f7ffc58174f",
+        "items": []
+      },
+      "d02298f9-c897-4479-8ff7-870c41236186": {
+        "id": "d02298f9-c897-4479-8ff7-870c41236186",
+        "items": []
+      },
+      "43aaebd0-ab39-48e8-90ef-37413611d0c0": {
+        "id": "43aaebd0-ab39-48e8-90ef-37413611d0c0",
+        "items": []
+      }
+    },
+    "/api/v1/host-initiator-groups/merge": {
+      "test_val": {
+        "id": "test_val",
+        "hostGroupIds": [],
+        "name": "test_val"
+      }
+    },
+    "/api/v1/host-initiators": {
+      "test_val": {
+        "id": "test_val",
+        "comment": "test_val",
+        "contact": "test_val",
+        "fqdn": "test_val",
+        "hostGroupIds": [],
+        "initiatorIds": [],
+        "initiatorsToCreate": [],
+        "ipAddress": "test_val",
+        "isVvolHost": 1,
+        "location": "test_val",
+        "model": "test_val",
+        "name": "test_val",
+        "operatingSystem": "test_val",
+        "persona": "test_val",
+        "protocol": "test_val",
+        "subnet": "test_val",
+        "userCreated": 1,
+        "updatedInitiators": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "comment": null,
+        "contact": null,
+        "fqdn": null,
+        "hostGroupIds": null,
+        "initiatorIds": null,
+        "initiatorsToCreate": [],
+        "ipAddress": null,
+        "isVvolHost": null,
+        "location": null,
+        "model": null,
+        "name": "test_val",
+        "operatingSystem": null,
+        "persona": null,
+        "protocol": null,
+        "subnet": null,
+        "userCreated": null,
+        "updatedInitiators": []
+      }
+    },
+    "/api/v1/host-initiators/test-id-999/chap": {
+      "9dbc524d-d60b-4a85-8f6f-0152ca9ff260": {
+        "id": "9dbc524d-d60b-4a85-8f6f-0152ca9ff260",
+        "items": []
+      },
+      "eb0b7e2c-e61e-4b7e-a8a7-1c74887bc840": {
+        "id": "eb0b7e2c-e61e-4b7e-a8a7-1c74887bc840",
+        "items": []
+      },
+      "0347dd0a-c34d-4037-9c5a-f8e4fce64d54": {
+        "id": "0347dd0a-c34d-4037-9c5a-f8e4fce64d54",
+        "items": []
+      }
+    },
+    "/api/v1/host-initiators/test-id-999/chapkey": {
+      "4b1c567a-4cbd-4483-8c25-db15726acb0d": {
+        "id": "4b1c567a-4cbd-4483-8c25-db15726acb0d",
+        "hmacNum": "test_val",
+        "secret": "test_val",
+        "system": "test_val",
+        "type": "test_val"
+      },
+      "ac477549-3ee8-4d18-b64c-f2acf8705ca6": {
+        "id": "ac477549-3ee8-4d18-b64c-f2acf8705ca6",
+        "hmacNum": "test_val",
+        "secret": "test_val",
+        "system": "test_val",
+        "type": "test_val"
+      },
+      "a2e5cbbb-e9b5-4ac0-ae99-103bc9e1d422": {
+        "id": "a2e5cbbb-e9b5-4ac0-ae99-103bc9e1d422",
+        "hmacNum": "test_val",
+        "secret": "test_val",
+        "system": "test_val",
+        "type": "test_val"
+      }
+    },
+    "/api/v1/host-initiators/bulkmerge": {
+      "65e7d0dd-f9e5-4886-85a2-14cd22115e8b": {
+        "id": "65e7d0dd-f9e5-4886-85a2-14cd22115e8b",
+        "items": []
+      },
+      "593f78cb-9c0b-4358-9dd3-2ec0f6f8b961": {
+        "id": "593f78cb-9c0b-4358-9dd3-2ec0f6f8b961",
+        "items": []
+      },
+      "cdb11ba3-fe35-4b4a-8141-ddbff574ce63": {
+        "id": "cdb11ba3-fe35-4b4a-8141-ddbff574ce63",
+        "items": []
+      }
+    },
+    "/api/v1/host-initiators/merge": {
+      "test_val": {
+        "id": "test_val",
+        "hostIds": [],
+        "name": "test_val",
+        "operatingSystem": "test_val"
+      }
+    },
+    "/api/v1/initiators": {
+      "test_val": {
+        "id": "test_val",
+        "address": "test_val",
+        "driverVersion": "test_val",
+        "firmwareVersion": "test_val",
+        "hbaModel": "test_val",
+        "hostSpeed": 1,
+        "ipAddress": "test_val",
+        "name": "test_val",
+        "protocol": "test_val",
+        "vendor": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type1": {
+      "bbb6d8ad-f9d0-45d5-9a96-b165651f0e4b": {
+        "id": "bbb6d8ad-f9d0-45d5-9a96-b165651f0e4b",
+        "locateEnabled": 1
+      },
+      "85a67696-c40f-4672-b82c-5e793e1983ee": {
+        "id": "85a67696-c40f-4672-b82c-5e793e1983ee",
+        "locateEnabled": 1
+      },
+      "eddf284b-f669-4ea9-bc61-908cf1c3f142": {
+        "id": "eddf284b-f669-4ea9-bc61-908cf1c3f142",
+        "locateEnabled": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/alert-contacts": {
+      "66985194-37f6-4f70-9023-192fd28b8ff7": {
+        "id": "66985194-37f6-4f70-9023-192fd28b8ff7",
+        "company": "test_val",
+        "companyCode": "test_val",
+        "country": "test_val",
+        "fax": "test_val",
+        "firstName": "test_val",
+        "includeSvcAlerts": 1,
+        "lastName": "test_val",
+        "notificationSeverities": [],
+        "preferredLanguage": "test_val",
+        "primaryEmail": "test_val",
+        "primaryPhone": "test_val",
+        "receiveEmail": 1,
+        "receiveGrouped": 1,
+        "secondaryEmail": "test_val",
+        "secondaryPhone": "test_val"
+      },
+      "782b8832-f2c5-4549-9f3b-ff111c00470b": {
+        "id": "782b8832-f2c5-4549-9f3b-ff111c00470b",
+        "company": "test_val",
+        "companyCode": "test_val",
+        "country": "test_val",
+        "fax": "test_val",
+        "firstName": "test_val",
+        "includeSvcAlerts": 1,
+        "lastName": "test_val",
+        "notificationSeverities": [],
+        "preferredLanguage": "test_val",
+        "primaryEmail": "test_val",
+        "primaryPhone": "test_val",
+        "receiveEmail": 1,
+        "receiveGrouped": 1,
+        "secondaryEmail": "test_val",
+        "secondaryPhone": "test_val"
+      },
+      "3ebb63c1-bc0f-42cc-b127-4535412d00e6": {
+        "id": "3ebb63c1-bc0f-42cc-b127-4535412d00e6",
+        "company": "test_val",
+        "companyCode": "test_val",
+        "country": "test_val",
+        "fax": "test_val",
+        "firstName": "test_val",
+        "includeSvcAlerts": 1,
+        "lastName": "test_val",
+        "notificationSeverities": [],
+        "preferredLanguage": "test_val",
+        "primaryEmail": "test_val",
+        "primaryPhone": "test_val",
+        "receiveEmail": 1,
+        "receiveGrouped": 1,
+        "secondaryEmail": "test_val",
+        "secondaryPhone": "test_val"
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "company": "test_val",
+        "companyCode": "test_val",
+        "country": "test_val",
+        "fax": "test_val",
+        "firstName": "test_val",
+        "includeSvcAlerts": 1,
+        "lastName": "test_val",
+        "notificationSeverities": [],
+        "preferredLanguage": "test_val",
+        "primaryEmail": "test_val",
+        "primaryPhone": "test_val",
+        "receiveEmail": 1,
+        "receiveGrouped": 1,
+        "secondaryEmail": "test_val",
+        "secondaryPhone": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/applicationsets": {
+      "41c5a56a-3f53-4a39-8362-1f8e080b3c47": {
+        "id": "41c5a56a-3f53-4a39-8362-1f8e080b3c47",
+        "appSetBusinessUnit": "test_val",
+        "appSetComments": "test_val",
+        "appSetImportance": "test_val",
+        "appSetName": "test_val",
+        "appSetType": "test_val",
+        "createAppSetQosConfigInput": {},
+        "customAppType": "test_val",
+        "members": [],
+        "addMembers": null,
+        "editAppSetQosConfigInput": null,
+        "removeMembers": null,
+        "retainVolumeExportsOnRemoval": null
+      },
+      "f1a8f81a-8978-4d94-828c-161eb6dea332": {
+        "id": "f1a8f81a-8978-4d94-828c-161eb6dea332",
+        "appSetBusinessUnit": "test_val",
+        "appSetComments": "test_val",
+        "appSetImportance": "test_val",
+        "appSetName": "test_val",
+        "appSetType": "test_val",
+        "createAppSetQosConfigInput": {},
+        "customAppType": "test_val",
+        "members": [],
+        "addMembers": null,
+        "editAppSetQosConfigInput": null,
+        "removeMembers": null,
+        "retainVolumeExportsOnRemoval": null
+      },
+      "5fff80c7-13cf-43c4-9560-cbe77c53dbb8": {
+        "id": "5fff80c7-13cf-43c4-9560-cbe77c53dbb8",
+        "appSetBusinessUnit": "test_val",
+        "appSetComments": "test_val",
+        "appSetImportance": "test_val",
+        "appSetName": "test_val",
+        "appSetType": "test_val",
+        "createAppSetQosConfigInput": {},
+        "customAppType": "test_val",
+        "members": [],
+        "addMembers": null,
+        "editAppSetQosConfigInput": null,
+        "removeMembers": null,
+        "retainVolumeExportsOnRemoval": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "appSetBusinessUnit": "test_val",
+        "appSetComments": "test_val",
+        "appSetImportance": "test_val",
+        "appSetName": "test_val",
+        "appSetType": "test_val",
+        "createAppSetQosConfigInput": null,
+        "customAppType": "test_val",
+        "members": null,
+        "addMembers": [],
+        "editAppSetQosConfigInput": {},
+        "removeMembers": [],
+        "retainVolumeExportsOnRemoval": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/applicationsets/test-id-999/protection-policies": {
+      "8fbcd55e-5168-4c00-b788-c0ae7818f599": {
+        "id": "8fbcd55e-5168-4c00-b788-c0ae7818f599",
+        "policy": {},
+        "protectionPolicyType": "test_val",
+        "schedules": [],
+        "createSchedules": null,
+        "modifySchedules": null,
+        "removeSchedules": null
+      },
+      "0624bbf5-af74-4427-bc52-2d20feb22dfa": {
+        "id": "0624bbf5-af74-4427-bc52-2d20feb22dfa",
+        "policy": {},
+        "protectionPolicyType": "test_val",
+        "schedules": null,
+        "createSchedules": [],
+        "modifySchedules": [],
+        "removeSchedules": []
+      },
+      "7df62aaa-75fa-46ca-b79d-9ac169559fb5": {
+        "id": "7df62aaa-75fa-46ca-b79d-9ac169559fb5",
+        "policy": {},
+        "protectionPolicyType": "test_val",
+        "schedules": [],
+        "createSchedules": null,
+        "modifySchedules": null,
+        "removeSchedules": null
+      },
+      "33350e0f-4338-48bd-84a3-ce17f78855c7": {
+        "id": "33350e0f-4338-48bd-84a3-ce17f78855c7",
+        "policy": {},
+        "protectionPolicyType": "test_val",
+        "schedules": null,
+        "createSchedules": [],
+        "modifySchedules": [],
+        "removeSchedules": []
+      },
+      "7a262fbe-0176-4c81-b1c8-7e714329a6a0": {
+        "id": "7a262fbe-0176-4c81-b1c8-7e714329a6a0",
+        "policy": {},
+        "protectionPolicyType": "test_val",
+        "schedules": [],
+        "createSchedules": null,
+        "modifySchedules": null,
+        "removeSchedules": null
+      },
+      "64ac2ec9-ad11-4b05-8b17-fe16658f4a13": {
+        "id": "64ac2ec9-ad11-4b05-8b17-fe16658f4a13",
+        "policy": {},
+        "protectionPolicyType": "test_val",
+        "schedules": null,
+        "createSchedules": [],
+        "modifySchedules": [],
+        "removeSchedules": []
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/applicationsets/test-id-999/protection-policies/fix": {
+      "1d2fef7a-2f81-4506-b140-d3761c4e4b4d": {
+        "id": "1d2fef7a-2f81-4506-b140-d3761c4e4b4d",
+        "policy": {},
+        "protectionPolicyType": "test_val",
+        "schedules": []
+      },
+      "174de6ab-1662-479b-9786-01d6e4762144": {
+        "id": "174de6ab-1662-479b-9786-01d6e4762144",
+        "policy": {},
+        "protectionPolicyType": "test_val",
+        "schedules": []
+      },
+      "2bfe19ad-37da-49e3-b601-3b75c0a3c272": {
+        "id": "2bfe19ad-37da-49e3-b601-3b75c0a3c272",
+        "policy": {},
+        "protectionPolicyType": "test_val",
+        "schedules": []
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/applicationsets/test-id-999/proximity-settings": {
+      "f8657575-dc97-4ed4-be1e-fbc3ea806410": {
+        "id": "f8657575-dc97-4ed4-be1e-fbc3ea806410",
+        "hosts": []
+      },
+      "305aa127-3cc5-47cf-a8a9-fe8576b94c43": {
+        "id": "305aa127-3cc5-47cf-a8a9-fe8576b94c43",
+        "hosts": []
+      },
+      "4e1666fd-b771-49db-bcad-fc32bc8e1cd4": {
+        "id": "4e1666fd-b771-49db-bcad-fc32bc8e1cd4",
+        "hosts": []
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/applicationsets/test-id-999/remote-protection/actions": {
+      "5a66cd38-c940-4f61-8ff8-df3dd3d9682e": {
+        "id": "5a66cd38-c940-4f61-8ff8-df3dd3d9682e",
+        "action": "test_val",
+        "parameters": {}
+      },
+      "9963507e-8857-4d2d-91fb-1cc7dc676d45": {
+        "id": "9963507e-8857-4d2d-91fb-1cc7dc676d45",
+        "action": "test_val",
+        "parameters": {}
+      },
+      "18675f59-6b25-45df-8381-9561f3123df0": {
+        "id": "18675f59-6b25-45df-8381-9561f3123df0",
+        "action": "test_val",
+        "parameters": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/applicationsets/test-id-999/snapsets": {
+      "7c7ca993-1f18-46d6-9719-ce033ab8b7dd": {
+        "id": "7c7ca993-1f18-46d6-9719-ce033ab8b7dd",
+        "comment": "test_val",
+        "expireSecs": 1,
+        "readOnly": 1,
+        "retainSecs": 1,
+        "snapshotName": "test_val",
+        "vvNamePattern": "test_val"
+      },
+      "b3651811-0a39-4856-9839-9337e244bcf3": {
+        "id": "b3651811-0a39-4856-9839-9337e244bcf3",
+        "comment": "test_val",
+        "expireSecs": 1,
+        "readOnly": 1,
+        "retainSecs": 1,
+        "snapshotName": "test_val",
+        "vvNamePattern": "test_val"
+      },
+      "8fe00810-cbaf-4921-b18c-3409bf3c11db": {
+        "id": "8fe00810-cbaf-4921-b18c-3409bf3c11db",
+        "comment": "test_val",
+        "expireSecs": 1,
+        "readOnly": 1,
+        "retainSecs": 1,
+        "snapshotName": "test_val",
+        "vvNamePattern": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/certificates": {
+      "c901d4d0-af0c-4dc0-8d6a-5d01570d7e47": {
+        "id": "c901d4d0-af0c-4dc0-8d6a-5d01570d7e47",
+        "authorityChain": "test_val",
+        "commonName": "test_val",
+        "country": "test_val",
+        "days": 1,
+        "keyLength": 1,
+        "locality": "test_val",
+        "organization": "test_val",
+        "organizationUnit": "test_val",
+        "province": "test_val",
+        "service": "test_val",
+        "subjectAltName": {},
+        "type": "test_val",
+        "certificate": null
+      },
+      "e41c0469-50bc-4d23-ae01-3b8b35360d0c": {
+        "id": "e41c0469-50bc-4d23-ae01-3b8b35360d0c",
+        "authorityChain": "test_val",
+        "commonName": "test_val",
+        "country": "test_val",
+        "days": 1,
+        "keyLength": 1,
+        "locality": "test_val",
+        "organization": "test_val",
+        "organizationUnit": "test_val",
+        "province": "test_val",
+        "service": "test_val",
+        "subjectAltName": {},
+        "type": "test_val",
+        "certificate": null
+      },
+      "ab8ef8b3-01ee-4b5c-abe9-fe540c7d88ce": {
+        "id": "ab8ef8b3-01ee-4b5c-abe9-fe540c7d88ce",
+        "authorityChain": "test_val",
+        "commonName": "test_val",
+        "country": "test_val",
+        "days": 1,
+        "keyLength": 1,
+        "locality": "test_val",
+        "organization": "test_val",
+        "organizationUnit": "test_val",
+        "province": "test_val",
+        "service": "test_val",
+        "subjectAltName": {},
+        "type": "test_val",
+        "certificate": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "authorityChain": "test_val",
+        "commonName": null,
+        "country": null,
+        "days": null,
+        "keyLength": null,
+        "locality": null,
+        "organization": null,
+        "organizationUnit": null,
+        "province": null,
+        "service": null,
+        "subjectAltName": null,
+        "type": null,
+        "certificate": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/collect-support-data": {
+      "8b01515f-1f79-406d-bafd-158ccccfa1a2": {
+        "id": "8b01515f-1f79-406d-bafd-158ccccfa1a2"
+      },
+      "beee3c92-7984-4999-ad83-da98d301ea82": {
+        "id": "beee3c92-7984-4999-ad83-da98d301ea82"
+      },
+      "95e13cb3-5bfb-41af-9a69-002552706673": {
+        "id": "95e13cb3-5bfb-41af-9a69-002552706673"
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/enclosures/test-id-999/enclosure-cards": {
+      "e867bebf-82aa-4278-b962-8462100899ac": {
+        "id": "e867bebf-82aa-4278-b962-8462100899ac",
+        "locate": 1
+      },
+      "9463bbe3-b9bb-4c77-ae26-bdeaa19d510a": {
+        "id": "9463bbe3-b9bb-4c77-ae26-bdeaa19d510a",
+        "locate": 1
+      },
+      "8ab29c8f-9d42-4529-b1d7-f87f9221a1c8": {
+        "id": "8ab29c8f-9d42-4529-b1d7-f87f9221a1c8",
+        "locate": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/enclosures/test-id-999/enclosure-powers": {
+      "4e25191d-f9c4-4f6c-9ca3-6aedd6d835ab": {
+        "id": "4e25191d-f9c4-4f6c-9ca3-6aedd6d835ab",
+        "locate": 1
+      },
+      "59c1f8a4-b892-4e7d-b551-ea70fb9004ea": {
+        "id": "59c1f8a4-b892-4e7d-b551-ea70fb9004ea",
+        "locate": 1
+      },
+      "71aa51f3-a5ed-4694-9dca-adc0ccb6ace0": {
+        "id": "71aa51f3-a5ed-4694-9dca-adc0ccb6ace0",
+        "locate": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/enclosures/test-id-999/enclosure-sleds": {
+      "ab761435-8c0d-43ce-854e-14599b50f174": {
+        "id": "ab761435-8c0d-43ce-854e-14599b50f174",
+        "locate": 1
+      },
+      "403b41d4-d7de-4e6e-92f6-b5059c321644": {
+        "id": "403b41d4-d7de-4e6e-92f6-b5059c321644",
+        "locate": 1
+      },
+      "5feff1ef-fa43-4711-8187-b6fd540b46ea": {
+        "id": "5feff1ef-fa43-4711-8187-b6fd540b46ea",
+        "locate": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/enclosures": {
+      "f398208a-1f33-4bb7-8c5c-4c8d23730aa8": {
+        "id": "f398208a-1f33-4bb7-8c5c-4c8d23730aa8",
+        "locate": 1,
+        "location": null
+      },
+      "1c9336c3-c1ca-4f58-a011-747a48ab0a82": {
+        "id": "1c9336c3-c1ca-4f58-a011-747a48ab0a82",
+        "locate": 1,
+        "location": null
+      },
+      "443bb975-d96b-42c4-a387-4030eca9501f": {
+        "id": "443bb975-d96b-42c4-a387-4030eca9501f",
+        "locate": 1,
+        "location": null
+      },
+      "test_val": {
+        "id": "test_val",
+        "locate": null,
+        "location": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/encryption/backup": {
+      "330a17c3-9bec-49e2-89b0-5dada41f5616": {
+        "id": "330a17c3-9bec-49e2-89b0-5dada41f5616",
+        "parameters": {}
+      },
+      "0271fdb8-e797-486e-a7f6-582c6fb9a091": {
+        "id": "0271fdb8-e797-486e-a7f6-582c6fb9a091",
+        "parameters": {}
+      },
+      "2c3b94cb-b433-4aff-9895-f866430ec809": {
+        "id": "2c3b94cb-b433-4aff-9895-f866430ec809",
+        "parameters": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/encryption/checkekm": {
+      "eb41ecd7-1673-4ce5-8056-d71f4450955b": {
+        "id": "eb41ecd7-1673-4ce5-8056-d71f4450955b"
+      },
+      "a364ff33-ad02-4d95-bb85-4dec408176f5": {
+        "id": "a364ff33-ad02-4d95-bb85-4dec408176f5"
+      },
+      "0218c156-e50b-49d8-b2cd-06650cecc232": {
+        "id": "0218c156-e50b-49d8-b2cd-06650cecc232"
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/encryption/enable": {
+      "5d5304d5-5b35-4811-ac57-1e783b2849a5": {
+        "id": "5d5304d5-5b35-4811-ac57-1e783b2849a5",
+        "parameters": {}
+      },
+      "3bd833f2-7c7c-4a51-b6fc-ed289562a748": {
+        "id": "3bd833f2-7c7c-4a51-b6fc-ed289562a748",
+        "parameters": {}
+      },
+      "b80b239f-8929-4f51-870a-1ec7a949a673": {
+        "id": "b80b239f-8929-4f51-870a-1ec7a949a673",
+        "parameters": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/encryption/rekey": {
+      "0333005b-d66b-4a3c-82aa-1b59dc0515ab": {
+        "id": "0333005b-d66b-4a3c-82aa-1b59dc0515ab",
+        "parameters": {}
+      },
+      "ff980a8f-183d-40b9-bd6d-03208eb8b2e4": {
+        "id": "ff980a8f-183d-40b9-bd6d-03208eb8b2e4",
+        "parameters": {}
+      },
+      "07959ba7-276f-4d2f-8f71-83ec44e4764d": {
+        "id": "07959ba7-276f-4d2f-8f71-83ec44e4764d",
+        "parameters": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/encryption/setekm": {
+      "3dbd9eaa-4a48-490f-965d-12d02857b10e": {
+        "id": "3dbd9eaa-4a48-490f-965d-12d02857b10e",
+        "parameters": {}
+      },
+      "cb4a267d-00ba-42a6-9c02-d087e122ed96": {
+        "id": "cb4a267d-00ba-42a6-9c02-d087e122ed96",
+        "parameters": {}
+      },
+      "b07c7ea4-2711-40b6-9068-cd9dd3208324": {
+        "id": "b07c7ea4-2711-40b6-9068-cd9dd3208324",
+        "parameters": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/encryption/setekm/backup": {
+      "4f4eabe7-72e2-4a43-9618-71c62a1a0fd1": {
+        "id": "4f4eabe7-72e2-4a43-9618-71c62a1a0fd1",
+        "parameters": {}
+      },
+      "9455d14e-56e4-46e6-bcda-c7041831ad70": {
+        "id": "9455d14e-56e4-46e6-bcda-c7041831ad70",
+        "parameters": {}
+      },
+      "7a1ff927-26dd-45f1-8013-e2f8ffd4e2eb": {
+        "id": "7a1ff927-26dd-45f1-8013-e2f8ffd4e2eb",
+        "parameters": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/mail-settings": {
+      "a4287b3c-92b0-4aa7-8008-b766af6fd121": {
+        "id": "a4287b3c-92b0-4aa7-8008-b766af6fd121",
+        "authenticationRequired": "test_val",
+        "mailHostDomain": "test_val",
+        "mailHostServer": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "senderEmailId": "test_val",
+        "username": "test_val"
+      },
+      "95aec16f-a506-46ef-a086-9c2c452fcd21": {
+        "id": "95aec16f-a506-46ef-a086-9c2c452fcd21",
+        "authenticationRequired": "test_val",
+        "mailHostDomain": "test_val",
+        "mailHostServer": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "senderEmailId": "test_val",
+        "username": "test_val"
+      },
+      "5dc120a5-66be-459e-abc1-7cb19d93ba5d": {
+        "id": "5dc120a5-66be-459e-abc1-7cb19d93ba5d",
+        "authenticationRequired": "test_val",
+        "mailHostDomain": "test_val",
+        "mailHostServer": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "senderEmailId": "test_val",
+        "username": "test_val"
+      },
+      "80645ba8-1c1c-44f1-9a71-e2b97f93e3e7": {
+        "id": "80645ba8-1c1c-44f1-9a71-e2b97f93e3e7",
+        "authenticationRequired": "test_val",
+        "mailHostDomain": "test_val",
+        "mailHostServer": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "senderEmailId": "test_val",
+        "username": "test_val"
+      },
+      "c0a858d1-8e1e-44d1-92ed-2fad451dfe5b": {
+        "id": "c0a858d1-8e1e-44d1-92ed-2fad451dfe5b",
+        "authenticationRequired": "test_val",
+        "mailHostDomain": "test_val",
+        "mailHostServer": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "senderEmailId": "test_val",
+        "username": "test_val"
+      },
+      "dca4815d-c1cf-459d-9ac4-4dd29529d8a6": {
+        "id": "dca4815d-c1cf-459d-9ac4-4dd29529d8a6",
+        "authenticationRequired": "test_val",
+        "mailHostDomain": "test_val",
+        "mailHostServer": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "senderEmailId": "test_val",
+        "username": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/network-services/cim": {
+      "ca3b3c35-5651-4cf5-a001-ac02cacc650d": {
+        "id": "ca3b3c35-5651-4cf5-a001-ac02cacc650d",
+        "cim": {}
+      },
+      "ba7e96d0-7ece-422b-b10a-38f9550c7302": {
+        "id": "ba7e96d0-7ece-422b-b10a-38f9550c7302",
+        "cim": {}
+      },
+      "5ec4403c-5407-42f8-b39d-56bdb9aa8cbe": {
+        "id": "5ec4403c-5407-42f8-b39d-56bdb9aa8cbe",
+        "cim": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/network-services/snmp-mgr": {
+      "820205c2-3ded-46e5-babe-08537d4b79c0": {
+        "id": "820205c2-3ded-46e5-babe-08537d4b79c0",
+        "snmpConfig": [],
+        "managerIP": null,
+        "notify": null,
+        "port": null,
+        "retry": null,
+        "timeoutSecs": null,
+        "user": null,
+        "version": null
+      },
+      "4a7c53fc-8f99-461f-9687-00bc1ce488be": {
+        "id": "4a7c53fc-8f99-461f-9687-00bc1ce488be",
+        "snmpConfig": [],
+        "managerIP": null,
+        "notify": null,
+        "port": null,
+        "retry": null,
+        "timeoutSecs": null,
+        "user": null,
+        "version": null
+      },
+      "ca9a3af7-c30f-4b3a-9cac-3857f746be69": {
+        "id": "ca9a3af7-c30f-4b3a-9cac-3857f746be69",
+        "snmpConfig": [],
+        "managerIP": null,
+        "notify": null,
+        "port": null,
+        "retry": null,
+        "timeoutSecs": null,
+        "user": null,
+        "version": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "snmpConfig": null,
+        "managerIP": "test_val",
+        "notify": "test_val",
+        "port": 1,
+        "retry": 1,
+        "timeoutSecs": 1,
+        "user": "test_val",
+        "version": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/network-services/vasa": {
+      "82691831-b8b1-4aa3-9c19-44152149df09": {
+        "id": "82691831-b8b1-4aa3-9c19-44152149df09",
+        "action": "test_val"
+      },
+      "e182f5b8-f5cc-442a-8ce4-1dd730c2e5f0": {
+        "id": "e182f5b8-f5cc-442a-8ce4-1dd730c2e5f0",
+        "action": "test_val"
+      },
+      "43757f54-8933-427b-84d3-51ffcbfaac38": {
+        "id": "43757f54-8933-427b-84d3-51ffcbfaac38",
+        "action": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/network-services/vasa/test-id-999/services": {
+      "52e91abf-ea52-4168-94ab-9b0bd59294af": {
+        "id": "52e91abf-ea52-4168-94ab-9b0bd59294af",
+        "certMgmt": "test_val",
+        "vasaStateEnabled": 1
+      },
+      "df652775-82f5-4fbd-8041-2e0c29253db9": {
+        "id": "df652775-82f5-4fbd-8041-2e0c29253db9",
+        "certMgmt": "test_val",
+        "vasaStateEnabled": 1
+      },
+      "9c5334ca-207c-47fa-bd9a-9fff3ad6cd8d": {
+        "id": "9c5334ca-207c-47fa-bd9a-9fff3ad6cd8d",
+        "certMgmt": "test_val",
+        "vasaStateEnabled": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/network-settings": {
+      "5775f5da-0fc9-471a-aa72-0f33d9fd3cff": {
+        "id": "5775f5da-0fc9-471a-aa72-0f33d9fd3cff",
+        "dnsAddresses": [],
+        "ipv4Address": "test_val",
+        "ipv4Gateway": "test_val",
+        "ipv4SubnetMask": "test_val",
+        "ipv6Address": "test_val",
+        "ipv6Gateway": "test_val",
+        "ipv6PrefixLen": "test_val",
+        "proxyParams": {}
+      },
+      "93ad6283-98ba-4a83-846c-97d543102117": {
+        "id": "93ad6283-98ba-4a83-846c-97d543102117",
+        "dnsAddresses": [],
+        "ipv4Address": "test_val",
+        "ipv4Gateway": "test_val",
+        "ipv4SubnetMask": "test_val",
+        "ipv6Address": "test_val",
+        "ipv6Gateway": "test_val",
+        "ipv6PrefixLen": "test_val",
+        "proxyParams": {}
+      },
+      "8d80b254-2f07-41e9-b53d-bcd6a0b50675": {
+        "id": "8d80b254-2f07-41e9-b53d-bcd6a0b50675",
+        "dnsAddresses": [],
+        "ipv4Address": "test_val",
+        "ipv4Gateway": "test_val",
+        "ipv4SubnetMask": "test_val",
+        "ipv6Address": "test_val",
+        "ipv6Gateway": "test_val",
+        "ipv6PrefixLen": "test_val",
+        "proxyParams": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/nodes": {
+      "9420086c-521d-49ed-8b28-af9bb91e39ae": {
+        "id": "9420086c-521d-49ed-8b28-af9bb91e39ae",
+        "locate": 1
+      },
+      "0deb8a33-3b13-4cce-a4a0-87aa47c51699": {
+        "id": "0deb8a33-3b13-4cce-a4a0-87aa47c51699",
+        "locate": 1
+      },
+      "291d7556-2de1-4d85-83c8-b7970ecebbd4": {
+        "id": "291d7556-2de1-4d85-83c8-b7970ecebbd4",
+        "locate": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/nodes/test-id-999/node-cards": {
+      "e70fd14b-52e6-484f-ba20-9a88cfd8a325": {
+        "id": "e70fd14b-52e6-484f-ba20-9a88cfd8a325",
+        "locate": 1
+      },
+      "ea87f876-b1e0-4be8-8db2-e20f8dbd272a": {
+        "id": "ea87f876-b1e0-4be8-8db2-e20f8dbd272a",
+        "locate": 1
+      },
+      "bc88876a-6e4a-4c57-8040-0c7b4215903a": {
+        "id": "bc88876a-6e4a-4c57-8040-0c7b4215903a",
+        "locate": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/nodes/test-id-999/node-powers": {
+      "98ce05a3-60c9-4b0b-93d6-0416b800b9e3": {
+        "id": "98ce05a3-60c9-4b0b-93d6-0416b800b9e3",
+        "locate": 1
+      },
+      "fb7d2c56-ab2b-4481-bbd7-da8427e64c0c": {
+        "id": "fb7d2c56-ab2b-4481-bbd7-da8427e64c0c",
+        "locate": 1
+      },
+      "8118d1ef-eb2a-4a32-bb13-8f54a2373e2f": {
+        "id": "8118d1ef-eb2a-4a32-bb13-8f54a2373e2f",
+        "locate": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/ports": {
+      "0b57350e-f175-4fcf-93d3-28605b0d9cad": {
+        "id": "0b57350e-f175-4fcf-93d3-28605b0d9cad",
+        "portEnable": 1
+      },
+      "88a40bca-b868-4a17-8301-b4a3aad1fa34": {
+        "id": "88a40bca-b868-4a17-8301-b4a3aad1fa34",
+        "portEnable": 1
+      },
+      "14c62637-a5ef-43e6-8886-1793984eece3": {
+        "id": "14c62637-a5ef-43e6-8886-1793984eece3",
+        "portEnable": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/ports/test-id-999/edit-iscsi": {
+      "df8fba39-394c-4492-a5b8-31b04ea56661": {
+        "id": "df8fba39-394c-4492-a5b8-31b04ea56661",
+        "gatewayAddress": "test_val",
+        "ipAddress": "test_val",
+        "label": "test_val",
+        "mtu": "test_val",
+        "netMask": "test_val",
+        "sendTargetGroupTag": 1
+      },
+      "a7c12780-6fa7-41b1-bc20-c2a0f5a1173f": {
+        "id": "a7c12780-6fa7-41b1-bc20-c2a0f5a1173f",
+        "gatewayAddress": "test_val",
+        "ipAddress": "test_val",
+        "label": "test_val",
+        "mtu": "test_val",
+        "netMask": "test_val",
+        "sendTargetGroupTag": 1
+      },
+      "d316b318-83e8-4221-8980-77edf57d04ba": {
+        "id": "d316b318-83e8-4221-8980-77edf57d04ba",
+        "gatewayAddress": "test_val",
+        "ipAddress": "test_val",
+        "label": "test_val",
+        "mtu": "test_val",
+        "netMask": "test_val",
+        "sendTargetGroupTag": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/ports/test-id-999/edit-rcip": {
+      "45c4e6a4-ee2e-413e-b13f-523d0c07d243": {
+        "id": "45c4e6a4-ee2e-413e-b13f-523d0c07d243",
+        "gatewayAddress": "test_val",
+        "gatewayAddressV6": "test_val",
+        "ipAddress": "test_val",
+        "ipAddressV6": "test_val",
+        "label": "test_val",
+        "mtu": "test_val",
+        "netMask": "test_val",
+        "netMaskV6": "test_val",
+        "speedConfigured": "test_val"
+      },
+      "4340f772-7126-45ce-beda-6c77b3e21df5": {
+        "id": "4340f772-7126-45ce-beda-6c77b3e21df5",
+        "gatewayAddress": "test_val",
+        "gatewayAddressV6": "test_val",
+        "ipAddress": "test_val",
+        "ipAddressV6": "test_val",
+        "label": "test_val",
+        "mtu": "test_val",
+        "netMask": "test_val",
+        "netMaskV6": "test_val",
+        "speedConfigured": "test_val"
+      },
+      "709b96a7-23d7-4b2d-9cc8-9d12177ad1f3": {
+        "id": "709b96a7-23d7-4b2d-9cc8-9d12177ad1f3",
+        "gatewayAddress": "test_val",
+        "gatewayAddressV6": "test_val",
+        "ipAddress": "test_val",
+        "ipAddressV6": "test_val",
+        "label": "test_val",
+        "mtu": "test_val",
+        "netMask": "test_val",
+        "netMaskV6": "test_val",
+        "speedConfigured": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/ports/test-id-999/fc": {
+      "75c1aaa2-0200-4a93-95cd-854728430e51": {
+        "id": "75c1aaa2-0200-4a93-95cd-854728430e51",
+        "configMode": "test_val",
+        "connectionType": "test_val",
+        "interuptCoalesce": 1,
+        "label": "test_val",
+        "speedConfigured": "test_val",
+        "uniqueWWN": 1,
+        "vcn": 1
+      },
+      "f6787918-026a-4f0a-aa39-6f9fc26ac160": {
+        "id": "f6787918-026a-4f0a-aa39-6f9fc26ac160",
+        "configMode": "test_val",
+        "connectionType": "test_val",
+        "interuptCoalesce": 1,
+        "label": "test_val",
+        "speedConfigured": "test_val",
+        "uniqueWWN": 1,
+        "vcn": 1
+      },
+      "68f175c0-9329-4d4d-986f-8b172899d5d6": {
+        "id": "68f175c0-9329-4d4d-986f-8b172899d5d6",
+        "configMode": "test_val",
+        "connectionType": "test_val",
+        "interuptCoalesce": 1,
+        "label": "test_val",
+        "speedConfigured": "test_val",
+        "uniqueWWN": 1,
+        "vcn": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/support-settings": {
+      "64c54871-ef87-4c29-9fe0-a4116156722b": {
+        "id": "64c54871-ef87-4c29-9fe0-a4116156722b",
+        "connectToHPE": "test_val",
+        "deviceId": "test_val",
+        "enterpriseServerURL": "test_val",
+        "miniInsploreEnabled": "test_val",
+        "rapForwarding": "test_val",
+        "remoteAccess": "test_val",
+        "remoteRequestAcknowledge": {},
+        "rtsEnabled": "test_val"
+      },
+      "81080b0d-990d-4c63-8763-8532908b53e0": {
+        "id": "81080b0d-990d-4c63-8763-8532908b53e0",
+        "connectToHPE": "test_val",
+        "deviceId": "test_val",
+        "enterpriseServerURL": "test_val",
+        "miniInsploreEnabled": "test_val",
+        "rapForwarding": "test_val",
+        "remoteAccess": "test_val",
+        "remoteRequestAcknowledge": {},
+        "rtsEnabled": "test_val"
+      },
+      "6579d9b6-9b8b-4921-8b6d-ea297634ad66": {
+        "id": "6579d9b6-9b8b-4921-8b6d-ea297634ad66",
+        "connectToHPE": "test_val",
+        "deviceId": "test_val",
+        "enterpriseServerURL": "test_val",
+        "miniInsploreEnabled": "test_val",
+        "rapForwarding": "test_val",
+        "remoteAccess": "test_val",
+        "remoteRequestAcknowledge": {},
+        "rtsEnabled": "test_val"
+      },
+      "fb3c4922-e98c-40a1-a4a2-d8b6f268aa6e": {
+        "id": "fb3c4922-e98c-40a1-a4a2-d8b6f268aa6e",
+        "connectToHPE": "test_val",
+        "deviceId": "test_val",
+        "enterpriseServerURL": "test_val",
+        "miniInsploreEnabled": "test_val",
+        "rapForwarding": "test_val",
+        "remoteAccess": "test_val",
+        "remoteRequestAcknowledge": {},
+        "rtsEnabled": "test_val"
+      },
+      "3ec9d6ae-f305-4640-80dd-5895c2284178": {
+        "id": "3ec9d6ae-f305-4640-80dd-5895c2284178",
+        "connectToHPE": "test_val",
+        "deviceId": "test_val",
+        "enterpriseServerURL": "test_val",
+        "miniInsploreEnabled": "test_val",
+        "rapForwarding": "test_val",
+        "remoteAccess": "test_val",
+        "remoteRequestAcknowledge": {},
+        "rtsEnabled": "test_val"
+      },
+      "bc7f09f0-7e23-4935-9ca6-00f6ee19b154": {
+        "id": "bc7f09f0-7e23-4935-9ca6-00f6ee19b154",
+        "connectToHPE": "test_val",
+        "deviceId": "test_val",
+        "enterpriseServerURL": "test_val",
+        "miniInsploreEnabled": "test_val",
+        "rapForwarding": "test_val",
+        "remoteAccess": "test_val",
+        "remoteRequestAcknowledge": {},
+        "rtsEnabled": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/system-settings": {
+      "test_val": {
+        "id": "test_val",
+        "authMode": {},
+        "dateTime": "test_val",
+        "installationSites": {},
+        "name": "test_val",
+        "ntpAddresses": [],
+        "remoteSyslogSettings": {},
+        "srinfo": {},
+        "supportContact": {},
+        "systemParameters": {},
+        "timezone": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/system-settings/management-services/vvolscs": {
+      "test_val": {
+        "id": "test_val",
+        "comment": "test_val",
+        "domain": "test_val",
+        "hostIDs": [],
+        "hostSetIDs": [],
+        "keep": 1,
+        "members": [],
+        "name": "test_val",
+        "hostProximity": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "comment": "test_val",
+        "domain": null,
+        "hostIDs": null,
+        "hostSetIDs": null,
+        "keep": null,
+        "members": [],
+        "name": "test_val",
+        "hostProximity": []
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/system-settings/quorum-witness": {
+      "021d0ca8-afe1-4f84-a62e-4f5801729ff9": {
+        "id": "021d0ca8-afe1-4f84-a62e-4f5801729ff9",
+        "parameters": {},
+        "replicationPartnerSystemId": "test_val",
+        "srcReplicationId": "test_val",
+        "startQuorumWitness": 1,
+        "targetReplicationId": "test_val"
+      },
+      "c93b3cdb-26fc-45bb-b80c-b79a5b415b72": {
+        "id": "c93b3cdb-26fc-45bb-b80c-b79a5b415b72",
+        "parameters": {},
+        "replicationPartnerSystemId": "test_val",
+        "srcReplicationId": "test_val",
+        "startQuorumWitness": 1,
+        "targetReplicationId": "test_val"
+      },
+      "e2166681-138a-4d6e-b9c8-6850fb9933ae": {
+        "id": "e2166681-138a-4d6e-b9c8-6850fb9933ae",
+        "parameters": {},
+        "replicationPartnerSystemId": "test_val",
+        "srcReplicationId": "test_val",
+        "startQuorumWitness": 1,
+        "targetReplicationId": "test_val"
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "parameters": null,
+        "replicationPartnerSystemId": "test_val",
+        "srcReplicationId": null,
+        "startQuorumWitness": 1,
+        "targetReplicationId": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/system-settings/replication-partners": {
+      "b28298ce-5d0a-47da-a100-d21c2dcdea3b": {
+        "id": "b28298ce-5d0a-47da-a100-d21c2dcdea3b",
+        "replicationPartners": [],
+        "addRcLinks": null,
+        "removeRcLinks": null
+      },
+      "5d0214a1-652a-45d3-9db2-3421b995834a": {
+        "id": "5d0214a1-652a-45d3-9db2-3421b995834a",
+        "replicationPartners": [],
+        "addRcLinks": null,
+        "removeRcLinks": null
+      },
+      "39065f53-2247-4353-a89f-e96de94bc379": {
+        "id": "39065f53-2247-4353-a89f-e96de94bc379",
+        "replicationPartners": [],
+        "addRcLinks": null,
+        "removeRcLinks": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "replicationPartners": null,
+        "addRcLinks": {},
+        "removeRcLinks": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/trust-certificates": {
+      "3c073f76-f1d8-4468-88d8-d74279476ce8": {
+        "id": "3c073f76-f1d8-4468-88d8-d74279476ce8",
+        "action": "test_val",
+        "parameters": {}
+      },
+      "659058f3-1de6-48b0-a5dd-8bebab816078": {
+        "id": "659058f3-1de6-48b0-a5dd-8bebab816078",
+        "action": "test_val",
+        "parameters": {}
+      },
+      "e6ee62c7-75ac-4bd5-95c6-83f74c5f5f23": {
+        "id": "e6ee62c7-75ac-4bd5-95c6-83f74c5f5f23",
+        "action": "test_val",
+        "parameters": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/vm-manager-settings": {
+      "test_val": {
+        "id": "test_val",
+        "certChainPem": "test_val",
+        "description": "test_val",
+        "inetaddress": "test_val",
+        "name": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "username": "test_val"
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "certChainPem": "test_val",
+        "description": "test_val",
+        "inetaddress": "test_val",
+        "name": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "username": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/volumes": {
+      "test_val": {
+        "id": "test_val",
+        "comments": "test_val",
+        "count": 1,
+        "dataReduction": 1,
+        "name": "test_val",
+        "sizeMib": 1,
+        "snapCpg": "test_val",
+        "snapshotAllocWarning": 1,
+        "userAllocWarning": 1,
+        "userCpg": "test_val",
+        "conversionType": null,
+        "snapshotCpgName": null,
+        "userCpgName": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "comments": null,
+        "count": null,
+        "dataReduction": 1,
+        "name": "test_val",
+        "sizeMib": 1,
+        "snapCpg": null,
+        "snapshotAllocWarning": 1,
+        "userAllocWarning": 1,
+        "userCpg": null,
+        "conversionType": "test_val",
+        "snapshotCpgName": "test_val",
+        "userCpgName": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type1/test-id-999/volumes/test-id-999/snapshots": {
+      "24cda130-bab4-4935-ad19-015506d91322": {
+        "id": "24cda130-bab4-4935-ad19-015506d91322",
+        "comment": "test_val",
+        "customName": "test_val",
+        "expireSecs": 1,
+        "namePattern": "test_val",
+        "readOnly": 1,
+        "retainSecs": 1,
+        "priority": null,
+        "target": null
+      },
+      "deb03e0d-f998-4b28-8a3c-2176a11c149d": {
+        "id": "deb03e0d-f998-4b28-8a3c-2176a11c149d",
+        "comment": null,
+        "customName": null,
+        "expireSecs": null,
+        "namePattern": null,
+        "readOnly": null,
+        "retainSecs": null,
+        "priority": "test_val",
+        "target": "test_val"
+      },
+      "e1983a5c-f748-4c63-a1f0-f17717fd5e28": {
+        "id": "e1983a5c-f748-4c63-a1f0-f17717fd5e28",
+        "comment": "test_val",
+        "customName": "test_val",
+        "expireSecs": 1,
+        "namePattern": "test_val",
+        "readOnly": 1,
+        "retainSecs": 1,
+        "priority": null,
+        "target": null
+      },
+      "940f5d6c-e92e-454f-80e4-d4f63911eff6": {
+        "id": "940f5d6c-e92e-454f-80e4-d4f63911eff6",
+        "comment": null,
+        "customName": null,
+        "expireSecs": null,
+        "namePattern": null,
+        "readOnly": null,
+        "retainSecs": null,
+        "priority": "test_val",
+        "target": "test_val"
+      },
+      "b65271ac-e3de-45f2-b3c9-965ffb7fbced": {
+        "id": "b65271ac-e3de-45f2-b3c9-965ffb7fbced",
+        "comment": "test_val",
+        "customName": "test_val",
+        "expireSecs": 1,
+        "namePattern": "test_val",
+        "readOnly": 1,
+        "retainSecs": 1,
+        "priority": null,
+        "target": null
+      },
+      "4b9e0393-7d99-484e-8aa7-f890c4e5adfb": {
+        "id": "4b9e0393-7d99-484e-8aa7-f890c4e5adfb",
+        "comment": null,
+        "customName": null,
+        "expireSecs": null,
+        "namePattern": null,
+        "readOnly": null,
+        "retainSecs": null,
+        "priority": "test_val",
+        "target": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type2": {
+      "test-id-999": {
+        "id": "test-id-999",
+        "auto_switchover_enabled": 1,
+        "autoclean_unmanaged_snapshots_enabled": 1,
+        "autoclean_unmanaged_snapshots_ttl_unit": 1,
+        "cc_mode_enabled": 1,
+        "date": 1,
+        "default_iscsi_target_scope": "test_val",
+        "group_snapshot_ttl": 1,
+        "group_target_name": "test_val",
+        "max_lock_period": 1,
+        "name": "test_val",
+        "ntp_server": "test_val",
+        "tdz_enabled": 1,
+        "tdz_prefix": "test_val",
+        "timezone": "test_val",
+        "tlsv1_enabled": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/access-control-records": {
+      "fd54dbac-bba8-4193-ad10-1a5bc712e5a1": {
+        "id": "fd54dbac-bba8-4193-ad10-1a5bc712e5a1",
+        "apply_to": "test_val",
+        "chap_user_id": "test_val",
+        "initiator_group_id": "test_val",
+        "lun": 1,
+        "pe_id": "test_val",
+        "pe_ids": [],
+        "snap_id": "test_val",
+        "systemUid": "test_val",
+        "vol_id": "test_val"
+      },
+      "9a7b49af-1857-453e-a27f-df4a41d49260": {
+        "id": "9a7b49af-1857-453e-a27f-df4a41d49260",
+        "apply_to": "test_val",
+        "chap_user_id": "test_val",
+        "initiator_group_id": "test_val",
+        "lun": 1,
+        "pe_id": "test_val",
+        "pe_ids": [],
+        "snap_id": "test_val",
+        "systemUid": "test_val",
+        "vol_id": "test_val"
+      },
+      "52419d4d-01d7-4c44-89c4-ebb2b042b528": {
+        "id": "52419d4d-01d7-4c44-89c4-ebb2b042b528",
+        "apply_to": "test_val",
+        "chap_user_id": "test_val",
+        "initiator_group_id": "test_val",
+        "lun": 1,
+        "pe_id": "test_val",
+        "pe_ids": [],
+        "snap_id": "test_val",
+        "systemUid": "test_val",
+        "vol_id": "test_val"
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "apply_to": "test_val",
+        "chap_user_id": null,
+        "initiator_group_id": null,
+        "lun": null,
+        "pe_id": null,
+        "pe_ids": null,
+        "snap_id": null,
+        "systemUid": null,
+        "vol_id": null
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/actions/merge": {
+      "df2dd63f-f13a-41b1-b682-5363f22ca0b8": {
+        "id": "df2dd63f-f13a-41b1-b682-5363f22ca0b8",
+        "force": 1,
+        "skip_secondary_mgmt_ip": 1,
+        "src_group_ip": "test_val",
+        "src_group_name": "test_val",
+        "src_passphrase": "test_val",
+        "src_password": "test_val",
+        "src_username": "test_val"
+      },
+      "b25dea42-00f3-46c9-a12f-0e2ff581ab3c": {
+        "id": "b25dea42-00f3-46c9-a12f-0e2ff581ab3c",
+        "force": 1,
+        "skip_secondary_mgmt_ip": 1,
+        "src_group_ip": "test_val",
+        "src_group_name": "test_val",
+        "src_passphrase": "test_val",
+        "src_password": "test_val",
+        "src_username": "test_val"
+      },
+      "5667ce6f-56bb-431f-b70f-62390836f683": {
+        "id": "5667ce6f-56bb-431f-b70f-62390836f683",
+        "force": 1,
+        "skip_secondary_mgmt_ip": 1,
+        "src_group_ip": "test_val",
+        "src_group_name": "test_val",
+        "src_passphrase": "test_val",
+        "src_password": "test_val",
+        "src_username": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/application-servers": {
+      "test_val": {
+        "id": "test_val",
+        "description": "test_val",
+        "hostname": "test_val",
+        "metadata": [],
+        "name": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "server_type": "test_val",
+        "username": "test_val"
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "description": "test_val",
+        "hostname": "test_val",
+        "metadata": [],
+        "name": "test_val",
+        "password": null,
+        "port": 1,
+        "server_type": "test_val",
+        "username": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/arrays": {
+      "test_val": {
+        "id": "test_val",
+        "allow_lower_limits": 1,
+        "create_pool": 1,
+        "ctrlr_a_support_ip": "test_val",
+        "ctrlr_b_support_ip": "test_val",
+        "dedupe_disabled": 1,
+        "name": "test_val",
+        "nic_list": [],
+        "pool_description": "test_val",
+        "pool_name": "test_val",
+        "secondary_mgmt_ip": "test_val",
+        "serial": "test_val"
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "allow_lower_limits": null,
+        "create_pool": null,
+        "ctrlr_a_support_ip": null,
+        "ctrlr_b_support_ip": null,
+        "dedupe_disabled": null,
+        "name": "test_val",
+        "nic_list": null,
+        "pool_description": null,
+        "pool_name": null,
+        "secondary_mgmt_ip": null,
+        "serial": null
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/arrays/test-id-999/actions/failover": {
+      "ae158c64-9d7d-4553-87df-757a2706aec5": {
+        "id": "ae158c64-9d7d-4553-87df-757a2706aec5",
+        "force": 1
+      },
+      "23dfdbb5-33ff-402e-86d7-501ac13134c2": {
+        "id": "23dfdbb5-33ff-402e-86d7-501ac13134c2",
+        "force": 1
+      },
+      "60e9984d-dd3f-4f8b-a0a2-53f36e157572": {
+        "id": "60e9984d-dd3f-4f8b-a0a2-53f36e157572",
+        "force": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/autosupport/actions/send": {
+      "5e60e361-f5d7-4f28-806d-a713a530846b": {
+        "id": "5e60e361-f5d7-4f28-806d-a713a530846b"
+      },
+      "f7d10873-3624-46b0-8bda-535c852ba3d1": {
+        "id": "f7d10873-3624-46b0-8bda-535c852ba3d1"
+      },
+      "ef220824-8f31-4275-b471-40b4ef77c6f4": {
+        "id": "ef220824-8f31-4275-b471-40b4ef77c6f4"
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/controllers/test-id-999/actions/halt": {
+      "ae7d2a62-c20a-47d2-9f88-590b4cf29d40": {
+        "id": "ae7d2a62-c20a-47d2-9f88-590b4cf29d40"
+      },
+      "8aed60ba-ffd5-47d6-99d5-46bf0814e568": {
+        "id": "8aed60ba-ffd5-47d6-99d5-46bf0814e568"
+      },
+      "42df93b0-b117-456b-aff2-87e6f29477b2": {
+        "id": "42df93b0-b117-456b-aff2-87e6f29477b2"
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/disks": {
+      "test-id-999": {
+        "id": "test-id-999",
+        "disk_op": "test_val",
+        "force": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/external-key-manager": {
+      "test_val": {
+        "id": "test_val",
+        "description": "test_val",
+        "hostname": "test_val",
+        "name": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "protocol": "test_val",
+        "username": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/external-key-manager/test-id-999/actions/migrate": {
+      "c07b9d17-4760-4bce-8a77-870520d17ef6": {
+        "id": "c07b9d17-4760-4bce-8a77-870520d17ef6"
+      },
+      "bb8eac1f-8d0b-44bf-bbb3-cf4aa8616b1a": {
+        "id": "bb8eac1f-8d0b-44bf-bbb3-cf4aa8616b1a"
+      },
+      "43f47410-532e-498b-9441-c8d3227e4a96": {
+        "id": "43f47410-532e-498b-9441-c8d3227e4a96"
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/folders": {
+      "test_val": {
+        "id": "test_val",
+        "access_protocol": "test_val",
+        "agent_type": "test_val",
+        "appserver_id": "test_val",
+        "description": "test_val",
+        "hostInitiatorGroupIDs": [],
+        "hostInitiatorsIDs": [],
+        "inherited_vol_perfpol_id": "test_val",
+        "limit_iops": 1,
+        "limit_mbps": 1,
+        "limit_size_bytes": 1,
+        "name": "test_val",
+        "overdraft_limit_pct": 1,
+        "pool_id": "test_val",
+        "provisioned_limit_size_bytes": 1
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "access_protocol": null,
+        "agent_type": null,
+        "appserver_id": "test_val",
+        "description": "test_val",
+        "hostInitiatorGroupIDs": null,
+        "hostInitiatorsIDs": null,
+        "inherited_vol_perfpol_id": "test_val",
+        "limit_iops": 1,
+        "limit_mbps": 1,
+        "limit_size_bytes": 1,
+        "name": "test_val",
+        "overdraft_limit_pct": 1,
+        "pool_id": null,
+        "provisioned_limit_size_bytes": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/host-groups": {
+      "test_val": {
+        "id": "test_val",
+        "access_protocol": "test_val",
+        "app_uuid": "test_val",
+        "description": "test_val",
+        "fc_initiators": [],
+        "fc_tdz_ports": [],
+        "host_type": "test_val",
+        "iscsi_initiators": [],
+        "metadata": [],
+        "name": "test_val",
+        "target_subnets": []
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "access_protocol": null,
+        "app_uuid": "test_val",
+        "description": "test_val",
+        "fc_initiators": [],
+        "fc_tdz_ports": [],
+        "host_type": "test_val",
+        "iscsi_initiators": [],
+        "metadata": [],
+        "name": "test_val",
+        "target_subnets": []
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/host-initiators": {
+      "78f4f731-da3f-4709-89ba-cb160be1e498": {
+        "id": "78f4f731-da3f-4709-89ba-cb160be1e498",
+        "access_protocol": "test_val",
+        "alias": "test_val",
+        "chapuser_id": "test_val",
+        "initiator_group_id": "test_val",
+        "ip_address": "test_val",
+        "iqn": "test_val",
+        "label": "test_val",
+        "override_existing_alias": 1,
+        "wwpn": "test_val"
+      },
+      "3f973685-db08-4e2c-b5ad-a0e2caf77b99": {
+        "id": "3f973685-db08-4e2c-b5ad-a0e2caf77b99",
+        "access_protocol": "test_val",
+        "alias": "test_val",
+        "chapuser_id": "test_val",
+        "initiator_group_id": "test_val",
+        "ip_address": "test_val",
+        "iqn": "test_val",
+        "label": "test_val",
+        "override_existing_alias": 1,
+        "wwpn": "test_val"
+      },
+      "c847271e-0b64-48e7-862c-670b563827d5": {
+        "id": "c847271e-0b64-48e7-862c-670b563827d5",
+        "access_protocol": "test_val",
+        "alias": "test_val",
+        "chapuser_id": "test_val",
+        "initiator_group_id": "test_val",
+        "ip_address": "test_val",
+        "iqn": "test_val",
+        "label": "test_val",
+        "override_existing_alias": 1,
+        "wwpn": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/local-key-manager": {
+      "b33bbada-39d1-4583-be4b-a6530489c97e": {
+        "id": "b33bbada-39d1-4583-be4b-a6530489c97e",
+        "passphrase": "test_val",
+        "active": null,
+        "new_passphrase": null
+      },
+      "279b98a7-ea4b-44ec-83d8-f5b9eb93c67d": {
+        "id": "279b98a7-ea4b-44ec-83d8-f5b9eb93c67d",
+        "passphrase": "test_val",
+        "active": null,
+        "new_passphrase": null
+      },
+      "844a7db4-1f3e-45c9-ab4b-a226616cb5f9": {
+        "id": "844a7db4-1f3e-45c9-ab4b-a226616cb5f9",
+        "passphrase": "test_val",
+        "active": null,
+        "new_passphrase": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "passphrase": "test_val",
+        "active": 1,
+        "new_passphrase": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/mail-settings": {
+      "7089f6c8-fa90-467e-bf37-954ca28dbb79": {
+        "id": "7089f6c8-fa90-467e-bf37-954ca28dbb79",
+        "smtp_port": 1,
+        "smtp_server": "test_val"
+      },
+      "203ee5b5-3b5f-489a-9ab5-e8ec6491bd26": {
+        "id": "203ee5b5-3b5f-489a-9ab5-e8ec6491bd26",
+        "smtp_port": 1,
+        "smtp_server": "test_val"
+      },
+      "b29d6eab-217f-492a-9a73-b1d04a477e3e": {
+        "id": "b29d6eab-217f-492a-9a73-b1d04a477e3e",
+        "smtp_port": 1,
+        "smtp_server": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/network-settings": {
+      "test-id-999": {
+        "id": "test-id-999",
+        "array_list": [],
+        "iscsi_automatic_connection_method": 1,
+        "iscsi_connection_rebalancing": 1,
+        "mgmt_ip": "test_val",
+        "name": "test_val",
+        "route_list": [],
+        "secondary_mgmt_ip": "test_val",
+        "subnet_list": []
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/performance-policies": {
+      "test_val": {
+        "id": "test_val",
+        "app_category": "test_val",
+        "block_size": 1,
+        "cache": 1,
+        "cache_policy": "test_val",
+        "compress": 1,
+        "dedupe_enabled": 1,
+        "description": "test_val",
+        "name": "test_val",
+        "space_policy": "test_val"
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "app_category": "test_val",
+        "block_size": null,
+        "cache": 1,
+        "cache_policy": "test_val",
+        "compress": 1,
+        "dedupe_enabled": 1,
+        "description": "test_val",
+        "name": "test_val",
+        "space_policy": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/ports": {
+      "test-id-999": {
+        "id": "test-id-999",
+        "online": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/protection-templates": {
+      "test_val": {
+        "id": "test_val",
+        "app_cluster_name": "test_val",
+        "app_id": "test_val",
+        "app_server": "test_val",
+        "app_service_name": "test_val",
+        "app_sync": "test_val",
+        "description": "test_val",
+        "name": "test_val",
+        "schedules": [],
+        "addSchedules": null,
+        "editSchedules": null,
+        "removeSchedules": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "app_cluster_name": "test_val",
+        "app_id": "test_val",
+        "app_server": "test_val",
+        "app_service_name": "test_val",
+        "app_sync": "test_val",
+        "description": "test_val",
+        "name": "test_val",
+        "schedules": null,
+        "addSchedules": [],
+        "editSchedules": [],
+        "removeSchedules": []
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/provisioning": {
+      "test_val": {
+        "id": "test_val",
+        "agent_type": "test_val",
+        "app_uuid": "test_val",
+        "appSetName": "test_val",
+        "count": 1,
+        "dedupe_enabled": 1,
+        "downstreamPartner": "test_val",
+        "downstreamPartnerId": "test_val",
+        "encryption_cipher": "test_val",
+        "folder_id": "test_val",
+        "host_groups": [],
+        "limit": 1,
+        "limit_iops": 1,
+        "limit_mbps": 1,
+        "name": "test_val",
+        "perfpolicy": {},
+        "perfpolicy_id": "test_val",
+        "pool_id": "test_val",
+        "protectionPolicyId": "test_val",
+        "protectionPolicySchedules": [],
+        "replicationStartTime": 1,
+        "size": 1,
+        "suffix": 1,
+        "volColId": "test_val",
+        "volColName": "test_val",
+        "warn_level": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/provisioning-review": {
+      "d6f7e154-e25f-4c65-9c37-457e5b285677": {
+        "id": "d6f7e154-e25f-4c65-9c37-457e5b285677",
+        "host_groups": []
+      },
+      "9c84f838-c8b2-4010-b7bc-d6b3fd422687": {
+        "id": "9c84f838-c8b2-4010-b7bc-d6b3fd422687",
+        "host_groups": []
+      },
+      "25eec32c-0fda-495c-8ae7-5425a2c84f41": {
+        "id": "25eec32c-0fda-495c-8ae7-5425a2c84f41",
+        "host_groups": []
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/shelves/actions/activate": {
+      "46302ec5-ec13-44c8-845f-c8f104c6f14d": {
+        "id": "46302ec5-ec13-44c8-845f-c8f104c6f14d",
+        "shelf_list": []
+      },
+      "f05459c2-62ec-4e88-9366-9ab56d660c0d": {
+        "id": "f05459c2-62ec-4e88-9366-9ab56d660c0d",
+        "shelf_list": []
+      },
+      "0672af60-6b62-42a1-80b2-7f97d8182b7b": {
+        "id": "0672af60-6b62-42a1-80b2-7f97d8182b7b",
+        "shelf_list": []
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/snapshots/actions/update": {
+      "97dddca0-360c-4816-b79c-3bd7dc7aa41a": {
+        "id": "97dddca0-360c-4816-b79c-3bd7dc7aa41a",
+        "snapshot_list": []
+      },
+      "088421d1-ab13-4a5f-81d4-16491a92e0a3": {
+        "id": "088421d1-ab13-4a5f-81d4-16491a92e0a3",
+        "snapshot_list": []
+      },
+      "43cd0067-10db-4f73-993c-a4ef0c98a425": {
+        "id": "43cd0067-10db-4f73-993c-a4ef0c98a425",
+        "snapshot_list": []
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/storage-pools": {
+      "test_val": {
+        "id": "test_val",
+        "array_list": [],
+        "dedupe_all_volumes": 1,
+        "description": "test_val",
+        "name": "test_val",
+        "dedupe_capable": null,
+        "force": null,
+        "is_default": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "array_list": [],
+        "dedupe_all_volumes": 1,
+        "description": "test_val",
+        "name": "test_val",
+        "dedupe_capable": 1,
+        "force": 1,
+        "is_default": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/storage-pools/test-id-999/actions/merge": {
+      "8c2c92dc-d20c-4c34-8a78-c91d96de1140": {
+        "id": "8c2c92dc-d20c-4c34-8a78-c91d96de1140",
+        "force": 1,
+        "target_pool_id": "test_val"
+      },
+      "bc846f5e-c4f5-4e29-9aa4-8e497754f7a1": {
+        "id": "bc846f5e-c4f5-4e29-9aa4-8e497754f7a1",
+        "force": 1,
+        "target_pool_id": "test_val"
+      },
+      "1860256f-5ba9-4bf7-8726-c0452f61edc1": {
+        "id": "1860256f-5ba9-4bf7-8726-c0452f61edc1",
+        "force": 1,
+        "target_pool_id": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/system-settings": {
+      "test_val": {
+        "id": "test_val",
+        "alert_settings": {},
+        "date_timezone_settings": {},
+        "dns_settings": {},
+        "encryption_config": {},
+        "isns_settings": {},
+        "name": "test_val",
+        "proxy_settings": {},
+        "security_settings": {},
+        "smtp_settings": {},
+        "snmp_settings": {},
+        "support_settings": {},
+        "syslogd_settings": {},
+        "system_parameters": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/system-settings/replication-partners": {
+      "a413e2f9-c4db-4c99-ab12-228c0ddde996": {
+        "id": "a413e2f9-c4db-4c99-ab12-228c0ddde996",
+        "replicationPartners": []
+      },
+      "a427338d-337e-4268-a0c2-e53f3d8dac02": {
+        "id": "a427338d-337e-4268-a0c2-e53f3d8dac02",
+        "replicationPartners": []
+      },
+      "11cbfbaf-d477-4224-a73b-8147b9c7f335": {
+        "id": "11cbfbaf-d477-4224-a73b-8147b9c7f335",
+        "replicationPartners": []
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "replicationPartners": []
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/system-settings/replication-partners/actions/pause": {
+      "0d6d5e76-8440-4c21-9ce6-87fa1cdd8593": {
+        "id": "0d6d5e76-8440-4c21-9ce6-87fa1cdd8593",
+        "replicationPartners": []
+      },
+      "25fb728f-60fa-4f71-9fad-aebe5dc05862": {
+        "id": "25fb728f-60fa-4f71-9fad-aebe5dc05862",
+        "replicationPartners": []
+      },
+      "720ed032-7495-4a0c-8795-c453d391e0dd": {
+        "id": "720ed032-7495-4a0c-8795-c453d391e0dd",
+        "replicationPartners": []
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/system-settings/replication-partners/actions/resume": {
+      "5881875c-5a67-4be6-b5ff-961275ba9bcb": {
+        "id": "5881875c-5a67-4be6-b5ff-961275ba9bcb",
+        "replicationPartners": []
+      },
+      "fd5f233c-83be-443e-9103-63cec8994549": {
+        "id": "fd5f233c-83be-443e-9103-63cec8994549",
+        "replicationPartners": []
+      },
+      "c3fc8437-639b-46c1-9a2e-0bc52876921b": {
+        "id": "c3fc8437-639b-46c1-9a2e-0bc52876921b",
+        "replicationPartners": []
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/system-settings/replication-partners/actions/test": {
+      "c94ab7b3-adbd-4054-934a-548253a80dc2": {
+        "id": "c94ab7b3-adbd-4054-934a-548253a80dc2",
+        "replicationPartners": []
+      },
+      "1705c4f4-1837-4fbf-b46d-4f99ab0aa97a": {
+        "id": "1705c4f4-1837-4fbf-b46d-4f99ab0aa97a",
+        "replicationPartners": []
+      },
+      "df41d872-d655-4b92-bcd3-0de8e81c81ad": {
+        "id": "df41d872-d655-4b92-bcd3-0de8e81c81ad",
+        "replicationPartners": []
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/system-settings/witnesses": {
+      "0a3bcd74-39db-4868-b70c-8201d664d19d": {
+        "id": "0a3bcd74-39db-4868-b70c-8201d664d19d",
+        "host": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "username": "test_val"
+      },
+      "61593be9-9d5a-4329-b44a-dff1cff2131a": {
+        "id": "61593be9-9d5a-4329-b44a-dff1cff2131a",
+        "host": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "username": "test_val"
+      },
+      "a59febdf-dbb0-4150-86c4-de0eae8d751b": {
+        "id": "a59febdf-dbb0-4150-86c4-de0eae8d751b",
+        "host": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "username": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/system-settings/witnesses/test-id-999/actions/test": {
+      "9ae46a4c-5f43-47d0-906d-024ead281bcf": {
+        "id": "9ae46a4c-5f43-47d0-906d-024ead281bcf"
+      },
+      "6e68a9d1-37c1-454b-b388-7199fc020875": {
+        "id": "6e68a9d1-37c1-454b-b388-7199fc020875"
+      },
+      "41b9556d-e23b-4317-9cbc-0f8bde67c1c6": {
+        "id": "41b9556d-e23b-4317-9cbc-0f8bde67c1c6"
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/uninitialized-arrays": {
+      "5a89ff6d-bbd2-49ad-b950-5bafe758c2b3": {
+        "id": "5a89ff6d-bbd2-49ad-b950-5bafe758c2b3"
+      },
+      "fcca0874-11a9-4e56-98be-c586f76cc489": {
+        "id": "fcca0874-11a9-4e56-98be-c586f76cc489"
+      },
+      "28e1adcd-7699-46c7-bff6-4fbc8a4cfc80": {
+        "id": "28e1adcd-7699-46c7-bff6-4fbc8a4cfc80"
+      },
+      "test_val": {
+        "id": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/volume-collections": {
+      "test_val": {
+        "id": "test_val",
+        "agent_hostname": "test_val",
+        "agent_username": "test_val",
+        "app_cluster_name": "test_val",
+        "app_id": "test_val",
+        "app_server": "test_val",
+        "app_service_name": "test_val",
+        "app_sync": "test_val",
+        "description": "test_val",
+        "is_standalone_volcoll": 1,
+        "metadata": [],
+        "name": "test_val",
+        "prottmpl_id": "test_val",
+        "replication_type": "test_val",
+        "vcenter_hostname": "test_val",
+        "vcenter_username": "test_val",
+        "volume_list": []
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "agent_hostname": "test_val",
+        "agent_username": "test_val",
+        "app_cluster_name": "test_val",
+        "app_id": "test_val",
+        "app_server": "test_val",
+        "app_service_name": "test_val",
+        "app_sync": "test_val",
+        "description": "test_val",
+        "is_standalone_volcoll": null,
+        "metadata": null,
+        "name": "test_val",
+        "prottmpl_id": null,
+        "replication_type": null,
+        "vcenter_hostname": "test_val",
+        "vcenter_username": "test_val",
+        "volume_list": null
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/volume-collections/test-id-999/actions/abort-handover": {
+      "31c4b304-cf53-451c-b246-c0be82f21638": {
+        "id": "31c4b304-cf53-451c-b246-c0be82f21638"
+      },
+      "fb770f75-6a12-475a-9977-a65054f0b116": {
+        "id": "fb770f75-6a12-475a-9977-a65054f0b116"
+      },
+      "c22a8e09-0af9-47ce-994c-4fbda3323c72": {
+        "id": "c22a8e09-0af9-47ce-994c-4fbda3323c72"
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/volume-collections/test-id-999/actions/add-volumes": {
+      "8d7e5284-9498-4554-b705-d92c0716efc2": {
+        "id": "8d7e5284-9498-4554-b705-d92c0716efc2",
+        "volume_ids": []
+      },
+      "169a3e93-eb73-49f2-a508-657c941166d4": {
+        "id": "169a3e93-eb73-49f2-a508-657c941166d4",
+        "volume_ids": []
+      },
+      "a32a9353-84eb-4ed8-8b25-8147ec91417c": {
+        "id": "a32a9353-84eb-4ed8-8b25-8147ec91417c",
+        "volume_ids": []
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/volume-collections/test-id-999/actions/demote": {
+      "7c332274-4d5d-42a5-a9b7-718210b7df5e": {
+        "id": "7c332274-4d5d-42a5-a9b7-718210b7df5e",
+        "invoke_on_upstream_partner": 1,
+        "replication_partner_id": "test_val"
+      },
+      "3aedbedc-7ae6-4d3e-8ea0-a69628a78e9b": {
+        "id": "3aedbedc-7ae6-4d3e-8ea0-a69628a78e9b",
+        "invoke_on_upstream_partner": 1,
+        "replication_partner_id": "test_val"
+      },
+      "db4e0d75-f28b-4c84-a15a-d29cde5d5663": {
+        "id": "db4e0d75-f28b-4c84-a15a-d29cde5d5663",
+        "invoke_on_upstream_partner": 1,
+        "replication_partner_id": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/volume-collections/test-id-999/actions/handover": {
+      "bf0f8c6e-886d-4ffd-83dc-0315a46b20a7": {
+        "id": "bf0f8c6e-886d-4ffd-83dc-0315a46b20a7",
+        "invoke_on_upstream_partner": 1,
+        "no_reverse": 1,
+        "override_upstream_down": 1,
+        "replication_partner_id": "test_val"
+      },
+      "b820262f-810c-4130-9390-00b73c0995f5": {
+        "id": "b820262f-810c-4130-9390-00b73c0995f5",
+        "invoke_on_upstream_partner": 1,
+        "no_reverse": 1,
+        "override_upstream_down": 1,
+        "replication_partner_id": "test_val"
+      },
+      "caa9e54a-ff5e-456d-b14c-848b4071729b": {
+        "id": "caa9e54a-ff5e-456d-b14c-848b4071729b",
+        "invoke_on_upstream_partner": 1,
+        "no_reverse": 1,
+        "override_upstream_down": 1,
+        "replication_partner_id": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/volume-collections/test-id-999/actions/remove-volumes": {
+      "b26311b1-8f9f-4f95-bc9b-ed83763bdcb0": {
+        "id": "b26311b1-8f9f-4f95-bc9b-ed83763bdcb0",
+        "volume_ids": []
+      },
+      "517f6c43-34c4-4e20-a661-3a65ef1ccd66": {
+        "id": "517f6c43-34c4-4e20-a661-3a65ef1ccd66",
+        "volume_ids": []
+      },
+      "7a7543f9-b7c8-496a-a331-5d8739d1f6bf": {
+        "id": "7a7543f9-b7c8-496a-a331-5d8739d1f6bf",
+        "volume_ids": []
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/volume-collections/test-id-999/snapshot-collections": {
+      "test_val": {
+        "id": "test_val",
+        "agent_type": "test_val",
+        "allow_writes": 1,
+        "description": "test_val",
+        "disable_appsync": 1,
+        "invoke_on_upstream_partner": 1,
+        "is_external_trigger": 1,
+        "lock_period": 1,
+        "metadata": [],
+        "name": "test_val",
+        "replicate": 1,
+        "replicate_to": "test_val",
+        "skip_db_consistency_check": 1,
+        "snap_verify": 1,
+        "start_online": 1,
+        "vol_snap_attr_list": []
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/volume-collections/test-id-999/snapshot-collections/update": {
+      "3e7e1448-0305-4296-a60d-02ae93fbb62b": {
+        "id": "3e7e1448-0305-4296-a60d-02ae93fbb62b",
+        "online": 1,
+        "snapshot_collection_ids": []
+      },
+      "0716c348-aed3-4a4f-b109-44ca3be85bcb": {
+        "id": "0716c348-aed3-4a4f-b109-44ca3be85bcb",
+        "online": 1,
+        "snapshot_collection_ids": []
+      },
+      "444d8544-5e55-4492-82f2-c0fc3715ee7f": {
+        "id": "444d8544-5e55-4492-82f2-c0fc3715ee7f",
+        "online": 1,
+        "snapshot_collection_ids": []
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/volumes": {
+      "test_val": {
+        "id": "test_val",
+        "agent_type": "test_val",
+        "app_uuid": "test_val",
+        "base_snap_id": "test_val",
+        "block_size": 1,
+        "cache_pinned": 1,
+        "clone": 1,
+        "dedupe_enabled": 1,
+        "description": "test_val",
+        "dest_pool_id": "test_val",
+        "encryption_cipher": "test_val",
+        "folder_id": "test_val",
+        "limit": 1,
+        "limit_iops": 1,
+        "limit_mbps": 1,
+        "metadata": [],
+        "multi_initiator": 1,
+        "name": "test_val",
+        "online": 1,
+        "owned_by_group_id": "test_val",
+        "perfpolicy_id": "test_val",
+        "pool_id": "test_val",
+        "read_only": 1,
+        "reserve": 1,
+        "size": 1,
+        "snap_reserve": 1,
+        "snap_warn_level": 1,
+        "suffix": 1,
+        "warn_level": 1,
+        "caching_enabled": null,
+        "force": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "agent_type": null,
+        "app_uuid": "test_val",
+        "base_snap_id": null,
+        "block_size": null,
+        "cache_pinned": null,
+        "clone": null,
+        "dedupe_enabled": 1,
+        "description": "test_val",
+        "dest_pool_id": null,
+        "encryption_cipher": null,
+        "folder_id": "test_val",
+        "limit": 1,
+        "limit_iops": 1,
+        "limit_mbps": 1,
+        "metadata": null,
+        "multi_initiator": null,
+        "name": "test_val",
+        "online": 1,
+        "owned_by_group_id": "test_val",
+        "perfpolicy_id": "test_val",
+        "pool_id": null,
+        "read_only": null,
+        "reserve": null,
+        "size": 1,
+        "snap_reserve": null,
+        "snap_warn_level": null,
+        "suffix": null,
+        "warn_level": null,
+        "caching_enabled": 1,
+        "force": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/volumes/test-id-999/actions/move": {
+      "011e0e66-cad1-42d8-8e5a-9d45d3b7d7b1": {
+        "id": "011e0e66-cad1-42d8-8e5a-9d45d3b7d7b1",
+        "dest_pool_id": "test_val"
+      },
+      "8628c321-b3fa-4a93-9596-597c877405af": {
+        "id": "8628c321-b3fa-4a93-9596-597c877405af",
+        "dest_pool_id": "test_val"
+      },
+      "797d2141-9fc5-4fcf-9792-3748dd54e4ea": {
+        "id": "797d2141-9fc5-4fcf-9792-3748dd54e4ea",
+        "dest_pool_id": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type2/test-id-999/volumes/test-id-999/snapshots": {
+      "test_val": {
+        "id": "test_val",
+        "app_uuid": "test_val",
+        "description": "test_val",
+        "lock_period": 1,
+        "metadata": [],
+        "name": "test_val",
+        "online": 1,
+        "writable": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type4": {
+      "4190fdae-59dd-4c58-a37c-745b767f7cce": {
+        "id": "4190fdae-59dd-4c58-a37c-745b767f7cce",
+        "locateEnabled": 1
+      },
+      "90cde7a9-c86f-4133-b1f3-67cfcee98d7d": {
+        "id": "90cde7a9-c86f-4133-b1f3-67cfcee98d7d",
+        "locateEnabled": 1
+      },
+      "f0901f85-51e8-4503-81b5-58dfaba41f63": {
+        "id": "f0901f85-51e8-4503-81b5-58dfaba41f63",
+        "locateEnabled": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/alert-contacts": {
+      "d46c4aca-e89b-44fb-ac6b-5f59ead10118": {
+        "id": "d46c4aca-e89b-44fb-ac6b-5f59ead10118",
+        "company": "test_val",
+        "companyCode": "test_val",
+        "country": "test_val",
+        "fax": "test_val",
+        "firstName": "test_val",
+        "includeSvcAlerts": 1,
+        "lastName": "test_val",
+        "notificationSeverities": [],
+        "preferredLanguage": "test_val",
+        "primaryEmail": "test_val",
+        "primaryPhone": "test_val",
+        "receiveEmail": 1,
+        "receiveGrouped": 1,
+        "secondaryEmail": "test_val",
+        "secondaryPhone": "test_val"
+      },
+      "87804cca-f1ca-42ba-9e11-d0b722b99ca2": {
+        "id": "87804cca-f1ca-42ba-9e11-d0b722b99ca2",
+        "company": "test_val",
+        "companyCode": "test_val",
+        "country": "test_val",
+        "fax": "test_val",
+        "firstName": "test_val",
+        "includeSvcAlerts": 1,
+        "lastName": "test_val",
+        "notificationSeverities": [],
+        "preferredLanguage": "test_val",
+        "primaryEmail": "test_val",
+        "primaryPhone": "test_val",
+        "receiveEmail": 1,
+        "receiveGrouped": 1,
+        "secondaryEmail": "test_val",
+        "secondaryPhone": "test_val"
+      },
+      "c5524399-59c9-4e78-9848-415aaa3590cf": {
+        "id": "c5524399-59c9-4e78-9848-415aaa3590cf",
+        "company": "test_val",
+        "companyCode": "test_val",
+        "country": "test_val",
+        "fax": "test_val",
+        "firstName": "test_val",
+        "includeSvcAlerts": 1,
+        "lastName": "test_val",
+        "notificationSeverities": [],
+        "preferredLanguage": "test_val",
+        "primaryEmail": "test_val",
+        "primaryPhone": "test_val",
+        "receiveEmail": 1,
+        "receiveGrouped": 1,
+        "secondaryEmail": "test_val",
+        "secondaryPhone": "test_val"
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "company": "test_val",
+        "companyCode": "test_val",
+        "country": "test_val",
+        "fax": "test_val",
+        "firstName": "test_val",
+        "includeSvcAlerts": 1,
+        "lastName": "test_val",
+        "notificationSeverities": [],
+        "preferredLanguage": "test_val",
+        "primaryEmail": "test_val",
+        "primaryPhone": "test_val",
+        "receiveEmail": 1,
+        "receiveGrouped": 1,
+        "secondaryEmail": "test_val",
+        "secondaryPhone": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/applicationsets": {
+      "5cc9fc1a-f737-47c0-ab14-be0534bf0a64": {
+        "id": "5cc9fc1a-f737-47c0-ab14-be0534bf0a64",
+        "appSetBusinessUnit": "test_val",
+        "appSetComments": "test_val",
+        "appSetImportance": "test_val",
+        "appSetName": "test_val",
+        "appSetType": "test_val",
+        "createAppSetQosConfigInput": {},
+        "customAppType": "test_val",
+        "members": [],
+        "ransomware": 1,
+        "addMembers": null,
+        "editAppSetQosConfigInput": null,
+        "removeMembers": null,
+        "retainVolumeExportsOnRemoval": null
+      },
+      "e7c9e7fe-97bb-405e-a25a-d55949fb4c3e": {
+        "id": "e7c9e7fe-97bb-405e-a25a-d55949fb4c3e",
+        "appSetBusinessUnit": "test_val",
+        "appSetComments": "test_val",
+        "appSetImportance": "test_val",
+        "appSetName": "test_val",
+        "appSetType": "test_val",
+        "createAppSetQosConfigInput": {},
+        "customAppType": "test_val",
+        "members": [],
+        "ransomware": 1,
+        "addMembers": null,
+        "editAppSetQosConfigInput": null,
+        "removeMembers": null,
+        "retainVolumeExportsOnRemoval": null
+      },
+      "1c3ef372-12c3-4da1-a12e-9bf40a2dd2b1": {
+        "id": "1c3ef372-12c3-4da1-a12e-9bf40a2dd2b1",
+        "appSetBusinessUnit": "test_val",
+        "appSetComments": "test_val",
+        "appSetImportance": "test_val",
+        "appSetName": "test_val",
+        "appSetType": "test_val",
+        "createAppSetQosConfigInput": {},
+        "customAppType": "test_val",
+        "members": [],
+        "ransomware": 1,
+        "addMembers": null,
+        "editAppSetQosConfigInput": null,
+        "removeMembers": null,
+        "retainVolumeExportsOnRemoval": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "appSetBusinessUnit": "test_val",
+        "appSetComments": "test_val",
+        "appSetImportance": "test_val",
+        "appSetName": "test_val",
+        "appSetType": "test_val",
+        "createAppSetQosConfigInput": null,
+        "customAppType": "test_val",
+        "members": null,
+        "ransomware": 1,
+        "addMembers": [],
+        "editAppSetQosConfigInput": {},
+        "removeMembers": [],
+        "retainVolumeExportsOnRemoval": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/applicationsets/test-id-999/protection-policies": {
+      "3a49638d-dddb-4b04-80bd-78f3be68ae38": {
+        "id": "3a49638d-dddb-4b04-80bd-78f3be68ae38",
+        "policy": {},
+        "policyId": "test_val",
+        "protectionPolicyType": "test_val",
+        "protectionStoreId": "test_val",
+        "schedules": [],
+        "createSchedules": null,
+        "modifySchedules": null,
+        "removeSchedules": null
+      },
+      "9863ffd7-f68f-4473-b8ca-dbfafa17f519": {
+        "id": "9863ffd7-f68f-4473-b8ca-dbfafa17f519",
+        "policy": {},
+        "policyId": null,
+        "protectionPolicyType": "test_val",
+        "protectionStoreId": null,
+        "schedules": null,
+        "createSchedules": [],
+        "modifySchedules": [],
+        "removeSchedules": []
+      },
+      "eb560aed-8ba3-40ec-ab51-0e0181aa1d00": {
+        "id": "eb560aed-8ba3-40ec-ab51-0e0181aa1d00",
+        "policy": {},
+        "policyId": "test_val",
+        "protectionPolicyType": "test_val",
+        "protectionStoreId": "test_val",
+        "schedules": [],
+        "createSchedules": null,
+        "modifySchedules": null,
+        "removeSchedules": null
+      },
+      "3bc5f54d-be7c-49a3-9269-a6d056fde0ea": {
+        "id": "3bc5f54d-be7c-49a3-9269-a6d056fde0ea",
+        "policy": {},
+        "policyId": null,
+        "protectionPolicyType": "test_val",
+        "protectionStoreId": null,
+        "schedules": null,
+        "createSchedules": [],
+        "modifySchedules": [],
+        "removeSchedules": []
+      },
+      "f94b55e4-5c53-466d-badb-992a6cc8c222": {
+        "id": "f94b55e4-5c53-466d-badb-992a6cc8c222",
+        "policy": {},
+        "policyId": "test_val",
+        "protectionPolicyType": "test_val",
+        "protectionStoreId": "test_val",
+        "schedules": [],
+        "createSchedules": null,
+        "modifySchedules": null,
+        "removeSchedules": null
+      },
+      "d2b89b28-1219-43ae-94ef-8cbab9ecf02a": {
+        "id": "d2b89b28-1219-43ae-94ef-8cbab9ecf02a",
+        "policy": {},
+        "policyId": null,
+        "protectionPolicyType": "test_val",
+        "protectionStoreId": null,
+        "schedules": null,
+        "createSchedules": [],
+        "modifySchedules": [],
+        "removeSchedules": []
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/applicationsets/test-id-999/protection-policies/fix": {
+      "526b01c8-ecc6-4cab-bd79-312976742895": {
+        "id": "526b01c8-ecc6-4cab-bd79-312976742895",
+        "policy": {},
+        "policyId": "test_val",
+        "protectionPolicyType": "test_val",
+        "protectionStoreId": "test_val",
+        "schedules": []
+      },
+      "53006f3d-2466-4383-bbbb-48b856d97822": {
+        "id": "53006f3d-2466-4383-bbbb-48b856d97822",
+        "policy": {},
+        "policyId": "test_val",
+        "protectionPolicyType": "test_val",
+        "protectionStoreId": "test_val",
+        "schedules": []
+      },
+      "bef632bb-2fdf-42e2-8a8c-796afe70b614": {
+        "id": "bef632bb-2fdf-42e2-8a8c-796afe70b614",
+        "policy": {},
+        "policyId": "test_val",
+        "protectionPolicyType": "test_val",
+        "protectionStoreId": "test_val",
+        "schedules": []
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/applicationsets/test-id-999/proximity-settings": {
+      "de0ca1a7-4bdd-4840-b5c8-7a70b9889bb7": {
+        "id": "de0ca1a7-4bdd-4840-b5c8-7a70b9889bb7",
+        "hostGroups": [],
+        "hosts": []
+      },
+      "c4d06645-40eb-4e17-ab06-7dfbce7a10e0": {
+        "id": "c4d06645-40eb-4e17-ab06-7dfbce7a10e0",
+        "hostGroups": [],
+        "hosts": []
+      },
+      "241d82a1-423a-4062-b0ff-f2b06760a4ca": {
+        "id": "241d82a1-423a-4062-b0ff-f2b06760a4ca",
+        "hostGroups": [],
+        "hosts": []
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/applicationsets/test-id-999/remote-protection/actions": {
+      "b5ceec3f-afda-45ad-b9cf-ae5e578c324b": {
+        "id": "b5ceec3f-afda-45ad-b9cf-ae5e578c324b",
+        "action": "test_val",
+        "parameters": {}
+      },
+      "73202b81-3c6c-41f4-9f96-c24b6c63ed64": {
+        "id": "73202b81-3c6c-41f4-9f96-c24b6c63ed64",
+        "action": "test_val",
+        "parameters": {}
+      },
+      "4bc5f194-ff4b-47b2-a2a8-27643c352bba": {
+        "id": "4bc5f194-ff4b-47b2-a2a8-27643c352bba",
+        "action": "test_val",
+        "parameters": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/applicationsets/test-id-999/snapsets": {
+      "0f1b8a20-e198-4b60-8c63-68365611d3fc": {
+        "id": "0f1b8a20-e198-4b60-8c63-68365611d3fc",
+        "comment": "test_val",
+        "expireSecs": 1,
+        "readOnly": 1,
+        "retainSecs": 1,
+        "snapshotName": "test_val",
+        "vvNamePattern": "test_val"
+      },
+      "0f2ce791-068a-4548-9e68-296817db1a9c": {
+        "id": "0f2ce791-068a-4548-9e68-296817db1a9c",
+        "comment": "test_val",
+        "expireSecs": 1,
+        "readOnly": 1,
+        "retainSecs": 1,
+        "snapshotName": "test_val",
+        "vvNamePattern": "test_val"
+      },
+      "151ccba5-9140-4344-b443-3b6b3cb04a71": {
+        "id": "151ccba5-9140-4344-b443-3b6b3cb04a71",
+        "comment": "test_val",
+        "expireSecs": 1,
+        "readOnly": 1,
+        "retainSecs": 1,
+        "snapshotName": "test_val",
+        "vvNamePattern": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/certificates": {
+      "901f4a3e-6a7d-4ec7-b5a5-ea3878e78ca2": {
+        "id": "901f4a3e-6a7d-4ec7-b5a5-ea3878e78ca2",
+        "authorityChain": "test_val",
+        "commonName": "test_val",
+        "country": "test_val",
+        "days": 1,
+        "keyLength": 1,
+        "locality": "test_val",
+        "organization": "test_val",
+        "organizationUnit": "test_val",
+        "province": "test_val",
+        "service": "test_val",
+        "subjectAltName": {},
+        "type": "test_val",
+        "certificate": null,
+        "vcGuid": null
+      },
+      "1f5e6fd9-0ff8-4b25-ba81-a16364a4f8c7": {
+        "id": "1f5e6fd9-0ff8-4b25-ba81-a16364a4f8c7",
+        "authorityChain": "test_val",
+        "commonName": "test_val",
+        "country": "test_val",
+        "days": 1,
+        "keyLength": 1,
+        "locality": "test_val",
+        "organization": "test_val",
+        "organizationUnit": "test_val",
+        "province": "test_val",
+        "service": "test_val",
+        "subjectAltName": {},
+        "type": "test_val",
+        "certificate": null,
+        "vcGuid": null
+      },
+      "7fb9692a-4e50-44b5-85bf-351365cff06a": {
+        "id": "7fb9692a-4e50-44b5-85bf-351365cff06a",
+        "authorityChain": "test_val",
+        "commonName": "test_val",
+        "country": "test_val",
+        "days": 1,
+        "keyLength": 1,
+        "locality": "test_val",
+        "organization": "test_val",
+        "organizationUnit": "test_val",
+        "province": "test_val",
+        "service": "test_val",
+        "subjectAltName": {},
+        "type": "test_val",
+        "certificate": null,
+        "vcGuid": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "authorityChain": "test_val",
+        "commonName": null,
+        "country": null,
+        "days": null,
+        "keyLength": null,
+        "locality": null,
+        "organization": null,
+        "organizationUnit": null,
+        "province": null,
+        "service": null,
+        "subjectAltName": null,
+        "type": null,
+        "certificate": "test_val",
+        "vcGuid": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/collect-support-data": {
+      "e7c28b00-705c-463c-8a78-15e703830ac4": {
+        "id": "e7c28b00-705c-463c-8a78-15e703830ac4"
+      },
+      "5e997803-e36f-49f8-bbd7-8849fc86e93e": {
+        "id": "5e997803-e36f-49f8-bbd7-8849fc86e93e"
+      },
+      "0f96cae0-6198-4f6b-87ee-5b2e42d87e6f": {
+        "id": "0f96cae0-6198-4f6b-87ee-5b2e42d87e6f"
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/enclosures/test-id-999/enclosure-cards": {
+      "da1fc27b-8e8f-4823-bc81-01adabda4a09": {
+        "id": "da1fc27b-8e8f-4823-bc81-01adabda4a09",
+        "locate": 1
+      },
+      "b12788d3-8f85-4f1a-bb1a-e230b40e14a3": {
+        "id": "b12788d3-8f85-4f1a-bb1a-e230b40e14a3",
+        "locate": 1
+      },
+      "eef74ba3-b672-43ee-bd60-098ace9d1f9e": {
+        "id": "eef74ba3-b672-43ee-bd60-098ace9d1f9e",
+        "locate": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/enclosures/test-id-999/enclosure-sleds": {
+      "005637cf-1a2b-4fa0-9d42-339b53359c46": {
+        "id": "005637cf-1a2b-4fa0-9d42-339b53359c46",
+        "locate": 1
+      },
+      "5697cde1-9a33-4a9a-adeb-859300b7606d": {
+        "id": "5697cde1-9a33-4a9a-adeb-859300b7606d",
+        "locate": 1
+      },
+      "e072cbd2-ad8d-477c-8ff9-6eff050edf54": {
+        "id": "e072cbd2-ad8d-477c-8ff9-6eff050edf54",
+        "locate": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/enclosures": {
+      "94d6c030-3f8b-4bfc-ac3d-937142d70723": {
+        "id": "94d6c030-3f8b-4bfc-ac3d-937142d70723",
+        "locate": 1,
+        "location": null
+      },
+      "cc56f016-68d3-47fe-8cc3-f3a2c4a11dff": {
+        "id": "cc56f016-68d3-47fe-8cc3-f3a2c4a11dff",
+        "locate": 1,
+        "location": null
+      },
+      "46e7f89a-6f42-43aa-b868-35f092542740": {
+        "id": "46e7f89a-6f42-43aa-b868-35f092542740",
+        "locate": 1,
+        "location": null
+      },
+      "test_val": {
+        "id": "test_val",
+        "locate": null,
+        "location": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/encryption/backup": {
+      "f38a1aa8-0de3-40e5-99f7-81198530f620": {
+        "id": "f38a1aa8-0de3-40e5-99f7-81198530f620",
+        "parameters": {}
+      },
+      "79d4497c-4323-4b49-851c-f4b8e7f075c7": {
+        "id": "79d4497c-4323-4b49-851c-f4b8e7f075c7",
+        "parameters": {}
+      },
+      "0ed849fe-3f65-419c-91db-585016cbf088": {
+        "id": "0ed849fe-3f65-419c-91db-585016cbf088",
+        "parameters": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/encryption/checkekm": {
+      "c63b449c-2936-4e2a-b639-d4276bf3837e": {
+        "id": "c63b449c-2936-4e2a-b639-d4276bf3837e"
+      },
+      "a25dcbd0-fe25-4cc1-b19d-0f3e81fbbe80": {
+        "id": "a25dcbd0-fe25-4cc1-b19d-0f3e81fbbe80"
+      },
+      "8b8d9bf8-9cee-44dc-97ca-b729e0b5edf8": {
+        "id": "8b8d9bf8-9cee-44dc-97ca-b729e0b5edf8"
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/encryption/enable": {
+      "8f1c3bdd-682d-4c74-ba62-e6778c8df403": {
+        "id": "8f1c3bdd-682d-4c74-ba62-e6778c8df403",
+        "parameters": {}
+      },
+      "9c48f6f5-e99b-4bc2-841b-f6bb0d10e0f8": {
+        "id": "9c48f6f5-e99b-4bc2-841b-f6bb0d10e0f8",
+        "parameters": {}
+      },
+      "c5bc42f1-1b57-4242-a034-208e4a0593b7": {
+        "id": "c5bc42f1-1b57-4242-a034-208e4a0593b7",
+        "parameters": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/encryption/rekey": {
+      "ce29443d-3c3c-4e32-b47d-0862dd3dafd5": {
+        "id": "ce29443d-3c3c-4e32-b47d-0862dd3dafd5",
+        "parameters": {}
+      },
+      "f41a8c59-bf06-4697-aa6c-621a38e81ef2": {
+        "id": "f41a8c59-bf06-4697-aa6c-621a38e81ef2",
+        "parameters": {}
+      },
+      "753d0207-d288-4f3f-bdbf-8ec127e2d7ce": {
+        "id": "753d0207-d288-4f3f-bdbf-8ec127e2d7ce",
+        "parameters": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/encryption/setekm": {
+      "962dd09a-6f64-484d-aaf1-ba0c71719263": {
+        "id": "962dd09a-6f64-484d-aaf1-ba0c71719263",
+        "parameters": {}
+      },
+      "8f19a11e-e369-4373-9785-7eab680bbbd0": {
+        "id": "8f19a11e-e369-4373-9785-7eab680bbbd0",
+        "parameters": {}
+      },
+      "0e511de1-cf4d-40f9-b82e-7e6d09b85390": {
+        "id": "0e511de1-cf4d-40f9-b82e-7e6d09b85390",
+        "parameters": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/encryption/setekm/backup": {
+      "3f6f8aa2-e8bf-461e-a97d-9ba3d3cfcd21": {
+        "id": "3f6f8aa2-e8bf-461e-a97d-9ba3d3cfcd21",
+        "parameters": {}
+      },
+      "06092dc2-e3f8-4bcc-908a-82b3f5a49985": {
+        "id": "06092dc2-e3f8-4bcc-908a-82b3f5a49985",
+        "parameters": {}
+      },
+      "cfd6fbdf-4868-4b59-b91f-7d4eff748b1c": {
+        "id": "cfd6fbdf-4868-4b59-b91f-7d4eff748b1c",
+        "parameters": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/file-shares": {
+      "test_val": {
+        "id": "test_val",
+        "filesystemName": "test_val",
+        "hostAccess": [],
+        "name": "test_val",
+        "protocol": [],
+        "reduce": 1,
+        "settingName": "test_val",
+        "sizeInMiB": 1,
+        "additionalSizeInMiB": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "filesystemName": null,
+        "hostAccess": [],
+        "name": null,
+        "protocol": null,
+        "reduce": null,
+        "settingName": null,
+        "sizeInMiB": null,
+        "additionalSizeInMiB": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/licenses": {
+      "2ecadf0d-6c03-4bec-9a2d-ab139f10052b": {
+        "id": "2ecadf0d-6c03-4bec-9a2d-ab139f10052b",
+        "parameters": {}
+      },
+      "71bacbab-513b-44ad-a7e8-e9fb874e6c42": {
+        "id": "71bacbab-513b-44ad-a7e8-e9fb874e6c42",
+        "parameters": {}
+      },
+      "3e4799f9-87c4-49b1-9d57-e89871563be9": {
+        "id": "3e4799f9-87c4-49b1-9d57-e89871563be9",
+        "parameters": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/mail-settings": {
+      "433f9737-12b9-4e1e-b333-b450b82157eb": {
+        "id": "433f9737-12b9-4e1e-b333-b450b82157eb",
+        "authenticationRequired": "test_val",
+        "mailHostDomain": "test_val",
+        "mailHostServer": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "senderEmailId": "test_val",
+        "username": "test_val"
+      },
+      "aeefb601-1b5e-455d-94bd-08a37fd30c8a": {
+        "id": "aeefb601-1b5e-455d-94bd-08a37fd30c8a",
+        "authenticationRequired": "test_val",
+        "mailHostDomain": "test_val",
+        "mailHostServer": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "senderEmailId": "test_val",
+        "username": "test_val"
+      },
+      "762421cc-87d0-49e3-b4eb-0b88f003f33b": {
+        "id": "762421cc-87d0-49e3-b4eb-0b88f003f33b",
+        "authenticationRequired": "test_val",
+        "mailHostDomain": "test_val",
+        "mailHostServer": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "senderEmailId": "test_val",
+        "username": "test_val"
+      },
+      "2c9d75f8-0aaa-4617-afc3-e1582cf58a5d": {
+        "id": "2c9d75f8-0aaa-4617-afc3-e1582cf58a5d",
+        "authenticationRequired": "test_val",
+        "mailHostDomain": "test_val",
+        "mailHostServer": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "senderEmailId": "test_val",
+        "username": "test_val"
+      },
+      "873ab5b8-d5a3-40c9-940a-d697c5a92371": {
+        "id": "873ab5b8-d5a3-40c9-940a-d697c5a92371",
+        "authenticationRequired": "test_val",
+        "mailHostDomain": "test_val",
+        "mailHostServer": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "senderEmailId": "test_val",
+        "username": "test_val"
+      },
+      "67a5ed0c-3b33-4b91-801a-504d5c2e1a2b": {
+        "id": "67a5ed0c-3b33-4b91-801a-504d5c2e1a2b",
+        "authenticationRequired": "test_val",
+        "mailHostDomain": "test_val",
+        "mailHostServer": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "senderEmailId": "test_val",
+        "username": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/network-services/cim": {
+      "0bf64eb7-9f38-4407-8b3f-b51dd207cd7b": {
+        "id": "0bf64eb7-9f38-4407-8b3f-b51dd207cd7b",
+        "cim": {}
+      },
+      "1021d8a9-1aaf-45a2-aa89-337764eda34a": {
+        "id": "1021d8a9-1aaf-45a2-aa89-337764eda34a",
+        "cim": {}
+      },
+      "cf19f4b4-b287-485e-84b4-10ba043b149e": {
+        "id": "cf19f4b4-b287-485e-84b4-10ba043b149e",
+        "cim": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/network-services/snmp-mgr": {
+      "9d7132e1-9a0e-4ad8-955e-99d81ee4dfbe": {
+        "id": "9d7132e1-9a0e-4ad8-955e-99d81ee4dfbe",
+        "snmpConfig": [],
+        "authenticationPassword": null,
+        "managerIP": null,
+        "notify": null,
+        "port": null,
+        "privPassword": null,
+        "retry": null,
+        "timeoutSecs": null,
+        "user": null,
+        "userMode": null,
+        "version": null
+      },
+      "3f0c3f94-58c7-4bdb-8bb5-2c4eab50e026": {
+        "id": "3f0c3f94-58c7-4bdb-8bb5-2c4eab50e026",
+        "snmpConfig": [],
+        "authenticationPassword": null,
+        "managerIP": null,
+        "notify": null,
+        "port": null,
+        "privPassword": null,
+        "retry": null,
+        "timeoutSecs": null,
+        "user": null,
+        "userMode": null,
+        "version": null
+      },
+      "119f8d87-5ff7-4d36-bff1-907417a1aadc": {
+        "id": "119f8d87-5ff7-4d36-bff1-907417a1aadc",
+        "snmpConfig": [],
+        "authenticationPassword": null,
+        "managerIP": null,
+        "notify": null,
+        "port": null,
+        "privPassword": null,
+        "retry": null,
+        "timeoutSecs": null,
+        "user": null,
+        "userMode": null,
+        "version": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "snmpConfig": null,
+        "authenticationPassword": "test_val",
+        "managerIP": "test_val",
+        "notify": "test_val",
+        "port": 1,
+        "privPassword": "test_val",
+        "retry": 1,
+        "timeoutSecs": 1,
+        "user": "test_val",
+        "userMode": "test_val",
+        "version": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/network-services/vasa": {
+      "37d965dd-561c-4f82-a70d-4709e233ab3f": {
+        "id": "37d965dd-561c-4f82-a70d-4709e233ab3f",
+        "action": "test_val"
+      },
+      "9b4d8d28-d8ab-48d8-be38-ea8903444118": {
+        "id": "9b4d8d28-d8ab-48d8-be38-ea8903444118",
+        "action": "test_val"
+      },
+      "e2a0ca25-1019-40b9-ae67-da55100989fa": {
+        "id": "e2a0ca25-1019-40b9-ae67-da55100989fa",
+        "action": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/network-services/vasa/test-id-999/services": {
+      "a5b027bb-2012-4421-a1b7-5456e323a5c6": {
+        "id": "a5b027bb-2012-4421-a1b7-5456e323a5c6",
+        "certMgmt": "test_val",
+        "cfgList": [],
+        "nodeId": "test_val",
+        "vasaStateEnabled": 1
+      },
+      "eb001f6d-00d1-42f6-98bc-01d57c77802f": {
+        "id": "eb001f6d-00d1-42f6-98bc-01d57c77802f",
+        "certMgmt": "test_val",
+        "cfgList": [],
+        "nodeId": "test_val",
+        "vasaStateEnabled": 1
+      },
+      "16006139-67f7-4962-83a9-f28f2c329233": {
+        "id": "16006139-67f7-4962-83a9-f28f2c329233",
+        "certMgmt": "test_val",
+        "cfgList": [],
+        "nodeId": "test_val",
+        "vasaStateEnabled": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/network-settings": {
+      "e31d3ffe-58f1-4b0e-b0a6-6704f3689f33": {
+        "id": "e31d3ffe-58f1-4b0e-b0a6-6704f3689f33",
+        "dnsAddresses": [],
+        "ipv4Address": "test_val",
+        "ipv4Gateway": "test_val",
+        "ipv4SubnetMask": "test_val",
+        "ipv6Address": "test_val",
+        "ipv6Gateway": "test_val",
+        "ipv6PrefixLen": "test_val",
+        "proxyParams": {}
+      },
+      "09678de8-775b-4194-b820-8f0285971868": {
+        "id": "09678de8-775b-4194-b820-8f0285971868",
+        "dnsAddresses": [],
+        "ipv4Address": "test_val",
+        "ipv4Gateway": "test_val",
+        "ipv4SubnetMask": "test_val",
+        "ipv6Address": "test_val",
+        "ipv6Gateway": "test_val",
+        "ipv6PrefixLen": "test_val",
+        "proxyParams": {}
+      },
+      "30f20a20-1f56-4915-8705-cc85ca25f465": {
+        "id": "30f20a20-1f56-4915-8705-cc85ca25f465",
+        "dnsAddresses": [],
+        "ipv4Address": "test_val",
+        "ipv4Gateway": "test_val",
+        "ipv4SubnetMask": "test_val",
+        "ipv6Address": "test_val",
+        "ipv6Gateway": "test_val",
+        "ipv6PrefixLen": "test_val",
+        "proxyParams": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/network-settings/vasaprovider": {
+      "d3e32716-38f9-4f86-9a62-b9e0c27f2a12": {
+        "id": "d3e32716-38f9-4f86-9a62-b9e0c27f2a12",
+        "configVpAddress": []
+      },
+      "18bcf051-7a04-4626-85a7-3a91755882ec": {
+        "id": "18bcf051-7a04-4626-85a7-3a91755882ec",
+        "configVpAddress": []
+      },
+      "ce964c29-3d9f-452b-ae0f-a8898864de1c": {
+        "id": "ce964c29-3d9f-452b-ae0f-a8898864de1c",
+        "configVpAddress": []
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/nodes": {
+      "7f36a316-f282-444e-9ed0-9b66484ccf3f": {
+        "id": "7f36a316-f282-444e-9ed0-9b66484ccf3f",
+        "locate": 1
+      },
+      "b4a7efb9-8d00-4f29-8435-44a15a56c132": {
+        "id": "b4a7efb9-8d00-4f29-8435-44a15a56c132",
+        "locate": 1
+      },
+      "bac405e6-4580-4860-b104-c3f6b65657db": {
+        "id": "bac405e6-4580-4860-b104-c3f6b65657db",
+        "locate": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/ports": {
+      "d7db85c9-5fff-4f37-9bda-262a4909462b": {
+        "id": "d7db85c9-5fff-4f37-9bda-262a4909462b",
+        "portEnable": 1
+      },
+      "21a5c2af-7ba1-4152-83be-dbecdcbdc979": {
+        "id": "21a5c2af-7ba1-4152-83be-dbecdcbdc979",
+        "portEnable": 1
+      },
+      "76286b6e-9b2a-4530-8fbc-a4f0b02ea782": {
+        "id": "76286b6e-9b2a-4530-8fbc-a4f0b02ea782",
+        "portEnable": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/ports/test-id-999/edit-file": {
+      "344d1bd5-dc07-46bd-8d80-d2a75504f48e": {
+        "id": "344d1bd5-dc07-46bd-8d80-d2a75504f48e",
+        "ipAddress": "test_val"
+      },
+      "f779faa8-ca23-452d-af83-58ddf5318c51": {
+        "id": "f779faa8-ca23-452d-af83-58ddf5318c51",
+        "ipAddress": "test_val"
+      },
+      "1e303a32-c8d2-4086-9016-91f0185d28ea": {
+        "id": "1e303a32-c8d2-4086-9016-91f0185d28ea",
+        "ipAddress": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/ports/test-id-999/edit-iscsi": {
+      "229aa4cc-b9dc-4257-9359-1ecdaa9ea5aa": {
+        "id": "229aa4cc-b9dc-4257-9359-1ecdaa9ea5aa",
+        "enablePeer": 1,
+        "ethernetFlowControl": "test_val",
+        "label": "test_val",
+        "mtu": "test_val",
+        "targetProtocol": "test_val",
+        "vlans": []
+      },
+      "b0fb6893-b6f8-4265-81a4-afb73b108239": {
+        "id": "b0fb6893-b6f8-4265-81a4-afb73b108239",
+        "enablePeer": 1,
+        "ethernetFlowControl": "test_val",
+        "label": "test_val",
+        "mtu": "test_val",
+        "targetProtocol": "test_val",
+        "vlans": []
+      },
+      "ffda436f-373f-42e5-96ff-fb1c852f0a2e": {
+        "id": "ffda436f-373f-42e5-96ff-fb1c852f0a2e",
+        "enablePeer": 1,
+        "ethernetFlowControl": "test_val",
+        "label": "test_val",
+        "mtu": "test_val",
+        "targetProtocol": "test_val",
+        "vlans": []
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/ports/test-id-999/edit-nvme": {
+      "567b144a-1234-4f4b-b9b2-f42fcbec8a76": {
+        "id": "567b144a-1234-4f4b-b9b2-f42fcbec8a76",
+        "ethernetFlowControl": "test_val",
+        "label": "test_val",
+        "mtu": "test_val",
+        "targetProtocol": "test_val",
+        "vlans": []
+      },
+      "fcecf04b-0e9c-4a10-9e9c-76a49b3b5aa0": {
+        "id": "fcecf04b-0e9c-4a10-9e9c-76a49b3b5aa0",
+        "ethernetFlowControl": "test_val",
+        "label": "test_val",
+        "mtu": "test_val",
+        "targetProtocol": "test_val",
+        "vlans": []
+      },
+      "46bd5afb-6fc9-4f25-8b7b-efefc6bad1f6": {
+        "id": "46bd5afb-6fc9-4f25-8b7b-efefc6bad1f6",
+        "ethernetFlowControl": "test_val",
+        "label": "test_val",
+        "mtu": "test_val",
+        "targetProtocol": "test_val",
+        "vlans": []
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/ports/test-id-999/edit-rcip": {
+      "46860a4c-5246-4cc4-a094-befb64d9a904": {
+        "id": "46860a4c-5246-4cc4-a094-befb64d9a904",
+        "gatewayAddress": "test_val",
+        "gatewayAddressV6": "test_val",
+        "ipAddress": "test_val",
+        "ipAddressV6": "test_val",
+        "label": "test_val",
+        "mtu": "test_val",
+        "netMask": "test_val",
+        "netMaskV6": "test_val",
+        "speedConfigured": "test_val"
+      },
+      "4cde2367-1500-4a57-8b28-a0a2d86ca8bf": {
+        "id": "4cde2367-1500-4a57-8b28-a0a2d86ca8bf",
+        "gatewayAddress": "test_val",
+        "gatewayAddressV6": "test_val",
+        "ipAddress": "test_val",
+        "ipAddressV6": "test_val",
+        "label": "test_val",
+        "mtu": "test_val",
+        "netMask": "test_val",
+        "netMaskV6": "test_val",
+        "speedConfigured": "test_val"
+      },
+      "b2020fd4-0619-4fbb-9328-98a925c9555e": {
+        "id": "b2020fd4-0619-4fbb-9328-98a925c9555e",
+        "gatewayAddress": "test_val",
+        "gatewayAddressV6": "test_val",
+        "ipAddress": "test_val",
+        "ipAddressV6": "test_val",
+        "label": "test_val",
+        "mtu": "test_val",
+        "netMask": "test_val",
+        "netMaskV6": "test_val",
+        "speedConfigured": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/ports/test-id-999/fc": {
+      "aac35b81-4c0f-4c58-94a0-021f2c39b93c": {
+        "id": "aac35b81-4c0f-4c58-94a0-021f2c39b93c",
+        "configMode": "test_val",
+        "connectionType": "test_val",
+        "interuptCoalesce": 1,
+        "label": "test_val",
+        "speedConfigured": "test_val",
+        "uniqueWWN": 1,
+        "vcn": 1
+      },
+      "b169d107-56ca-4b3e-adad-060b529b0ca3": {
+        "id": "b169d107-56ca-4b3e-adad-060b529b0ca3",
+        "configMode": "test_val",
+        "connectionType": "test_val",
+        "interuptCoalesce": 1,
+        "label": "test_val",
+        "speedConfigured": "test_val",
+        "uniqueWWN": 1,
+        "vcn": 1
+      },
+      "baee615a-ce23-4f0d-823c-1e4fc9a5c17b": {
+        "id": "baee615a-ce23-4f0d-823c-1e4fc9a5c17b",
+        "configMode": "test_val",
+        "connectionType": "test_val",
+        "interuptCoalesce": 1,
+        "label": "test_val",
+        "speedConfigured": "test_val",
+        "uniqueWWN": 1,
+        "vcn": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/snapshots/test-id-999/snapshots": {
+      "6e8224df-14d8-4a0e-903d-aaf503fb30b8": {
+        "id": "6e8224df-14d8-4a0e-903d-aaf503fb30b8",
+        "comment": "test_val",
+        "customName": "test_val",
+        "expireSecs": 1,
+        "namePattern": "test_val",
+        "readOnly": 1,
+        "retainSecs": 1
+      },
+      "e58f8745-03b1-4c47-8d54-9e2848148573": {
+        "id": "e58f8745-03b1-4c47-8d54-9e2848148573",
+        "comment": "test_val",
+        "customName": "test_val",
+        "expireSecs": 1,
+        "namePattern": "test_val",
+        "readOnly": 1,
+        "retainSecs": 1
+      },
+      "582790f7-66e5-4c95-9969-693b9c85245c": {
+        "id": "582790f7-66e5-4c95-9969-693b9c85245c",
+        "comment": "test_val",
+        "customName": "test_val",
+        "expireSecs": 1,
+        "namePattern": "test_val",
+        "readOnly": 1,
+        "retainSecs": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/support-settings": {
+      "5d385bbc-f7cb-4a11-9fb1-8d179f6e6be9": {
+        "id": "5d385bbc-f7cb-4a11-9fb1-8d179f6e6be9",
+        "connectToHPE": "test_val",
+        "deviceId": "test_val",
+        "enterpriseServerURL": "test_val",
+        "miniInsploreEnabled": "test_val",
+        "remoteAccess": "test_val",
+        "remoteRequestAcknowledge": {}
+      },
+      "7a29128b-5450-4de8-b83e-3ec4eb2aee2b": {
+        "id": "7a29128b-5450-4de8-b83e-3ec4eb2aee2b",
+        "connectToHPE": "test_val",
+        "deviceId": "test_val",
+        "enterpriseServerURL": "test_val",
+        "miniInsploreEnabled": "test_val",
+        "remoteAccess": "test_val",
+        "remoteRequestAcknowledge": {}
+      },
+      "1d7fe127-d2f9-4d58-85f2-cb06af62f8ac": {
+        "id": "1d7fe127-d2f9-4d58-85f2-cb06af62f8ac",
+        "connectToHPE": "test_val",
+        "deviceId": "test_val",
+        "enterpriseServerURL": "test_val",
+        "miniInsploreEnabled": "test_val",
+        "remoteAccess": "test_val",
+        "remoteRequestAcknowledge": {}
+      },
+      "99fb9dd3-797d-455e-a9f1-aaec27af8f41": {
+        "id": "99fb9dd3-797d-455e-a9f1-aaec27af8f41",
+        "connectToHPE": "test_val",
+        "deviceId": "test_val",
+        "enterpriseServerURL": "test_val",
+        "miniInsploreEnabled": "test_val",
+        "remoteAccess": "test_val",
+        "remoteRequestAcknowledge": {}
+      },
+      "10185677-008e-473c-baaf-e256569d7c88": {
+        "id": "10185677-008e-473c-baaf-e256569d7c88",
+        "connectToHPE": "test_val",
+        "deviceId": "test_val",
+        "enterpriseServerURL": "test_val",
+        "miniInsploreEnabled": "test_val",
+        "remoteAccess": "test_val",
+        "remoteRequestAcknowledge": {}
+      },
+      "1cd7b854-4068-4d2e-9ad4-b503c611839d": {
+        "id": "1cd7b854-4068-4d2e-9ad4-b503c611839d",
+        "connectToHPE": "test_val",
+        "deviceId": "test_val",
+        "enterpriseServerURL": "test_val",
+        "miniInsploreEnabled": "test_val",
+        "remoteAccess": "test_val",
+        "remoteRequestAcknowledge": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/switches": {
+      "641b8008-26c3-4b17-8857-d8fe330f4fa9": {
+        "id": "641b8008-26c3-4b17-8857-d8fe330f4fa9",
+        "locate": 1
+      },
+      "b2ceed73-ccf1-4a37-a64d-ed6a2391229a": {
+        "id": "b2ceed73-ccf1-4a37-a64d-ed6a2391229a",
+        "locate": 1
+      },
+      "554ab76f-c4b6-469a-97ea-9ed5c8a8d098": {
+        "id": "554ab76f-c4b6-469a-97ea-9ed5c8a8d098",
+        "locate": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/system-settings": {
+      "test_val": {
+        "id": "test_val",
+        "authMode": {},
+        "dateTime": "test_val",
+        "enableFile": {},
+        "installationSites": {},
+        "name": "test_val",
+        "ntpAddresses": [],
+        "remoteSyslogSettings": {},
+        "srinfo": {},
+        "supportContact": {},
+        "systemParameters": {},
+        "timezone": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/system-settings/management-services/vvolscs": {
+      "test_val": {
+        "id": "test_val",
+        "domain": "test_val",
+        "hostIDs": [],
+        "hostSetIDs": [],
+        "name": "test_val",
+        "scType": "test_val",
+        "transportType": "test_val",
+        "comment": null,
+        "growthLimitMiB": null,
+        "growthSizeMiB": null,
+        "growthWarnMiB": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "domain": null,
+        "hostIDs": null,
+        "hostSetIDs": null,
+        "name": "test_val",
+        "scType": null,
+        "transportType": null,
+        "comment": "test_val",
+        "growthLimitMiB": 1,
+        "growthSizeMiB": 1,
+        "growthWarnMiB": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/system-settings/quorum-witness": {
+      "476feb28-dd20-47e8-8c01-d2a0368f5732": {
+        "id": "476feb28-dd20-47e8-8c01-d2a0368f5732",
+        "parameters": {},
+        "replicationPartnerSystemId": "test_val",
+        "srcReplicationId": "test_val",
+        "startQuorumWitness": 1,
+        "targetReplicationId": "test_val"
+      },
+      "b202ca2f-b20f-442b-bb86-4ab244911c2d": {
+        "id": "b202ca2f-b20f-442b-bb86-4ab244911c2d",
+        "parameters": {},
+        "replicationPartnerSystemId": "test_val",
+        "srcReplicationId": "test_val",
+        "startQuorumWitness": 1,
+        "targetReplicationId": "test_val"
+      },
+      "9c4593f1-0433-4417-b075-1070f0deb040": {
+        "id": "9c4593f1-0433-4417-b075-1070f0deb040",
+        "parameters": {},
+        "replicationPartnerSystemId": "test_val",
+        "srcReplicationId": "test_val",
+        "startQuorumWitness": 1,
+        "targetReplicationId": "test_val"
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "parameters": null,
+        "replicationPartnerSystemId": "test_val",
+        "srcReplicationId": null,
+        "startQuorumWitness": 1,
+        "targetReplicationId": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/system-settings/replication-partners": {
+      "2e7efec5-bde8-44be-81f2-52bac4cc60d1": {
+        "id": "2e7efec5-bde8-44be-81f2-52bac4cc60d1",
+        "replicationPartners": [],
+        "addRcLinks": null,
+        "removeRcLinks": null
+      },
+      "9eaf6398-2d9e-445f-bd60-37716b8add90": {
+        "id": "9eaf6398-2d9e-445f-bd60-37716b8add90",
+        "replicationPartners": [],
+        "addRcLinks": null,
+        "removeRcLinks": null
+      },
+      "e279bb03-ee80-4386-8ea0-df3d10e55160": {
+        "id": "e279bb03-ee80-4386-8ea0-df3d10e55160",
+        "replicationPartners": [],
+        "addRcLinks": null,
+        "removeRcLinks": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "replicationPartners": null,
+        "addRcLinks": {},
+        "removeRcLinks": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/trust-certificates": {
+      "ee6d7d66-5f65-4716-b108-527303f81799": {
+        "id": "ee6d7d66-5f65-4716-b108-527303f81799",
+        "action": "test_val",
+        "parameters": {}
+      },
+      "ab1c875f-646b-4648-adbb-352157a08d06": {
+        "id": "ab1c875f-646b-4648-adbb-352157a08d06",
+        "action": "test_val",
+        "parameters": {}
+      },
+      "aa6b1207-42a3-4889-a1e8-470a71e83c6b": {
+        "id": "aa6b1207-42a3-4889-a1e8-470a71e83c6b",
+        "action": "test_val",
+        "parameters": {}
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/vm-manager-settings": {
+      "test_val": {
+        "id": "test_val",
+        "certChainPem": "test_val",
+        "description": "test_val",
+        "inetaddress": "test_val",
+        "name": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "username": "test_val"
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "certChainPem": "test_val",
+        "description": "test_val",
+        "inetaddress": "test_val",
+        "name": "test_val",
+        "password": "test_val",
+        "port": 1,
+        "username": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/vme-manager-settings": {
+      "test_val": {
+        "id": "test_val",
+        "accessToken": "test_val",
+        "address": "test_val",
+        "certificateVerification": {},
+        "description": "test_val",
+        "name": "test_val",
+        "port": 1
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "accessToken": "test_val",
+        "address": "test_val",
+        "certificateVerification": {},
+        "description": "test_val",
+        "name": "test_val",
+        "port": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/volumes": {
+      "test_val": {
+        "id": "test_val",
+        "comments": "test_val",
+        "count": 1,
+        "dataReduction": 1,
+        "name": "test_val",
+        "ransomware": 1,
+        "sizeMib": 1,
+        "snapshotAllocWarning": 1,
+        "userAllocWarning": 1,
+        "userCpg": "test_val",
+        "conversionType": null,
+        "userCpgName": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "comments": null,
+        "count": null,
+        "dataReduction": 1,
+        "name": "test_val",
+        "ransomware": 1,
+        "sizeMib": 1,
+        "snapshotAllocWarning": 1,
+        "userAllocWarning": 1,
+        "userCpg": null,
+        "conversionType": "test_val",
+        "userCpgName": "test_val"
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/volumes/test-id-999/snapshots": {
+      "23fa5bd1-7335-465e-9354-fd4dff7ba7a8": {
+        "id": "23fa5bd1-7335-465e-9354-fd4dff7ba7a8",
+        "comment": "test_val",
+        "customName": "test_val",
+        "expireSecs": 1,
+        "namePattern": "test_val",
+        "readOnly": 1,
+        "retainSecs": 1,
+        "priority": null,
+        "target": null,
+        "ransomware": null
+      },
+      "74591674-f5bd-4eb2-926d-625fd974804e": {
+        "id": "74591674-f5bd-4eb2-926d-625fd974804e",
+        "comment": null,
+        "customName": null,
+        "expireSecs": null,
+        "namePattern": null,
+        "readOnly": null,
+        "retainSecs": null,
+        "priority": "test_val",
+        "target": "test_val",
+        "ransomware": null
+      },
+      "8a15c9f1-3631-4c67-bd7b-35b4e58869c1": {
+        "id": "8a15c9f1-3631-4c67-bd7b-35b4e58869c1",
+        "comment": "test_val",
+        "customName": "test_val",
+        "expireSecs": 1,
+        "namePattern": "test_val",
+        "readOnly": 1,
+        "retainSecs": 1,
+        "priority": null,
+        "target": null,
+        "ransomware": null
+      },
+      "85df2fd2-81bd-48ad-9bec-ea0c9bea1f7a": {
+        "id": "85df2fd2-81bd-48ad-9bec-ea0c9bea1f7a",
+        "comment": null,
+        "customName": null,
+        "expireSecs": null,
+        "namePattern": null,
+        "readOnly": null,
+        "retainSecs": null,
+        "priority": "test_val",
+        "target": "test_val",
+        "ransomware": null
+      },
+      "15f9c10b-c8cc-45ae-8660-793ad0b65659": {
+        "id": "15f9c10b-c8cc-45ae-8660-793ad0b65659",
+        "comment": "test_val",
+        "customName": "test_val",
+        "expireSecs": 1,
+        "namePattern": "test_val",
+        "readOnly": 1,
+        "retainSecs": 1,
+        "priority": null,
+        "target": null,
+        "ransomware": null
+      },
+      "ae1b1927-6157-4e34-98d1-d6271f6e9860": {
+        "id": "ae1b1927-6157-4e34-98d1-d6271f6e9860",
+        "comment": null,
+        "customName": null,
+        "expireSecs": null,
+        "namePattern": null,
+        "readOnly": null,
+        "retainSecs": null,
+        "priority": "test_val",
+        "target": "test_val",
+        "ransomware": null
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "comment": null,
+        "customName": null,
+        "expireSecs": null,
+        "namePattern": null,
+        "readOnly": null,
+        "retainSecs": null,
+        "priority": null,
+        "target": null,
+        "ransomware": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/volumes/test-id-999/clones": {
+      "test-id-999": {
+        "id": "test-id-999",
+        "ransomware": 1
+      }
+    },
+    "/api/v1/storage-systems/device-type4/test-id-999/volumes/test-id-999/schedules": {
+      "test_val": {
+        "id": "test_val",
+        "allowSysOffsetMinute": 1,
+        "atTime": 1,
+        "dayOfMonth": 1,
+        "days": "test_val",
+        "expireSecs": 1,
+        "name": "test_val",
+        "period": 1,
+        "periodUnit": "test_val",
+        "readOnly": 1,
+        "retainSecs": 1,
+        "untilTime": 1
+      },
+      "test-id-999": {
+        "id": "test-id-999",
+        "allowSysOffsetMinute": 1,
+        "atTime": 1,
+        "dayOfMonth": 1,
+        "days": "test_val",
+        "expireSecs": null,
+        "name": "test_val",
+        "period": 1,
+        "periodUnit": "test_val",
+        "readOnly": null,
+        "retainSecs": null,
+        "untilTime": 1
+      }
+    },
+    "/api/v1/storage-systems/provisioning-recommendations": {
+      "a1149268-20e6-4da1-a74d-d1faa60f8b9f": {
+        "id": "a1149268-20e6-4da1-a74d-d1faa60f8b9f",
+        "hostGroupId": "test_val",
+        "productFamily": "test_val",
+        "sizeMib": 1
+      },
+      "929db61f-e8ad-4643-ba81-9280c63b8212": {
+        "id": "929db61f-e8ad-4643-ba81-9280c63b8212",
+        "hostGroupId": "test_val",
+        "productFamily": "test_val",
+        "sizeMib": 1
+      },
+      "b5aa46a5-1655-451f-b5dc-98ff70361f7d": {
+        "id": "b5aa46a5-1655-451f-b5dc-98ff70361f7d",
+        "hostGroupId": "test_val",
+        "productFamily": "test_val",
+        "sizeMib": 1
+      }
+    },
+    "/api/v1/devices": {}
   }
 }

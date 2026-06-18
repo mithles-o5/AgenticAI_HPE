@@ -27,3 +27,9 @@ class PatchDataServicesV1beta1SettingsIdRequest(BaseModel):
 class PostDataServicesV1beta1SoftwareReleasesIdDownloadRequest(BaseModel):
     file: str = None
 
+
+class StorageVolumeCreateRequest(BaseModel):
+    volume_name: str
+    size_gb: int
+
+

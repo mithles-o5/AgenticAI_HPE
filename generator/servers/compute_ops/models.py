@@ -229,3 +229,12 @@ class CustomServerUpdateRequest(BaseModel):
     cpuCores: int = None
 
 
+class ServerPowerActionRequest(BaseModel):
+    action: str
+
+
+class ServerFirmwareUpdateRequest(BaseModel):
+    firmware_version: str
+
+
+

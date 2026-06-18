@@ -3,7 +3,7 @@ from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import json
 import os
-from models import DeviceSchema
+from models import DeviceSchema, NetworkVlanRequest, NetworkPortStatusRequest
 
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -67,3 +67,48 @@ def delete_network_device(id: str):
         raise HTTPException(status_code=404, detail="Device not found")
     deleted = MOCK_DB["dynamic_store"][collection_path].pop(id)
     return {"message": "Deleted successfully", "id": id, "item": deleted}
+
+
+@app.post("/network/v1/devices/{id}/vlans")
+def post_network_device_vlans(id: str, payload: NetworkVlanRequest):
+    collection_path = "/network/v1/devices"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    device = dict(store[id])
+    configured_vlans = device.get("configured_vlans") or []
+    if isinstance(configured_vlans, str):
+        try:
+            configured_vlans = json.loads(configured_vlans)
+        except Exception:
+            configured_vlans = []
+            
+    configured_vlans.append(payload.dict())
+    device["configured_vlans"] = configured_vlans
+    
+    MOCK_DB["dynamic_store"][collection_path][id] = device
+    return device
+
+
+@app.post("/network/v1/devices/{id}/ports/{port_name}/status")
+def post_network_device_port_status(id: str, port_name: str, payload: NetworkPortStatusRequest):
+    collection_path = "/network/v1/devices"
+    store = MOCK_DB.get("dynamic_store", {}).get(collection_path, {})
+    if id not in store:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    device = dict(store[id])
+    ports = device.get("ports") or {}
+    if isinstance(ports, str):
+        try:
+            ports = json.loads(ports)
+        except Exception:
+            ports = {}
+            
+    ports[port_name] = payload.status
+    device["ports"] = ports
+    
+    MOCK_DB["dynamic_store"][collection_path][id] = device
+    return device
+
