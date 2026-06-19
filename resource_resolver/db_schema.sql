@@ -49,6 +49,28 @@ CREATE TABLE IF NOT EXISTS poll_history (
 CREATE INDEX IF NOT EXISTS idx_poll_history_timestamp on poll_history(timestamp);
 
 -- ---------------------------------------------------------------------------
+-- Poll Snapshots — persistent baseline for reconciliation diffs
+-- ---------------------------------------------------------------------------
+-- Stores the last successfully polled set of serial numbers per
+-- (source_type, source_host). Used as the comparison baseline for computing
+-- devices_added / devices_removed across restarts, deployments, and crashes.
+--
+-- serial_numbers : JSON array of serial number strings from the last poll
+-- snapshot_at    : wall-clock timestamp of when this snapshot was captured
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS poll_snapshots (
+    id            UUID         PRIMARY KEY DEFAULT gen_random_uuid(),
+    source_type   VARCHAR(32)  NOT NULL,
+    source_host   VARCHAR(255) NOT NULL,
+    serial_numbers JSONB       NOT NULL DEFAULT '[]',
+    snapshot_at   TIMESTAMPTZ  DEFAULT NOW(),
+    UNIQUE (source_type, source_host)
+);
+
+CREATE INDEX IF NOT EXISTS idx_poll_snapshots_source
+    ON poll_snapshots (lower(source_type), lower(source_host));
+
+-- ---------------------------------------------------------------------------
 -- Endpoint Registry — vendor-agnostic, DB-driven API endpoint catalogue
 -- ---------------------------------------------------------------------------
 -- Seeded from oneview_api_prompts.txt and comops_api_prompts.txt via

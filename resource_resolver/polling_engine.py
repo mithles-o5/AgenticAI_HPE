@@ -10,6 +10,8 @@ import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed, Future
 from typing import Optional
 
+import httpx
+
 from cache import ResourceCache
 from db_queries import DeviceQueries, PollHistoryQueries
 from records import DeviceRecord
@@ -52,10 +54,8 @@ class PollingEngine:
         self.cache = cache
         self.dscc_client = MockDSCCClient()
         self._max_workers = max_workers
-        # Tracks the set of serial numbers seen in the PREVIOUS poll cycle per
-        # (source_type, source_host) key.  Used to compute accurate added/removed
-        # counts even when the poll collectors read from the same DB they write to.
-        self._last_known_sns: dict[tuple[str, str], set[str]] = {}
+        # Reconciliation state is now persisted in the poll_snapshots PostgreSQL
+        # table — no in-memory baseline is maintained here.
 
     # ------------------------------------------------------------------
     # Source collectors
@@ -105,16 +105,58 @@ class PollingEngine:
         return devices
 
     def poll_mock_storage(self, host: str) -> list[dict]:
-        """Fetch the current mock_storage inventory from PostgreSQL."""
-        logger.info("[Polling][Mock Storage] Starting collection | host=%s", host)
+        """Fetch the current mock_storage inventory from the live REST endpoint.
+
+        Queries GET /data-services/v1beta1/devices on the mock storage server
+        (default: http://127.0.0.1:8004) and normalises each item into the
+        dict shape expected by DeviceQueries.sync_source_devices.
+        """
+        logger.info("[Polling][Mock Storage] Starting HTTP collection | host=%s", host)
         t0 = time.perf_counter()
-        rows = DeviceQueries.list_devices_by_management_source(
-            management_source="mock_storage", source_host=host
-        )
-        devices = [DeviceRecord.from_row(row).to_dict() for row in rows]
+
+        base_url = os.getenv("MOCK_STORAGE_URL", "http://127.0.0.1:8004")
+        endpoint = f"{base_url}/data-services/v1beta1/devices"
+        timeout = float(os.getenv("MOCK_STORAGE_TIMEOUT", "10"))
+
+        try:
+            response = httpx.get(endpoint, timeout=timeout)
+            response.raise_for_status()
+            raw_items: list[dict] = response.json()
+        except httpx.HTTPError as exc:
+            elapsed_ms = int((time.perf_counter() - t0) * 1000)
+            logger.error(
+                "[Polling][Mock Storage] HTTP request failed | host=%s url=%s error=%s elapsed_ms=%d",
+                host, endpoint, exc, elapsed_ms,
+            )
+            raise
+
+        # Normalise raw API items into the canonical device dict shape.
+        devices: list[dict] = []
+        for item in raw_items:
+            serial = (
+                item.get("serial_number")
+                or item.get("id")
+                or ""
+            )
+            if not serial:
+                logger.warning(
+                    "[Polling][Mock Storage] Skipping item with no serial_number | item=%r", item
+                )
+                continue
+            devices.append({
+                "serial_number":   str(serial),
+                "ip_address":      item.get("ip_address"),
+                "fqdn":            item.get("fqdn"),
+                "management_source": "mock_storage",
+                "source_host":     host,
+                "source_device_id": str(item.get("id") or serial),
+                "device_type":     item.get("device_type"),
+                "last_seen":       item.get("updated_at") or item.get("last_seen"),
+            })
+
         elapsed_ms = int((time.perf_counter() - t0) * 1000)
         logger.info(
-            "[Polling][Mock Storage] Collection complete | host=%s devices=%d elapsed_ms=%d",
+            "[Polling][Mock Storage] HTTP collection complete | host=%s devices=%d elapsed_ms=%d",
             host, len(devices), elapsed_ms,
         )
         return devices
@@ -221,17 +263,8 @@ class PollingEngine:
                 devices=item["devices"],
             )
 
-            # 4. Incremental Memurai warming — reconstruct DeviceRecord directly
-            #    from the already-normalized payload (no extra DB round-trip).
-            for dev_dict in item["devices"]:
-                try:
-                    dev_rec = DeviceRecord.from_row(dev_dict)
-                    self.cache.put_device(dev_rec)
-                except Exception as warm_exc:
-                    logger.warning(
-                        "[Polling][Cache] Warm failed | sn=%s error=%s",
-                        dev_dict.get("serial_number"), warm_exc,
-                    )
+            # 4. Incremental warming is disabled during polling cycles to prevent bulk cache churn.
+            # Redis is populated lazily on demand when lookups occur.
 
             # 5. Poll history — use DB-computed diff counts
             PollHistoryQueries.log({
