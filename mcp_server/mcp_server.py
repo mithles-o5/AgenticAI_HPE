@@ -138,7 +138,7 @@ _resolver = ResourceResolver(registry=_registry, cache=_cache)
 # Start background polling thread
 try:
     from resource_resolver.polling_engine import start_background_polling
-    poll_interval = int(os.getenv("POLL_INTERVAL_SECONDS", "60"))
+    poll_interval = int(os.getenv("POLL_INTERVAL_SECONDS", "600"))
     start_background_polling(_cache, poll_interval)
 except Exception as e:
     print(f"⚠️ Failed to start background polling: {e}", file=sys.stderr)
