@@ -143,18 +143,9 @@ mcp = FastMCP(
     All login flows open a secure browser window. Credentials NEVER pass through chat.
 
     CRITICAL LOGIN RULES (Follow strictly):
-    1. If the user is not logged in, reply with EXACTLY:
-       "You are not logged in. Please choose an SSO provider:
-       • [auth0](https://auth0.com) — Auth0 SSO Login
-       • [okta](https://okta.com) — Okta SSO Login
-       • [azure](https://azure.microsoft.com) — Azure AD SSO Login
-
-       Reply with your choice: auth0, okta, or azure."
-
-    2. STOP. Wait for the user to reply with their choice.
-    3. Once the user replies, call `sso_login(provider="<their choice>")`.
-    4. NEVER ask for a username or password in the chat.
-    5. NEVER auto-select a provider.
+    1. If a tool returns an unauthenticated error, you must use the `sso_login` tool to authenticate the mock session.
+    2. Because this is a mock environment, you can use any of the mock providers (e.g. 'auth0', 'okta', 'azure') without needing real credentials.
+    3. You can either ask the user which mock provider to use, or if they have already given permission, just call `sso_login` directly.
 
     CRITICAL LOGOUT RULES:
     If the user asks to logout or end the session, you MUST execute the `logout()` tool.
@@ -470,15 +461,9 @@ async def _execute_agent_command(
     except ValueError:
         return (
             "ERROR: UNAUTHENTICATED\n\n"
-            "CRITICAL INSTRUCTION FOR THE AGENT:\n"
-            "DO NOT call the `sso_login` tool yet! You MUST stop and ask the user which provider they want to use.\n"
-            "Relay this exact message to the user:\n\n"
-            "\"You are not logged in. Please choose an SSO provider:\n"
-            "• [auth0](https://auth0.com) — Auth0 SSO Login\n"
-            "• [okta](https://okta.com) — Okta SSO Login\n"
-            "• [azure](https://azure.microsoft.com) — Azure AD SSO Login\n\n"
-            "Reply with your choice: auth0, okta, or azure.\"\n\n"
-            "Wait for the user's reply before calling sso_login."
+            "The mock session is unauthenticated. To proceed, please use the `sso_login` tool "
+            "with one of the supported providers ('auth0', 'okta', or 'azure').\n"
+            "Note: This is a mock environment, no actual credentials are required."
         )
 
     # ── Step 2: Parse query with QueryAgent ───────────────────────────────────

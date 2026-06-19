@@ -12697,10 +12697,10 @@ def get_cloud_device_by_id(id: str):
     """
     from fastapi import HTTPException
     collection_path = "/api/v1/devices"
-    store = db.get_collection(collection_path)
-    if id not in store:
-        raise HTTPException(status_code=404, detail="Device not found")
-    return store[id]
+    item = db.get_item(collection_path, id)
+    if item:
+        return item
+    raise HTTPException(status_code=404, detail="Device not found")
 
 @app.post("/api/v1/devices")
 def create_cloud_device(payload: dict):
@@ -12715,162 +12715,41 @@ def create_cloud_device(payload: dict):
     return payload
 
 @app.put("/api/v1/devices/{id}")
+@app.post("/api/v1/devices/{id}")
 def update_cloud_device(id: str, payload: dict):
     """
     CRUD Route: PUT /api/v1/devices/{id}
     """
     from fastapi import HTTPException
-    collection_path = "/api/v1/devices"
-    store = db.get_collection(collection_path)
-    if id not in store:
-        raise HTTPException(status_code=404, detail="Device not found")
-    
-    existing = store[id]
-    payload_dict = {k: v for k, v in payload.items() if v is not None}
-    existing.update(payload_dict)
-    db.upsert_item(collection_path, id, existing)
-    return existing
-
-@app.delete("/api/v1/devices/{id}")
-def delete_cloud_device(id: str):
-    """
-    CRUD Route: DELETE /api/v1/devices/{id}
-    """
-    from fastapi import HTTPException
-    collection_path = "/api/v1/devices"
-    store = db.get_collection(collection_path)
-    if id not in store:
-        raise HTTPException(status_code=404, detail="Device not found")
-    deleted = db.delete_item(collection_path, id)
-    return {"message": "Deleted successfully", "id": id, "item": deleted}
-
-
-@app.post("/api/v1/devices/{id}/vms")
-def post_cloud_device_vms(id: str, payload: CloudVmCreateRequest):
-    """
-    Action Route: POST /api/v1/devices/{id}/vms
-    """
-    from fastapi import HTTPException
-    import uuid
-    device_path = "/api/v1/devices"
-    vm_path = "/api/v1/vms"
-    
-    device_store = MOCK_DB.get("dynamic_store", {}).get(device_path, {})
-    if id not in device_store:
-        raise HTTPException(status_code=404, detail="Device not found")
-        
-    device = dict(device_store[id])
-    
-    # Initialize resource allocation fields if they don't exist or are None
-    if device.get("active_vms") is None:
-        device["active_vms"] = 0
-    if device.get("allocated_vcpu") is None:
-        device["allocated_vcpu"] = 0
-    if device.get("allocated_ram_gb") is None:
-        device["allocated_ram_gb"] = 0
-        
-    device["active_vms"] += 1
-    device["allocated_vcpu"] += payload.vcpu
-    device["allocated_ram_gb"] += payload.ram_gb
-    MOCK_DB["dynamic_store"][device_path][id] = device
-    
-    # Create VM record
-    vm_id = str(uuid.uuid4())
-    vm = {
-        "id": vm_id,
-        "device_id": id,
-        "vm_name": payload.vm_name,
-        "vcpu": payload.vcpu,
-        "ram_gb": payload.ram_gb,
-        "status": "RUNNING"
-    }
-    
-    if vm_path not in MOCK_DB["dynamic_store"]:
-        MOCK_DB["dynamic_store"][vm_path] = {}
-        
-    MOCK_DB["dynamic_store"][vm_path][vm_id] = vm
-    return vm
-
-
-@app.delete("/api/v1/devices/{id}/vms/{vm_id}")
-def delete_cloud_device_vm(id: str, vm_id: str):
-    """
-    Action Route: DELETE /api/v1/devices/{id}/vms/{vm_id}
-    """
-    from fastapi import HTTPException
-    device_path = "/api/v1/devices"
-    vm_path = "/api/v1/vms"
-    
-    device_store = MOCK_DB.get("dynamic_store", {}).get(device_path, {})
-    if id not in device_store:
-        raise HTTPException(status_code=404, detail="Device not found")
-        
-    vm_store = MOCK_DB.get("dynamic_store", {}).get(vm_path, {})
-    if vm_id not in vm_store:
-        raise HTTPException(status_code=404, detail="VM not found")
-        
-    vm = vm_store[vm_id]
-    if vm.get("device_id") != id:
-        raise HTTPException(status_code=400, detail="VM does not belong to this cloud device")
-        
-    vcpu = vm.get("vcpu") or 0
-    ram_gb = vm.get("ram_gb") or 0
-    
-    device = dict(device_store[id])
-    if device.get("active_vms") is not None and device["active_vms"] > 0:
-        device["active_vms"] -= 1
-    if device.get("allocated_vcpu") is not None:
-        device["allocated_vcpu"] = max(0, device["allocated_vcpu"] - vcpu)
-    if device.get("allocated_ram_gb") is not None:
-        device["allocated_ram_gb"] = max(0, device["allocated_ram_gb"] - ram_gb)
-        
-    MOCK_DB["dynamic_store"][device_path][id] = device
-    MOCK_DB["dynamic_store"][vm_path].pop(vm_id)
-    return {"message": "VM terminated successfully", "vm_id": vm_id}
-
-
-@app.patch("/api/v1/devices/{id}")
-def patch_cloud_device(id: str, payload: dict):
-    """
-    CRUD Route: PATCH /api/v1/devices/{id}
-    """
-    from fastapi import HTTPException
-    collection_path = "/api/v1/devices"
-    store = db.get_collection(collection_path)
-    if id not in store:
-        raise HTTPException(status_code=404, detail="Device not found")
-    
-    existing = dict(store[id])
-    payload_dict = {k: v for k, v in payload.items() if v is not None}
-    existing.update(payload_dict)
-    db.upsert_item(collection_path, id, existing)
-    return existing
-
-
-class CloudPowerRequest(BaseModel):
-    action: str
-
-
-@app.post("/api/v1/devices/{id}/power")
-def post_cloud_device_power(id: str, payload: CloudPowerRequest):
-    """
-    Action Route: POST /api/v1/devices/{id}/power
-    """
-    from fastapi import HTTPException
+    import random
     import datetime
+    
     collection_path = "/api/v1/devices"
-    store = db.get_collection(collection_path)
-    if id not in store:
+    item = db.get_item(collection_path, id)
+    if not item:
         raise HTTPException(status_code=404, detail="Device not found")
         
-    action_upper = payload.action.upper()
-    if action_upper not in ["ON", "OFF"]:
-        raise HTTPException(status_code=400, detail="Invalid action. Only 'ON' or 'OFF' are allowed.")
-        
-    device = dict(store[id])
-    device["power_state"] = action_upper
+    device = dict(item)
+    state = payload.get("power_state") or payload.get("powerState") or payload.get("action")
+    if state:
+        if state.upper() in ["ON", "POWERON"]:
+            device["power_state"] = "ON"
+            device["cpu_utilization_percent"] = round(random.uniform(10.0, 90.0), 1)
+            device["memory_utilization_percent"] = round(random.uniform(10.0, 90.0), 1)
+            device["power_draw_watts"] = round(random.uniform(150.0, 400.0), 1)
+            device["temperature_celsius"] = round(random.uniform(25.0, 45.0), 1)
+        elif state.upper() in ["OFF", "POWEROFF"]:
+            device["power_state"] = "OFF"
+            device["cpu_utilization_percent"] = 0.0
+            device["memory_utilization_percent"] = 0.0
+            device["power_draw_watts"] = 0.0
+            device["temperature_celsius"] = 0.0
+            
+    # Also apply any other payload properties
+    for k, v in payload.items():
+        if k not in ["power_state", "powerState", "action"]:
+            device[k] = v
+            
     device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
-    db.upsert_item(collection_path, id, device)
+    db.upsert_item(collection_path, device["id"], device)
     return device
-
-

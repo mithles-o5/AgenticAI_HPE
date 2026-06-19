@@ -74,7 +74,25 @@ class Database:
             conn = sqlite3.connect(self.db_path, check_same_thread=False)
             conn.row_factory = sqlite3.Row
             try:
-                cursor = conn.execute(f"SELECT * FROM {table_name} WHERE id = ?", (item_id,))
+                # Get available columns to search by multiple identifiers
+                cursor = conn.execute(f"PRAGMA table_info({table_name})")
+                cols = {row[1] for row in cursor.fetchall()}
+                
+                where_clause = ["id = ?"]
+                params = [item_id]
+                
+                if "name" in cols:
+                    where_clause.append("name = ?")
+                    params.append(item_id)
+                if "source_device_id" in cols:
+                    where_clause.append("source_device_id = ?")
+                    params.append(item_id)
+                if "uuid" in cols:
+                    where_clause.append("uuid = ?")
+                    params.append(item_id)
+                    
+                query = f"SELECT * FROM {table_name} WHERE " + " OR ".join(where_clause)
+                cursor = conn.execute(query, tuple(params))
                 row = cursor.fetchone()
                 if not row: return None
                 item = dict(row)
@@ -91,7 +109,10 @@ class Database:
 
     def upsert_item(self, collection_path, item_id, payload_dict):
         table_name = self._get_table_name(collection_path)
-        if "id" not in payload_dict:
+        existing_item = self.get_item(collection_path, item_id)
+        if existing_item and "id" in existing_item:
+            payload_dict["id"] = existing_item["id"]
+        elif "id" not in payload_dict:
             payload_dict["id"] = item_id
             
         with self._lock:
@@ -125,15 +146,19 @@ class Database:
 
     def delete_item(self, collection_path, item_id):
         table_name = self._get_table_name(collection_path)
+        existing_item = self.get_item(collection_path, item_id)
+        if not existing_item or "id" not in existing_item:
+            return None
+        true_id = existing_item["id"]
         with self._lock:
             conn = sqlite3.connect(self.db_path, check_same_thread=False)
             try:
                 # Fetch first
                 conn.row_factory = sqlite3.Row
-                cursor = conn.execute(f"SELECT * FROM {table_name} WHERE id = ?", (item_id,))
+                cursor = conn.execute(f"SELECT * FROM {table_name} WHERE id = ?", (true_id,))
                 row = cursor.fetchone()
                 if row:
-                    conn.execute(f"DELETE FROM {table_name} WHERE id = ?", (item_id,))
+                    conn.execute(f"DELETE FROM {table_name} WHERE id = ?", (true_id,))
                     conn.commit()
                     return dict(row)
                 return None

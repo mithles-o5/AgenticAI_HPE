@@ -88,7 +88,7 @@ def put_rest_custom_servers_id(id: str, payload: CustomServerUpdateRequest):
     existing = store[id]
     payload_dict = {k: v for k, v in payload.dict().items() if v is not None}
     existing.update(payload_dict)
-    db.upsert_item(collection_path, id, existing)
+    db.upsert_item(collection_path, existing["id"], existing)
     return existing
 
 @app.delete("/rest/custom-servers/{id}")
@@ -170,7 +170,7 @@ def put_rest_custom_switches_id(id: str, payload: CustomSwitchUpdateRequest):
     existing = store[id]
     payload_dict = {k: v for k, v in payload.dict().items() if v is not None}
     existing.update(payload_dict)
-    db.upsert_item(collection_path, id, existing)
+    db.upsert_item(collection_path, existing["id"], existing)
     return existing
 
 @app.delete("/rest/custom-switches/{id}")
@@ -778,12 +778,10 @@ def get_rest_rack_managers_id(id: str):
     Dynamic CRUD Route: GET /rest/rack-managers/{id}
     """
     collection_path = f"/rest/rack-managers"
-    item_id = id
-    item = db.get_item(collection_path, item_id)
+    item = db.get_item(collection_path, id)
     if item:
         return item
-    static_val = db.get_static("get_rest_rack_managers_id", dict())
-    return static_val
+    raise HTTPException(status_code=404, detail="Rack manager not found")
 
 @app.patch("/rest/rack-managers/{id}")
 def patch_rest_rack_managers_id(id: str):
@@ -1188,12 +1186,10 @@ def get_rest_server_hardware_id(id: str):
     Dynamic CRUD Route: GET /rest/server-hardware/{id}
     """
     collection_path = f"/rest/server-hardware"
-    item_id = id
-    item = db.get_item(collection_path, item_id)
+    item = db.get_item(collection_path, id)
     if item:
         return item
-    static_val = db.get_static("get_rest_server_hardware_id", dict())
-    return static_val
+    raise HTTPException(status_code=404, detail="Server hardware not found")
 
 
 @app.put("/rest/server-hardware/{id}")
@@ -1203,58 +1199,19 @@ def put_rest_server_hardware_id(id: str, payload: dict):
     """
     collection_path = f"/rest/server-hardware"
         
-    store = db.get_collection(collection_path)
-    if id not in store:
-        static_list = db.get_static("get_rest_server_hardware").get("members", [])
-        static_item = None
-        for item in static_list:
-            if item.get("id") == id:
-                static_item = item
-                break
-        if not static_item and db.get_static("get_rest_server_hardware_id").get("id") == id:
-            static_item = db.get_static("get_rest_server_hardware_id")
-            
-        if static_item:
-            db.upsert_item(collection_path, id, dict(static_item))
-            store = db.get_collection(collection_path)
-        else:
-            raise HTTPException(status_code=404, detail="Server hardware not found")
-            
-    existing = store[id]
-    payload_dict = {k: v for k, v in payload.items() if v is not None}
-    existing.update(payload_dict)
-    db.upsert_item(collection_path, id, existing)
-    return existing
+    existing = db.get_item(collection_path, id)
 
-
-@app.patch("/rest/server-hardware/{id}")
-def patch_rest_server_hardware_id(id: str, payload: dict):
-    """
-    Dynamic CRUD Route: PATCH /rest/server-hardware/{id}
-    """
-    collection_path = f"/rest/server-hardware"
         
-    store = db.get_collection(collection_path)
-    if id not in store:
-        static_list = db.get_static("get_rest_server_hardware").get("members", [])
-        static_item = None
-        for item in static_list:
-            if item.get("id") == id:
-                static_item = item
-                break
-        if not static_item and db.get_static("get_rest_server_hardware_id").get("id") == id:
-            static_item = db.get_static("get_rest_server_hardware_id")
-            
-        if static_item:
-            db.upsert_item(collection_path, id, dict(static_item))
-            store = db.get_collection(collection_path)
-        else:
-            raise HTTPException(status_code=404, detail="Server hardware not found")
-            
-    existing = dict(store[id])
+    if not existing:
+
+        
+        raise HTTPException(status_code=404, detail="Resource not found")
+
+        
+    existing = dict(existing)
     payload_dict = {k: v for k, v in payload.items() if v is not None}
     existing.update(payload_dict)
-    db.upsert_item(collection_path, id, existing)
+    db.upsert_item(collection_path, existing["id"], existing)
     return existing
 
 
@@ -1299,36 +1256,35 @@ def post_oneview_device_power(id: str, payload: OneViewPowerRequest):
     """
     collection_path = f"/rest/server-hardware"
         
-    store = db.get_collection(collection_path)
-    if id not in store:
-        static_list = db.get_static("get_rest_server_hardware").get("members", [])
-        static_item = None
-        for item in static_list:
-            if item.get("id") == id:
-                static_item = item
-                break
-        if not static_item and db.get_static("get_rest_server_hardware_id").get("id") == id:
-            static_item = db.get_static("get_rest_server_hardware_id")
+    device = db.get_item(collection_path, id)
+    if not device:
+        raise HTTPException(status_code=404, detail="Server hardware not found")
             
-        if static_item:
-            db.upsert_item(collection_path, id, dict(static_item))
-            store = db.get_collection(collection_path)
-        else:
-            raise HTTPException(status_code=404, detail="Server hardware not found")
-            
-    device = dict(store[id])
+    device = dict(device)
     state = payload.powerState or payload.action or "On"
+    
+    import random
+    
     if state.upper() in ["ON", "POWERON"]:
         device["power_state"] = "ON"
         device["powerState"] = "On"
+        device["cpu_utilization_percent"] = round(random.uniform(10.0, 90.0), 1)
+        device["memory_utilization_percent"] = round(random.uniform(10.0, 90.0), 1)
+        device["power_draw_watts"] = round(random.uniform(150.0, 400.0), 1)
+        device["temperature_celsius"] = round(random.uniform(25.0, 45.0), 1)
     elif state.upper() in ["OFF", "POWEROFF"]:
         device["power_state"] = "OFF"
         device["powerState"] = "Off"
+        device["cpu_utilization_percent"] = 0.0
+        device["memory_utilization_percent"] = 0.0
+        device["power_draw_watts"] = 0.0
+        device["temperature_celsius"] = 0.0
     else:
         raise HTTPException(status_code=400, detail="Invalid power state. Only 'ON', 'OFF', 'PowerOn', or 'PowerOff' are allowed.")
         
     import datetime
     device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
-    db.upsert_item(collection_path, id, device)
+    # Need to save with the UUID, not the name
+    db.upsert_item(collection_path, device["id"], device)
     return device
 

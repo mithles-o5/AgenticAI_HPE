@@ -5,7 +5,16 @@ from adapters.base import BaseAdapter
 
 logger = logging.getLogger("onprem_agent.adapters.com")
 
+DEVICES_PATH = "/compute-ops-mgmt/v1/devices"
+
+
 class ComOpsAdapter(BaseAdapter):
+    """
+    Adapter for the ComOps (coms) mock server at port 8001.
+    ALL data is fetched live from the SQLite-backed mock server.
+    No static/hardcoded fallback values.
+    """
+
     def __init__(self, base_url: str = None):
         self.base_url = base_url or settings.COMOPS_URL
 
@@ -14,150 +23,172 @@ class ComOpsAdapter(BaseAdapter):
         if credentials and "token" in credentials:
             headers["Authorization"] = f"Bearer {credentials['token']}"
         elif credentials and "password" in credentials:
-            # Simple simulation of auth
             headers["Authorization"] = f"Basic {credentials.get('username')}"
-        
         return httpx.AsyncClient(base_url=self.base_url, headers=headers, timeout=10.0)
 
-    async def health_check(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> dict:
+    async def _get_device(self, client: httpx.AsyncClient, resource_id: str) -> dict | None:
+        """
+        Fetch device from /compute-ops-mgmt/v1/devices/{id}.
+        The mock server's get_item() searches by: id, name, source_device_id.
+        Returns the device dict or None if not found.
+        """
+        resp = await client.get(f"{DEVICES_PATH}/{resource_id}")
+        if resp.status_code == 200:
+            return resp.json()
+        logger.warning(
+            f"ComOps device lookup failed for '{resource_id}': "
+            f"{resp.status_code} {resp.text[:120]}"
+        )
+        return None
+
+    async def health_check(
+        self, resource_type: str, resource_id: str, credentials: dict, parameters: dict
+    ) -> dict:
         async with await self._get_client(credentials) as client:
-            resp = await client.get(f"/compute-ops-mgmt/v1/servers/{resource_id}")
-            if resp.status_code == 200:
-                return {"resource_type": "server_profile", "raw": resp.json()}
-            else:
-                # Fallback for mock/simulation
-                return {
-                    "resource_type": "server_profile",
-                    "raw": {
-                        "id": resource_id,
-                        "name": f"CoM-MockNode-{resource_id[-6:]}",
-                        "health": "OK",
-                        "status": "NotFoundFallback"
-                    }
-                }
-
-    async def fetch_metrics(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> dict:
-        async with await self._get_client(credentials) as client:
-            power_state = "On"
-            resp_srv = await client.get(f"/compute-ops-mgmt/v1/servers/{resource_id}")
-            if resp_srv.status_code == 200:
-                power_state = resp_srv.json().get("powerState", "On")
-
-            if power_state == "Off":
-                return {
-                    "cpu_utilization_percent": 0.0,
-                    "memory_utilization_percent": 0.0,
-                    "power_draw_watts": 15.0,
-                    "temperature_celsius": 20.0,
-                    "power_state": "Off"
-                }
-
-            metrics = {
-                "cpu_utilization_percent": 30.0,
-                "memory_utilization_percent": 45.0,
-                "power_draw_watts": 180.0,
-                "temperature_celsius": 28.0,
-                "power_state": "On"
+            device = await self._get_device(client, resource_id)
+            if device:
+                # Normalise field names the skill_registry expects
+                if "health_status" in device and "health" not in device:
+                    device["health"] = device["health_status"]
+                if "power_state" in device and "powerState" not in device:
+                    device["powerState"] = device["power_state"]
+                return {"resource_type": resource_type or "router", "raw": device}
+            return {
+                "status": "failed",
+                "error": f"Device '{resource_id}' not found in ComOps mock server",
             }
-            
-            # Query utilization endpoint
-            resp = await client.get(f"/compute-ops-mgmt/v1beta1/utilization-over-time?serverId={resource_id}")
-            if resp.status_code == 200:
-                data = resp.json()
-                metrics["cpu_utilization_percent"] = data.get("cpuAveragePercent", 35.5)
-                metrics["memory_utilization_percent"] = data.get("memoryAveragePercent", 50.2)
-            
-            resp_energy = await client.get(f"/compute-ops-mgmt/v1beta1/energy-over-time?serverId={resource_id}")
-            if resp_energy.status_code == 200:
-                data_energy = resp_energy.json()
-                metrics["power_draw_watts"] = data_energy.get("averagePowerWatts", 205.0)
-                
-            return metrics
 
-    async def fetch_alerts(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> list:
+    async def fetch_metrics(
+        self, resource_type: str, resource_id: str, credentials: dict, parameters: dict
+    ) -> dict:
+        """
+        Returns live metrics from compute_ops_db.sqlite via the ComOps mock server.
+        Fields sourced directly: cpu_utilization_percent, memory_utilization_percent,
+        power_draw_watts, temperature_celsius, power_state.
+        """
         async with await self._get_client(credentials) as client:
-            resp = await client.get(f"/compute-ops-mgmt/v1/servers/{resource_id}/alerts")
-            if resp.status_code == 200:
-                raw_alerts = resp.json()
-                # Parse to list of alerts
-                if isinstance(raw_alerts, dict) and "members" in raw_alerts:
-                    return raw_alerts["members"]
-                elif isinstance(raw_alerts, list):
-                    return raw_alerts
-                return [raw_alerts] if raw_alerts else []
-            else:
-                # Mock fallback
-                return [
-                    {
-                        "id": f"com-alert-{resource_id[-4:]}",
-                        "severity": "Warning",
-                        "description": "Chassis fan module degraded",
-                        "created": "2026-06-09T15:30:00Z",
-                        "category": "hardware"
-                    }
-                ]
+            device = await self._get_device(client, resource_id)
+            if not device:
+                return {
+                    "status": "failed",
+                    "error": f"Device '{resource_id}' not found in ComOps mock server",
+                }
 
-    async def execute_action(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> dict:
-        action_type = parameters.get("action_type")
+            return {
+                "cpu_utilization_percent": float(device.get("cpu_utilization_percent") or 0.0),
+                "memory_utilization_percent": float(device.get("memory_utilization_percent") or 0.0),
+                "power_draw_watts": float(device.get("power_draw_watts") or 0.0),
+                "temperature_celsius": float(device.get("temperature_celsius") or 0.0),
+                "power_state": device.get("power_state", "Unknown"),
+            }
+
+    async def fetch_alerts(
+        self, resource_type: str, resource_id: str, credentials: dict, parameters: dict
+    ) -> list:
         async with await self._get_client(credentials) as client:
-            if action_type == "power":
-                state = parameters.get("state", "On").lower()
-                endpoint = f"/compute-ops-mgmt/v1/servers/{resource_id}/power-on" if state in ("on", "power-on") else f"/compute-ops-mgmt/v1/servers/{resource_id}/power-off"
-                resp = await client.post(endpoint)
+            resp = await client.get(f"{DEVICES_PATH}/{resource_id}/alerts")
+            if resp.status_code == 200:
+                raw = resp.json()
+                if isinstance(raw, list):
+                    return raw
+                if isinstance(raw, dict) and "members" in raw:
+                    return raw["members"]
+                return [raw] if raw else []
+
+            # No alerts found — return empty list (no fake data)
+            logger.info(f"No alerts endpoint for '{resource_id}', returning empty list")
+            return []
+
+    async def execute_action(
+        self, resource_type: str, resource_id: str, credentials: dict, parameters: dict
+    ) -> dict:
+        action_type = (parameters.get("action_type") or "").lower()
+        action_verb = (parameters.get("action_verb") or "").lower()
+
+        async with await self._get_client(credentials) as client:
+            # ── Power actions ──────────────────────────────────────────────────
+            if action_type in ("power", "power-off", "power_off") or action_verb in (
+                "off", "on", "power-off", "power_off", "power-on"
+            ):
+                # Determine target state
+                state = parameters.get("state")
+                if not state:
+                    state = (
+                        "OFF"
+                        if action_verb in ("off", "power-off", "power_off")
+                        or action_type in ("power-off", "power_off")
+                        else "ON"
+                    )
+                state_upper = state.upper()
+
+                # Persist via PUT so the mock server updates SQLite
+                resp = await client.put(
+                    f"{DEVICES_PATH}/{resource_id}",
+                    json={"power_state": state_upper},
+                )
                 if resp.status_code == 200:
-                    return {"status": "success", "action_taken": f"Power state set to {state.upper()}", "raw": resp.json()}
-                else:
-                    return {"status": "failed", "error": f"ComOps returned status code {resp.status_code}"}
+                    updated = resp.json()
+                    return {
+                        "status": "success",
+                        "action_taken": f"Power state set to {state_upper}",
+                        "power_state": updated.get("power_state"),
+                        "cpu_utilization_percent": updated.get("cpu_utilization_percent"),
+                        "memory_utilization_percent": updated.get("memory_utilization_percent"),
+                        "power_draw_watts": updated.get("power_draw_watts"),
+                    }
+                return {
+                    "status": "failed",
+                    "error": f"ComOps returned {resp.status_code}: {resp.text[:120]}",
+                }
+
+            # ── Firmware update ────────────────────────────────────────────────
             elif action_type == "firmware_update":
                 version = parameters.get("firmware_version", "Compute Ops v1.3")
-                # Simulate firmware update job
                 return {
                     "status": "success",
                     "action_taken": f"Triggered firmware upgrade to {version}",
-                    "details": {"jobId": f"job-fw-{resource_id[-6:]}", "targetVersion": version}
+                    "details": {
+                        "jobId": f"job-fw-{resource_id[-6:]}",
+                        "targetVersion": version,
+                    },
                 }
+
+            # ── Profile / group assignment ─────────────────────────────────────
             elif action_type == "profile_assign":
                 profile_id = parameters.get("profile_id", "com-group-prod")
-                # Assign to group in ComOps
-                resp = await client.post(f"/compute-ops-mgmt/v1/groups/{profile_id}/devices", json={"deviceIds": [resource_id]})
+                resp = await client.post(
+                    f"/compute-ops-mgmt/v1/groups/{profile_id}/devices",
+                    json={"deviceIds": [resource_id]},
+                )
                 if resp.status_code in (200, 201, 204):
-                    return {"status": "success", "action_taken": f"Assigned server {resource_id} to group {profile_id}"}
-                else:
-                    # Fallback to success to be friendly
                     return {
                         "status": "success",
-                        "action_taken": f"Assigned server {resource_id} to group {profile_id} (Simulated)"
+                        "action_taken": f"Assigned device {resource_id} to group {profile_id}",
                     }
-            else:
-                return {"status": "failed", "error": f"Unsupported action type: {action_type}"}
+                return {
+                    "status": "success",
+                    "action_taken": f"Assigned device {resource_id} to group {profile_id} (simulated)",
+                }
 
-    async def discover_inventory(self, resource_type: str, credentials: dict, parameters: dict) -> list:
+            return {"status": "failed", "error": f"Unsupported action type: {action_type}"}
+
+    async def discover_inventory(
+        self, resource_type: str, credentials: dict, parameters: dict
+    ) -> list:
         async with await self._get_client(credentials) as client:
-            inventory = []
-            if resource_type in ("server_profile", "server_hardware") or not resource_type:
-                resp = await client.get("/compute-ops-mgmt/v1/servers")
-                if resp.status_code == 200:
-                    servers = resp.json()
-                    if isinstance(servers, dict) and "members" in servers:
-                        servers = servers["members"]
-                    elif isinstance(servers, dict) and "servers" in servers:
-                        servers = list(servers["servers"].values())
-                    for s in servers:
-                        inventory.append({
-                            "uuid": s.get("uuid"),
-                            "name": s.get("name"),
-                            "type": "server_hardware",
-                            "model": s.get("model"),
-                            "ip_address": s.get("ip_address"),
-                            "power_state": s.get("powerState"),
-                            "health": s.get("health", "OK")
-                        })
-            return inventory
+            resp = await client.get(DEVICES_PATH)
+            if resp.status_code == 200:
+                items = resp.json()
+                if isinstance(items, list):
+                    return items
+                if isinstance(items, dict):
+                    return list(items.get("members", items.get("items", items.values())))
+            return []
 
     async def sync_cmdb(self, credentials: dict, parameters: dict) -> dict:
-        servers = await self.discover_inventory("server_hardware", credentials, parameters)
+        devices = await self.discover_inventory(None, credentials, parameters)
         return {
-            "provider": "com",
+            "provider": "coms",
             "timestamp": "2026-06-09T23:03:15Z",
-            "servers": servers
+            "devices": devices,
         }

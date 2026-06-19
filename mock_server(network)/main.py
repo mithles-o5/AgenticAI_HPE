@@ -25,10 +25,10 @@ def get_network_devices():
 @app.get("/network/v1/devices/{id}")
 def get_network_device_by_id(id: str):
     collection_path = "/network/v1/devices"
-    store = db.get_collection(collection_path)
-    if id not in store:
-        raise HTTPException(status_code=404, detail="Device not found")
-    return store[id]
+    item = db.get_item(collection_path, id)
+    if item:
+        return item
+    raise HTTPException(status_code=404, detail="Device not found")
 
 @app.post("/network/v1/devices")
 def create_network_device(payload: DeviceSchema):
@@ -41,111 +41,39 @@ def create_network_device(payload: DeviceSchema):
     return payload_dict
 
 @app.put("/network/v1/devices/{id}")
+@app.post("/network/v1/devices/{id}")
 def update_network_device(id: str, payload: DeviceSchema):
-    collection_path = "/network/v1/devices"
-    store = db.get_collection(collection_path)
-    if id not in store:
-        raise HTTPException(status_code=404, detail="Device not found")
-    
-    existing = store[id]
-    payload_dict = {k: v for k, v in payload.dict().items() if v is not None}
-    existing.update(payload_dict)
-    db.upsert_item(collection_path, id, existing)
-    return existing
-
-@app.delete("/network/v1/devices/{id}")
-def delete_network_device(id: str):
-    collection_path = "/network/v1/devices"
-    store = db.get_collection(collection_path)
-    if id not in store:
-        raise HTTPException(status_code=404, detail="Device not found")
-    deleted = db.delete_item(collection_path, id)
-    return {"message": "Deleted successfully", "id": id, "item": deleted}
-
-
-@app.post("/network/v1/devices/{id}/vlans")
-def post_network_device_vlans(id: str, payload: NetworkVlanRequest):
-    collection_path = "/network/v1/devices"
-    store = db.get_collection(collection_path)
-    if id not in store:
-        raise HTTPException(status_code=404, detail="Device not found")
-    
-    device = dict(store[id])
-    configured_vlans = device.get("configured_vlans") or []
-    if isinstance(configured_vlans, str):
-        try:
-            configured_vlans = json.loads(configured_vlans)
-        except Exception:
-            configured_vlans = []
-            
-    configured_vlans.append(payload.dict())
-    device["configured_vlans"] = configured_vlans
-    
-    db.upsert_item(collection_path, id, device)
-    return device
-
-
-@app.post("/network/v1/devices/{id}/ports/{port_name}/status")
-def post_network_device_port_status(id: str, port_name: str, payload: NetworkPortStatusRequest):
-    collection_path = "/network/v1/devices"
-    store = db.get_collection(collection_path)
-    if id not in store:
-        raise HTTPException(status_code=404, detail="Device not found")
-    
-    device = dict(store[id])
-    ports = device.get("ports") or {}
-    if isinstance(ports, str):
-        try:
-            ports = json.loads(ports)
-        except Exception:
-            ports = {}
-            
-    ports[port_name] = payload.status
-    device["ports"] = ports
-    
-    db.upsert_item(collection_path, id, device)
-    return device
-
-
-@app.patch("/network/v1/devices/{id}")
-def patch_network_device(id: str, payload: dict):
-    collection_path = "/network/v1/devices"
-    store = db.get_collection(collection_path)
-    if id not in store:
-        raise HTTPException(status_code=404, detail="Device not found")
-    
-    existing = dict(store[id])
-    payload_dict = {k: v for k, v in payload.items() if v is not None}
-    existing.update(payload_dict)
-    db.upsert_item(collection_path, id, existing)
-    return existing
-
-
-from pydantic import BaseModel
-
-class NetworkPowerRequest(BaseModel):
-    action: str
-
-
-@app.post("/network/v1/devices/{id}/power")
-def post_network_device_power(id: str, payload: NetworkPowerRequest):
-    """
-    Action Route: POST /network/v1/devices/{id}/power
-    """
+    from fastapi import HTTPException
+    import random
     import datetime
+    
     collection_path = "/network/v1/devices"
-    store = db.get_collection(collection_path)
-    if id not in store:
+    item = db.get_item(collection_path, id)
+    if not item:
         raise HTTPException(status_code=404, detail="Device not found")
         
-    action_upper = payload.action.upper()
-    if action_upper not in ["ON", "OFF"]:
-        raise HTTPException(status_code=400, detail="Invalid action. Only 'ON' or 'OFF' are allowed.")
-        
-    device = dict(store[id])
-    device["power_state"] = action_upper
+    device = dict(item)
+    payload_dict = payload.dict(exclude_unset=True) if hasattr(payload, 'dict') else payload
+    state = payload_dict.get("power_state") or payload_dict.get("powerState") or payload_dict.get("action")
+    if state:
+        if state.upper() in ["ON", "POWERON"]:
+            device["power_state"] = "ON"
+            device["cpu_utilization_percent"] = round(random.uniform(10.0, 90.0), 1)
+            device["memory_utilization_percent"] = round(random.uniform(10.0, 90.0), 1)
+            device["power_draw_watts"] = round(random.uniform(150.0, 400.0), 1)
+            device["temperature_celsius"] = round(random.uniform(25.0, 45.0), 1)
+        elif state.upper() in ["OFF", "POWEROFF"]:
+            device["power_state"] = "OFF"
+            device["cpu_utilization_percent"] = 0.0
+            device["memory_utilization_percent"] = 0.0
+            device["power_draw_watts"] = 0.0
+            device["temperature_celsius"] = 0.0
+            
+    # Also apply any other payload properties
+    for k, v in payload_dict.items():
+        if k not in ["power_state", "powerState", "action"]:
+            device[k] = v
+            
     device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
-    db.upsert_item(collection_path, id, device)
+    db.upsert_item(collection_path, device["id"], device)
     return device
-
-
