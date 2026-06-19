@@ -90,6 +90,12 @@ class Database:
                 if "uuid" in cols:
                     where_clause.append("uuid = ?")
                     params.append(item_id)
+                if "serial_number" in cols:
+                    where_clause.append("serial_number = ?")
+                    params.append(item_id)
+                if "serialNumber" in cols:
+                    where_clause.append("serialNumber = ?")
+                    params.append(item_id)
                     
                 query = f"SELECT * FROM {table_name} WHERE " + " OR ".join(where_clause)
                 cursor = conn.execute(query, tuple(params))

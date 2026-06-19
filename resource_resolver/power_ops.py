@@ -28,6 +28,7 @@ logger = logging.getLogger(__name__)
 _FALLBACK_PATHS: dict[str, str] = {
     "oneview": "/rest/{resource}/{id}",
     "coms":    "/compute-ops-mgmt/v1/{resource}/{id}",
+    "mock_cloud": "/api/v1/devices/{id}",
 }
 _FALLBACK_METHOD = "GET"
 

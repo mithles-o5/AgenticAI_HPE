@@ -47,11 +47,8 @@ _ACTION_MAPPINGS: tuple[_Mapping, ...] = (
     _Mapping(_compile(r"\b(allocate|deploy)\b"),                      "ALLOCATE",    "Provisioning"),
     _Mapping(_compile(r"\b(deallocate|release)\b"),                   "DEALLOCATE",  "Provisioning"),
     _Mapping(_compile(r"\b(deprovision|destroy|delete)\b"),           "DELETE",      "Provisioning"),
-    # Future extensibility — add new rows here, no flow logic changes needed:
-    # _Mapping(_compile(r"\b(migrate)\b"),                            "MIGRATE",     "Provisioning"),
-    # _Mapping(_compile(r"\b(patch)\b"),                              "PATCH",       "Operational"),
-    # _Mapping(_compile(r"\b(quarantine)\b"),                         "QUARANTINE",  "Operational"),
-    # _Mapping(_compile(r"\b(snapshot)\b"),                           "SNAPSHOT",    "Operational"),
+    _Mapping(_compile(r"\b(update)\b"),                               "UPDATE",      "Operational"),
+    _Mapping(_compile(r"\b(patch)\b"),                                "PATCH",       "Operational"),
 )
 
 # Noise words stripped from the leading edge of the extracted identifier
