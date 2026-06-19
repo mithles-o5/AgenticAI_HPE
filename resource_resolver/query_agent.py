@@ -43,6 +43,8 @@ _ACTION_MAPPINGS: tuple[_Mapping, ...] = (
     # Read / query
     _Mapping(_compile(r"\b(list)\b"),                                 "LIST",        "Operational"),
     _Mapping(_compile(r"\b(status|check|state|lookup|show|find|get)\b"), "STATUS",   "Operational"),
+    # Update / modify — must be BEFORE provisioning words so "update" is not swallowed
+    _Mapping(_compile(r"\b(change|update|set|modify|configure|patch)\b"), "UPDATE",  "Operational"),
     # Provisioning
     _Mapping(_compile(r"\b(provision|create)\b"),                     "CREATE",      "Provisioning"),
     _Mapping(_compile(r"\b(allocate|deploy)\b"),                      "ALLOCATE",    "Provisioning"),
@@ -50,7 +52,6 @@ _ACTION_MAPPINGS: tuple[_Mapping, ...] = (
     _Mapping(_compile(r"\b(deprovision|destroy|delete)\b"),           "DELETE",      "Provisioning"),
     # Future extensibility — add new rows here, no flow logic changes needed:
     # _Mapping(_compile(r"\b(migrate)\b"),                            "MIGRATE",     "Provisioning"),
-    # _Mapping(_compile(r"\b(patch)\b"),                              "PATCH",       "Operational"),
     # _Mapping(_compile(r"\b(quarantine)\b"),                         "QUARANTINE",  "Operational"),
     # _Mapping(_compile(r"\b(snapshot)\b"),                           "SNAPSHOT",    "Operational"),
 )
@@ -61,6 +62,7 @@ _PREFIX_NOISE: frozenset[str] = frozenset({
     "device", "resource", "system", "systems", "storage-system", "storage_system", "storage-systems", "storage_systems",
     "storage-pool", "storage_pool", "storage-pools", "storage_pools", "storage-volume", "storage_volume", "storage-volumes", "storage_volumes",
     "server", "switch", "router", "firewall", "storage", "named", "called", "name", "with", "by", "having",
+    "change", "update", "set", "modify", "configure", "patch",
 })
 
 # Noise words stripped from the trailing edge of the extracted identifier
@@ -69,6 +71,7 @@ _SUFFIX_NOISE: frozenset[str] = frozenset({
     "device", "resource", "system", "systems", "storage-system", "storage_system", "storage-systems", "storage_systems",
     "storage-pool", "storage_pool", "storage-pools", "storage_pools", "storage-volume", "storage_volume", "storage-volumes", "storage_volumes",
     "server", "switch", "router", "firewall", "storage", "named", "called", "name", "with", "by", "having",
+    "change", "update", "set", "modify", "configure", "patch",
 })
 
 # Characters considered "boundary punctuation" — stripped only when they
@@ -146,6 +149,12 @@ class QueryAgent:
                 identifier = f"{before} {after}".strip() if before or after else ""
                 break
 
+        # For UPDATE queries, extract just the device name from consolidated parsing logic
+        if matched_action == "UPDATE":
+            details = QueryAgent._parse_update_details(query_clean)
+            if details and details.get("device"):
+                identifier = details["device"]
+
         # --- 2. Collapse internal whitespace (multi-space → single space) ---
         identifier = re.sub(r"\s{2,}", " ", identifier)
 
@@ -176,4 +185,129 @@ class QueryAgent:
             "identifier": identifier,
             "action": matched_action,
             "category": matched_category,
+        }
+
+    @staticmethod
+    def _coerce_value(raw_value: str) -> object:
+        """Coerce raw string value into boolean, int, float, or string."""
+        val_lower = raw_value.strip().lower()
+        if val_lower in {"true", "on", "enabled"}:
+            return True
+        if val_lower in {"false", "off", "disabled"}:
+            return False
+
+        try:
+            return int(raw_value)
+        except ValueError:
+            try:
+                return float(raw_value)
+            except ValueError:
+                return raw_value
+
+    @staticmethod
+    def _parse_update_details(query: str) -> dict:
+        """
+        Consolidated helper to parse UPDATE/PATCH queries.
+        Returns a dict with 'device', 'attribute', and 'value' keys, or an empty dict.
+        """
+        # Map natural language phrases to canonical field names
+        _FIELD_ALIASES: dict[str, str] = {
+            "temperature":           "temperature_celsius",
+            "temp":                  "temperature_celsius",
+            "health":                "health_status",
+            "health status":         "health_status",
+            "status":                "health_status",
+            "free capacity":         "free_capacity_gb",
+            "free_capacity":         "free_capacity_gb",
+            "free storage":          "free_storage_gb",
+            "total capacity":        "total_capacity_gb",
+            "total_capacity":        "total_capacity_gb",
+            "firmware":              "firmware_version",
+            "firmware version":      "firmware_version",
+            "power":                 "power_state",
+            "power state":           "power_state",
+            "memory":                "memory_gb",
+            "cpu":                   "cpu_cores",
+            "cpu cores":             "cpu_cores",
+        }
+
+        # Pattern 1: (change|set|update|modify|configure|patch) [the] <attribute> of/for/on <device> [to|=|space] <value>
+        m1 = re.search(
+            r"\b(?:change|set|update|modify|configure|patch)\b"
+            r"\s+(?:the\s+)?"                           # optional "the"
+            r"(?P<attr>[\w\s_]+?)"                       # attribute name (lazy)
+            r"\s+(?:of|for|on)\s+"
+            r"(?P<device>[\w\-\.]+)"
+            r"(?:\s+to\s+|\s*=\s*|\s+)"                 # 'to', '=', or whitespace
+            r"(?P<value>[\w\.\-]+)",
+            query,
+            re.IGNORECASE,
+        )
+        if m1:
+            raw_device = m1.group("device").strip()
+            raw_attr = m1.group("attr").strip().lower()
+            raw_value = m1.group("value").strip()
+            attribute = _FIELD_ALIASES.get(raw_attr, raw_attr.replace(" ", "_"))
+            return {
+                "device": raw_device,
+                "attribute": attribute,
+                "value": QueryAgent._coerce_value(raw_value)
+            }
+
+        # Pattern 2: (change|set|update|modify|configure|patch) <device> to <attribute> <value>
+        m2 = re.search(
+            r"\b(?:change|set|update|modify|configure|patch)\b"
+            r"\s+(?P<device>[\w\-\.]+)"
+            r"\s+to\s+"
+            r"(?P<attr>[\w_]+)"
+            r"\s+(?P<value>[\w\.\-]+)",
+            query,
+            re.IGNORECASE,
+        )
+        if m2:
+            raw_device = m2.group("device").strip()
+            raw_attr = m2.group("attr").strip().lower()
+            raw_value = m2.group("value").strip()
+            attribute = _FIELD_ALIASES.get(raw_attr, raw_attr.replace(" ", "_"))
+            return {
+                "device": raw_device,
+                "attribute": attribute,
+                "value": QueryAgent._coerce_value(raw_value)
+            }
+
+        # Pattern 3: (change|set|update|modify|configure|patch) <device> <attribute> [to|=|space] <value>
+        m3 = re.search(
+            r"\b(?:change|set|update|modify|configure|patch)\b"
+            r"\s+(?P<device>[\w\-\.]+)"
+            r"\s+(?P<attr>(?!to\b)[\w_]+)"              # exclude 'to'
+            r"(?:\s+to\s+|\s*=\s*|\s+)"                 # 'to', '=', or whitespace
+            r"(?P<value>[\w\.\-]+)",
+            query,
+            re.IGNORECASE,
+        )
+        if m3:
+            raw_device = m3.group("device").strip()
+            raw_attr = m3.group("attr").strip().lower()
+            raw_value = m3.group("value").strip()
+            attribute = _FIELD_ALIASES.get(raw_attr, raw_attr.replace(" ", "_"))
+            return {
+                "device": raw_device,
+                "attribute": attribute,
+                "value": QueryAgent._coerce_value(raw_value)
+            }
+
+        return {}
+
+    @staticmethod
+    def parse_update_payload(query: str) -> dict:
+        """
+        Extract the attribute name and new value from an UPDATE query.
+        Delegates to _parse_update_details.
+        """
+        details = QueryAgent._parse_update_details(query)
+        if not details:
+            return {}
+        return {
+            "attribute": details["attribute"],
+            "value": details["value"]
         }

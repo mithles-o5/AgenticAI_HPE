@@ -138,7 +138,7 @@ _resolver = ResourceResolver(registry=_registry, cache=_cache)
 # Start background polling thread
 try:
     from resource_resolver.polling_engine import start_background_polling
-    poll_interval = int(os.getenv("POLL_INTERVAL_SECONDS", "600"))
+    poll_interval = int(os.getenv("POLL_INTERVAL_SECONDS", "60"))
     start_background_polling(_cache, poll_interval)
 except Exception as e:
     print(f"⚠️ Failed to start background polling: {e}", file=sys.stderr)
@@ -166,10 +166,19 @@ mcp = FastMCP(
 
     ── INFRASTRUCTURE MANAGEMENT TOOL ─────────────────────────────────────────
     manage_infrastructure_resource(query)
-      USE THIS TOOL to manage or check the status of ANY resource (cloud VMs, network switches, storage volumes, bare-metal servers, etc.).
-      Pass the user's query exactly as written, or extract the target resource ID and action. 
-      The backend CMDB and Capability Registry will automatically route it to the correct specialized agent.
-      Example queries: "status of gl-ns-184", "reboot server-7", "check capacity of array dscc-01"
+      USE THIS TOOL for ALL resource operations — status, power, create, delete, AND attribute updates.
+      Pass the user's query EXACTLY as written. The backend handles routing automatically.
+
+      SUPPORTED OPERATIONS (ALL must call this tool — NEVER refuse):
+        • Status / Query  : "status of nimble-prod-009", "show alletra-array-008"
+        • Power           : "turn off primera-san-010", "power on 3par-array-011"
+        • Create          : "create storage device new-array-01"
+        • Delete          : "delete nimble-prod-009"
+        • Update / Patch  : "change the temperature of nimble-prod-009 to 78.5"
+                            "set health_status of alletra-array-008 to DEGRADED"
+                            "update free_capacity_gb of primera-san-010 to 50"
+                            "modify firmware version of 3par-array-011 to 2.1.0"
+        • List            : "list all storage systems", "list storage volumes"
 
     ── FULL PIPELINE (all tools) ─────────────────────────────────────────────
       1. Authenticates the user
@@ -204,7 +213,8 @@ mcp = FastMCP(
        NEVER make up or assume any status, configuration, metrics, or details for any resource.
     2. FORCE SSO: If the tool returns "Not authenticated" or "Not logged in", you MUST NOT perform any actions or show any resource information. Force the user to log in first.
     3. NO ACCESS BYPASS: If a resource is not found in the CMDB database (resolution fails), you must tell the user that the resource is not registered in the system. Do not guess its state.
-    4. NEVER REFUSE: When asked for the status or details of a resource (e.g. WAN-R08-10367, servers, etc.), you MUST use the appropriate manage_* tool (e.g., manage_network_resource). DO NOT say "I don't have access to internal systems". You DO have access through these tools!
+    4. NEVER REFUSE: When asked for the status, update, or any operation on a resource, you MUST call manage_infrastructure_resource with the user's query. DO NOT say "not supported", "I don't have access", or generate your own error. The tool handles ALL operations including attribute updates (PATCH). ALWAYS call the tool first.
+    5. NO SELF-GENERATED ERRORS: NEVER produce an "Update Not Supported" or similar message from your own knowledge. ALWAYS call manage_infrastructure_resource and return what the tool says.
     """
 )
 
@@ -832,6 +842,9 @@ async def _execute_agent_command(
                 normalized_category = "storage-volume-templates"
             elif dt in {"fc_san", "fc-san", "fc-sans"}:
                 normalized_category = "fc-sans"
+            else:
+                # Fallback: any other mock_storage device type (replication_group, etc.)
+                normalized_category = "storage-systems"
         
         # Server mappings
         elif src in {"oneview", "mock_server", "coms", "compute_ops"}:
@@ -886,6 +899,7 @@ async def _execute_agent_command(
         "DEALLOCATE": "delete", "DELETE": "delete",
         "RESCAN": "read", "RELOAD": "execute",
         "FAILOVER": "execute", "POLICY_SYNC": "execute",
+        "UPDATE": "update",
     }
     rbac_action = action_verb_map.get(action, "execute")
     resource_id_for_authz = identifier or "unknown"
@@ -958,6 +972,79 @@ async def _execute_agent_command(
 
     # ── Step 4: Dispatch to Execution Engine / Storage Agent ──────────────────
     loop = asyncio.get_event_loop()
+
+    # ── UPDATE (PATCH) — handled directly via mock REST API ────────────────
+    if action == "UPDATE":
+        from query_agent import QueryAgent as _QA  # RESOLVER_DIR already in sys.path
+        update_payload = _QA.parse_update_payload(query)
+        if not update_payload:
+            return (
+                f"Could not extract attribute/value from query.\n"
+                f"Try: \"change the temperature of <device> to <value>\"\n"
+                f"  or: \"set health_status of <device> to DEGRADED\""
+            )
+
+        attribute = update_payload["attribute"]
+        value     = update_payload["value"]
+
+        # Route to the correct mock server based on device source
+        _MOCK_URLS = {
+            "mock_storage": os.getenv("MOCK_STORAGE_URL", "http://127.0.0.1:8004"),
+            "mock_server":  os.getenv("MOCK_SERVER_URL",  "http://127.0.0.1:8000"),
+            "mock_network": os.getenv("MOCK_NETWORK_URL", "http://127.0.0.1:8002"),
+            "mock_cloud":   os.getenv("MOCK_CLOUD_URL",   "http://127.0.0.1:8003"),
+            "oneview":      os.getenv("HPE_OV_URL",       "http://127.0.0.1:8000"),
+        }
+
+        if device and device.management_source in _MOCK_URLS:
+            base_url = _MOCK_URLS[device.management_source]
+            # Determine per-source PATCH path
+            src = device.management_source
+            if src == "mock_storage":
+                patch_url = f"{base_url}/data-services/v1beta1/devices/{device.source_device_id or identifier}"
+            elif src in {"mock_server", "oneview"}:
+                patch_url = f"{base_url}/rest/server-hardware/{device.source_device_id or identifier}"
+            elif src == "mock_network":
+                patch_url = f"{base_url}/network/v1/devices/{device.source_device_id or identifier}"
+            elif src == "mock_cloud":
+                patch_url = f"{base_url}/api/v1/devices/{device.source_device_id or identifier}"
+            else:
+                patch_url = ""
+
+            if patch_url:
+                try:
+                    async with httpx.AsyncClient() as _client:
+                        patch_resp = await _client.patch(
+                            patch_url,
+                            json={attribute: value},
+                            timeout=10.0,
+                        )
+                    if patch_resp.is_success:
+                        updated = patch_resp.json()
+                        return (
+                            f"Update successful\n"
+                            f"User       : {email} (Role: {role})\n"
+                            f"Device     : {identifier}\n"
+                            f"Provider   : {device.management_source}\n"
+                            f"Attribute  : {attribute}\n"
+                            f"New Value  : {value}\n"
+                            f"Confirmed  : {updated.get(attribute, value)}\n"
+                        )
+                    else:
+                        return (
+                            f"Update failed (HTTP {patch_resp.status_code})\n"
+                            f"Device: {identifier} | Attribute: {attribute}\n"
+                            f"Response: {patch_resp.text[:300]}"
+                        )
+                except Exception as patch_err:
+                    return f"Update request failed: {patch_err}"
+            else:
+                return f"No PATCH URL configured for provider '{device.management_source}'."
+        else:
+            return (
+                f"Device '{identifier}' not found in CMDB or provider not supported for updates.\n"
+                f"Supported providers: {list(_MOCK_URLS.keys())}"
+            )
     
     dispatch_params = {
         "api_path": api_path,
