@@ -41,6 +41,7 @@ _ACTION_MAPPINGS: tuple[_Mapping, ...] = (
     # Storage / discovery
     _Mapping(_compile(r"\b(rescan)\b"),                               "RESCAN",      "Operational"),
     # Read / query
+    _Mapping(_compile(r"\b(list)\b"),                                 "LIST",        "Operational"),
     _Mapping(_compile(r"\b(status|check|state|lookup|show|find|get)\b"), "STATUS",   "Operational"),
     # Provisioning
     _Mapping(_compile(r"\b(provision|create)\b"),                     "CREATE",      "Provisioning"),
@@ -57,15 +58,17 @@ _ACTION_MAPPINGS: tuple[_Mapping, ...] = (
 # Noise words stripped from the leading edge of the extracted identifier
 _PREFIX_NOISE: frozenset[str] = frozenset({
     "the", "a", "an", "of", "for", "on", "at", "to", "my", "our", "their", "is", "was", "be", "about",
-    "device", "resource",
-    "server", "switch", "router", "firewall", "storage",
+    "device", "resource", "system", "systems", "storage-system", "storage_system", "storage-systems", "storage_systems",
+    "storage-pool", "storage_pool", "storage-pools", "storage_pools", "storage-volume", "storage_volume", "storage-volumes", "storage_volumes",
+    "server", "switch", "router", "firewall", "storage", "named", "called", "name", "with", "by", "having",
 })
 
 # Noise words stripped from the trailing edge of the extracted identifier
 _SUFFIX_NOISE: frozenset[str] = frozenset({
     "the", "of", "for", "on", "at", "to", "my", "our", "their", "is", "was", "be", "about",
-    "device", "resource",
-    "server", "switch", "router", "firewall", "storage",
+    "device", "resource", "system", "systems", "storage-system", "storage_system", "storage-systems", "storage_systems",
+    "storage-pool", "storage_pool", "storage-pools", "storage_pools", "storage-volume", "storage_volume", "storage-volumes", "storage_volumes",
+    "server", "switch", "router", "firewall", "storage", "named", "called", "name", "with", "by", "having",
 })
 
 # Characters considered "boundary punctuation" — stripped only when they
@@ -152,10 +155,14 @@ class QueryAgent:
         # --- 4. Strip prefix noise words ---
         words = identifier.split()
         while words and words[0].lower() in _PREFIX_NOISE:
+            if matched_action == "LIST" and words[0].lower() in {"server", "servers", "storage_pool", "storage_pools", "storage_system", "storage_systems", "pool", "pools", "volume", "volumes"}:
+                break
             words = words[1:]
 
         # --- 5. Strip suffix noise words ---
         while words and words[-1].lower() in _SUFFIX_NOISE:
+            if matched_action == "LIST" and words[-1].lower() in {"server", "servers", "storage_pool", "storage_pools", "storage_system", "storage_systems", "pool", "pools", "volume", "volumes"}:
+                break
             words = words[:-1]
 
         identifier = " ".join(words)

@@ -170,13 +170,22 @@ class DeviceQueries:
     ) -> dict:
         """Upsert one source's inventory and remove devices no longer reported.
 
+        Reconciliation is performed against the **previous poll snapshot**
+        stored in the ``poll_snapshots`` table (not the live ``devices`` table),
+        so the diff is accurate even across service restarts and crashes.
+
+        Behaviour on the very first poll for a source (no previous snapshot):
+            devices_added = 0
+            devices_removed = 0
+        The current inventory is stored as the baseline for the next poll.
+
         Returns:
             dict containing:
-                "source_type": source
-                "source_host": source_host
-                "devices_found": total incoming count
-                "devices_added": number of newly added devices
-                "devices_removed": number of removed devices
+                ``source_type``    : normalised management source
+                ``source_host``    : source host identifier
+                ``devices_found``  : total incoming count from the live source
+                ``devices_added``  : serial numbers present now but not in last snapshot
+                ``devices_removed``: serial numbers in last snapshot but absent now
         """
         source = normalize_management_source(management_source)
         device_rows = list(devices)
@@ -185,22 +194,35 @@ class DeviceQueries:
 
         try:
             with conn.cursor() as cur:
-                # 1. Fetch existing serial numbers for this source to compute accurate added/removed counts
+                # ── 1. Load the previous poll snapshot (persistent baseline) ──────────
                 cur.execute(
                     """
-                    SELECT serial_number
-                    FROM devices
-                    WHERE lower(management_source) = lower(%s)
+                    SELECT serial_numbers
+                    FROM poll_snapshots
+                    WHERE lower(source_type) = lower(%s)
                       AND lower(source_host) = lower(%s)
                     """,
                     (source, source_host),
                 )
-                existing_sns = {str(row[0]).strip() for row in cur.fetchall()}
-                
-                devices_added = len(incoming_sns - existing_sns)
-                devices_removed = len(existing_sns - incoming_sns)
+                snapshot_row = cur.fetchone()
 
-                # 2. Upsert incoming devices
+                if snapshot_row is None:
+                    # First-ever poll for this source — no baseline exists yet.
+                    # Report zero diff so we don't generate false positives.
+                    previous_sns: set[str] = set()
+                    is_first_poll = True
+                else:
+                    previous_sns = set(snapshot_row[0])  # psycopg2 deserialises JSONB → list
+                    is_first_poll = False
+
+                if is_first_poll:
+                    devices_added = 0
+                    devices_removed = 0
+                else:
+                    devices_added   = len(incoming_sns - previous_sns)
+                    devices_removed = len(previous_sns - incoming_sns)
+
+                # ── 2. Upsert incoming devices into the authoritative table ────────────
                 for device in device_rows:
                     serial_number = str(device["serial_number"]).strip()
                     cur.execute(
@@ -233,7 +255,7 @@ class DeviceQueries:
                         ),
                     )
 
-                # 3. Delete old devices
+                # ── 3. Purge devices that disappeared from the live source ─────────────
                 if incoming_sns:
                     cur.execute(
                         """
@@ -253,6 +275,20 @@ class DeviceQueries:
                         """,
                         (source, source_host),
                     )
+
+                # ── 4. Persist the new snapshot as the baseline for the next poll ──────
+                import json as _json
+                cur.execute(
+                    """
+                    INSERT INTO poll_snapshots (source_type, source_host, serial_numbers, snapshot_at)
+                    VALUES (%s, %s, %s::jsonb, NOW())
+                    ON CONFLICT (source_type, source_host) DO UPDATE SET
+                        serial_numbers = EXCLUDED.serial_numbers,
+                        snapshot_at    = EXCLUDED.snapshot_at
+                    """,
+                    (source, source_host, _json.dumps(list(incoming_sns))),
+                )
+
             conn.commit()
         except Exception:
             conn.rollback()
@@ -268,6 +304,43 @@ class DeviceQueries:
             "devices_removed": devices_removed,
         }
 
+
+
+class PollSnapshotQueries:
+    """Read and write persistent poll snapshots used as the reconciliation baseline."""
+
+    @staticmethod
+    def get(source_type: str, source_host: str) -> Optional[set[str]]:
+        """Return the last persisted serial-number set for a source, or None on first poll."""
+        row = db_manager.execute_query(
+            """
+            SELECT serial_numbers
+            FROM poll_snapshots
+            WHERE lower(source_type) = lower(%s)
+              AND lower(source_host) = lower(%s)
+            """,
+            (source_type, source_host),
+            fetch_one=True,
+        )
+        if row is None:
+            return None
+        return set(row["serial_numbers"])
+
+    @staticmethod
+    def save(source_type: str, source_host: str, serial_numbers: set[str]) -> None:
+        """Upsert the snapshot for a source after a successful poll cycle."""
+        import json as _json
+        db_manager.execute_query(
+            """
+            INSERT INTO poll_snapshots (source_type, source_host, serial_numbers, snapshot_at)
+            VALUES (%s, %s, %s::jsonb, NOW())
+            ON CONFLICT (source_type, source_host) DO UPDATE SET
+                serial_numbers = EXCLUDED.serial_numbers,
+                snapshot_at    = EXCLUDED.snapshot_at
+            """,
+            (source_type, source_host, _json.dumps(list(serial_numbers))),
+            fetch_all=False,
+        )
 
 
 class RoutingAuditQueries:

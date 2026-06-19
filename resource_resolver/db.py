@@ -24,7 +24,7 @@ class DatabaseManager:
     """
 
     _instance: Optional[DatabaseManager] = None
-    _connection_pool: Optional[pool.SimpleConnectionPool] = None
+    _connection_pool: Optional[pool.ThreadedConnectionPool] = None
 
     def __new__(cls) -> DatabaseManager:
         if cls._instance is None:
@@ -52,7 +52,7 @@ class DatabaseManager:
 
         if self._connection_pool is None:
             try:
-                self._connection_pool = pool.SimpleConnectionPool(
+                self._connection_pool = pool.ThreadedConnectionPool(
                     min_connections,
                     max_connections,
                     host=host,
@@ -71,7 +71,7 @@ class DatabaseManager:
                 raise
 
     @property
-    def pool(self) -> pool.SimpleConnectionPool:
+    def pool(self) -> pool.ThreadedConnectionPool:
         """Get the connection pool."""
         if self._connection_pool is None:
             raise RuntimeError("Database manager not initialized")

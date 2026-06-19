@@ -632,10 +632,17 @@ def get_storage_device_by_id(id: str):
     """
     from fastapi import HTTPException
     collection_path = "/data-services/v1beta1/devices"
-    store = db.get_collection(collection_path)
-    if id not in store:
+    device = db.get_item(collection_path, id)
+    if not device:
+        store = db.get_collection(collection_path)
+        for actual_id, item in store.items():
+            if item.get("source_device_id") == id or item.get("serial_number") == id:
+                device = item
+                break
+    if not device:
         raise HTTPException(status_code=404, detail="Device not found")
-    return store[id]
+    return device
+
 
 @app.post("/data-services/v1beta1/devices")
 def create_storage_device(payload: dict):
@@ -643,28 +650,34 @@ def create_storage_device(payload: dict):
     CRUD Route: POST /data-services/v1beta1/devices
     """
     collection_path = "/data-services/v1beta1/devices"
-    
     item_id = payload.get("id") or payload.get("serial_number") or str(uuid.uuid4())
     payload["id"] = item_id
     db.upsert_item(collection_path, item_id, payload)
     return payload
 
+
 @app.put("/data-services/v1beta1/devices/{id}")
-def update_storage_device(id: str, payload: dict):
+def put_storage_device(id: str, payload: dict):
     """
     CRUD Route: PUT /data-services/v1beta1/devices/{id}
     """
-    from fastapi import HTTPException
     collection_path = "/data-services/v1beta1/devices"
-    store = db.get_collection(collection_path)
-    if id not in store:
-        raise HTTPException(status_code=404, detail="Device not found")
-    
-    existing = store[id]
-    payload_dict = {k: v for k, v in payload.items() if v is not None}
-    existing.update(payload_dict)
-    db.upsert_item(collection_path, id, existing)
-    return existing
+    device = db.get_item(collection_path, id)
+    if not device:
+        store = db.get_collection(collection_path)
+        for actual_id, item in store.items():
+            if item.get("source_device_id") == id or item.get("serial_number") == id:
+                id = actual_id
+                device = item
+                break
+    if not device:
+        # Create new
+        payload["id"] = id
+        db.upsert_item(collection_path, id, payload)
+        return payload
+    db.upsert_item(collection_path, id, payload)
+    return payload
+
 
 @app.delete("/data-services/v1beta1/devices/{id}")
 def delete_storage_device(id: str):
@@ -673,8 +686,15 @@ def delete_storage_device(id: str):
     """
     from fastapi import HTTPException
     collection_path = "/data-services/v1beta1/devices"
-    store = db.get_collection(collection_path)
-    if id not in store:
+    device = db.get_item(collection_path, id)
+    if not device:
+        store = db.get_collection(collection_path)
+        for actual_id, item in store.items():
+            if item.get("source_device_id") == id or item.get("serial_number") == id:
+                id = actual_id
+                device = item
+                break
+    if not device:
         raise HTTPException(status_code=404, detail="Device not found")
     deleted = db.delete_item(collection_path, id)
     return {"message": "Deleted successfully", "id": id, "item": deleted}
@@ -690,11 +710,18 @@ def post_storage_device_volumes(id: str, payload: StorageVolumeCreateRequest):
     device_path = "/data-services/v1beta1/devices"
     volume_path = "/data-services/v1beta1/volumes"
     
-    device_store = MOCK_DB.get("dynamic_store", {}).get(device_path, {})
-    if id not in device_store:
+    device = db.get_item(device_path, id)
+    if not device:
+        store = db.get_collection(device_path)
+        for actual_id, item in store.items():
+            if item.get("source_device_id") == id or item.get("serial_number") == id:
+                id = actual_id
+                device = item
+                break
+    if not device:
         raise HTTPException(status_code=404, detail="Device not found")
         
-    device = dict(device_store[id])
+    device = dict(device)
     
     # Initialize capacity fields if they don't exist or are None
     if device.get("total_capacity_gb") is None:
@@ -706,7 +733,7 @@ def post_storage_device_volumes(id: str, payload: StorageVolumeCreateRequest):
         raise HTTPException(status_code=400, detail="Insufficient storage capacity")
         
     device["free_capacity_gb"] -= payload.size_gb
-    MOCK_DB["dynamic_store"][device_path][id] = device
+    db.upsert_item(device_path, id, device)
     
     # Create volume
     volume_id = str(uuid.uuid4())
@@ -718,10 +745,7 @@ def post_storage_device_volumes(id: str, payload: StorageVolumeCreateRequest):
         "status": "HEALTHY"
     }
     
-    if volume_path not in MOCK_DB["dynamic_store"]:
-        MOCK_DB["dynamic_store"][volume_path] = {}
-        
-    MOCK_DB["dynamic_store"][volume_path][volume_id] = volume
+    db.upsert_item(volume_path, volume_id, volume)
     return volume
 
 
@@ -734,25 +758,31 @@ def delete_storage_device_volume(id: str, volume_id: str):
     device_path = "/data-services/v1beta1/devices"
     volume_path = "/data-services/v1beta1/volumes"
     
-    device_store = MOCK_DB.get("dynamic_store", {}).get(device_path, {})
-    if id not in device_store:
+    device = db.get_item(device_path, id)
+    if not device:
+        store = db.get_collection(device_path)
+        for actual_id, item in store.items():
+            if item.get("source_device_id") == id or item.get("serial_number") == id:
+                id = actual_id
+                device = item
+                break
+    if not device:
         raise HTTPException(status_code=404, detail="Device not found")
         
-    volume_store = MOCK_DB.get("dynamic_store", {}).get(volume_path, {})
-    if volume_id not in volume_store:
+    volume = db.get_item(volume_path, volume_id)
+    if not volume:
         raise HTTPException(status_code=404, detail="Volume not found")
         
-    volume = volume_store[volume_id]
     if volume.get("device_id") != id:
         raise HTTPException(status_code=400, detail="Volume does not belong to this device")
         
     size_gb = volume.get("size_gb") or 0
-    device = dict(device_store[id])
+    device = dict(device)
     if "free_capacity_gb" in device:
         device["free_capacity_gb"] += size_gb
-        MOCK_DB["dynamic_store"][device_path][id] = device
+        db.upsert_item(device_path, id, device)
         
-    MOCK_DB["dynamic_store"][volume_path].pop(volume_id)
+    db.delete_item(volume_path, volume_id)
     return {"message": "Volume deleted successfully", "volume_id": volume_id}
 
 
@@ -763,11 +793,18 @@ def patch_storage_device(id: str, payload: dict):
     """
     from fastapi import HTTPException
     collection_path = "/data-services/v1beta1/devices"
-    store = db.get_collection(collection_path)
-    if id not in store:
+    device = db.get_item(collection_path, id)
+    if not device:
+        store = db.get_collection(collection_path)
+        for actual_id, item in store.items():
+            if item.get("source_device_id") == id or item.get("serial_number") == id:
+                id = actual_id
+                device = item
+                break
+    if not device:
         raise HTTPException(status_code=404, detail="Device not found")
     
-    existing = dict(store[id])
+    existing = dict(device)
     payload_dict = {k: v for k, v in payload.items() if v is not None}
     existing.update(payload_dict)
     db.upsert_item(collection_path, id, existing)
@@ -786,18 +823,23 @@ def post_storage_device_power(id: str, payload: StoragePowerRequest):
     from fastapi import HTTPException
     import datetime
     collection_path = "/data-services/v1beta1/devices"
-    store = db.get_collection(collection_path)
-    if id not in store:
+    device = db.get_item(collection_path, id)
+    if not device:
+        store = db.get_collection(collection_path)
+        for actual_id, item in store.items():
+            if item.get("source_device_id") == id or item.get("serial_number") == id:
+                id = actual_id
+                device = item
+                break
+    if not device:
         raise HTTPException(status_code=404, detail="Device not found")
         
     action_upper = payload.action.upper()
     if action_upper not in ["ON", "OFF"]:
         raise HTTPException(status_code=400, detail="Invalid action. Only 'ON' or 'OFF' are allowed.")
         
-    device = dict(store[id])
+    device = dict(device)
     device["power_state"] = action_upper
     device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
     db.upsert_item(collection_path, id, device)
     return device
-
-
