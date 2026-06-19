@@ -106,6 +106,56 @@ class AgentDispatcher:
                 "locators": [{"url": f"http://127.0.0.1:{agent_port}/openapi.json"}]
             }
 
+        # ── Step 1.5: Capability Verification ──────────────────────────────
+        # Confirm: Can the agent perform this operation?
+        agent_name = agent_record.get("name", "").lower()
+        target_skill = None
+        if "storage" in agent_name:
+            action_skill_map = {
+                "STATUS": "storage.monitoring.capacity",
+                "CAPACITY": "storage.monitoring.capacity",
+                "CREATE_VOLUME": "storage.execute.volume_action",
+                "DELETE_VOLUME": "storage.execute.volume_action",
+                "RESCAN": "storage.discover.arrays",
+                "ON": "storage.execute.volume_action",
+                "OFF": "storage.execute.volume_action",
+            }
+            target_skill = action_skill_map.get(query_action)
+        elif "server" in agent_name:
+            action_skill_map = {
+                "STATUS": "server.monitoring.health",
+                "ON": "server.execute.power_action",
+                "OFF": "server.execute.power_action",
+            }
+            target_skill = action_skill_map.get(query_action)
+        elif "onprem" in agent_name:
+            action_skill_map = {
+                "STATUS": "onprem.monitoring.health",
+                "ON": "onprem.execute.power_action",
+                "OFF": "onprem.execute.power_action",
+            }
+            target_skill = action_skill_map.get(query_action)
+        elif "cloud" in agent_name:
+            action_skill_map = {
+                "STATUS": "cloud.monitoring.health_check",
+                "ON": "cloud.execute.action",
+                "OFF": "cloud.execute.action",
+            }
+            target_skill = action_skill_map.get(query_action)
+        elif "network" in agent_name:
+            action_skill_map = {
+                "STATUS": "network.monitoring.interface",
+                "RESCAN": "network.topology.discover",
+            }
+            target_skill = action_skill_map.get(query_action)
+
+        if target_skill and agent_record.get("skills"):
+            agent_skills = [s.get("name") for s in agent_record.get("skills", [])]
+            if target_skill not in agent_skills:
+                msg = f"Capability error: Agent '{agent_record.get('name')}' does not support skill '{target_skill}' for action '{query_action}'."
+                logger.error("[AgentDispatcher] %s", msg)
+                return {"status": "failed", "errors": [msg]}
+
         # Resolve locator URL
         locator_url = agent_record["locators"][0]["url"]
         # Convert locator url (e.g. http://cloud-agent:8005/openapi.json) to localhost/127.0.0.1
@@ -130,10 +180,9 @@ class AgentDispatcher:
         # Build payload key name — cloud/storage/onprem use "provider"; network uses "protocol"
         if agent_key == "network":
             protocol_key = "protocol"
-            prov_val = provider_or_protocol
         else:
             protocol_key = "provider"
-            prov_val = "com" if (agent_key == "onprem" and provider_or_protocol == "coms") else provider_or_protocol
+        prov_val = provider_or_protocol
 
         payload: Dict[str, Any] = {
             "task_id":          str(uuid.uuid4()),
@@ -153,6 +202,9 @@ class AgentDispatcher:
         # Add action_verb to parameters so execute_action knows what to do
         if agent_action == "execute_action":
             payload["parameters"]["action_verb"] = query_action.lower()
+            if query_action in {"ON", "OFF", "RESET", "COLD_BOOT"}:
+                payload["parameters"]["action_type"] = "power"
+                payload["parameters"]["state"] = "On" if query_action in ("ON", "COLD_BOOT") else ("Off" if query_action == "OFF" else "Reset")
 
         # Route endpoint mapping
         if agent_key == "onprem":

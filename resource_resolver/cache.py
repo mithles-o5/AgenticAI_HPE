@@ -42,13 +42,8 @@ class ResourceCache:
             socket_keepalive=True,
             health_check_interval=30,
         )
-        self._connected = True
-        try:
-            self._client.ping()
-            logger.info("[Cache] Memurai connected at %s:%s/db=%s ttl=%ss", host, port, db, ttl)
-        except redis.exceptions.ConnectionError as e:
-            self._connected = False
-            logger.warning("[Cache] Memurai connection failed: %s. Cache disabled.", e)
+        self._client.ping()
+        logger.info("[Cache] Memurai connected at %s:%s/db=%s ttl=%ss", host, port, db, ttl)
 
     @staticmethod
     def key(identifier_type: IdentifierType, identifier: str) -> str:
@@ -73,7 +68,6 @@ class ResourceCache:
 
     def put_device(self, device: DeviceRecord) -> None:
         """Store lookup keys and source membership for one device in Memurai using pipelines."""
-        if not getattr(self, "_connected", True): return
         payload_data = {
             "management_source": normalize_management_source(device.management_source),
             "source_host": device.source_host,
@@ -112,7 +106,6 @@ class ResourceCache:
         identifier: str,
         identifier_type: IdentifierType,
     ) -> tuple[Optional[DeviceRecord], CacheStatus]:
-        if not getattr(self, "_connected", True): return None, CacheStatus.MISS
         try:
             raw = self._client.get(self.key(identifier_type, identifier))
             if not raw:
@@ -124,7 +117,6 @@ class ResourceCache:
 
     def warm_from_devices(self, devices: Iterable[DeviceRecord]) -> int:
         """Warm Memurai cache using pipelines to reduce RTT overhead."""
-        if not getattr(self, "_connected", True): return 0
         count = 0
         pipe = self._client.pipeline()
         for device in devices:
@@ -206,7 +198,6 @@ class ResourceCache:
         metadata: dict,
         source_device_id: str | None = None,
     ) -> None:
-        if not getattr(self, "_connected", True): return
         pkey = self.poll_key(source_type, source_host, source_device_id)
         pipe = self._client.pipeline()
         pipe.hset(pkey, mapping={
@@ -217,7 +208,6 @@ class ResourceCache:
         pipe.execute()
 
     def invalidate_device(self, device: DeviceRecord) -> None:
-        if not getattr(self, "_connected", True): return
         keys = []
         if device.ip_address:
             keys.append(self.key(IdentifierType.IP, device.ip_address))
@@ -237,7 +227,6 @@ class ResourceCache:
 
     def stats(self) -> dict:
         """Non-blocking stats lookup using SCAN."""
-        if not getattr(self, "_connected", True): return {"ip_keys": 0, "serial_keys": 0, "fqdn_keys": 0, "source_indexes": 0, "poll_metadata": 0, "ttl": self._ttl, "status": "disconnected"}
         return {
             "ip_keys": self._count_pattern("resolver:ip:*"),
             "serial_keys": self._count_pattern("resolver:sn:*"),

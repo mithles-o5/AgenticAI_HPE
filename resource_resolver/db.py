@@ -35,9 +35,9 @@ class DatabaseManager:
             self,
             host: str = os.getenv("DB_HOST", "localhost"),
             port: int = int(os.getenv("DB_PORT", "5432")),
-            database: str = os.getenv("DB_NAME", "hpe_agentic_ai"),
+            database: str = os.getenv("DB_NAME", "postgres"),
             user: str = os.getenv("DB_USER", "postgres"),
-            password: str = os.getenv("DB_PASSWORD", "Mithles"),
+            password: str = os.getenv("DB_PASSWORD", "mithles"),
             min_connections: int = 2,
             max_connections: int = 10,
     ) -> None:

@@ -193,10 +193,18 @@ class ExecutionOrchestrator:
         source = normalize_management_source(device.management_source)
 
         # Base URL components
-        host = device.source_host
-        if not host:
-            raise ValueError(f"Missing source_host for device {device.id}")
-        scheme = "https"
+        mock_port = os.getenv("MOCK_AGENT_PORT")
+        mock_host = os.getenv("MOCK_AGENT_HOST", "localhost")
+
+        if mock_port:
+            host   = f"{mock_host}:{mock_port}"
+            scheme = "http"
+        else:
+            host   = device.source_host 
+            if ":" in host or "localhost" in host or "127.0.0.1" in host:
+                scheme = "http"
+            else:
+                scheme = "https"
 
         uuid        = device.source_device_id or device.id
         device_type = (device.device_type or "").strip().lower()
@@ -227,7 +235,7 @@ class ExecutionOrchestrator:
     # ------------------------------------------------------------------
     # Dispatch
     # ------------------------------------------------------------------
-
+#Just prints the log messages, that's it
     def execute_operation(self, context: dict) -> dict:
         """Route the operation to the correct registered management source handler."""
         source  = context["management_source"].lower()
