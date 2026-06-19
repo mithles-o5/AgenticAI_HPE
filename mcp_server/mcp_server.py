@@ -491,21 +491,22 @@ async def _execute_agent_command(
     if identifier.lower().startswith("of "):
         identifier = identifier[3:].strip()
 
-    # ── Step 2.5: Verify CMDB Resource Existence ─────────────────────────────
+    # ── Step 2.5: Resource Resolver Validation & CMDB Check ───────────────────
     device = None
     api_path = ""
+    resolution = None
     try:
         resolution = _resolver.resolve({
             "identifier": identifier,
             "action": action,
-            "category": "Operational"
+            "category": task.category
         })
         device = resolution.device
         api_path = resolution.api_endpoint
     except Exception:
         pass
 
-    # Conversational memory fallback (ONLY if no explicit identifier was provided or generic)
+    # Conversational memory fallback
     if not device and identifier.lower() in {"", "it", "this", "that", "the device", "the resource"}:
         try:
             last_target = recall(SESSION_ID, "last_target_id")
@@ -513,7 +514,7 @@ async def _execute_agent_command(
                 resolution = _resolver.resolve({
                     "identifier": last_target,
                     "action": action,
-                    "category": "Operational"
+                    "category": task.category
                 })
                 device = resolution.device
                 api_path = resolution.api_endpoint
@@ -524,6 +525,40 @@ async def _execute_agent_command(
 
     if not device:
         return f"❌ Resource '{identifier}' not found in the CMDB registry. Unable to route task."
+
+    # ── Step 3: Authorization (RBAC + ABAC) ───────────────────────────────────
+    action_verb_map = {
+        "ON": "execute", "OFF": "execute", "RESET": "execute",
+        "COLD_BOOT": "execute", "STATUS": "read",
+        "CREATE": "create", "ALLOCATE": "create",
+        "DEALLOCATE": "delete", "DELETE": "delete",
+        "RESCAN": "read", "RELOAD": "execute",
+        "FAILOVER": "execute", "POLICY_SYNC": "execute",
+    }
+    rbac_action = action_verb_map.get(action, "execute")
+    resource_id_for_authz = identifier or "unknown"
+
+    try:
+        allowed, reason, identity = _authorize(
+            rbac_action, resource_id_for_authz, resource_type, env, "HPE"
+        )
+    except (RuntimeError, ValueError) as e:
+        return f"Authorization error for '{identifier}': {e}"
+
+    if not allowed:
+        return f"Access Denied for {email} (Role: {role}) on '{identifier}'\nReason: {reason}"
+
+    # ── Step 3.5: Vendor Synthesizer ──────────────────────────────────────────
+    from synthesizer import VendorSynthesizer
+    try:
+        # Pass the task and resolution to the synthesizer
+        batches = VendorSynthesizer.synthesize_batches([(task, resolution)])
+        if batches:
+            batch = list(batches.values())[0]
+            # Verify the batch grouped it correctly
+            provider_or_protocol = batch.management_source
+    except Exception as e:
+        print(f"Vendor Synthesizer warning: {e}")
 
     # OVERRIDE the LLM's guessed provider with the actual CMDB source
     if device.management_source:
@@ -548,67 +583,8 @@ async def _execute_agent_command(
         except Exception as e:
             print(f"Warning: Failed to lookup agent in capability registry: {e}")
 
-
-    # ── Step 3: Authorization (RBAC + ABAC) ───────────────────────────────────
-    action_verb_map = {
-        "ON": "execute", "OFF": "execute", "RESET": "execute",
-        "COLD_BOOT": "execute", "STATUS": "read",
-        "CREATE": "create", "ALLOCATE": "create",
-        "DEALLOCATE": "delete", "DELETE": "delete",
-        "RESCAN": "read", "RELOAD": "execute",
-        "FAILOVER": "execute", "POLICY_SYNC": "execute",
-    }
-    rbac_action = action_verb_map.get(action, "execute")
-    resource_id_for_authz = identifier or "unknown"
-
-    try:
-        allowed, reason, identity = _authorize(
-            rbac_action, resource_id_for_authz, resource_type, env, "HPE"
-        )
-    except (RuntimeError, ValueError) as e:
-        return f"Authorization error for '{identifier}': {e}"
-
-    if not allowed:
-        return f"Access Denied for {email} (Role: {role}) on '{identifier}'\nReason: {reason}"
-
-    # ── Step 3: Resource Resolver Validation ──────────────────────────────────
-    # Task Planner triggers Resource Resolver to query CMDB registry and lookup templates/routes.
-    device = None
-    api_path = ""
-    resolution = None
-    try:
-        resolution = _resolver.resolve({
-            "identifier": identifier,
-            "action": action,
-            "category": task.category
-        })
-        device = resolution.device
-        api_path = resolution.api_endpoint
-    except Exception:
-        pass
-
-    # Conversational memory fallback
-    if not device:
-        try:
-            last_target = recall(SESSION_ID, "last_target_id")
-            if last_target:
-                resolution = _resolver.resolve({
-                    "identifier": last_target,
-                    "action": action,
-                    "category": task.category
-                })
-                device = resolution.device
-                api_path = resolution.api_endpoint
-                if device:
-                    identifier = last_target
-        except Exception:
-            pass
-
-    if not device:
-        return f"❌ Resource '{identifier}' not found in the CMDB registry. Unable to route task."
-
     # Use resolver-derived routing metadata, management source, and credentials ref.
-    resolved_provider = device.management_source
+    resolved_provider = provider_or_protocol
     resolved_credentials_ref = resolution.credential_ref
 
     # ── Step 4: Dispatch to Execution Engine / Storage Agent ──────────────────

@@ -1,0 +1,19 @@
+Agent command succeeded
+User         : devasksr@gmail.com (Role: Infrastructure administrator)
+Agent        : onprem-agent
+Resource     : router/wan-r08-10017
+Power State  : ON
+Health Status: HEALTHY
+Provider     : coms
+Action       : STATUS
+Status       : success
+Actions taken:
+  • fetch_metrics
+Metrics:
+{
+  "cpu_utilization_percent": 48.3,
+  "memory_utilization_percent": 53.5,
+  "power_draw_watts": 227.6,
+  "temperature_celsius": 22.7,
+  "power_state": "ON"
+}
