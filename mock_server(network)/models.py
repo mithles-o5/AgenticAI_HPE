@@ -20,3 +20,13 @@ class NetworkVlanRequest(BaseModel):
 class NetworkPortStatusRequest(BaseModel):
     status: str
 
+
+class ArubaVlanRequest(BaseModel):
+    vlan_id: int
+    name: str = None
+
+
+class ArubaPortStatusRequest(BaseModel):
+    status: str
+
+

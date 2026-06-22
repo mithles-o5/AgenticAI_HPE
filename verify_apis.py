@@ -69,8 +69,52 @@ def verify_network():
     assert ports.get("eth9") == "down", f"Port eth9 not down in {ports}"
     print("Success: Port status configured and persisted.")
     
+    # 6.5 Test Aruba Central REST APIs
+    # List switches
+    resp = client.get("/monitoring/v1/switches")
+    assert resp.status_code == 200, f"List Aruba switches failed: {resp.text}"
+    switches = resp.json()["switches"]
+    assert len(switches) > 0, "No Aruba switches returned"
+    print("Success: Aruba Central list switches returned results.")
+
+    # Get single switch
+    resp = client.get(f"/monitoring/v1/switches/{device_id}")
+    assert resp.status_code == 200, f"Get Aruba switch failed: {resp.text}"
+    sw_data = resp.json()
+    assert sw_data["serial"] == device_id
+    assert isinstance(sw_data["model"], str)
+
+    print("Success: Aruba Central get switch by serial returned correct details.")
+
+    # Get switch ports
+    resp = client.get(f"/monitoring/v1/switches/{device_id}/ports")
+    assert resp.status_code == 200, f"Get Aruba ports failed: {resp.text}"
+    ports_data = resp.json()["ports"]
+    assert ports_data.get("eth9") == "down"
+    print("Success: Aruba Central get switch ports returned correct ports config.")
+
+    # Get switch VLANs
+    resp = client.get(f"/monitoring/v1/switches/{device_id}/vlan")
+    assert resp.status_code == 200, f"Get Aruba VLANs failed: {resp.text}"
+    vlans_data = resp.json()["vlans"]
+    assert any(v["vlan_id"] == 99 for v in vlans_data)
+    print("Success: Aruba Central get switch VLANs returned correct configuration.")
+
+    # Configure a VLAN via Aruba Endpoint
+    resp = client.post(f"/monitoring/v1/switches/{device_id}/vlan", json={"vlan_id": 100, "name": "ArubaVLAN"})
+    assert resp.status_code == 200, f"Configure Aruba VLAN failed: {resp.text}"
+    assert any(v["vlan_id"] == 100 for v in resp.json()["vlans"])
+    print("Success: Aruba Central configure VLAN works.")
+
+    # Configure port status via Aruba Endpoint
+    resp = client.post(f"/monitoring/v1/switches/{device_id}/ports/eth10/status", json={"status": "up"})
+    assert resp.status_code == 200, f"Configure Aruba port status failed: {resp.text}"
+    assert resp.json()["ports"].get("eth10") == "up"
+    print("Success: Aruba Central configure port status works.")
+
     # 7. Delete device
     resp = client.delete(f"/network/v1/devices/{device_id}")
+
     assert resp.status_code == 200, f"Delete failed: {resp.text}"
     print("Success: Device deleted.")
     
@@ -307,11 +351,9 @@ if __name__ == "__main__":
         print("\n==============================")
         print("ALL TESTS PASSED SUCCESSFULLY!")
         print("==============================")
-    except AssertionError as e:
-        print(f"\nAssertion failed: {e}")
-        sys.exit(1)
     except Exception as e:
         print(f"\nAn error occurred during verification: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)
+

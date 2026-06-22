@@ -10307,6 +10307,64 @@
     }
   },
   {
+    "server": "network",
+    "method": "GET",
+    "path": "/monitoring/v1/switches",
+    "description": "Aruba Central Endpoint: GET /monitoring/v1/switches",
+    "target_sqlite_table": "dynamic_monitoring_v1_switches",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/monitoring/v1/switches/{serial}",
+    "description": "Aruba Central Endpoint: GET /monitoring/v1/switches/{serial}",
+    "target_sqlite_table": "dynamic_monitoring_v1_switches",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{serial}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/monitoring/v1/switches/{serial}/ports",
+    "description": "Aruba Central Endpoint: GET /monitoring/v1/switches/{serial}/ports",
+    "target_sqlite_table": "dynamic_monitoring_v1_switches_{serial}_ports",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/monitoring/v1/switches/{serial}/vlan",
+    "description": "Aruba Central Endpoint: GET /monitoring/v1/switches/{serial}/vlan",
+    "target_sqlite_table": "dynamic_monitoring_v1_switches_{serial}_vlan",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/monitoring/v1/switches/{serial}/vlan",
+    "description": "Aruba Central Endpoint: POST /monitoring/v1/switches/{serial}/vlan",
+    "target_sqlite_table": "dynamic_monitoring_v1_switches_{serial}_vlan",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Vlan"
+    }
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/monitoring/v1/switches/{serial}/ports/{port_name}/status",
+    "description": "Aruba Central Endpoint: POST /monitoring/v1/switches/{serial}/ports/{port_name}/status",
+    "target_sqlite_table": "dynamic_monitoring_v1_switches_{serial}_ports_{port_name}_status",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "status": "down"
+    }
+  },
+  {
     "server": "oneview",
     "method": "GET",
     "path": "/openapi.json",
