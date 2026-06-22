@@ -650,13 +650,191 @@ def create_storage_device(payload: dict):
     return payload
 
 @app.put("/data-services/v1beta1/devices/{id}")
+@app.post("/data-services/v1beta1/devices/{id}")
 def update_storage_device(id: str, payload: dict):
     """
     CRUD Route: PUT /data-services/v1beta1/devices/{id}
     """
     from fastapi import HTTPException
+    import random
+    import datetime
+    
     collection_path = "/data-services/v1beta1/devices"
     item = db.get_item(collection_path, id)
-    if item:
-        return item
-    raise HTTPException(status_code=404, detail="Device not found")
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+        
+    device = dict(item)
+    state = payload.get("power_state") or payload.get("powerState") or payload.get("action")
+    if state:
+        if state.upper() in ["ON", "POWERON"]:
+            device["power_state"] = "ON"
+            device["cpu_utilization_percent"] = round(random.uniform(10.0, 90.0), 1)
+            device["memory_utilization_percent"] = round(random.uniform(10.0, 90.0), 1)
+            device["power_draw_watts"] = round(random.uniform(150.0, 400.0), 1)
+            device["temperature_celsius"] = round(random.uniform(25.0, 45.0), 1)
+        elif state.upper() in ["OFF", "POWEROFF"]:
+            device["power_state"] = "OFF"
+            device["cpu_utilization_percent"] = 0.0
+            device["memory_utilization_percent"] = 0.0
+            device["power_draw_watts"] = 0.0
+            device["temperature_celsius"] = 0.0
+            
+    # Also apply any other payload properties
+    for k, v in payload.items():
+        if k not in ["power_state", "powerState", "action"]:
+            device[k] = v
+            
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(collection_path, device["id"], device)
+    return device
+
+@app.delete("/data-services/v1beta1/devices/{id}")
+def delete_storage_device(id: str):
+    """
+    CRUD Route: DELETE /data-services/v1beta1/devices/{id}
+    """
+    from fastapi import HTTPException
+    collection_path = "/data-services/v1beta1/devices"
+    item = db.get_item(collection_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+    deleted = db.delete_item(collection_path, item["id"])
+    return {"message": "Deleted successfully", "id": id, "item": deleted}
+
+@app.patch("/data-services/v1beta1/devices/{id}")
+def patch_storage_device(id: str, payload: dict):
+    """
+    CRUD Route: PATCH /data-services/v1beta1/devices/{id}
+    """
+    from fastapi import HTTPException
+    import datetime
+    collection_path = "/data-services/v1beta1/devices"
+    item = db.get_item(collection_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    device = dict(item)
+    payload_dict = {k: v for k, v in payload.items() if v is not None}
+    device.update(payload_dict)
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(collection_path, device["id"], device)
+    return device
+
+class StoragePowerRequest(BaseModel):
+    action: str
+
+@app.post("/data-services/v1beta1/devices/{id}/power")
+def post_storage_device_power(id: str, payload: StoragePowerRequest):
+    """
+    Action Route: POST /data-services/v1beta1/devices/{id}/power
+    """
+    from fastapi import HTTPException
+    import random
+    import datetime
+    collection_path = "/data-services/v1beta1/devices"
+    item = db.get_item(collection_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+        
+    device = dict(item)
+    action_upper = payload.action.upper()
+    if action_upper not in ["ON", "OFF"]:
+        raise HTTPException(status_code=400, detail="Invalid action. Only 'ON' or 'OFF' are allowed.")
+        
+    device["power_state"] = action_upper
+    if action_upper == "ON":
+        device["cpu_utilization_percent"] = round(random.uniform(10.0, 90.0), 1)
+        device["memory_utilization_percent"] = round(random.uniform(10.0, 90.0), 1)
+        device["power_draw_watts"] = round(random.uniform(150.0, 400.0), 1)
+        device["temperature_celsius"] = round(random.uniform(25.0, 45.0), 1)
+    else:
+        device["cpu_utilization_percent"] = 0.0
+        device["memory_utilization_percent"] = 0.0
+        device["power_draw_watts"] = 0.0
+        device["temperature_celsius"] = 0.0
+        
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(collection_path, device["id"], device)
+    return device
+
+@app.post("/data-services/v1beta1/devices/{id}/volumes")
+def post_storage_device_volumes(id: str, payload: StorageVolumeCreateRequest):
+    """
+    Action Route: POST /data-services/v1beta1/devices/{id}/volumes
+    """
+    from fastapi import HTTPException
+    import datetime
+    device_path = "/data-services/v1beta1/devices"
+    volume_path = "/data-services/v1beta1/volumes"
+    
+    item = db.get_item(device_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+    device = dict(item)
+    
+    # Initialize capacity fields if they don't exist
+    total_cap = device.get("total_capacity_gb")
+    if total_cap is None:
+        total_cap = 10000
+        device["total_capacity_gb"] = total_cap
+    else:
+        total_cap = float(total_cap)
+        
+    free_cap = device.get("free_capacity_gb")
+    if free_cap is None:
+        free_cap = 10000
+        device["free_capacity_gb"] = free_cap
+    else:
+        free_cap = float(free_cap)
+        
+    if free_cap < payload.size_gb:
+        raise HTTPException(status_code=400, detail="Insufficient storage capacity")
+        
+    device["free_capacity_gb"] = free_cap - payload.size_gb
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(device_path, device["id"], device)
+    
+    # Create volume
+    volume_id = str(uuid.uuid4())
+    volume = {
+        "id": volume_id,
+        "device_id": device["id"],
+        "volume_name": payload.volume_name,
+        "size_gb": payload.size_gb,
+        "status": "HEALTHY"
+    }
+    db.upsert_item(volume_path, volume_id, volume)
+    return volume
+
+@app.delete("/data-services/v1beta1/devices/{id}/volumes/{volume_id}")
+def delete_storage_device_volume(id: str, volume_id: str):
+    """
+    Action Route: DELETE /data-services/v1beta1/devices/{id}/volumes/{volume_id}
+    """
+    from fastapi import HTTPException
+    import datetime
+    device_path = "/data-services/v1beta1/devices"
+    volume_path = "/data-services/v1beta1/volumes"
+    
+    item = db.get_item(device_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+        
+    vol_item = db.get_item(volume_path, volume_id)
+    if not vol_item:
+        raise HTTPException(status_code=404, detail="Volume not found")
+        
+    if vol_item.get("device_id") != id:
+        raise HTTPException(status_code=400, detail="Volume does not belong to this device")
+        
+    size_gb = float(vol_item.get("size_gb") or 0)
+    device = dict(item)
+    free_cap = device.get("free_capacity_gb")
+    if free_cap is not None:
+        device["free_capacity_gb"] = float(free_cap) + size_gb
+        device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+        db.upsert_item(device_path, device["id"], device)
+        
+    db.delete_item(volume_path, volume_id)
+    return {"message": "Volume deleted successfully", "volume_id": volume_id}

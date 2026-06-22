@@ -12753,3 +12753,163 @@ def update_cloud_device(id: str, payload: dict):
     device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
     db.upsert_item(collection_path, device["id"], device)
     return device
+
+@app.delete("/api/v1/devices/{id}")
+def delete_cloud_device(id: str):
+    """
+    CRUD Route: DELETE /api/v1/devices/{id}
+    """
+    from fastapi import HTTPException
+    collection_path = "/api/v1/devices"
+    item = db.get_item(collection_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+    deleted = db.delete_item(collection_path, item["id"])
+    return {"message": "Deleted successfully", "id": id, "item": deleted}
+
+@app.patch("/api/v1/devices/{id}")
+def patch_cloud_device(id: str, payload: dict):
+    """
+    CRUD Route: PATCH /api/v1/devices/{id}
+    """
+    from fastapi import HTTPException
+    import datetime
+    collection_path = "/api/v1/devices"
+    item = db.get_item(collection_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    device = dict(item)
+    payload_dict = {k: v for k, v in payload.items() if v is not None}
+    device.update(payload_dict)
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(collection_path, device["id"], device)
+    return device
+
+class CloudPowerRequest(BaseModel):
+    action: str
+
+@app.post("/api/v1/devices/{id}/power")
+def post_cloud_device_power(id: str, payload: CloudPowerRequest):
+    """
+    Action Route: POST /api/v1/devices/{id}/power
+    """
+    from fastapi import HTTPException
+    import random
+    import datetime
+    collection_path = "/api/v1/devices"
+    item = db.get_item(collection_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+        
+    device = dict(item)
+    action_upper = payload.action.upper()
+    if action_upper not in ["ON", "OFF"]:
+        raise HTTPException(status_code=400, detail="Invalid action. Only 'ON' or 'OFF' are allowed.")
+        
+    device["power_state"] = action_upper
+    if action_upper == "ON":
+        device["cpu_utilization_percent"] = round(random.uniform(10.0, 90.0), 1)
+        device["memory_utilization_percent"] = round(random.uniform(10.0, 90.0), 1)
+        device["power_draw_watts"] = round(random.uniform(150.0, 400.0), 1)
+        device["temperature_celsius"] = round(random.uniform(25.0, 45.0), 1)
+    else:
+        device["cpu_utilization_percent"] = 0.0
+        device["memory_utilization_percent"] = 0.0
+        device["power_draw_watts"] = 0.0
+        device["temperature_celsius"] = 0.0
+        
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(collection_path, device["id"], device)
+    return device
+
+@app.post("/api/v1/devices/{id}/vms")
+def post_cloud_device_vms(id: str, payload: CloudVmCreateRequest):
+    """
+    Action Route: POST /api/v1/devices/{id}/vms
+    """
+    from fastapi import HTTPException
+    import datetime
+    device_path = "/api/v1/devices"
+    vm_path = "/api/v1/vms"
+    
+    item = db.get_item(device_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+    device = dict(item)
+    
+    # Initialize resource allocation fields if they don't exist
+    active_vms = device.get("active_vms")
+    if active_vms is None:
+        active_vms = 0
+    else:
+        active_vms = int(active_vms)
+        
+    allocated_vcpu = device.get("allocated_vcpu")
+    if allocated_vcpu is None:
+        allocated_vcpu = 0
+    else:
+        allocated_vcpu = int(allocated_vcpu)
+        
+    allocated_ram_gb = device.get("allocated_ram_gb")
+    if allocated_ram_gb is None:
+        allocated_ram_gb = 0
+    else:
+        allocated_ram_gb = int(allocated_ram_gb)
+        
+    device["active_vms"] = active_vms + 1
+    device["allocated_vcpu"] = allocated_vcpu + payload.vcpu
+    device["allocated_ram_gb"] = allocated_ram_gb + payload.ram_gb
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(device_path, device["id"], device)
+    
+    # Create VM record
+    vm_id = str(uuid.uuid4())
+    vm = {
+        "id": vm_id,
+        "device_id": device["id"],
+        "vm_name": payload.vm_name,
+        "vcpu": payload.vcpu,
+        "ram_gb": payload.ram_gb,
+        "status": "RUNNING"
+    }
+    db.upsert_item(vm_path, vm_id, vm)
+    return vm
+
+@app.delete("/api/v1/devices/{id}/vms/{vm_id}")
+def delete_cloud_device_vm(id: str, vm_id: str):
+    """
+    Action Route: DELETE /api/v1/devices/{id}/vms/{vm_id}
+    """
+    from fastapi import HTTPException
+    import datetime
+    device_path = "/api/v1/devices"
+    vm_path = "/api/v1/vms"
+    
+    item = db.get_item(device_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+        
+    vm_item = db.get_item(vm_path, vm_id)
+    if not vm_item:
+        raise HTTPException(status_code=404, detail="VM not found")
+        
+    if vm_item.get("device_id") != id:
+        raise HTTPException(status_code=400, detail="VM does not belong to this cloud device")
+        
+    vcpu = int(vm_item.get("vcpu") or 0)
+    ram_gb = int(vm_item.get("ram_gb") or 0)
+    
+    device = dict(item)
+    active_vms = int(device.get("active_vms") or 0)
+    allocated_vcpu = int(device.get("allocated_vcpu") or 0)
+    allocated_ram_gb = int(device.get("allocated_ram_gb") or 0)
+    
+    device["active_vms"] = max(0, active_vms - 1)
+    device["allocated_vcpu"] = max(0, allocated_vcpu - vcpu)
+    device["allocated_ram_gb"] = max(0, allocated_ram_gb - ram_gb)
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(device_path, device["id"], device)
+    
+    db.delete_item(vm_path, vm_id)
+    return {"message": "VM terminated successfully", "vm_id": vm_id}

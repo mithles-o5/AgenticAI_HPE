@@ -77,3 +77,125 @@ def update_network_device(id: str, payload: DeviceSchema):
     device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
     db.upsert_item(collection_path, device["id"], device)
     return device
+
+@app.delete("/network/v1/devices/{id}")
+def delete_network_device(id: str):
+    """
+    CRUD Route: DELETE /network/v1/devices/{id}
+    """
+    collection_path = "/network/v1/devices"
+    item = db.get_item(collection_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+    deleted = db.delete_item(collection_path, item["id"])
+    return {"message": "Deleted successfully", "id": id, "item": deleted}
+
+@app.patch("/network/v1/devices/{id}")
+def patch_network_device(id: str, payload: dict):
+    """
+    CRUD Route: PATCH /network/v1/devices/{id}
+    """
+    import datetime
+    collection_path = "/network/v1/devices"
+    item = db.get_item(collection_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    device = dict(item)
+    payload_dict = {k: v for k, v in payload.items() if v is not None}
+    device.update(payload_dict)
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(collection_path, device["id"], device)
+    return device
+
+from pydantic import BaseModel
+class NetworkPowerRequest(BaseModel):
+    action: str
+
+@app.post("/network/v1/devices/{id}/power")
+def post_network_device_power(id: str, payload: NetworkPowerRequest):
+    """
+    Action Route: POST /network/v1/devices/{id}/power
+    """
+    import random
+    import datetime
+    collection_path = "/network/v1/devices"
+    item = db.get_item(collection_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+        
+    device = dict(item)
+    action_upper = payload.action.upper()
+    if action_upper not in ["ON", "OFF"]:
+        raise HTTPException(status_code=400, detail="Invalid action. Only 'ON' or 'OFF' are allowed.")
+        
+    device["power_state"] = action_upper
+    if action_upper == "ON":
+        device["cpu_utilization_percent"] = round(random.uniform(10.0, 90.0), 1)
+        device["memory_utilization_percent"] = round(random.uniform(10.0, 90.0), 1)
+        device["power_draw_watts"] = round(random.uniform(150.0, 400.0), 1)
+        device["temperature_celsius"] = round(random.uniform(25.0, 45.0), 1)
+    else:
+        device["cpu_utilization_percent"] = 0.0
+        device["memory_utilization_percent"] = 0.0
+        device["power_draw_watts"] = 0.0
+        device["temperature_celsius"] = 0.0
+        
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(collection_path, device["id"], device)
+    return device
+
+@app.post("/network/v1/devices/{id}/vlans")
+def post_network_device_vlans(id: str, payload: NetworkVlanRequest):
+    """
+    Action Route: POST /network/v1/devices/{id}/vlans
+    """
+    import datetime
+    collection_path = "/network/v1/devices"
+    item = db.get_item(collection_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    device = dict(item)
+    configured_vlans = device.get("configured_vlans") or []
+    if isinstance(configured_vlans, str):
+        try:
+            configured_vlans = json.loads(configured_vlans)
+        except Exception:
+            configured_vlans = []
+    elif not isinstance(configured_vlans, list):
+        configured_vlans = []
+        
+    configured_vlans.append(payload.dict())
+    device["configured_vlans"] = configured_vlans
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(collection_path, device["id"], device)
+    return device
+
+@app.post("/network/v1/devices/{id}/ports/{port_name}/status")
+def post_network_device_port_status(id: str, port_name: str, payload: NetworkPortStatusRequest):
+    """
+    Action Route: POST /network/v1/devices/{id}/ports/{port_name}/status
+    """
+    import datetime
+    collection_path = "/network/v1/devices"
+    item = db.get_item(collection_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    device = dict(item)
+    ports = device.get("ports") or {}
+    if isinstance(ports, str):
+        try:
+            ports = json.loads(ports)
+        except Exception:
+            ports = {}
+    elif not isinstance(ports, dict):
+        ports = {}
+        
+    ports[port_name] = payload.status
+    device["ports"] = ports
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(collection_path, device["id"], device)
+    return device
+

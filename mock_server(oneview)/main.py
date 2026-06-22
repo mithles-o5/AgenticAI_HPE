@@ -1213,6 +1213,22 @@ def put_rest_server_hardware_id(id: str, payload: dict):
     existing.update(payload_dict)
     db.upsert_item(collection_path, existing["id"], existing)
     return existing
+@app.patch("/rest/server-hardware/{id}")
+def patch_rest_server_hardware_id(id: str, payload: dict):
+    """
+    Dynamic CRUD Route: PATCH /rest/server-hardware/{id}
+    """
+    import datetime
+    collection_path = f"/rest/server-hardware"
+    existing = db.get_item(collection_path, id)
+    if not existing:
+        raise HTTPException(status_code=404, detail="Resource not found")
+    existing = dict(existing)
+    payload_dict = {k: v for k, v in payload.items() if v is not None}
+    existing.update(payload_dict)
+    existing["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(collection_path, existing["id"], existing)
+    return existing
 
 
 @app.delete("/rest/server-hardware/{id}")

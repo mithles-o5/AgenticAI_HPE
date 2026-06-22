@@ -3387,6 +3387,7 @@ def create_compute_ops_device(payload: dict):
     return payload
 
 @app.put("/compute-ops-mgmt/v1/devices/{id}")
+@app.post("/compute-ops-mgmt/v1/devices/{id}")
 def update_compute_ops_device(id: str, payload: dict):
     """
     CRUD Route: PUT /compute-ops-mgmt/v1/devices/{id}
@@ -3421,3 +3422,87 @@ def update_compute_ops_device(id: str, payload: dict):
 
     db.upsert_item(collection_path, item["id"], item)
     return item
+
+@app.delete("/compute-ops-mgmt/v1/devices/{id}")
+def delete_compute_ops_device(id: str):
+    """
+    CRUD Route: DELETE /compute-ops-mgmt/v1/devices/{id}
+    """
+    from fastapi import HTTPException
+    collection_path = "/compute-ops-mgmt/v1/devices"
+    item = db.get_item(collection_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+    deleted = db.delete_item(collection_path, item["id"])
+    return {"message": "Deleted successfully", "id": id, "item": deleted}
+
+@app.patch("/compute-ops-mgmt/v1/devices/{id}")
+def patch_compute_ops_device(id: str, payload: dict):
+    """
+    CRUD Route: PATCH /compute-ops-mgmt/v1/devices/{id}
+    """
+    from fastapi import HTTPException
+    import datetime
+    collection_path = "/compute-ops-mgmt/v1/devices"
+    item = db.get_item(collection_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    device = dict(item)
+    payload_dict = {k: v for k, v in payload.items() if v is not None}
+    device.update(payload_dict)
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(collection_path, device["id"], device)
+    return device
+
+@app.post("/compute-ops-mgmt/v1/devices/{id}/power")
+def post_compute_ops_device_power(id: str, payload: ServerPowerActionRequest):
+    """
+    Action Route: POST /compute-ops-mgmt/v1/devices/{id}/power
+    """
+    from fastapi import HTTPException
+    import random
+    import datetime
+    collection_path = "/compute-ops-mgmt/v1/devices"
+    item = db.get_item(collection_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    action_upper = payload.action.upper()
+    if action_upper not in ["ON", "OFF"]:
+         raise HTTPException(status_code=400, detail="Invalid action. Only 'ON' or 'OFF' are allowed.")
+         
+    device = dict(item)
+    device["power_state"] = action_upper
+    if action_upper == "ON":
+        device["cpu_utilization_percent"] = round(random.uniform(5.0, 85.0), 1)
+        device["memory_utilization_percent"] = round(random.uniform(10.0, 80.0), 1)
+        device["power_draw_watts"] = round(random.uniform(80.0, 300.0), 1)
+        device["temperature_celsius"] = round(random.uniform(25.0, 45.0), 1)
+    else:
+        device["cpu_utilization_percent"] = 0.0
+        device["memory_utilization_percent"] = 0.0
+        device["power_draw_watts"] = 0.0
+        device["temperature_celsius"] = 0.0
+        
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(collection_path, device["id"], device)
+    return device
+
+@app.post("/compute-ops-mgmt/v1/devices/{id}/firmware")
+def post_compute_ops_device_firmware(id: str, payload: ServerFirmwareUpdateRequest):
+    """
+    Action Route: POST /compute-ops-mgmt/v1/devices/{id}/firmware
+    """
+    from fastapi import HTTPException
+    import datetime
+    collection_path = "/compute-ops-mgmt/v1/devices"
+    item = db.get_item(collection_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+    
+    device = dict(item)
+    device["firmware_version"] = payload.firmware_version
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(collection_path, device["id"], device)
+    return device

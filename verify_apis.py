@@ -1,0 +1,317 @@
+import sys
+import os
+import json
+from fastapi.testclient import TestClient
+
+workspace = "d:\\AgenticAI_HPE"
+
+def verify_network():
+    print("\n--- Verifying Network Server ---")
+    sys.path.insert(0, os.path.join(workspace, "mock_server(network)"))
+    from main import app as network_app
+    client = TestClient(network_app)
+    
+    # 1. List devices
+    resp = client.get("/network/v1/devices")
+    assert resp.status_code == 200, f"List failed: {resp.text}"
+    devices = resp.json()
+    assert len(devices) > 0, "No network devices found"
+    print(f"Success: Found {len(devices)} network devices.")
+    
+    device_id = devices[0]["id"]
+    
+    # 2. Get device by ID
+    resp = client.get(f"/network/v1/devices/{device_id}")
+    assert resp.status_code == 200, f"Get failed: {resp.text}"
+    device = resp.json()
+    assert device["id"] == device_id
+    print("Success: Get device by ID matches.")
+    
+    # 3. Patch device
+    resp = client.patch(f"/network/v1/devices/{device_id}", json={"name": "New Network Name"})
+    assert resp.status_code == 200, f"Patch failed: {resp.text}"
+    device = resp.json()
+    assert device["name"] == "New Network Name"
+    print("Success: Patch name matches.")
+    
+    # 4. Power ON / OFF
+    resp = client.post(f"/network/v1/devices/{device_id}/power", json={"action": "ON"})
+    assert resp.status_code == 200, f"Power ON failed: {resp.text}"
+    device = resp.json()
+    assert device["power_state"] == "ON"
+    assert float(device["cpu_utilization_percent"]) > 0.0
+    print("Success: Power ON sets state and metrics.")
+    
+    resp = client.post(f"/network/v1/devices/{device_id}/power", json={"action": "OFF"})
+    assert resp.status_code == 200, f"Power OFF failed: {resp.text}"
+    device = resp.json()
+    assert device["power_state"] == "OFF"
+    assert float(device["cpu_utilization_percent"]) == 0.0
+    print("Success: Power OFF zeroes out metrics.")
+    
+    # 5. Configure VLAN
+    resp = client.post(f"/network/v1/devices/{device_id}/vlans", json={"vlan_id": 99, "name": "TestVLAN"})
+    assert resp.status_code == 200, f"VLAN config failed: {resp.text}"
+    device = resp.json()
+    vlans = device["configured_vlans"]
+    if isinstance(vlans, str):
+        vlans = json.loads(vlans)
+    assert any(v["vlan_id"] == 99 for v in vlans), f"VLAN 99 not found in {vlans}"
+    print("Success: VLAN configured and persisted.")
+    
+    # 6. Port Status change
+    resp = client.post(f"/network/v1/devices/{device_id}/ports/eth9/status", json={"status": "down"})
+    assert resp.status_code == 200, f"Port config failed: {resp.text}"
+    device = resp.json()
+    ports = device["ports"]
+    if isinstance(ports, str):
+        ports = json.loads(ports)
+    assert ports.get("eth9") == "down", f"Port eth9 not down in {ports}"
+    print("Success: Port status configured and persisted.")
+    
+    # 7. Delete device
+    resp = client.delete(f"/network/v1/devices/{device_id}")
+    assert resp.status_code == 200, f"Delete failed: {resp.text}"
+    print("Success: Device deleted.")
+    
+    resp = client.get(f"/network/v1/devices/{device_id}")
+    assert resp.status_code == 404, "Device was not deleted"
+    
+    # Clean up sys.path
+    sys.path.remove(os.path.join(workspace, "mock_server(network)"))
+    # Remove from sys.modules to avoid collision
+    for key in list(sys.modules.keys()):
+        if key == "main" or key.startswith("models") or key.startswith("database"):
+            del sys.modules[key]
+
+
+def verify_cloud():
+    print("\n--- Verifying Cloud Server ---")
+    sys.path.insert(0, os.path.join(workspace, "mock_server(cloud)"))
+    from main import app as cloud_app
+    client = TestClient(cloud_app)
+    
+    # 1. List devices
+    resp = client.get("/api/v1/devices")
+    assert resp.status_code == 200, f"List failed: {resp.text}"
+    devices = resp.json()
+    assert len(devices) > 0, "No cloud devices found"
+    print(f"Success: Found {len(devices)} cloud devices.")
+    
+    device_id = devices[0]["id"]
+    
+    # 2. Get device by ID
+    resp = client.get(f"/api/v1/devices/{device_id}")
+    assert resp.status_code == 200, f"Get failed: {resp.text}"
+    device = resp.json()
+    assert device["id"] == device_id
+    print("Success: Get device by ID matches.")
+    
+    # 3. Patch device
+    resp = client.patch(f"/api/v1/devices/{device_id}", json={"name": "New Cloud Name"})
+    assert resp.status_code == 200, f"Patch failed: {resp.text}"
+    device = resp.json()
+    assert device["name"] == "New Cloud Name"
+    print("Success: Patch name matches.")
+    
+    # 4. Power ON / OFF
+    resp = client.post(f"/api/v1/devices/{device_id}/power", json={"action": "ON"})
+    assert resp.status_code == 200, f"Power ON failed: {resp.text}"
+    device = resp.json()
+    assert device["power_state"] == "ON"
+    print("Success: Power ON succeeded.")
+    
+    # 5. Create VM
+    resp = client.get(f"/api/v1/devices/{device_id}")
+    initial_device = resp.json()
+    initial_vms = int(initial_device.get("active_vms") or 0)
+    initial_vcpu = int(initial_device.get("allocated_vcpu") or 0)
+    initial_ram = int(initial_device.get("allocated_ram_gb") or 0)
+
+    resp = client.post(f"/api/v1/devices/{device_id}/vms", json={"vm_name": "TestVM", "vcpu": 4, "ram_gb": 16})
+    assert resp.status_code == 200, f"VM creation failed: {resp.text}"
+    vm = resp.json()
+    vm_id = vm["id"]
+    assert vm["vm_name"] == "TestVM"
+    print("Success: VM created.")
+    
+    # Verify resources on host device
+    resp = client.get(f"/api/v1/devices/{device_id}")
+    device = resp.json()
+    assert int(device["active_vms"]) == initial_vms + 1
+    assert int(device["allocated_vcpu"]) == initial_vcpu + 4
+    assert int(device["allocated_ram_gb"]) == initial_ram + 16
+    print("Success: Host device metrics incremented.")
+    
+    # 6. Delete VM
+    resp = client.delete(f"/api/v1/devices/{device_id}/vms/{vm_id}")
+    assert resp.status_code == 200, f"VM deletion failed: {resp.text}"
+    print("Success: VM terminated.")
+    
+    # Verify resources decremented
+    resp = client.get(f"/api/v1/devices/{device_id}")
+    device = resp.json()
+    assert int(device["active_vms"]) == initial_vms
+    assert int(device["allocated_vcpu"]) == initial_vcpu
+    assert int(device["allocated_ram_gb"]) == initial_ram
+    print("Success: Host device metrics decremented.")
+    
+    # 7. Delete device
+    resp = client.delete(f"/api/v1/devices/{device_id}")
+    assert resp.status_code == 200, f"Delete failed: {resp.text}"
+    print("Success: Device deleted.")
+    
+    # Clean up sys.path
+    sys.path.remove(os.path.join(workspace, "mock_server(cloud)"))
+    for key in list(sys.modules.keys()):
+        if key == "main" or key.startswith("models") or key.startswith("database"):
+            del sys.modules[key]
+
+
+def verify_storage():
+    print("\n--- Verifying Storage Server ---")
+    sys.path.insert(0, os.path.join(workspace, "mock_server(storage)"))
+    from main import app as storage_app
+    client = TestClient(storage_app)
+    
+    # 1. List devices
+    resp = client.get("/data-services/v1beta1/devices")
+    assert resp.status_code == 200, f"List failed: {resp.text}"
+    devices = resp.json()
+    assert len(devices) > 0, "No storage devices found"
+    print(f"Success: Found {len(devices)} storage devices.")
+    
+    device_id = devices[0]["id"]
+    
+    # 2. Get device by ID
+    resp = client.get(f"/data-services/v1beta1/devices/{device_id}")
+    assert resp.status_code == 200, f"Get failed: {resp.text}"
+    device = resp.json()
+    assert device["id"] == device_id
+    
+    initial_free = float(device.get("free_capacity_gb") or 10000)
+
+    # 3. Create Volume
+    resp = client.post(f"/data-services/v1beta1/devices/{device_id}/volumes", json={"volume_name": "TestVol", "size_gb": 100})
+    assert resp.status_code == 200, f"Volume creation failed: {resp.text}"
+    vol = resp.json()
+    vol_id = vol["id"]
+    assert vol["volume_name"] == "TestVol"
+    print("Success: Volume created.")
+    
+    # Verify free capacity decremented
+    resp = client.get(f"/data-services/v1beta1/devices/{device_id}")
+    device_new = resp.json()
+    assert float(device_new["free_capacity_gb"]) == initial_free - 100
+    print("Success: Free capacity decremented.")
+    
+    # 4. Delete Volume
+    resp = client.delete(f"/data-services/v1beta1/devices/{device_id}/volumes/{vol_id}")
+    assert resp.status_code == 200, f"Volume deletion failed: {resp.text}"
+    print("Success: Volume deleted.")
+    
+    # Verify free capacity restored
+    resp = client.get(f"/data-services/v1beta1/devices/{device_id}")
+    device_restored = resp.json()
+    assert float(device_restored["free_capacity_gb"]) == initial_free
+    print("Success: Free capacity restored.")
+    
+    # Clean up sys.path
+    sys.path.remove(os.path.join(workspace, "mock_server(storage)"))
+    for key in list(sys.modules.keys()):
+        if key == "main" or key.startswith("models") or key.startswith("database"):
+            del sys.modules[key]
+
+
+def verify_compute_ops():
+    print("\n--- Verifying Compute Ops Server ---")
+    sys.path.insert(0, os.path.join(workspace, "mock_server(Comops)"))
+    from main import app as comops_app
+    client = TestClient(comops_app)
+    
+    # 1. List devices
+    resp = client.get("/compute-ops-mgmt/v1/devices")
+    assert resp.status_code == 200, f"List failed: {resp.text}"
+    devices = resp.json()
+    assert len(devices) > 0, "No compute ops devices found"
+    print(f"Success: Found {len(devices)} compute ops devices.")
+    
+    device_id = devices[0]["id"]
+    
+    # 2. Power Control
+    resp = client.post(f"/compute-ops-mgmt/v1/devices/{device_id}/power", json={"action": "ON"})
+    assert resp.status_code == 200, f"Power ON failed: {resp.text}"
+    device = resp.json()
+    assert device["power_state"] == "ON"
+    print("Success: Power ON succeeded.")
+    
+    # 3. Firmware Update
+    resp = client.post(f"/compute-ops-mgmt/v1/devices/{device_id}/firmware", json={"firmware_version": "1.2.3.4"})
+    assert resp.status_code == 200, f"Firmware update failed: {resp.text}"
+    device = resp.json()
+    assert device["firmware_version"] == "1.2.3.4"
+    print("Success: Firmware updated.")
+    
+    # Clean up sys.path
+    sys.path.remove(os.path.join(workspace, "mock_server(Comops)"))
+    for key in list(sys.modules.keys()):
+        if key == "main" or key.startswith("models") or key.startswith("database"):
+            del sys.modules[key]
+
+
+def verify_oneview():
+    print("\n--- Verifying OneView Server ---")
+    sys.path.insert(0, os.path.join(workspace, "mock_server(oneview)"))
+    from main import app as oneview_app
+    client = TestClient(oneview_app)
+    
+    # 1. List server hardware
+    resp = client.get("/rest/server-hardware")
+    assert resp.status_code == 200, f"List failed: {resp.text}"
+    devices = resp.json()
+    # Check members if returned as dict or list
+    members = devices.get("members") if isinstance(devices, dict) else devices
+    assert len(members) > 0, "No oneview server hardware found"
+    print(f"Success: Found {len(members)} oneview server hardware.")
+    
+    device_id = members[0]["id"]
+    
+    # 2. Patch device
+    resp = client.patch(f"/rest/server-hardware/{device_id}", json={"name": "New OneView Name"})
+    assert resp.status_code == 200, f"Patch failed: {resp.text}"
+    device = resp.json()
+    assert device["name"] == "New OneView Name"
+    print("Success: Patch name matches.")
+    
+    # 3. Power Control
+    resp = client.post(f"/rest/server-hardware/{device_id}/power", json={"powerState": "On", "action": "On"})
+    assert resp.status_code == 200, f"Power ON failed: {resp.text}"
+    device = resp.json()
+    assert device["power_state"] == "ON"
+    print("Success: Power ON succeeded.")
+    
+    # Clean up sys.path
+    sys.path.remove(os.path.join(workspace, "mock_server(oneview)"))
+    for key in list(sys.modules.keys()):
+        if key == "main" or key.startswith("models") or key.startswith("database"):
+            del sys.modules[key]
+
+
+if __name__ == "__main__":
+    try:
+        verify_network()
+        verify_cloud()
+        verify_storage()
+        verify_compute_ops()
+        verify_oneview()
+        print("\n==============================")
+        print("ALL TESTS PASSED SUCCESSFULLY!")
+        print("==============================")
+    except AssertionError as e:
+        print(f"\nAssertion failed: {e}")
+        sys.exit(1)
+    except Exception as e:
+        print(f"\nAn error occurred during verification: {e}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
