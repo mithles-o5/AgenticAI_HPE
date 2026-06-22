@@ -10365,6 +10365,3063 @@
     }
   },
   {
+    "server": "network",
+    "method": "POST",
+    "path": "/as/token.oauth2",
+    "description": "Aruba Central Endpoint: POST /as/token.oauth2",
+    "target_sqlite_table": "dynamic_as_token.oauth2",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Token.Oauth2"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/radios",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/radios",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_radios",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/bssids",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/bssids",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_bssids",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/wlans",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/wlans",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_wlans",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/swarms",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/swarms",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_swarms",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/top-aps-by-wireless-usage",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/top-aps-by-wireless-usage",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_top_aps_by_wireless_usage",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/top-aps-by-wired-usage",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/top-aps-by-wired-usage",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_top_aps_by_wired_usage",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/top-aps-by-usage",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/top-aps-by-usage",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_top_aps_by_usage",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{serial_number}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/throughput-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/throughput-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_throughput_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/cpu-utilization-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/cpu-utilization-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_cpu_utilization_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/memory-utilization-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/memory-utilization-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_memory_utilization_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/power-consumption-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/power-consumption-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_power_consumption_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/radios",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/radios",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_radios",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/radios/{radio_number}/throughput-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/radios/{radio-number}/throughput-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_radios_{radio_number}_throughput_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/radios/{radio_number}/channel-utilization-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/radios/{radio-number}/channel-utilization-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_radios_{radio_number}_channel_utilization_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/radios/{radio_number}/channel-quality-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/radios/{radio-number}/channel-quality-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_radios_{radio_number}_channel_quality_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/radios/{radio_number}/noise-floor-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/radios/{radio-number}/noise-floor-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_radios_{radio_number}_noise_floor_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/radios/{radio_number}/frames-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/radios/{radio-number}/frames-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_radios_{radio_number}_frames_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/ports",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/ports",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_ports",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/ports/{port_index}/throughput-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/ports/{port-index}/throughput-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_ports_{port_index}_throughput_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/ports/{port_index}/frames-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/ports/{port-index}/frames-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_ports_{port_index}_frames_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/ports/{port_index}/crc-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/ports/{port-index}/crc-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_ports_{port_index}_crc_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/ports/{port_index}/collisions-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/ports/{port-index}/collisions-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_ports_{port_index}_collisions_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/tunnels",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/tunnels",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_tunnels",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/tunnels/{tunnel_id}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/tunnels/{tunnel-id}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_tunnels",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{tunnel_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/tunnels/{tunnel_id}/throughput-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/tunnels/{tunnel-id}/throughput-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_tunnels_{tunnel_id}_throughput_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/tunnels/{tunnel_id}/packet-loss-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/tunnels/{tunnel-id}/packet-loss-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_tunnels_{tunnel_id}_packet_loss_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/tunnels/{tunnel_id}/mos-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/tunnels/{tunnel-id}/mos-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_tunnels_{tunnel_id}_mos_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/tunnels/{tunnel_id}/jitter-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/tunnels/{tunnel-id}/jitter-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_tunnels_{tunnel_id}_jitter_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/tunnels/{tunnel_id}/latency-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/tunnels/{tunnel-id}/latency-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_tunnels_{tunnel_id}_latency_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/wlans",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/wlans",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_wlans",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/aps/{serial_number}/wlans/{wlan_name}/throughput-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/aps/{serial-number}/wlans/{wlan-name}/throughput-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_aps_{serial_number}_wlans_{wlan_name}_throughput_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/wlans/{wlan_name}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/wlans/{wlan-name}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_wlans",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{wlan_name}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/wlans/{wlan_name}/throughput-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/wlans/{wlan-name}/throughput-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_wlans_{wlan_name}_throughput_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/swarms/{cluster_id}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/swarms/{cluster-id}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_swarms",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{cluster_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/applications",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/applications",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_applications",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/client-onboarding-score",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/client-onboarding-score",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_client_onboarding_score",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/client-onboarding-stage/export",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/client-onboarding-stage/export",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_client_onboarding_stage_export",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/client-onboarding-stage/reasons",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/client-onboarding-stage/reasons",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_client_onboarding_stage_reasons",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/client-onboarding-stage/count",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/client-onboarding-stage/count",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_client_onboarding_stage_count",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/clients",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/clients",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_clients",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/clients-trend",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/clients-trend",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_clients_trend",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/clients-topn-usage",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/clients-topn-usage",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_clients_topn_usage",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/clients-usage",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/clients-usage",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_clients_usage",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/clients/{mac_address}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/clients/{mac-address}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_clients",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{mac_address}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/clients/{mac_address}/mobility-trail",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/clients/{mac-address}/mobility-trail",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_clients_{mac_address}_mobility_trail",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/devices",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/devices",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_devices",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "PATCH",
+    "path": "/network-monitoring/v1/devices/{serial_number}",
+    "description": "Aruba Central Endpoint: PATCH /network-monitoring/v1/devices/{serial-number}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_devices",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{serial_number}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "DELETE",
+    "path": "/network-monitoring/v1/devices/{serial_number}",
+    "description": "Aruba Central Endpoint: DELETE /network-monitoring/v1/devices/{serial-number}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_devices",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{serial_number}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/device-inventory",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/device-inventory",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_device_inventory",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/site-firewall-sessions",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/site-firewall-sessions",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_site_firewall_sessions",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/client-firewall-sessions",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/client-firewall-sessions",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_client_firewall_sessions",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/firewall-clients",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/firewall-clients",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_firewall_clients",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/sitemaps-summary/{site_id}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/sitemaps-summary/{site-id}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_summary",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{site_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/network-devices-deployed",
+    "description": "Aruba Central Endpoint: POST /network-monitoring/v1/sitemaps/{site-id}/network-devices-deployed",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_network_devices_deployed",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_NetworkDevicesDeployed"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/network-devices-deployed",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/sitemaps/{site-id}/network-devices-deployed",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_network_devices_deployed",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/network-devices-undeploy",
+    "description": "Aruba Central Endpoint: POST /network-monitoring/v1/sitemaps/{site-id}/network-devices-undeploy",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_network_devices_undeploy",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_NetworkDevicesUndeploy"
+    }
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/network-devices-assigned",
+    "description": "Aruba Central Endpoint: POST /network-monitoring/v1/sitemaps/{site-id}/network-devices-assigned",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_network_devices_assigned",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_NetworkDevicesAssigned"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/network-devices-assigned",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/sitemaps/{site-id}/network-devices-assigned",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_network_devices_assigned",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/network-devices-planned",
+    "description": "Aruba Central Endpoint: POST /network-monitoring/v1/sitemaps/{site-id}/network-devices-planned",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_network_devices_planned",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_NetworkDevicesPlanned"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/network-devices-planned",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/sitemaps/{site-id}/network-devices-planned",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_network_devices_planned",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "DELETE",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/network-devices-planned",
+    "description": "Aruba Central Endpoint: DELETE /network-monitoring/v1/sitemaps/{site-id}/network-devices-planned",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_network_devices_planned",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_NetworkDevicesPlanned"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/catalogue-aps",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/catalogue-aps",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_catalogue_aps",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/sitemaps/sites",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/sitemaps/sites",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_sites",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/floors",
+    "description": "Aruba Central Endpoint: POST /network-monitoring/v1/sitemaps/{site-id}/floors",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_floors",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Floors"
+    }
+  },
+  {
+    "server": "network",
+    "method": "DELETE",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/floors/{floor_id}",
+    "description": "Aruba Central Endpoint: DELETE /network-monitoring/v1/sitemaps/{site-id}/floors/{floor-id}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_floors",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{floor_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/floors/{floor_id}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/sitemaps/{site-id}/floors/{floor-id}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_floors",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{floor_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "PUT",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/floors/{floor_id}",
+    "description": "Aruba Central Endpoint: PUT /network-monitoring/v1/sitemaps/{site-id}/floors/{floor-id}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_floors",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{floor_id}`",
+    "sample_input": {
+      "name": "Sample_{FloorId}"
+    }
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/floors/{floor_id}/scale",
+    "description": "Aruba Central Endpoint: POST /network-monitoring/v1/sitemaps/{site-id}/floors/{floor-id}/scale",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_floors_{floor_id}_scale",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Scale"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/floors/{floor_id}/image",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/sitemaps/{site-id}/floors/{floor-id}/image",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_floors_{floor_id}_image",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "PUT",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/floors/{floor_id}/image",
+    "description": "Aruba Central Endpoint: PUT /network-monitoring/v1/sitemaps/{site-id}/floors/{floor-id}/image",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_floors_{floor_id}_image",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Image"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/buildings",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/sitemaps/{site-id}/buildings",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_buildings",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "DELETE",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/buildings/{building_id}",
+    "description": "Aruba Central Endpoint: DELETE /network-monitoring/v1/sitemaps/{site-id}/buildings/{building-id}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_buildings",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{building_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "PUT",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/buildings/{building_id}",
+    "description": "Aruba Central Endpoint: PUT /network-monitoring/v1/sitemaps/{site-id}/buildings/{building-id}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_buildings",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{building_id}`",
+    "sample_input": {
+      "name": "Sample_{BuildingId}"
+    }
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/import",
+    "description": "Aruba Central Endpoint: POST /network-monitoring/v1/sitemaps/{site-id}/import",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_import",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Import"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/import/{id}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/sitemaps/{site-id}/import/{id}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_import",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/wall-types",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/wall-types",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_wall_types",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-monitoring/v1/wall-types",
+    "description": "Aruba Central Endpoint: POST /network-monitoring/v1/wall-types",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_wall_types",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "items": "sample_items",
+      "action": "sample_action",
+      "name": "Sample_Device_Name"
+    }
+  },
+  {
+    "server": "network",
+    "method": "PUT",
+    "path": "/network-monitoring/v1/wall-types",
+    "description": "Aruba Central Endpoint: PUT /network-monitoring/v1/wall-types",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_wall_types",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "items": "sample_items",
+      "action": "sample_action",
+      "name": "Sample_Device_Name"
+    }
+  },
+  {
+    "server": "network",
+    "method": "DELETE",
+    "path": "/network-monitoring/v1/wall-types",
+    "description": "Aruba Central Endpoint: DELETE /network-monitoring/v1/wall-types",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_wall_types",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "items": "sample_items",
+      "action": "sample_action",
+      "name": "Sample_Device_Name"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/floors/{floor_id}/walls",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/sitemaps/{site-id}/floors/{floor-id}/walls",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_floors_{floor_id}_walls",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/floors/{floor_id}/walls",
+    "description": "Aruba Central Endpoint: POST /network-monitoring/v1/sitemaps/{site-id}/floors/{floor-id}/walls",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_floors_{floor_id}_walls",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Walls"
+    }
+  },
+  {
+    "server": "network",
+    "method": "PUT",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/floors/{floor_id}/walls",
+    "description": "Aruba Central Endpoint: PUT /network-monitoring/v1/sitemaps/{site-id}/floors/{floor-id}/walls",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_floors_{floor_id}_walls",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Walls"
+    }
+  },
+  {
+    "server": "network",
+    "method": "DELETE",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/floors/{floor_id}/walls",
+    "description": "Aruba Central Endpoint: DELETE /network-monitoring/v1/sitemaps/{site-id}/floors/{floor-id}/walls",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_floors_{floor_id}_walls",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Walls"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/floors/{floor_id}/zones",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/sitemaps/{site-id}/floors/{floor-id}/zones",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_floors_{floor_id}_zones",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/floors/{floor_id}/zones",
+    "description": "Aruba Central Endpoint: POST /network-monitoring/v1/sitemaps/{site-id}/floors/{floor-id}/zones",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_floors_{floor_id}_zones",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Zones"
+    }
+  },
+  {
+    "server": "network",
+    "method": "PUT",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/floors/{floor_id}/zones",
+    "description": "Aruba Central Endpoint: PUT /network-monitoring/v1/sitemaps/{site-id}/floors/{floor-id}/zones",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_floors_{floor_id}_zones",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Zones"
+    }
+  },
+  {
+    "server": "network",
+    "method": "DELETE",
+    "path": "/network-monitoring/v1/sitemaps/{site_id}/floors/{floor_id}/zones",
+    "description": "Aruba Central Endpoint: DELETE /network-monitoring/v1/sitemaps/{site-id}/floors/{floor-id}/zones",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sitemaps_{site_id}_floors_{floor_id}_zones",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Zones"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{serial_number}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/clusters/{cluster_name}/vlan-mismatch",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/clusters/{cluster-name}/vlan-mismatch",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_clusters_{cluster_name}_vlan_mismatch",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/clusters/{cluster_name}/connectivity-graph",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/clusters/{cluster-name}/connectivity-graph",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_clusters_{cluster_name}_connectivity_graph",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/vlans/{vlan_id}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/vlans/{vlan-id}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_vlans",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{vlan_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/clusters/{cluster_name}/members",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/clusters/{cluster-name}/members",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_clusters_{cluster_name}_members",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/tunnels/{tunnel_name}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/tunnels/{tunnel-name}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_tunnels",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{tunnel_name}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/ports",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/ports",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_ports",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/ports/{port_number}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/ports/{port-number}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_ports",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{port_number}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/clusters/{cluster_name}/tunnels",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/clusters/{cluster-name}/tunnels",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_clusters_{cluster_name}_tunnels",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/vlans",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/vlans",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_vlans",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/tunnels",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/tunnels",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_tunnels",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/uplinks",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/uplinks",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_uplinks",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/cpu-utilization-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/cpu-utilization-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_cpu_utilization_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/memory-utilization-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/memory-utilization-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_memory_utilization_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/tunnels/{tunnel_name}/throughput-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/tunnels/{tunnel-name}/throughput-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_tunnels_{tunnel_name}_throughput_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/tunnels/{tunnel_name}/status-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/tunnels/{tunnel-name}/status-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_tunnels_{tunnel_name}_status_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/clusters/{cluster_name}/capacity-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/clusters/{cluster-name}/capacity-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_clusters_{cluster_name}_capacity_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/clusters/{cluster_name}/capacity-trends/{serial_number}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/clusters/{cluster-name}/capacity-trends/{serial-number}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_clusters_{cluster_name}_capacity_trends",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{serial_number}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/ports/{port_number}/throughput-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/ports/{port-number}/throughput-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_ports_{port_number}_throughput_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/clusters/{cluster_name}/tunnels-health-summary",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/clusters/{cluster-name}/tunnels-health-summary",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_clusters_{cluster_name}_tunnels_health_summary",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/clusters/{cluster_name}/tunnels-status-summary",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/clusters/{cluster-name}/tunnels-status-summary",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_clusters_{cluster_name}_tunnels_status_summary",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/lan-tunnels-health-summary",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/lan-tunnels-health-summary",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_lan_tunnels_health_summary",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/wan-availability-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/wan-availability-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_wan_availability_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/vpn-availability-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/vpn-availability-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_vpn_availability_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/ports/{port_number}/frames-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/ports/{port-number}/frames-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_ports_{port_number}_frames_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/ports/{port_number}/frames-errors-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/ports/{port-number}/frames-errors-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_ports_{port_number}_frames_errors_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/ports/{port_number}/frames-packets-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/ports/{port-number}/frames-packets-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_ports_{port_number}_frames_packets_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/tunnels/{tunnel_name}/dropped-packet-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/tunnels/{tunnel-name}/dropped-packet-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_tunnels_{tunnel_name}_dropped_packet_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/wan-tunnels-health-summary",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/wan-tunnels-health-summary",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_wan_tunnels_health_summary",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/uplinks/{link_tag}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/uplinks/{link-tag}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_uplinks",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{link_tag}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/uplinks/{link_tag}/throughput-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/uplinks/{link-tag}/throughput-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_uplinks_{link_tag}_throughput_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/uplinks/{link_tag}/wan-compression-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/uplinks/{link-tag}/wan-compression-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_uplinks_{link_tag}_wan_compression_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/uplinks/{link_tag}/probes",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/uplinks/{link-tag}/probes",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_uplinks_{link_tag}_probes",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/uplinks/{link_tag}/wan-availability-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/uplinks/{link-tag}/wan-availability-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_uplinks_{link_tag}_wan_availability_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/uplinks/{vlan_id}/vpn-availability-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/uplinks/{vlan-id}/vpn-availability-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_uplinks_{vlan_id}_vpn_availability_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/hardware-temperature-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/hardware-temperature-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_hardware_temperature_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/dhcp-pools",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/dhcp-pools",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_dhcp_pools",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/dhcp-clients",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/dhcp-clients",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_dhcp_clients",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/gateways/{serial_number}/uplinks/{link_tag}/probes/{probe}/performance-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/gateways/{serial-number}/uplinks/{link-tag}/probes/{probe}/performance-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_gateways_{serial_number}_uplinks_{link_tag}_probes_{probe}_performance_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/sites-health",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/sites-health",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sites_health",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/site-health/{site_id}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/site-health/{site-id}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_site_health",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{site_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/sites-device-health",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/sites-device-health",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sites_device_health",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/tenant-device-health",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/tenant-device-health",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_tenant_device_health",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/sites-client-health",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/sites-client-health",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_sites_client_health",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/tenant-client-health",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/tenant-client-health",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_tenant_client_health",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/switches",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/switches",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_switches",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/switches/{serial_number}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/switches/{serial-number}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_switches",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{serial_number}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/stack/{serial_number}/members",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/stack/{serial-number}/members",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_stack_{serial_number}_members",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/switches/{serial_number}/hardware-categories",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/switches/{serial-number}/hardware-categories",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_switches_{serial_number}_hardware_categories",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/switches/{serial_number}/lag",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/switches/{serial-number}/lag",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_switches_{serial_number}_lag",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/switches/{serial_number}/interfaces",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/switches/{serial-number}/interfaces",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_switches_{serial_number}_interfaces",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/switches/{serial_number}/vlans",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/switches/{serial-number}/vlans",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_switches_{serial_number}_vlans",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/switches/topn-interface-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/switches/topn-interface-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_switches_topn_interface_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/switches/{serial_number}/interface-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/switches/{serial-number}/interface-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_switches_{serial_number}_interface_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/switches/{serial_number}/hardware-trends",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/switches/{serial-number}/hardware-trends",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_switches_{serial_number}_hardware_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/switches/{serial_number}/interface-poe",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/switches/{serial-number}/interface-poe",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_switches_{serial_number}_interface_poe",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/switches/{serial_number}/vsx",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/switches/{serial-number}/vsx",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_switches_{serial_number}_vsx",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/topology/{site_id}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/topology/{site-id}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_topology",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{site_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/unmanaged-device/{mac_address}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/unmanaged-device/{mac-address}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_unmanaged_device",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{mac_address}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/isolated-devices/{site_id}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/isolated-devices/{site-id}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_isolated_devices",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{site_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-monitoring/v1/neighbours/{serial_number}",
+    "description": "Aruba Central Endpoint: GET /network-monitoring/v1/neighbours/{serial-number}",
+    "target_sqlite_table": "dynamic_network_monitoring_v1_neighbours",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{serial_number}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-msp/v1/list-tenants",
+    "description": "Aruba Central Endpoint: GET /network-msp/v1/list-tenants",
+    "target_sqlite_table": "dynamic_network_msp_v1_list_tenants",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-notifications/v1/alert-config",
+    "description": "Aruba Central Endpoint: GET /network-notifications/v1/alert-config",
+    "target_sqlite_table": "dynamic_network_notifications_v1_alert_config",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-notifications/v1/alerts",
+    "description": "Aruba Central Endpoint: GET /network-notifications/v1/alerts",
+    "target_sqlite_table": "dynamic_network_notifications_v1_alerts",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-notifications/v1/alerts/clear",
+    "description": "Aruba Central Endpoint: POST /network-notifications/v1/alerts/clear",
+    "target_sqlite_table": "dynamic_network_notifications_v1_alerts_clear",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "keys": "sample_keys",
+      "reason": "sample_reason",
+      "notes": "sample_notes",
+      "action": "sample_action",
+      "name": "Sample_Device_Name"
+    }
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-notifications/v1/alerts/defer",
+    "description": "Aruba Central Endpoint: POST /network-notifications/v1/alerts/defer",
+    "target_sqlite_table": "dynamic_network_notifications_v1_alerts_defer",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "keys": "sample_keys",
+      "deferUntil": "sample_deferUntil",
+      "action": "sample_action",
+      "name": "Sample_Device_Name"
+    }
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-notifications/v1/alerts/active",
+    "description": "Aruba Central Endpoint: POST /network-notifications/v1/alerts/active",
+    "target_sqlite_table": "dynamic_network_notifications_v1_alerts_active",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "keys": "sample_keys",
+      "action": "sample_action",
+      "name": "Sample_Device_Name"
+    }
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-notifications/v1/alerts/priority",
+    "description": "Aruba Central Endpoint: POST /network-notifications/v1/alerts/priority",
+    "target_sqlite_table": "dynamic_network_notifications_v1_alerts_priority",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "keys": "sample_keys",
+      "priority": "sample_priority",
+      "action": "sample_action",
+      "name": "Sample_Device_Name"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-notifications/v1/alerts/classification",
+    "description": "Aruba Central Endpoint: GET /network-notifications/v1/alerts/classification",
+    "target_sqlite_table": "dynamic_network_notifications_v1_alerts_classification",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-notifications/v1/alerts/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-notifications/v1/alerts/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_notifications_v1_alerts_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-notifications/v1/insights",
+    "description": "Aruba Central Endpoint: GET /network-notifications/v1/insights",
+    "target_sqlite_table": "dynamic_network_notifications_v1_insights",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-notifications/v1/insights-schema",
+    "description": "Aruba Central Endpoint: GET /network-notifications/v1/insights-schema",
+    "target_sqlite_table": "dynamic_network_notifications_v1_insights_schema",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-reporting/v1/reports",
+    "description": "Aruba Central Endpoint: GET /network-reporting/v1/reports",
+    "target_sqlite_table": "dynamic_network_reporting_v1_reports",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "PUT",
+    "path": "/network-reporting/v1/reports/{report_id}",
+    "description": "Aruba Central Endpoint: PUT /network-reporting/v1/reports/{report-id}",
+    "target_sqlite_table": "dynamic_network_reporting_v1_reports",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{report_id}`",
+    "sample_input": {
+      "name": "Sample_Device_Name",
+      "email": "sample_email",
+      "action": "sample_action"
+    }
+  },
+  {
+    "server": "network",
+    "method": "DELETE",
+    "path": "/network-reporting/v1/reports/{report_id}",
+    "description": "Aruba Central Endpoint: DELETE /network-reporting/v1/reports/{report-id}",
+    "target_sqlite_table": "dynamic_network_reporting_v1_reports",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{report_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-reporting/v1/reports/{report_id}/report-runs",
+    "description": "Aruba Central Endpoint: GET /network-reporting/v1/reports/{report-id}/report-runs",
+    "target_sqlite_table": "dynamic_network_reporting_v1_reports_{report_id}_report_runs",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "DELETE",
+    "path": "/network-reporting/v1/reports/{report_id}/report-runs/{report_run_id}",
+    "description": "Aruba Central Endpoint: DELETE /network-reporting/v1/reports/{report-id}/report-runs/{report-run-id}",
+    "target_sqlite_table": "dynamic_network_reporting_v1_reports_{report_id}_report_runs",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{report_run_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-reporting/v1/reports/{report_id}/report-runs/{report_run_id}/download-link",
+    "description": "Aruba Central Endpoint: POST /network-reporting/v1/reports/{report-id}/report-runs/{report-run-id}/download-link",
+    "target_sqlite_table": "dynamic_network_reporting_v1_reports_{report_id}_report_runs_{report_run_id}_download_link",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Device_Name",
+      "email": "sample_email",
+      "action": "sample_action"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-radio/{radio_mac}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-radio/{radio-mac}",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_radio",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{radio_mac}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-radio",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-radio",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_radio",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-ap/{serial_number}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-ap/{serial-number}",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_ap",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{serial_number}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-ap",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-ap",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_ap",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-ap-radio-relations/{serial_number}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-ap-radio-relations/{serial-number}",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_ap_radio_relations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{serial_number}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-priority-rf-events/{radio_mac}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-priority-rf-events/{radio-mac}",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_priority_rf_events",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{radio_mac}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-priority-rf-events",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-priority-rf-events",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_priority_rf_events",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-rf-events/{radio_mac}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-rf-events/{radio-mac}",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_rf_events",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{radio_mac}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-rf-events",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-rf-events",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_rf_events",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-history/{radio_mac}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-history/{radio-mac}",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_history",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{radio_mac}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-service-config",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-service-config",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_service_config",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-global-config-id",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-global-config-id",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_global_config_id",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-radio-feasibility/{radio_mac}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-radio-feasibility/{radio-mac}",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_radio_feasibility",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{radio_mac}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-radio-feasibility",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-radio-feasibility",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_radio_feasibility",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-board-limit/{serial_number}/{radio_mac}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-board-limit/{serial-number}/{radio-mac}",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_board_limit_{serial_number}",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{radio_mac}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-device-config/{serial_number}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-device-config/{serial-number}",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_device_config",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{serial_number}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-non-friend/{radio_mac}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-non-friend/{radio-mac}",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_non_friend",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{radio_mac}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-pathloss/{radio_mac}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-pathloss/{radio-mac}",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_pathloss",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{radio_mac}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-ap-neighbor-list/{serial_number}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-ap-neighbor-list/{serial-number}",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_ap_neighbor_list",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{serial_number}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-partition",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-partition",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_partition",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-services/v1/airmatch-partition",
+    "description": "Aruba Central Endpoint: POST /network-services/v1/airmatch-partition",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_partition",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-radio-partition/{radio_mac}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-radio-partition/{radio-mac}",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_radio_partition",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{radio_mac}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-services/v1/airmatch-runnow",
+    "description": "Aruba Central Endpoint: POST /network-services/v1/airmatch-runnow",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_runnow",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-solution",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-solution",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_solution",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-solution/{radio_mac}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-solution/{radio-mac}",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_solution",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{radio_mac}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-ap-coverage-plan/{serial_number}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-ap-coverage-plan/{serial-number}",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_ap_coverage_plan",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{serial_number}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-ap-coverage-plan",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-ap-coverage-plan",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_ap_coverage_plan",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/airmatch-state",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/airmatch-state",
+    "target_sqlite_table": "dynamic_network_services_v1_airmatch_state",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/audit/v1/logs/{id}",
+    "description": "Aruba Central Endpoint: GET /audit/v1/logs/{id}",
+    "target_sqlite_table": "dynamic_audit_v1_logs",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/audit/v1/logs",
+    "description": "Aruba Central Endpoint: GET /audit/v1/logs",
+    "target_sqlite_table": "dynamic_audit_v1_logs",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/fco-resp-info/{serial_number}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/fco-resp-info/{serial-number}",
+    "target_sqlite_table": "dynamic_network_services_v1_fco_resp_info",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{serial_number}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/fco-resp-info-all",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/fco-resp-info-all",
+    "target_sqlite_table": "dynamic_network_services_v1_fco_resp_info_all",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/firmware-details",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/firmware-details",
+    "target_sqlite_table": "dynamic_network_services_v1_firmware_details",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/sites/{site_id}/device-locations",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/sites/{site-id}/device-locations",
+    "target_sqlite_table": "dynamic_network_services_v1_sites_{site_id}_device_locations",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/sites/{site_id}/device-locations/{location_id}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/sites/{site-id}/device-locations/{location-id}",
+    "target_sqlite_table": "dynamic_network_services_v1_sites_{site_id}_device_locations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{location_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/sites/{site_id}/devices/{serial_number}/location",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/sites/{site-id}/devices/{serial-number}/location",
+    "target_sqlite_table": "dynamic_network_services_v1_sites_{site_id}_devices_{serial_number}_location",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-services/v1/sites/{site_id}/devices/{serial_number}/location",
+    "description": "Aruba Central Endpoint: POST /network-services/v1/sites/{site-id}/devices/{serial-number}/location",
+    "target_sqlite_table": "dynamic_network_services_v1_sites_{site_id}_devices_{serial_number}_location",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Location"
+    }
+  },
+  {
+    "server": "network",
+    "method": "DELETE",
+    "path": "/network-services/v1/sites/{site_id}/devices/{serial_number}/location",
+    "description": "Aruba Central Endpoint: DELETE /network-services/v1/sites/{site-id}/devices/{serial-number}/location",
+    "target_sqlite_table": "dynamic_network_services_v1_sites_{site_id}_devices_{serial_number}_location",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-services/v1/ap-ranging-scans",
+    "description": "Aruba Central Endpoint: POST /network-services/v1/ap-ranging-scans",
+    "target_sqlite_table": "dynamic_network_services_v1_ap_ranging_scans",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "scanStartTime": "sample_scanStartTime",
+      "action": "sample_action",
+      "name": "Sample_Device_Name"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/sitemaps/{site_id}/floors/{floor_id}/ap-ranging-scans",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/sitemaps/{site-id}/floors/{floor-id}/ap-ranging-scans",
+    "target_sqlite_table": "dynamic_network_services_v1_sitemaps_{site_id}_floors_{floor_id}_ap_ranging_scans",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/sitemaps/{site_id}/floors/{floor_id}/ap-ranging-scans/{scan_id}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/sitemaps/{site-id}/floors/{floor-id}/ap-ranging-scans/{scan-id}",
+    "target_sqlite_table": "dynamic_network_services_v1_sitemaps_{site_id}_floors_{floor_id}_ap_ranging_scans",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{scan_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "DELETE",
+    "path": "/network-services/v1/sitemaps/{site_id}/floors/{floor_id}/ap-ranging-scans/{scan_id}",
+    "description": "Aruba Central Endpoint: DELETE /network-services/v1/sitemaps/{site-id}/floors/{floor-id}/ap-ranging-scans/{scan-id}",
+    "target_sqlite_table": "dynamic_network_services_v1_sitemaps_{site_id}_floors_{floor_id}_ap_ranging_scans",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{scan_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/wifi-clients-locations",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/wifi-clients-locations",
+    "target_sqlite_table": "dynamic_network_services_v1_wifi_clients_locations",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/asset-tags",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/asset-tags",
+    "target_sqlite_table": "dynamic_network_services_v1_asset_tags",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/asset-tags/{asset_tag_id}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/asset-tags/{asset-tag-id}",
+    "target_sqlite_table": "dynamic_network_services_v1_asset_tags",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{asset_tag_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "PUT",
+    "path": "/network-services/v1/asset-tags/{asset_tag_id}/metadata",
+    "description": "Aruba Central Endpoint: PUT /network-services/v1/asset-tags/{asset-tag-id}/metadata",
+    "target_sqlite_table": "dynamic_network_services_v1_asset_tags_{asset_tag_id}_metadata",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Metadata"
+    }
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-services/v1/asset-tags/{asset_tag_id}/metadata",
+    "description": "Aruba Central Endpoint: POST /network-services/v1/asset-tags/{asset-tag-id}/metadata",
+    "target_sqlite_table": "dynamic_network_services_v1_asset_tags_{asset_tag_id}_metadata",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Metadata"
+    }
+  },
+  {
+    "server": "network",
+    "method": "DELETE",
+    "path": "/network-services/v1/asset-tags/{asset_tag_id}/metadata",
+    "description": "Aruba Central Endpoint: DELETE /network-services/v1/asset-tags/{asset-tag-id}/metadata",
+    "target_sqlite_table": "dynamic_network_services_v1_asset_tags_{asset_tag_id}_metadata",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/location-analytics/trends",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/location-analytics/trends",
+    "target_sqlite_table": "dynamic_network_services_v1_location_analytics_trends",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/location-analytics/sites/insights",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/location-analytics/sites/insights",
+    "target_sqlite_table": "dynamic_network_services_v1_location_analytics_sites_insights",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/webhooks",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/webhooks",
+    "target_sqlite_table": "dynamic_network_services_v1_webhooks",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-services/v1/webhooks",
+    "description": "Aruba Central Endpoint: POST /network-services/v1/webhooks",
+    "target_sqlite_table": "dynamic_network_services_v1_webhooks",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "input": "sample_input",
+      "action": "sample_action",
+      "name": "Sample_Device_Name"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-services/v1/webhooks/{id}",
+    "description": "Aruba Central Endpoint: GET /network-services/v1/webhooks/{id}",
+    "target_sqlite_table": "dynamic_network_services_v1_webhooks",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "PUT",
+    "path": "/network-services/v1/webhooks/{id}",
+    "description": "Aruba Central Endpoint: PUT /network-services/v1/webhooks/{id}",
+    "target_sqlite_table": "dynamic_network_services_v1_webhooks",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{id}`",
+    "sample_input": {
+      "input": "sample_input",
+      "action": "sample_action",
+      "name": "Sample_Device_Name"
+    }
+  },
+  {
+    "server": "network",
+    "method": "PATCH",
+    "path": "/network-services/v1/webhooks/{id}",
+    "description": "Aruba Central Endpoint: PATCH /network-services/v1/webhooks/{id}",
+    "target_sqlite_table": "dynamic_network_services_v1_webhooks",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{id}`",
+    "sample_input": {
+      "input": "sample_input",
+      "action": "sample_action",
+      "name": "Sample_Device_Name"
+    }
+  },
+  {
+    "server": "network",
+    "method": "DELETE",
+    "path": "/network-services/v1/webhooks/{id}",
+    "description": "Aruba Central Endpoint: DELETE /network-services/v1/webhooks/{id}",
+    "target_sqlite_table": "dynamic_network_services_v1_webhooks",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-services/v1/webhooks/{id}/rotate-hmac-key",
+    "description": "Aruba Central Endpoint: POST /network-services/v1/webhooks/{id}/rotate-hmac-key",
+    "target_sqlite_table": "dynamic_network_services_v1_webhooks_{id}_rotate_hmac_key",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aos-s/{serial_number}/ping",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aos-s/{serial-number}/ping",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aos_s_{serial_number}_ping",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Ping"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aos-s/{serial_number}/ping/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aos-s/{serial-number}/ping/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aos_s_{serial_number}_ping_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aos-s/{serial_number}/traceroute",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aos-s/{serial-number}/traceroute",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aos_s_{serial_number}_traceroute",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Traceroute"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aos-s/{serial_number}/traceroute/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aos-s/{serial-number}/traceroute/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aos_s_{serial_number}_traceroute_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aos-s/{serial_number}/poeBounce",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aos-s/{serial-number}/poeBounce",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aos_s_{serial_number}_poeBounce",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Poebounce"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aos-s/{serial_number}/poeBounce/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aos-s/{serial-number}/poeBounce/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aos_s_{serial_number}_poeBounce_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aos-s/{serial_number}/portBounce",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aos-s/{serial-number}/portBounce",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aos_s_{serial_number}_portBounce",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Portbounce"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aos-s/{serial_number}/portBounce/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aos-s/{serial-number}/portBounce/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aos_s_{serial_number}_portBounce_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aos-s/{serial_number}/cableTest",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aos-s/{serial-number}/cableTest",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aos_s_{serial_number}_cableTest",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Cabletest"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aos-s/{serial_number}/cableTest/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aos-s/{serial-number}/cableTest/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aos_s_{serial_number}_cableTest_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aos-s/{serial_number}/getArpTable",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aos-s/{serial-number}/getArpTable",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aos_s_{serial_number}_getArpTable",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aos-s/{serial_number}/getArpTable/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aos-s/{serial-number}/getArpTable/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aos_s_{serial_number}_getArpTable_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aos-s/{serial_number}/show-commands",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aos-s/{serial-number}/show-commands",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aos_s_{serial_number}_show_commands",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aos-s/{serial_number}/showCommands",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aos-s/{serial-number}/showCommands",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aos_s_{serial_number}_showCommands",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Showcommands"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aos-s/{serial_number}/showCommands/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aos-s/{serial-number}/showCommands/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aos_s_{serial_number}_showCommands_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aos-s/{serial_number}/reboot",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aos-s/{serial-number}/reboot",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aos_s_{serial_number}_reboot",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aos-s/{serial_number}/locate",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aos-s/{serial-number}/locate",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aos_s_{serial_number}_locate",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aos-s/{serial_number}/list-tasks",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aos-s/{serial-number}/list-tasks",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aos_s_{serial_number}_list_tasks",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/ping",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aps/{serial-number}/ping",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_ping",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Ping"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/ping/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aps/{serial-number}/ping/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_ping_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/traceroute",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aps/{serial-number}/traceroute",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_traceroute",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Traceroute"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/traceroute/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aps/{serial-number}/traceroute/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_traceroute_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/speedtest",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aps/{serial-number}/speedtest",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_speedtest",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Speedtest"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/speedtest/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aps/{serial-number}/speedtest/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_speedtest_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/http",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aps/{serial-number}/http",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_http",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Http"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/http/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aps/{serial-number}/http/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_http_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/https",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aps/{serial-number}/https",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_https",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Https"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/https/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aps/{serial-number}/https/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_https_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/tcp",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aps/{serial-number}/tcp",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_tcp",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Tcp"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/tcp/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aps/{serial-number}/tcp/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_tcp_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/getArpTable",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aps/{serial-number}/getArpTable",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_getArpTable",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/getArpTable/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aps/{serial-number}/getArpTable/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_getArpTable_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/nslookup",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aps/{serial-number}/nslookup",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_nslookup",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Nslookup"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/nslookup/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aps/{serial-number}/nslookup/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_nslookup_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/aaa",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aps/{serial-number}/aaa",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_aaa",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Aaa"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/aaa/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aps/{serial-number}/aaa/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_aaa_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/show-commands",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aps/{serial-number}/show-commands",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_show_commands",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/showCommands",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aps/{serial-number}/showCommands",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_showCommands",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Showcommands"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/showCommands/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aps/{serial-number}/showCommands/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_showCommands_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/reboot",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aps/{serial-number}/reboot",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_reboot",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/rebootSwarm",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aps/{serial-number}/rebootSwarm",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_rebootSwarm",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/locate",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aps/{serial-number}/locate",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_locate",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/disconnectUserAll",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aps/{serial-number}/disconnectUserAll",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_disconnectUserAll",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/disconnectUserByMacAddress",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aps/{serial-number}/disconnectUserByMacAddress",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_disconnectUserByMacAddress",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Disconnectuserbymacaddress"
+    }
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/disconnectUserByNetwork",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/aps/{serial-number}/disconnectUserByNetwork",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_disconnectUserByNetwork",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Disconnectuserbynetwork"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/aps/{serial_number}/list-tasks",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/aps/{serial-number}/list-tasks",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_aps_{serial_number}_list_tasks",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/ping",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/cx/{serial-number}/ping",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_ping",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Ping"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/ping/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/cx/{serial-number}/ping/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_ping_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/traceroute",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/cx/{serial-number}/traceroute",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_traceroute",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Traceroute"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/traceroute/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/cx/{serial-number}/traceroute/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_traceroute_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/poeBounce",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/cx/{serial-number}/poeBounce",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_poeBounce",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Poebounce"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/poeBounce/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/cx/{serial-number}/poeBounce/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_poeBounce_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/portBounce",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/cx/{serial-number}/portBounce",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_portBounce",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Portbounce"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/portBounce/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/cx/{serial-number}/portBounce/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_portBounce_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/cableTest",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/cx/{serial-number}/cableTest",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_cableTest",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Cabletest"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/cableTest/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/cx/{serial-number}/cableTest/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_cableTest_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/http",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/cx/{serial-number}/http",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_http",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Http"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/http/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/cx/{serial-number}/http/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_http_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/aaa",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/cx/{serial-number}/aaa",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_aaa",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Aaa"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/aaa/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/cx/{serial-number}/aaa/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_aaa_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/show-commands",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/cx/{serial-number}/show-commands",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_show_commands",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/showCommands",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/cx/{serial-number}/showCommands",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_showCommands",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Showcommands"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/showCommands/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/cx/{serial-number}/showCommands/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_showCommands_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/locate",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/cx/{serial-number}/locate",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_locate",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/reboot",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/cx/{serial-number}/reboot",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_reboot",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/cx/{serial_number}/list-tasks",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/cx/{serial-number}/list-tasks",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_cx_{serial_number}_list_tasks",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/events",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/events",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_events",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/event-extra-attributes",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/event-extra-attributes",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_event_extra_attributes",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/event-filters",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/event-filters",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_event_filters",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/ping",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/gateways/{serial-number}/ping",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_ping",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Ping"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/ping/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/gateways/{serial-number}/ping/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_ping_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/pingSweep",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/gateways/{serial-number}/pingSweep",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_pingSweep",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Pingsweep"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/pingSweep/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/gateways/{serial-number}/pingSweep/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_pingSweep_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/traceroute",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/gateways/{serial-number}/traceroute",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_traceroute",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Traceroute"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/traceroute/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/gateways/{serial-number}/traceroute/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_traceroute_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/poeBounce",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/gateways/{serial-number}/poeBounce",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_poeBounce",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Poebounce"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/poeBounce/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/gateways/{serial-number}/poeBounce/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_poeBounce_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/portBounce",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/gateways/{serial-number}/portBounce",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_portBounce",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Portbounce"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/portBounce/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/gateways/{serial-number}/portBounce/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_portBounce_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/iperf",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/gateways/{serial-number}/iperf",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_iperf",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Iperf"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/iperf/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/gateways/{serial-number}/iperf/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_iperf_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/http",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/gateways/{serial-number}/http",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_http",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Http"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/http/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/gateways/{serial-number}/http/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_http_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/https",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/gateways/{serial-number}/https",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_https",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Https"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/https/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/gateways/{serial-number}/https/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_https_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/getArpTable",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/gateways/{serial-number}/getArpTable",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_getArpTable",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/getArpTable/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/gateways/{serial-number}/getArpTable/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_getArpTable_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/show-commands",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/gateways/{serial-number}/show-commands",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_show_commands",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/showCommands",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/gateways/{serial-number}/showCommands",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_showCommands",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Showcommands"
+    }
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/showCommands/async-operations/{task_id}",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/gateways/{serial-number}/showCommands/async-operations/{task-id}",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_showCommands_async_operations",
+    "lookup_behavior": "Look up by `id` (or `name`/`uuid`) matching `{task_id}`",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/reboot",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/gateways/{serial-number}/reboot",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_reboot",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/disconnectClientAll",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/gateways/{serial-number}/disconnectClientAll",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_disconnectClientAll",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/disconnectClientByMacAddress",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/gateways/{serial-number}/disconnectClientByMacAddress",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_disconnectClientByMacAddress",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": {
+      "name": "Sample_Disconnectclientbymacaddress"
+    }
+  },
+  {
+    "server": "network",
+    "method": "POST",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/halt",
+    "description": "Aruba Central Endpoint: POST /network-troubleshooting/v1/gateways/{serial-number}/halt",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_halt",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
+    "server": "network",
+    "method": "GET",
+    "path": "/network-troubleshooting/v1/gateways/{serial_number}/list-tasks",
+    "description": "Aruba Central Endpoint: GET /network-troubleshooting/v1/gateways/{serial-number}/list-tasks",
+    "target_sqlite_table": "dynamic_network_troubleshooting_v1_gateways_{serial_number}_list_tasks",
+    "lookup_behavior": "Collection table containing records. Replace URL placeholders to get target table.",
+    "sample_input": null
+  },
+  {
     "server": "oneview",
     "method": "GET",
     "path": "/openapi.json",

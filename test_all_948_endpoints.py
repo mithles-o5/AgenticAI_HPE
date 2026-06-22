@@ -228,44 +228,54 @@ def run_tests():
     json_report_path = os.path.join(workspace, "api_test_report.json")
     md_report_path = os.path.join(workspace, "api_test_report.md")
     
-    with open(json_report_path, "w", encoding="utf-8") as f:
-        json.dump({"summary": summary, "results": report}, f, indent=2)
+    artifacts_dir = r"C:\Users\ELCOT\.gemini\antigravity-ide\brain\85185432-a575-44b7-a1d2-1644e07f0794"
+    json_art_path = os.path.join(artifacts_dir, "api_test_report.json")
+    md_art_path = os.path.join(artifacts_dir, "api_test_report.md")
+    
+    report_data = {"summary": summary, "results": report}
+    for path in (json_report_path, json_art_path):
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(report_data, f, indent=2)
         
     # Write Markdown version for easy reading
-    with open(md_report_path, "w", encoding="utf-8") as f:
-        f.write("# Mock Server Endpoint Verification Report\n\n")
-        f.write(f"Executed on: {time.strftime('%Y-%m-%d %H:%M:%S')}\n\n")
-        
-        f.write("## Execution Summary\n\n")
-        f.write(f"- **Total Endpoints Tested**: {summary['total_endpoints']}\n")
-        f.write(f"- **Successful Responses (2xx)**: {summary['success_2xx']}\n")
-        f.write(f"- **Resource Not Found (404)**: {summary['not_found_404']} *(Expected for unregistered resource IDs)*\n")
-        f.write(f"- **Input Validation Failure (422)**: {summary['validation_422']} *(Expected for empty/mock Pydantic validation)*\n")
-        f.write(f"- **Other Client Errors (4xx)**: {summary['other_4xx']}\n")
-        f.write(f"- **Server Errors (5xx)**: {summary['server_error_5xx']} *(Potential route handler bugs)*\n")
-        f.write(f"- **Python Crashes**: {summary['crashes']} *(Crashed during execution)*\n\n")
-        
-        f.write("## Endpoints with Server Errors (5xx) or Crashes\n\n")
-        failed_endpoints = [r for r in report if r["category"] in ("SERVER_ERROR_5XX", "CRASH_EXCEPTION")]
-        if not failed_endpoints:
-            f.write("🎉 **All 948 endpoints executed without a single server error or Python crash!**\n\n")
-        else:
-            f.write("| Server | Method | Path | Status | Response / Error Preview |\n")
-            f.write("| :--- | :--- | :--- | :--- | :--- |\n")
-            for item in failed_endpoints:
-                preview = item['response_preview'].replace('\n', ' ')
-                f.write(f"| {item['server']} | {item['method']} | `{item['evaluated_path']}` | {item['status_code'] or 'CRASH'} | `{preview}` |\n")
-            f.write("\n")
+    def write_md_content(path):
+        with open(path, "w", encoding="utf-8") as f:
+            f.write("# Mock Server Endpoint Verification Report\n\n")
+            f.write(f"Executed on: {time.strftime('%Y-%m-%d %H:%M:%S')}\n\n")
             
-        f.write("## Complete Results By Server\n\n")
-        for sname in servers.keys():
-            server_items = [r for r in report if r["server"] == sname]
-            f.write(f"<details><summary><b>{sname.upper()} Server - {len(server_items)} Endpoints (Click to Expand)</b></summary>\n\n")
-            f.write("| Method | Original Path | Replaced Path | Status Code | Result Category |\n")
-            f.write("| :--- | :--- | :--- | :--- | :--- |\n")
-            for item in server_items:
-                f.write(f"| {item['method']} | `{item['original_path']}` | `{item['evaluated_path']}` | {item['status_code'] or 'CRASH'} | {item['category']} |\n")
-            f.write("\n</details>\n\n")
+            f.write("## Execution Summary\n\n")
+            f.write(f"- **Total Endpoints Tested**: {summary['total_endpoints']}\n")
+            f.write(f"- **Successful Responses (2xx)**: {summary['success_2xx']}\n")
+            f.write(f"- **Resource Not Found (404)**: {summary['not_found_404']} *(Expected for unregistered resource IDs)*\n")
+            f.write(f"- **Input Validation Failure (422)**: {summary['validation_422']} *(Expected for empty/mock Pydantic validation)*\n")
+            f.write(f"- **Other Client Errors (4xx)**: {summary['other_4xx']}\n")
+            f.write(f"- **Server Errors (5xx)**: {summary['server_error_5xx']} *(Potential route handler bugs)*\n")
+            f.write(f"- **Python Crashes**: {summary['crashes']} *(Crashed during execution)*\n\n")
+            
+            f.write("## Endpoints with Server Errors (5xx) or Crashes\n\n")
+            failed_endpoints = [r for r in report if r["category"] in ("SERVER_ERROR_5XX", "CRASH_EXCEPTION")]
+            if not failed_endpoints:
+                f.write("🎉 **All 948 endpoints executed without a single server error or Python crash!**\n\n")
+            else:
+                f.write("| Server | Method | Path | Status | Response / Error Preview |\n")
+                f.write("| :--- | :--- | :--- | :--- | :--- |\n")
+                for item in failed_endpoints:
+                    preview = item['response_preview'].replace('\n', ' ')
+                    f.write(f"| {item['server']} | {item['method']} | `{item['evaluated_path']}` | {item['status_code'] or 'CRASH'} | `{preview}` |\n")
+                f.write("\n")
+                
+            f.write("## Complete Results By Server\n\n")
+            for sname in servers.keys():
+                server_items = [r for r in report if r["server"] == sname]
+                f.write(f"<details><summary><b>{sname.upper()} Server - {len(server_items)} Endpoints (Click to Expand)</b></summary>\n\n")
+                f.write("| Method | Original Path | Replaced Path | Status Code | Result Category |\n")
+                f.write("| :--- | :--- | :--- | :--- | :--- |\n")
+                for item in server_items:
+                    f.write(f"| {item['method']} | `{item['original_path']}` | `{item['evaluated_path']}` | {item['status_code'] or 'CRASH'} | {item['category']} |\n")
+                f.write("\n</details>\n\n")
+                
+    write_md_content(md_report_path)
+    write_md_content(md_art_path)
             
     print(f"\nVerification completed! Summary: {summary}")
     print(f"Report saved to JSON: {json_report_path}")
