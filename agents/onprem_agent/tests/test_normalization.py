@@ -34,20 +34,6 @@ def test_normalize_server_data_oneview():
     assert norm["name"] == "OV-Server-Prod-01"
     assert norm["health_status"] == "warning"
 
-def test_normalize_server_data_comops():
-    raw = {
-        "id": "com-server-2",
-        "name": "Cloud-Server-02",
-        "model": "GreenLake Node",
-        "ipAddress": "192.168.1.15",
-        "powerState": "Off",
-        "status": "Critical"
-    }
-    norm = normalize_server_data("com", raw)
-    assert norm["id"] == "com-server-2"
-    assert norm["health_status"] == "critical"
-    assert norm["power_state"] == "Off"
-
 def test_normalize_metrics():
     raw = {
         "cpu_utilization_percent": "15.5",

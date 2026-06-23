@@ -49,7 +49,6 @@
   "modules": {
     "providers": [
       "oneview",
-      "coms",
       "mock_onprem"
     ],
     "resource_types": [

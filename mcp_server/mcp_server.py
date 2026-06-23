@@ -581,7 +581,7 @@ async def _execute_agent_command(
         # If authorized, query Postgres CMDB
         try:
             import psycopg2
-            conn = psycopg2.connect(dbname="postgres", user="postgres", password="mithles", host="localhost")
+            conn = psycopg2.connect(dbname="hpe_agentic_ai", user="postgres", password="Mithles", host="localhost")
             with conn.cursor() as cur:
                 cur.execute(
                     "SELECT serial_number, ip_address, device_type, management_source FROM devices WHERE device_type = %s",
@@ -781,7 +781,7 @@ async def _execute_agent_command(
         # Insert into Postgres CMDB
         try:
             import psycopg2
-            conn = psycopg2.connect(dbname="postgres", user="postgres", password="mithles", host="localhost")
+            conn = psycopg2.connect(dbname="hpe_agentic_ai", user="postgres", password="Mithles", host="localhost")
             with conn.cursor() as cur:
                 cur.execute(
                     """

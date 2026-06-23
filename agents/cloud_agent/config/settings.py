@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     # Service identity
     SERVICE_NAME: str = "cloud-agent"
     SERVICE_PORT: int = 8005
+    COMOPS_URL: str = "http://localhost:8001"
 
     # Capability Registry — agents POST their oasf_record.json here on startup
     CAPABILITY_REGISTRY_URL: str = "http://localhost:8020"
