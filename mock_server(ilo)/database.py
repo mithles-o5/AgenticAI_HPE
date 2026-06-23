@@ -36,9 +36,9 @@ class Database:
         
         # Add missing columns
         cursor = conn.execute(f"PRAGMA table_info({table_name})")
-        existing_cols = {row[1] for row in cursor.fetchall()}
+        existing_cols = {row[1].lower() for row in cursor.fetchall()}
         for k in data.keys():
-            if k not in existing_cols:
+            if k.lower() not in existing_cols:
                 conn.execute(f'ALTER TABLE {table_name} ADD COLUMN "{k}" TEXT')
 
     def get_collection(self, collection_path):
