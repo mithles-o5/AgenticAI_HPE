@@ -14,7 +14,8 @@ servers = {
     "Comops": "mock_server(Comops)",
     "network": "mock_server(network)",
     "oneview": "mock_server(oneview)",
-    "storage": "mock_server(storage)"
+    "storage": "mock_server(storage)",
+    "ilo": "mock_server(ilo)"
 }
 
 def get_known_ids(db_path):

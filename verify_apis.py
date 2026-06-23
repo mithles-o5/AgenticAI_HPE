@@ -341,6 +341,71 @@ def verify_oneview():
             del sys.modules[key]
 
 
+def verify_ilo():
+    print("\n--- Verifying iLO Server ---")
+    sys.path.insert(0, os.path.join(workspace, "mock_server(ilo)"))
+    from main import app as ilo_app
+    client = TestClient(ilo_app)
+    
+    # 1. GET ServiceRoot
+    resp = client.get("/redfish/v1/")
+    assert resp.status_code == 200, f"Service root failed: {resp.text}"
+    root = resp.json()
+    assert "UUID" in root, "UUID missing in ServiceRoot"
+    print("Success: ServiceRoot accessed successfully.")
+    
+    # 2. GET accounts collection
+    resp = client.get("/redfish/v1/accountservice/accounts")
+    assert resp.status_code == 200, f"Accounts collection failed: {resp.text}"
+    accounts_collection = resp.json()
+    assert "Members" in accounts_collection, "Members missing in accounts collection"
+    print("Success: Accounts collection accessed successfully.")
+    
+    # 3. POST to create a new manager account
+    new_acc = {
+        "UserName": "test_admin",
+        "Password": "SecretPassword123!",
+        "RoleId": "Administrator",
+        "Enabled": True
+    }
+    resp = client.post("/redfish/v1/accountservice/accounts", json=new_acc)
+    assert resp.status_code == 200, f"Account creation failed: {resp.text}"
+    created_acc = resp.json()
+    acc_id = created_acc["Id"]
+    assert created_acc["UserName"] == "test_admin"
+    print(f"Success: Created new manager account with ID {acc_id}.")
+    
+    # 4. GET the created account
+    resp = client.get(f"/redfish/v1/accountservice/accounts/{acc_id}")
+    assert resp.status_code == 200, f"Get account failed: {resp.text}"
+    acc = resp.json()
+    assert acc["UserName"] == "test_admin"
+    print("Success: Retrieved newly created account.")
+    
+    # 5. PATCH the account
+    resp = client.patch(f"/redfish/v1/accountservice/accounts/{acc_id}", json={"Enabled": False})
+    assert resp.status_code == 200, f"Patch account failed: {resp.text}"
+    patched_acc = resp.json()
+    assert patched_acc["Enabled"] is False
+    print("Success: Patched account property (Enabled=False).")
+    
+    # 6. DELETE the account
+    resp = client.delete(f"/redfish/v1/accountservice/accounts/{acc_id}")
+    assert resp.status_code == 200, f"Delete account failed: {resp.text}"
+    print("Success: Account deleted.")
+    
+    # 7. GET deleted account should return 404
+    resp = client.get(f"/redfish/v1/accountservice/accounts/{acc_id}")
+    assert resp.status_code == 404, f"Get deleted account should be 404, got {resp.status_code}"
+    print("Success: Deleted account returns 404 as expected.")
+    
+    # Clean up sys.path
+    sys.path.remove(os.path.join(workspace, "mock_server(ilo)"))
+    for key in list(sys.modules.keys()):
+        if key == "main" or key.startswith("models") or key.startswith("database"):
+            del sys.modules[key]
+
+
 if __name__ == "__main__":
     try:
         verify_network()
@@ -348,6 +413,7 @@ if __name__ == "__main__":
         verify_storage()
         verify_compute_ops()
         verify_oneview()
+        verify_ilo()
         print("\n==============================")
         print("ALL TESTS PASSED SUCCESSFULLY!")
         print("==============================")
