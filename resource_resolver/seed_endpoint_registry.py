@@ -408,6 +408,31 @@ def main() -> None:
 
     rows = build_rows(all_entries)
 
+    # Explicitly seed mock_cloud endpoints for all cloud resource types
+    cloud_types = [
+        "vm", "virtual_machine", "kubernetes_cluster", "database_service",
+        "storage_service", "virtual_network", "subnet", "load_balancer", "namespace"
+    ]
+    for dtype in cloud_types:
+        cloud_endpoints = [
+            ("STATUS", "GET", "/api/v1/devices/{id}"),
+            ("ON", "POST", "/api/v1/devices/{id}/power"),
+            ("OFF", "POST", "/api/v1/devices/{id}/power"),
+            ("RESET", "POST", "/api/v1/devices/{id}/power"),
+            ("COLD_BOOT", "POST", "/api/v1/devices/{id}/power"),
+            ("LIST", "GET", "/api/v1/devices"),
+            ("RESCAN", "GET", "/api/v1/devices"),
+            ("UPDATE", "PATCH", "/api/v1/devices/{id}"),
+        ]
+        for act, method, path in cloud_endpoints:
+            rows.append({
+                "vendor": "mock_cloud",
+                "device_type": dtype,
+                "action_key": act,
+                "http_method": method,
+                "api_path": path
+            })
+
     # Breakdown before insert
     breakdown: dict[str, dict[str, int]] = {}
     for r in rows:

@@ -12716,9 +12716,10 @@ def create_cloud_device(payload: dict):
 
 @app.put("/api/v1/devices/{id}")
 @app.post("/api/v1/devices/{id}")
+@app.patch("/api/v1/devices/{id}")
 def update_cloud_device(id: str, payload: dict):
     """
-    CRUD Route: PUT /api/v1/devices/{id}
+    CRUD Route: PUT/POST/PATCH /api/v1/devices/{id}
     """
     from fastapi import HTTPException
     import random
@@ -12753,3 +12754,51 @@ def update_cloud_device(id: str, payload: dict):
     device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
     db.upsert_item(collection_path, device["id"], device)
     return device
+
+
+@app.post("/api/v1/devices/{id}/power")
+def power_cloud_device(id: str, payload: dict):
+    """
+    Control Power Action: POST /api/v1/devices/{id}/power
+    """
+    from fastapi import HTTPException
+    import random
+    import datetime
+    
+    collection_path = "/api/v1/devices"
+    item = db.get_item(collection_path, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Device not found")
+        
+    device = dict(item)
+    state = payload.get("power_state") or payload.get("powerState") or payload.get("action") or payload.get("state")
+    if not state:
+        raise HTTPException(status_code=400, detail="Power state not specified in payload")
+        
+    old_state = device.get("power_state", "UNKNOWN").upper()
+    target_state = "ON" if state.upper() in ["ON", "POWERON", "RESET", "COLD_BOOT"] else "OFF"
+    
+    if state.upper() in ["ON", "POWERON", "RESET", "COLD_BOOT"]:
+        device["power_state"] = "ON"
+        device["cpu_utilization_percent"] = round(random.uniform(10.0, 90.0), 1)
+        device["memory_utilization_percent"] = round(random.uniform(10.0, 90.0), 1)
+        device["power_draw_watts"] = round(random.uniform(150.0, 400.0), 1)
+        device["temperature_celsius"] = round(random.uniform(25.0, 45.0), 1)
+    elif state.upper() in ["OFF", "POWEROFF"]:
+        device["power_state"] = "OFF"
+        device["cpu_utilization_percent"] = 0.0
+        device["memory_utilization_percent"] = 0.0
+        device["power_draw_watts"] = 0.0
+        device["temperature_celsius"] = 0.0
+    else:
+        raise HTTPException(status_code=400, detail=f"Unsupported power action: {state}")
+        
+    if old_state == target_state:
+        device["message"] = f"Device {id} was already powered {target_state}."
+    else:
+        device["message"] = f"Device {id} has been successfully powered {target_state}."
+        
+    device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
+    db.upsert_item(collection_path, device["id"], device)
+    return device
+

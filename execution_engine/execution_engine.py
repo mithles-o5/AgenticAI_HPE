@@ -40,6 +40,8 @@ _ACTION_MAP: Dict[str, str] = {
     "RESCAN":      "discover_resources",
     "FAILOVER":    "execute_action",
     "POLICY_SYNC": "execute_action",
+    "UPDATE":      "execute_action",
+    "PATCH":       "execute_action",
 }
 
 # Agent-specific action overrides by domain

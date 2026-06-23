@@ -1113,6 +1113,11 @@ async def _execute_agent_command(
             resource_type=resource_type,
             resource_id=identifier,
             provider_or_protocol=resolved_provider,
+            parameters={
+                "api_path": api_path,
+                "http_method": resolution.http_method,
+                "user_email": email
+            } if api_path else {"user_email": email},
             parameters=dispatch_params,
             credentials_ref=resolved_credentials_ref,
         ),

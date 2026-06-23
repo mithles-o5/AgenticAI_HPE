@@ -84,7 +84,16 @@ class MockCloudAdapter(BaseCloudAdapter):
         api_path = parameters.get("api_path")
         if not api_path:
             return {"result": "failed", "detail": "Dynamic routing failed: No api_path provided by orchestrator. The agent is strictly dynamic."}
-        return self._dynamic_call(parameters.get("http_method", "POST"), api_path, resource_id, parameters.get("payload", {}), parameters.get("base_url", ""))
+            
+        payload = parameters.get("payload") or {}
+        if not payload:
+            payload = {
+                "action": action,
+                "state": parameters.get("state"),
+                "action_verb": parameters.get("action_verb"),
+                "action_type": parameters.get("action_type")
+            }
+        return self._dynamic_call(parameters.get("http_method", "POST"), api_path, resource_id, payload, parameters.get("base_url", ""))
 
     # ── discover_resources ────────────────────────────────────────────────────
     def discover_resources(
