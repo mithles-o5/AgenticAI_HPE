@@ -1,6 +1,5 @@
 import logging
 from adapters.plugins.oneview_adapter import OneViewAdapter
-from adapters.plugins.com_adapter import ComOpsAdapter
 from adapters.plugins.mock_adapter import MockAdapter
 from core.exceptions import AdapterError
 
@@ -9,7 +8,6 @@ logger = logging.getLogger("onprem_agent.adapter_manager")
 class AdapterManager:
     def __init__(self):
         self._oneview = OneViewAdapter()
-        self._com = ComOpsAdapter()
         self._mock = MockAdapter()
 
     def get_adapter(self, provider: str):
@@ -23,8 +21,6 @@ class AdapterManager:
         prov = provider.lower().strip()
         if prov == "oneview":
             return self._oneview
-        elif prov in ("com", "composable", "coms"):
-            return self._com
         elif prov == "mock_onprem":
             return self._mock
         else:

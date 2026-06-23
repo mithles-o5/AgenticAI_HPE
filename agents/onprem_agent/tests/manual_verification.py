@@ -22,14 +22,6 @@ def main():
         stderr=subprocess.DEVNULL
     )
 
-    print("[+] Starting Compute Ops (CoM) Mock Server on port 8001...")
-    com_process = subprocess.Popen(
-        [sys.executable, "-m", "uvicorn", "main:app", "--port", "8001"],
-        cwd=os.path.join(root_dir, "mock_server(Comops)"),
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL
-    )
-
     print("[+] Starting On-Prem Agent Microservice on port 8008...")
     agent_process = subprocess.Popen(
         [sys.executable, "-m", "uvicorn", "main:app", "--port", "8008"],
@@ -58,40 +50,6 @@ def main():
         print(f"Response:\n{resp.text}\n")
         assert resp.status_code == 200
         assert resp.json()["status"] == "success"
-
-        # Test 2: Health Check ComOps Server
-        print("[Test 2] Health Check ComOps Server:")
-        payload = {
-            "task_id": "manual-task-2",
-            "task_type": "monitoring",
-            "agent_type": "onprem",
-            "resource_type": "server_profile",
-            "resource_id": "CoM-CloudNode-001",
-            "provider": "com",
-            "action": "health_check"
-        }
-        resp = httpx.post("http://localhost:8008/tasks", json=payload, timeout=10.0)
-        print(f"Status Code: {resp.status_code}")
-        print(f"Response:\n{resp.text}\n")
-        assert resp.status_code == 200
-        assert resp.json()["status"] == "success"
-
-        # Test 3: Fetch Metrics ComOps
-        print("[Test 3] Fetch Metrics ComOps Server:")
-        payload = {
-            "task_id": "manual-task-3",
-            "task_type": "monitoring",
-            "agent_type": "onprem",
-            "resource_type": "server_profile",
-            "resource_id": "CoM-CloudNode-001",
-            "provider": "com",
-            "action": "fetch_metrics"
-        }
-        resp = httpx.post("http://localhost:8008/tasks", json=payload, timeout=10.0)
-        print(f"Status Code: {resp.status_code}")
-        print(f"Response:\n{resp.text}\n")
-        assert resp.status_code == 200
-        assert "cpu_utilization_percent" in resp.json()["metrics"]
 
         # Test 4: Execute Power Action OV
         print("[Test 4] Power Action OneView Server:")
@@ -139,7 +97,6 @@ def main():
     finally:
         print("[+] Shutting down backend processes and agent...")
         ov_process.terminate()
-        com_process.process = com_process.terminate()
         agent_process.terminate()
         print("[+] Cleanup complete.")
 
