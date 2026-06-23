@@ -1,0 +1,1181 @@
+2026-06-19 15:35:26,214 [INFO] db: [DB] Connection pool created: 2-10 connections to postgres@localhost:5432/hpe_agentic_ai
+2026-06-19 15:35:26,275 [INFO] db: [DB] Connection test successful
+2026-06-19 15:35:26,275 [INFO] resource_resolver.db_loader: [DB Loader] PostgreSQL registry verified and connected
+2026-06-19 15:35:28,351 [INFO] resource_resolver.cache: [Cache] Memurai connected at localhost:6379/db=0 ttl=900s
+2026-06-19 15:35:28,354 [INFO] resource_resolver.polling_engine: [Polling] Starting background polling thread (interval=600s)
+2026-06-19 15:35:28,420 [INFO] mcp.server.lowlevel.server: Processing request of type ListToolsRequest
+2026-06-19 15:35:28,424 [INFO] mcp.server.lowlevel.server: Processing request of type ListPromptsRequest
+2026-06-19 15:35:28,427 [INFO] mcp.server.lowlevel.server: Processing request of type ListResourcesRequest
+2026-06-19 15:35:33,360 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=4e89428f max_workers=8
+2026-06-19 15:35:33,360 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=4e89428f count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-19 15:35:33,361 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting collection | host=oneview-01.mgmt.local
+2026-06-19 15:35:33,362 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting collection | acid=coms-01.cloud.local
+2026-06-19 15:35:33,365 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-19 15:35:33,366 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-19 15:35:33,370 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting collection | host=mock-network-manager.local
+2026-06-19 15:35:33,372 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting collection | host=mock-cloud-manager.local
+2026-06-19 15:35:33,585 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection complete | acid=coms-01.cloud.local devices=507 elapsed_ms=221
+2026-06-19 15:35:33,599 [INFO] resource_resolver.polling_engine: [Polling][OneView] Collection complete | host=oneview-01.mgmt.local devices=1009 elapsed_ms=237
+2026-06-19 15:35:33,600 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=507 cycle=4e89428f
+2026-06-19 15:35:33,602 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=236
+2026-06-19 15:35:33,604 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=1009 cycle=4e89428f
+2026-06-19 15:35:33,607 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Collection complete | host=mock-network-manager.local devices=200 elapsed_ms=236
+2026-06-19 15:35:33,609 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=235
+2026-06-19 15:35:33,610 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=4e89428f
+2026-06-19 15:35:33,610 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=200 cycle=4e89428f
+2026-06-19 15:35:33,611 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=4e89428f
+2026-06-19 15:35:33,956 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-19 15:35:33,959 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=200 elapsed_ms=592
+2026-06-19 15:35:33,959 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=200 cycle=4e89428f
+2026-06-19 15:35:33,960 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=4e89428f sources=6 collection_ms=602
+2026-06-19 15:35:33,964 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=4e89428f
+2026-06-19 15:35:33,966 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=4e89428f
+2026-06-19 15:35:33,967 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=4e89428f
+2026-06-19 15:35:33,968 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=4e89428f
+2026-06-19 15:35:33,969 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=4e89428f
+2026-06-19 15:35:33,969 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=4e89428f
+2026-06-19 15:35:33,969 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=4e89428f total_ms=611 success=6 failed=0
+2026-06-19 15:35:49,620 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 15:35:50,362 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=gl-db-011
+2026-06-19 15:35:50,364 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=gl-db-011
+2026-06-19 15:35:50,372 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_cloud' device_type='database_service' action_key='STATUS'
+2026-06-19 15:35:50,373 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_cloud' device_type='database_service' action_key='STATUS' — using fallback path /rest/database_service/4118d785-6a3f-40ff-bb1c-48e95093b3a9
+2026-06-19 15:35:50,379 [INFO] resource_resolver.resolver: [Resolver] sn:gl-db-011 -> mock_cloud/mock-cloud-manager.local cache=miss 7ms
+2026-06-19 15:35:52,874 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_cloud' device_type='database_service' action_key='STATUS'
+2026-06-19 15:35:52,874 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_cloud' device_type='database_service' action_key='STATUS' — using fallback path /rest/database_service/4118d785-6a3f-40ff-bb1c-48e95093b3a9
+2026-06-19 15:35:52,875 [INFO] resource_resolver.resolver: [Resolver] sn:gl-db-011 -> mock_cloud/mock-cloud-manager.local cache=hit 0ms
+2026-06-19 15:35:55,230 [WARNING] execution_engine: Failed to query Capability Registry: [WinError 10061] No connection could be made because the target machine actively refused it. Falling back to default routing.
+2026-06-19 15:35:55,230 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> unknown-agent | url=http://127.0.0.1:8005/unknown-agent/execute-task
+2026-06-19 15:35:57,684 [ERROR] execution_engine: [AgentDispatcher] Could not connect to unknown-agent at http://127.0.0.1:8005. Start it with: python agents/unknown_agent/main.py
+2026-06-19 15:35:59,310 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 15:35:59,319 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=edge-r03-10022
+2026-06-19 15:35:59,321 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=edge-r03-10022
+2026-06-19 15:35:59,332 [INFO] resource_resolver.resolver: [Resolver] sn:edge-r03-10022 -> coms/coms-01.cloud.local cache=miss 8ms
+2026-06-19 15:36:01,937 [INFO] resource_resolver.resolver: [Resolver] sn:edge-r03-10022 -> coms/coms-01.cloud.local cache=hit 0ms
+2026-06-19 15:36:04,319 [WARNING] execution_engine: Failed to query Capability Registry: [WinError 10061] No connection could be made because the target machine actively refused it. Falling back to default routing.
+2026-06-19 15:36:04,319 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> unknown-agent | url=http://127.0.0.1:8005/unknown-agent/execute-task
+2026-06-19 15:36:06,721 [ERROR] execution_engine: [AgentDispatcher] Could not connect to unknown-agent at http://127.0.0.1:8005. Start it with: python agents/unknown_agent/main.py
+2026-06-19 15:36:08,223 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 15:36:08,229 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=ap-floor-006
+2026-06-19 15:36:08,230 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=ap-floor-006
+2026-06-19 15:36:08,233 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='access_point' action_key='STATUS'
+2026-06-19 15:36:08,233 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='access_point' action_key='STATUS' — using fallback path /rest/access_point/7dabb793-79bd-4761-ae66-0b8dd67d0b68
+2026-06-19 15:36:08,235 [INFO] resource_resolver.resolver: [Resolver] sn:ap-floor-006 -> mock_network/mock-network-manager.local cache=miss 5ms
+2026-06-19 15:36:10,623 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='access_point' action_key='STATUS'
+2026-06-19 15:36:10,623 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='access_point' action_key='STATUS' — using fallback path /rest/access_point/7dabb793-79bd-4761-ae66-0b8dd67d0b68
+2026-06-19 15:36:10,643 [INFO] resource_resolver.resolver: [Resolver] sn:ap-floor-006 -> mock_network/mock-network-manager.local cache=hit 0ms
+2026-06-19 15:36:13,024 [WARNING] execution_engine: Failed to query Capability Registry: [WinError 10061] No connection could be made because the target machine actively refused it. Falling back to default routing.
+2026-06-19 15:36:13,024 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> unknown-agent | url=http://127.0.0.1:8005/unknown-agent/execute-task
+2026-06-19 15:36:15,928 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8005/unknown-agent/execute-task "HTTP/1.1 404 Not Found"
+2026-06-19 15:36:15,929 [ERROR] execution_engine: [AgentDispatcher] unknown-agent returned HTTP 404: {"detail":"Not Found"}
+2026-06-19 15:36:23,677 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 15:36:23,682 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=stg-array-14
+2026-06-19 15:36:23,684 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=stg-array-14
+2026-06-19 15:36:23,692 [INFO] resource_resolver.resolver: [Resolver] sn:stg-array-14 -> oneview/oneview-01.mgmt.local cache=miss 5ms
+2026-06-19 15:36:24,186 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=storage&provider=oneview "HTTP/1.1 200 OK"
+2026-06-19 15:36:24,198 [INFO] resource_resolver.resolver: [Resolver] sn:stg-array-14 -> oneview/oneview-01.mgmt.local cache=hit 1ms
+2026-06-19 15:36:24,688 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=storage&provider=oneview "HTTP/1.1 200 OK"
+2026-06-19 15:36:24,689 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> onprem-agent | url=http://127.0.0.1:8008/tasks
+2026-06-19 15:36:25,668 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8008/tasks "HTTP/1.1 200 OK"
+2026-06-19 15:36:27,727 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 15:36:29,478 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 15:36:29,485 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=alletra-array-008
+2026-06-19 15:36:29,488 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=alletra-array-008
+2026-06-19 15:36:29,494 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_storage' device_type='snapshot' action_key='STATUS'
+2026-06-19 15:36:29,494 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_storage' device_type='snapshot' action_key='STATUS' — using fallback path /data-services/v1beta1/devices/40b3da26-2494-4949-8f27-74bf1ef392fe
+2026-06-19 15:36:29,496 [INFO] resource_resolver.resolver: [Resolver] sn:alletra-array-008 -> mock_storage/mock-storage-manager.local cache=miss 8ms
+2026-06-19 15:36:29,919 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=snapshot&provider=mock_storage "HTTP/1.1 200 OK"
+2026-06-19 15:36:29,925 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_storage' device_type='snapshot' action_key='STATUS'
+2026-06-19 15:36:29,925 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_storage' device_type='snapshot' action_key='STATUS' — using fallback path /data-services/v1beta1/devices/40b3da26-2494-4949-8f27-74bf1ef392fe
+2026-06-19 15:36:29,943 [INFO] resource_resolver.resolver: [Resolver] sn:alletra-array-008 -> mock_storage/mock-storage-manager.local cache=hit 0ms
+2026-06-19 15:36:30,367 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=snapshot&provider=mock_storage "HTTP/1.1 200 OK"
+2026-06-19 15:36:30,368 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> storage-agent | url=http://127.0.0.1:8007/storage-agent/execute-task
+2026-06-19 15:36:31,418 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8007/storage-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 15:36:31,426 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 15:37:58,371 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 15:37:58,376 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_cloud' device_type='database_service' action_key='STATUS'
+2026-06-19 15:37:58,376 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_cloud' device_type='database_service' action_key='STATUS' — using fallback path /rest/database_service/4118d785-6a3f-40ff-bb1c-48e95093b3a9
+2026-06-19 15:37:58,378 [INFO] resource_resolver.resolver: [Resolver] sn:gl-db-011 -> mock_cloud/mock-cloud-manager.local cache=hit 1ms
+2026-06-19 15:37:58,748 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=database_service&provider=mock_cloud "HTTP/1.1 200 OK"
+2026-06-19 15:37:58,757 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_cloud' device_type='database_service' action_key='STATUS'
+2026-06-19 15:37:58,757 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_cloud' device_type='database_service' action_key='STATUS' — using fallback path /rest/database_service/4118d785-6a3f-40ff-bb1c-48e95093b3a9
+2026-06-19 15:37:58,760 [INFO] resource_resolver.resolver: [Resolver] sn:gl-db-011 -> mock_cloud/mock-cloud-manager.local cache=hit 0ms
+2026-06-19 15:37:59,124 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=database_service&provider=mock_cloud "HTTP/1.1 200 OK"
+2026-06-19 15:37:59,125 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> cloud-agent | url=http://127.0.0.1:8005/cloud-agent/execute-task
+2026-06-19 15:37:59,840 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8005/cloud-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 15:37:59,843 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 15:38:01,556 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 15:38:01,581 [INFO] resource_resolver.resolver: [Resolver] sn:edge-r03-10022 -> coms/coms-01.cloud.local cache=hit 0ms
+2026-06-19 15:38:02,061 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=router&provider=coms "HTTP/1.1 200 OK"
+2026-06-19 15:38:02,069 [INFO] resource_resolver.resolver: [Resolver] sn:edge-r03-10022 -> coms/coms-01.cloud.local cache=hit 0ms
+2026-06-19 15:38:02,407 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=router&provider=coms "HTTP/1.1 200 OK"
+2026-06-19 15:38:02,408 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> onprem-agent | url=http://127.0.0.1:8008/tasks
+2026-06-19 15:38:03,422 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8008/tasks "HTTP/1.1 200 OK"
+2026-06-19 15:38:03,426 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 15:38:13,444 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 15:38:13,451 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='access_point' action_key='STATUS'
+2026-06-19 15:38:13,451 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='access_point' action_key='STATUS' — using fallback path /rest/access_point/7dabb793-79bd-4761-ae66-0b8dd67d0b68
+2026-06-19 15:38:13,470 [INFO] resource_resolver.resolver: [Resolver] sn:ap-floor-006 -> mock_network/mock-network-manager.local cache=hit 1ms
+2026-06-19 15:38:13,897 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=access_point&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 15:38:13,905 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='access_point' action_key='STATUS'
+2026-06-19 15:38:13,905 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='access_point' action_key='STATUS' — using fallback path /rest/access_point/7dabb793-79bd-4761-ae66-0b8dd67d0b68
+2026-06-19 15:38:13,925 [INFO] resource_resolver.resolver: [Resolver] sn:ap-floor-006 -> mock_network/mock-network-manager.local cache=hit 1ms
+2026-06-19 15:38:14,405 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=access_point&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 15:38:14,406 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> network-agent | url=http://127.0.0.1:8006/network-agent/execute-task
+2026-06-19 15:38:15,233 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8006/network-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 15:38:15,238 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 15:38:17,009 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 15:38:17,015 [INFO] resource_resolver.resolver: [Resolver] sn:stg-array-14 -> oneview/oneview-01.mgmt.local cache=hit 0ms
+2026-06-19 15:38:17,412 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=storage&provider=oneview "HTTP/1.1 200 OK"
+2026-06-19 15:38:17,434 [INFO] resource_resolver.resolver: [Resolver] sn:stg-array-14 -> oneview/oneview-01.mgmt.local cache=hit 0ms
+2026-06-19 15:38:17,795 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=storage&provider=oneview "HTTP/1.1 200 OK"
+2026-06-19 15:38:17,796 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> onprem-agent | url=http://127.0.0.1:8008/tasks
+2026-06-19 15:38:18,751 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8008/tasks "HTTP/1.1 200 OK"
+2026-06-19 15:38:18,757 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 15:38:20,443 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 15:38:20,446 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_storage' device_type='snapshot' action_key='STATUS'
+2026-06-19 15:38:20,447 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_storage' device_type='snapshot' action_key='STATUS' — using fallback path /data-services/v1beta1/devices/40b3da26-2494-4949-8f27-74bf1ef392fe
+2026-06-19 15:38:20,474 [INFO] resource_resolver.resolver: [Resolver] sn:alletra-array-008 -> mock_storage/mock-storage-manager.local cache=hit 0ms
+2026-06-19 15:38:20,822 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=snapshot&provider=mock_storage "HTTP/1.1 200 OK"
+2026-06-19 15:38:20,825 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_storage' device_type='snapshot' action_key='STATUS'
+2026-06-19 15:38:20,825 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_storage' device_type='snapshot' action_key='STATUS' — using fallback path /data-services/v1beta1/devices/40b3da26-2494-4949-8f27-74bf1ef392fe
+2026-06-19 15:38:20,843 [INFO] resource_resolver.resolver: [Resolver] sn:alletra-array-008 -> mock_storage/mock-storage-manager.local cache=hit 0ms
+2026-06-19 15:38:21,201 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=snapshot&provider=mock_storage "HTTP/1.1 200 OK"
+2026-06-19 15:38:21,201 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> storage-agent | url=http://127.0.0.1:8007/storage-agent/execute-task
+2026-06-19 15:38:21,926 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8007/storage-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 15:38:21,929 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 15:45:33,992 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=8fd50766 max_workers=8
+2026-06-19 15:45:33,992 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=8fd50766 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-19 15:45:33,993 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting collection | host=oneview-01.mgmt.local
+2026-06-19 15:45:33,993 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting collection | acid=coms-01.cloud.local
+2026-06-19 15:45:33,994 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-19 15:45:34,016 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-19 15:45:34,038 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting collection | host=mock-network-manager.local
+2026-06-19 15:45:34,045 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting collection | host=mock-cloud-manager.local
+2026-06-19 15:45:34,199 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection complete | acid=coms-01.cloud.local devices=507 elapsed_ms=205
+2026-06-19 15:45:34,213 [INFO] resource_resolver.polling_engine: [Polling][OneView] Collection complete | host=oneview-01.mgmt.local devices=1009 elapsed_ms=219
+2026-06-19 15:45:34,216 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=221
+2026-06-19 15:45:34,220 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=507 cycle=8fd50766
+2026-06-19 15:45:34,223 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Collection complete | host=mock-network-manager.local devices=200 elapsed_ms=178
+2026-06-19 15:45:34,225 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=1009 cycle=8fd50766
+2026-06-19 15:45:34,227 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=182
+2026-06-19 15:45:34,228 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=8fd50766
+2026-06-19 15:45:34,228 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=200 cycle=8fd50766
+2026-06-19 15:45:34,229 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=8fd50766
+2026-06-19 15:45:34,420 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-19 15:45:34,425 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=200 elapsed_ms=387
+2026-06-19 15:45:34,426 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=200 cycle=8fd50766
+2026-06-19 15:45:34,427 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=8fd50766 sources=6 collection_ms=435
+2026-06-19 15:45:34,456 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=8fd50766
+2026-06-19 15:45:34,460 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=8fd50766
+2026-06-19 15:45:34,464 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=8fd50766
+2026-06-19 15:45:34,466 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=8fd50766
+2026-06-19 15:45:34,470 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=8fd50766
+2026-06-19 15:45:34,471 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=8fd50766
+2026-06-19 15:45:34,471 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=8fd50766 total_ms=479 success=6 failed=0
+2026-06-19 15:55:34,478 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=688061ee max_workers=8
+2026-06-19 15:55:34,479 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=688061ee count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-19 15:55:34,499 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting collection | host=oneview-01.mgmt.local
+2026-06-19 15:55:34,499 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting collection | acid=coms-01.cloud.local
+2026-06-19 15:55:34,500 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-19 15:55:34,501 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-19 15:55:34,516 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting collection | host=mock-network-manager.local
+2026-06-19 15:55:34,536 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting collection | host=mock-cloud-manager.local
+2026-06-19 15:55:34,614 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection complete | acid=coms-01.cloud.local devices=507 elapsed_ms=113
+2026-06-19 15:55:34,616 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=507 cycle=688061ee
+2026-06-19 15:55:34,618 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=118
+2026-06-19 15:55:34,622 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=688061ee
+2026-06-19 15:55:34,629 [INFO] resource_resolver.polling_engine: [Polling][OneView] Collection complete | host=oneview-01.mgmt.local devices=1009 elapsed_ms=130
+2026-06-19 15:55:34,633 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=1009 cycle=688061ee
+2026-06-19 15:55:34,634 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Collection complete | host=mock-network-manager.local devices=200 elapsed_ms=112
+2026-06-19 15:55:34,638 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=200 cycle=688061ee
+2026-06-19 15:55:34,641 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=104
+2026-06-19 15:55:34,641 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=688061ee
+2026-06-19 15:55:34,860 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-19 15:55:34,863 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=200 elapsed_ms=362
+2026-06-19 15:55:34,864 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=200 cycle=688061ee
+2026-06-19 15:55:34,865 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=688061ee sources=6 collection_ms=386
+2026-06-19 15:55:34,886 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=688061ee
+2026-06-19 15:55:34,887 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=688061ee
+2026-06-19 15:55:34,888 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=688061ee
+2026-06-19 15:55:34,888 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=688061ee
+2026-06-19 15:55:34,889 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=688061ee
+2026-06-19 15:55:34,891 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=688061ee
+2026-06-19 15:55:34,891 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=688061ee total_ms=413 success=6 failed=0
+Traceback (most recent call last):
+  File "D:\HPE CPP\MCP_Integrated\scratch\test_flow.py", line 34, in <module>
+    asyncio.run(test_flow())
+    ~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "D:\HPE CPP\MCP_Integrated\scratch\test_flow.py", line 23, in test_flow
+    res = await ms._execute_agent_command(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+    )
+    ^
+  File "D:\HPE CPP\MCP_Integrated\mcp_server\mcp_server.py", line 1099, in _execute_agent_command
+    result = await loop.run_in_executor(
+                   ^^^^
+NameError: name 'loop' is not defined
+2026-06-19 16:05:34,894 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=a8724ca2 max_workers=8
+2026-06-19 16:05:34,895 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=a8724ca2 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-19 16:05:34,896 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting collection | host=oneview-01.mgmt.local
+2026-06-19 16:05:34,896 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting collection | acid=coms-01.cloud.local
+2026-06-19 16:05:34,899 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-19 16:05:34,914 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-19 16:05:34,932 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting collection | host=mock-network-manager.local
+2026-06-19 16:05:34,933 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting collection | host=mock-cloud-manager.local
+2026-06-19 16:05:34,977 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection complete | acid=coms-01.cloud.local devices=507 elapsed_ms=80
+2026-06-19 16:05:34,986 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=507 cycle=a8724ca2
+2026-06-19 16:05:34,988 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=88
+2026-06-19 16:05:34,988 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=a8724ca2
+2026-06-19 16:05:34,993 [INFO] resource_resolver.polling_engine: [Polling][OneView] Collection complete | host=oneview-01.mgmt.local devices=1009 elapsed_ms=97
+2026-06-19 16:05:34,998 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=1009 cycle=a8724ca2
+2026-06-19 16:05:35,000 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Collection complete | host=mock-network-manager.local devices=200 elapsed_ms=67
+2026-06-19 16:05:35,000 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=200 cycle=a8724ca2
+2026-06-19 16:05:35,004 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=71
+2026-06-19 16:05:35,005 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=a8724ca2
+2026-06-19 16:05:35,285 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-19 16:05:35,288 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=200 elapsed_ms=363
+2026-06-19 16:05:35,289 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=200 cycle=a8724ca2
+2026-06-19 16:05:35,290 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=a8724ca2 sources=6 collection_ms=395
+2026-06-19 16:05:35,291 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=a8724ca2
+2026-06-19 16:05:35,292 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=a8724ca2
+2026-06-19 16:05:35,293 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=a8724ca2
+2026-06-19 16:05:35,293 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=a8724ca2
+2026-06-19 16:05:35,294 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=a8724ca2
+2026-06-19 16:05:35,295 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=a8724ca2
+2026-06-19 16:05:35,295 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=a8724ca2 total_ms=400 success=6 failed=0
+Traceback (most recent call last):
+  File "D:\HPE CPP\MCP_Integrated\scratch\test_flow.py", line 34, in <module>
+    asyncio.run(test_flow())
+    ~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "D:\HPE CPP\MCP_Integrated\scratch\test_flow.py", line 23, in test_flow
+    res = await ms._execute_agent_command(
+                ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        task_id="test-1234",
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        role="Infrastructure administrator"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+TypeError: _execute_agent_command() got an unexpected keyword argument 'task_id'
+2026-06-19 16:09:32,733 [INFO] db: [DB] Connection pool created: 2-10 connections to postgres@localhost:5432/hpe_agentic_ai
+2026-06-19 16:09:32,743 [INFO] db: [DB] Connection test successful
+2026-06-19 16:09:32,743 [INFO] resource_resolver.db_loader: [DB Loader] PostgreSQL registry verified and connected
+2026-06-19 16:09:34,776 [INFO] resource_resolver.cache: [Cache] Memurai connected at localhost:6379/db=0 ttl=900s
+2026-06-19 16:09:34,778 [INFO] resource_resolver.polling_engine: [Polling] Starting background polling thread (interval=600s)
+2026-06-19 16:09:34,836 [INFO] mcp.server.lowlevel.server: Processing request of type ListToolsRequest
+2026-06-19 16:09:34,841 [INFO] mcp.server.lowlevel.server: Processing request of type ListPromptsRequest
+2026-06-19 16:09:34,844 [INFO] mcp.server.lowlevel.server: Processing request of type ListResourcesRequest
+2026-06-19 16:09:39,779 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=e4eac61a max_workers=8
+2026-06-19 16:09:39,780 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=e4eac61a count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-19 16:09:39,781 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting collection | host=oneview-01.mgmt.local
+2026-06-19 16:09:39,781 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting collection | acid=coms-01.cloud.local
+2026-06-19 16:09:39,782 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-19 16:09:39,783 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-19 16:09:39,785 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting collection | host=mock-network-manager.local
+2026-06-19 16:09:39,786 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting collection | host=mock-cloud-manager.local
+2026-06-19 16:09:40,013 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection complete | acid=coms-01.cloud.local devices=507 elapsed_ms=231
+2026-06-19 16:09:40,023 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=507 cycle=e4eac61a
+2026-06-19 16:09:40,035 [INFO] resource_resolver.polling_engine: [Polling][OneView] Collection complete | host=oneview-01.mgmt.local devices=1009 elapsed_ms=253
+2026-06-19 16:09:40,040 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=1009 cycle=e4eac61a
+2026-06-19 16:09:40,042 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=258
+2026-06-19 16:09:40,044 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Collection complete | host=mock-network-manager.local devices=200 elapsed_ms=258
+2026-06-19 16:09:40,053 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=200 cycle=e4eac61a
+2026-06-19 16:09:40,048 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=261
+2026-06-19 16:09:40,054 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=e4eac61a
+2026-06-19 16:09:40,045 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=e4eac61a
+2026-06-19 16:09:40,322 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-19 16:09:40,326 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=200 elapsed_ms=542
+2026-06-19 16:09:40,327 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=200 cycle=e4eac61a
+2026-06-19 16:09:40,328 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=e4eac61a sources=6 collection_ms=549
+2026-06-19 16:09:40,332 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=e4eac61a
+2026-06-19 16:09:40,333 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=e4eac61a
+2026-06-19 16:09:40,334 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=e4eac61a
+2026-06-19 16:09:40,335 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=e4eac61a
+2026-06-19 16:09:40,336 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=e4eac61a
+2026-06-19 16:09:40,337 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=e4eac61a
+2026-06-19 16:09:40,338 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=e4eac61a total_ms=558 success=6 failed=0
+2026-06-19 16:09:41,827 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 16:09:42,863 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=gl-db-011
+2026-06-19 16:09:42,864 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=gl-db-011
+2026-06-19 16:09:42,869 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_cloud' device_type='database_service' action_key='STATUS'
+2026-06-19 16:09:42,869 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_cloud' device_type='database_service' action_key='STATUS' — using fallback path /rest/database_service/4118d785-6a3f-40ff-bb1c-48e95093b3a9
+2026-06-19 16:09:42,873 [INFO] resource_resolver.resolver: [Resolver] sn:gl-db-011 -> mock_cloud/mock-cloud-manager.local cache=miss 4ms
+2026-06-19 16:09:43,227 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=database_service&provider=mock_cloud "HTTP/1.1 200 OK"
+2026-06-19 16:09:43,233 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_cloud' device_type='database_service' action_key='STATUS'
+2026-06-19 16:09:43,233 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_cloud' device_type='database_service' action_key='STATUS' — using fallback path /rest/database_service/4118d785-6a3f-40ff-bb1c-48e95093b3a9
+2026-06-19 16:09:43,234 [INFO] resource_resolver.resolver: [Resolver] sn:gl-db-011 -> mock_cloud/mock-cloud-manager.local cache=hit 0ms
+2026-06-19 16:09:43,623 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=database_service&provider=mock_cloud "HTTP/1.1 200 OK"
+2026-06-19 16:09:43,625 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> cloud-agent | url=http://127.0.0.1:8005/cloud-agent/execute-task
+2026-06-19 16:09:44,452 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8005/cloud-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 16:09:46,477 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 16:09:50,123 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 16:09:50,128 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=edge-r03-10022
+2026-06-19 16:09:50,130 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=edge-r03-10022
+2026-06-19 16:09:50,141 [INFO] resource_resolver.resolver: [Resolver] sn:edge-r03-10022 -> coms/coms-01.cloud.local cache=miss 5ms
+2026-06-19 16:09:50,481 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=router&provider=coms "HTTP/1.1 200 OK"
+2026-06-19 16:09:50,489 [INFO] resource_resolver.resolver: [Resolver] sn:edge-r03-10022 -> coms/coms-01.cloud.local cache=hit 0ms
+2026-06-19 16:09:50,874 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=router&provider=coms "HTTP/1.1 200 OK"
+2026-06-19 16:09:50,875 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> onprem-agent | url=http://127.0.0.1:8008/tasks
+2026-06-19 16:09:51,876 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8008/tasks "HTTP/1.1 200 OK"
+2026-06-19 16:09:51,880 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 16:09:53,640 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 16:09:53,645 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=ap-floor-006
+2026-06-19 16:09:53,646 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=ap-floor-006
+2026-06-19 16:09:53,650 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='access_point' action_key='STATUS'
+2026-06-19 16:09:53,651 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='access_point' action_key='STATUS' — using fallback path /rest/access_point/7dabb793-79bd-4761-ae66-0b8dd67d0b68
+2026-06-19 16:09:53,670 [INFO] resource_resolver.resolver: [Resolver] sn:ap-floor-006 -> mock_network/mock-network-manager.local cache=miss 5ms
+2026-06-19 16:09:54,021 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=access_point&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 16:09:54,027 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='access_point' action_key='STATUS'
+2026-06-19 16:09:54,027 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='access_point' action_key='STATUS' — using fallback path /rest/access_point/7dabb793-79bd-4761-ae66-0b8dd67d0b68
+2026-06-19 16:09:54,030 [INFO] resource_resolver.resolver: [Resolver] sn:ap-floor-006 -> mock_network/mock-network-manager.local cache=hit 0ms
+2026-06-19 16:09:54,381 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=access_point&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 16:09:54,382 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> network-agent | url=http://127.0.0.1:8006/network-agent/execute-task
+2026-06-19 16:09:55,183 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8006/network-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 16:09:55,187 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 16:09:56,805 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 16:09:56,808 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=stg-array-14
+2026-06-19 16:09:56,809 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=stg-array-14
+2026-06-19 16:09:56,831 [INFO] resource_resolver.resolver: [Resolver] sn:stg-array-14 -> oneview/oneview-01.mgmt.local cache=miss 3ms
+2026-06-19 16:09:57,147 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=storage&provider=oneview "HTTP/1.1 200 OK"
+2026-06-19 16:09:57,166 [INFO] resource_resolver.resolver: [Resolver] sn:stg-array-14 -> oneview/oneview-01.mgmt.local cache=hit 0ms
+2026-06-19 16:09:57,509 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=storage&provider=oneview "HTTP/1.1 200 OK"
+2026-06-19 16:09:57,510 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> onprem-agent | url=http://127.0.0.1:8008/tasks
+2026-06-19 16:09:58,592 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8008/tasks "HTTP/1.1 200 OK"
+2026-06-19 16:09:58,596 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 16:10:00,422 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 16:10:00,428 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_storage' device_type='snapshot' action_key='STATUS'
+2026-06-19 16:10:00,429 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_storage' device_type='snapshot' action_key='STATUS' — using fallback path /data-services/v1beta1/devices/40b3da26-2494-4949-8f27-74bf1ef392fe
+2026-06-19 16:10:00,449 [INFO] resource_resolver.resolver: [Resolver] sn:alletra-array-008 -> mock_storage/mock-storage-manager.local cache=hit 0ms
+2026-06-19 16:10:00,811 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=snapshot&provider=mock_storage "HTTP/1.1 200 OK"
+2026-06-19 16:10:00,816 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_storage' device_type='snapshot' action_key='STATUS'
+2026-06-19 16:10:00,816 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_storage' device_type='snapshot' action_key='STATUS' — using fallback path /data-services/v1beta1/devices/40b3da26-2494-4949-8f27-74bf1ef392fe
+2026-06-19 16:10:00,818 [INFO] resource_resolver.resolver: [Resolver] sn:alletra-array-008 -> mock_storage/mock-storage-manager.local cache=hit 0ms
+2026-06-19 16:10:01,166 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=snapshot&provider=mock_storage "HTTP/1.1 200 OK"
+2026-06-19 16:10:01,166 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> storage-agent | url=http://127.0.0.1:8007/storage-agent/execute-task
+2026-06-19 16:10:01,910 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8007/storage-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 16:10:01,913 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 16:13:05,719 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 16:13:05,724 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='access_point' action_key='STATUS'
+2026-06-19 16:13:05,724 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='access_point' action_key='STATUS' — using fallback path /rest/access_point/7dabb793-79bd-4761-ae66-0b8dd67d0b68
+2026-06-19 16:13:05,750 [INFO] resource_resolver.resolver: [Resolver] sn:ap-floor-006 -> mock_network/mock-network-manager.local cache=hit 0ms
+2026-06-19 16:13:06,126 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=access_point&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 16:13:06,133 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='access_point' action_key='STATUS'
+2026-06-19 16:13:06,133 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='access_point' action_key='STATUS' — using fallback path /rest/access_point/7dabb793-79bd-4761-ae66-0b8dd67d0b68
+2026-06-19 16:13:06,151 [INFO] resource_resolver.resolver: [Resolver] sn:ap-floor-006 -> mock_network/mock-network-manager.local cache=hit 0ms
+2026-06-19 16:13:06,541 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=access_point&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 16:13:06,542 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> network-agent | url=http://127.0.0.1:8006/network-agent/execute-task
+2026-06-19 16:13:07,336 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8006/network-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 16:13:07,339 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 16:18:20,617 [INFO] db: [DB] Connection pool created: 2-10 connections to postgres@localhost:5432/hpe_agentic_ai
+2026-06-19 16:18:20,627 [INFO] db: [DB] Connection test successful
+2026-06-19 16:18:20,628 [INFO] resource_resolver.db_loader: [DB Loader] PostgreSQL registry verified and connected
+2026-06-19 16:18:22,662 [INFO] resource_resolver.cache: [Cache] Memurai connected at localhost:6379/db=0 ttl=900s
+2026-06-19 16:18:22,664 [INFO] resource_resolver.polling_engine: [Polling] Starting background polling thread (interval=600s)
+2026-06-19 16:18:22,728 [INFO] mcp.server.lowlevel.server: Processing request of type ListToolsRequest
+2026-06-19 16:18:22,730 [INFO] mcp.server.lowlevel.server: Processing request of type ListPromptsRequest
+2026-06-19 16:18:22,732 [INFO] mcp.server.lowlevel.server: Processing request of type ListResourcesRequest
+2026-06-19 16:18:27,665 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=cfa38757 max_workers=8
+2026-06-19 16:18:27,666 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=cfa38757 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-19 16:18:27,667 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting collection | host=oneview-01.mgmt.local
+2026-06-19 16:18:27,668 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting collection | acid=coms-01.cloud.local
+2026-06-19 16:18:27,668 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-19 16:18:27,669 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-19 16:18:27,685 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting collection | host=mock-network-manager.local
+2026-06-19 16:18:27,702 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting collection | host=mock-cloud-manager.local
+2026-06-19 16:18:27,745 [INFO] resource_resolver.polling_engine: [Polling][OneView] Collection complete | host=oneview-01.mgmt.local devices=1009 elapsed_ms=78
+2026-06-19 16:18:27,748 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection complete | acid=coms-01.cloud.local devices=507 elapsed_ms=79
+2026-06-19 16:18:27,752 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=1009 cycle=cfa38757
+2026-06-19 16:18:27,757 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=507 cycle=cfa38757
+2026-06-19 16:18:27,759 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=90
+2026-06-19 16:18:27,761 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=58
+2026-06-19 16:18:27,763 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Collection complete | host=mock-network-manager.local devices=200 elapsed_ms=61
+2026-06-19 16:18:27,764 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=cfa38757
+2026-06-19 16:18:27,764 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=cfa38757
+2026-06-19 16:18:27,765 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=200 cycle=cfa38757
+2026-06-19 16:18:28,128 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-19 16:18:28,132 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=200 elapsed_ms=463
+2026-06-19 16:18:28,133 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=200 cycle=cfa38757
+2026-06-19 16:18:28,134 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=cfa38757 sources=6 collection_ms=468
+2026-06-19 16:18:28,136 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=cfa38757
+2026-06-19 16:18:28,137 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=cfa38757
+2026-06-19 16:18:28,137 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=cfa38757
+2026-06-19 16:18:28,138 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=cfa38757
+2026-06-19 16:18:28,138 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=cfa38757
+2026-06-19 16:18:28,139 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=cfa38757
+2026-06-19 16:18:28,139 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=cfa38757 total_ms=473 success=6 failed=0
+2026-06-19 16:18:31,087 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 16:18:31,696 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='access_point' action_key='STATUS'
+2026-06-19 16:18:31,696 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='access_point' action_key='STATUS' — using fallback path /rest/access_point/7dabb793-79bd-4761-ae66-0b8dd67d0b68
+2026-06-19 16:18:31,711 [INFO] resource_resolver.resolver: [Resolver] sn:ap-floor-006 -> mock_network/mock-network-manager.local cache=hit 1ms
+2026-06-19 16:18:32,137 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=access_point&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 16:18:32,145 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='access_point' action_key='STATUS'
+2026-06-19 16:18:32,145 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='access_point' action_key='STATUS' — using fallback path /rest/access_point/7dabb793-79bd-4761-ae66-0b8dd67d0b68
+2026-06-19 16:18:32,147 [INFO] resource_resolver.resolver: [Resolver] sn:ap-floor-006 -> mock_network/mock-network-manager.local cache=hit 0ms
+2026-06-19 16:18:32,498 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=access_point&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 16:18:32,498 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> network-agent | url=http://127.0.0.1:8006/network-agent/execute-task
+2026-06-19 16:18:33,135 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8006/network-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 16:18:35,166 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 16:19:38,578 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 16:19:38,582 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='access_point' action_key='OFF'
+2026-06-19 16:19:38,583 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='access_point' action_key='OFF' — using fallback path /rest/access_point/7dabb793-79bd-4761-ae66-0b8dd67d0b68
+2026-06-19 16:19:38,609 [INFO] resource_resolver.resolver: [Resolver] sn:ap-floor-006 -> mock_network/mock-network-manager.local cache=hit 0ms
+2026-06-19 16:19:39,021 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=access_point&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 16:19:39,025 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='access_point' action_key='OFF'
+2026-06-19 16:19:39,025 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='access_point' action_key='OFF' — using fallback path /rest/access_point/7dabb793-79bd-4761-ae66-0b8dd67d0b68
+2026-06-19 16:19:39,027 [INFO] resource_resolver.resolver: [Resolver] sn:ap-floor-006 -> mock_network/mock-network-manager.local cache=hit 0ms
+2026-06-19 16:19:39,397 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=access_point&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 16:19:39,397 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> network-agent | url=http://127.0.0.1:8006/network-agent/execute-task
+2026-06-19 16:19:39,785 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8006/network-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 16:22:10,146 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 16:22:10,152 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=vlan-cfg-007
+2026-06-19 16:22:10,153 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=vlan-cfg-007
+2026-06-19 16:22:10,156 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='vlan' action_key='STATUS'
+2026-06-19 16:22:10,156 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='vlan' action_key='STATUS' — using fallback path /rest/vlan/558a63f0-1dc9-4952-a4d6-a2a5082dd92c
+2026-06-19 16:22:10,182 [INFO] resource_resolver.resolver: [Resolver] sn:vlan-cfg-007 -> mock_network/mock-network-manager.local cache=miss 6ms
+2026-06-19 16:22:10,589 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=vlan&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 16:22:10,594 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='vlan' action_key='STATUS'
+2026-06-19 16:22:10,594 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='vlan' action_key='STATUS' — using fallback path /rest/vlan/558a63f0-1dc9-4952-a4d6-a2a5082dd92c
+2026-06-19 16:22:10,595 [INFO] resource_resolver.resolver: [Resolver] sn:vlan-cfg-007 -> mock_network/mock-network-manager.local cache=hit 0ms
+2026-06-19 16:22:10,973 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=vlan&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 16:22:10,974 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> network-agent | url=http://127.0.0.1:8006/network-agent/execute-task
+2026-06-19 16:22:11,712 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8006/network-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 16:22:11,717 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 16:28:28,142 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=1c1b7394 max_workers=8
+2026-06-19 16:28:28,142 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=1c1b7394 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-19 16:28:28,144 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting collection | host=oneview-01.mgmt.local
+2026-06-19 16:28:28,145 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting collection | acid=coms-01.cloud.local
+2026-06-19 16:28:28,155 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-19 16:28:28,160 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-19 16:28:28,164 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting collection | host=mock-network-manager.local
+2026-06-19 16:28:28,166 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting collection | host=mock-cloud-manager.local
+2026-06-19 16:28:28,577 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection complete | acid=coms-01.cloud.local devices=507 elapsed_ms=430
+2026-06-19 16:28:28,591 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=507 cycle=1c1b7394
+2026-06-19 16:28:28,595 [INFO] resource_resolver.polling_engine: [Polling][OneView] Collection complete | host=oneview-01.mgmt.local devices=1009 elapsed_ms=449
+2026-06-19 16:28:28,597 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=1009 cycle=1c1b7394
+2026-06-19 16:28:28,601 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=442
+2026-06-19 16:28:28,617 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Collection complete | host=mock-network-manager.local devices=200 elapsed_ms=452
+2026-06-19 16:28:28,623 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=456
+2026-06-19 16:28:28,624 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=1c1b7394
+2026-06-19 16:28:28,625 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=200 cycle=1c1b7394
+2026-06-19 16:28:28,626 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=1c1b7394
+2026-06-19 16:28:28,899 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-19 16:28:28,919 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=200 elapsed_ms=758
+2026-06-19 16:28:28,923 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=200 cycle=1c1b7394
+2026-06-19 16:28:28,928 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=1c1b7394 sources=6 collection_ms=786
+2026-06-19 16:28:28,930 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=1c1b7394
+2026-06-19 16:28:28,932 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=1c1b7394
+2026-06-19 16:28:28,933 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=1c1b7394
+2026-06-19 16:28:28,935 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=1c1b7394
+2026-06-19 16:28:28,936 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=1c1b7394
+2026-06-19 16:28:28,937 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=1c1b7394
+2026-06-19 16:28:28,938 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=1c1b7394 total_ms=796 success=6 failed=0
+2026-06-19 16:30:41,266 [INFO] db: [DB] Connection pool created: 2-10 connections to postgres@localhost:5432/hpe_agentic_ai
+2026-06-19 16:30:41,277 [INFO] db: [DB] Connection test successful
+2026-06-19 16:30:41,277 [INFO] resource_resolver.db_loader: [DB Loader] PostgreSQL registry verified and connected
+2026-06-19 16:30:43,331 [INFO] resource_resolver.cache: [Cache] Memurai connected at localhost:6379/db=0 ttl=900s
+2026-06-19 16:30:43,333 [INFO] resource_resolver.polling_engine: [Polling] Starting background polling thread (interval=600s)
+2026-06-19 16:30:43,389 [INFO] mcp.server.lowlevel.server: Processing request of type ListToolsRequest
+2026-06-19 16:30:43,392 [INFO] mcp.server.lowlevel.server: Processing request of type ListPromptsRequest
+2026-06-19 16:30:43,394 [INFO] mcp.server.lowlevel.server: Processing request of type ListResourcesRequest
+2026-06-19 16:30:48,335 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=554ec8e7 max_workers=8
+2026-06-19 16:30:48,335 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=554ec8e7 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-19 16:30:48,336 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting collection | host=oneview-01.mgmt.local
+2026-06-19 16:30:48,337 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting collection | acid=coms-01.cloud.local
+2026-06-19 16:30:48,338 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-19 16:30:48,339 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-19 16:30:48,340 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting collection | host=mock-network-manager.local
+2026-06-19 16:30:48,342 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting collection | host=mock-cloud-manager.local
+2026-06-19 16:30:48,495 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 16:30:48,700 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection complete | acid=coms-01.cloud.local devices=507 elapsed_ms=362
+2026-06-19 16:30:48,717 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=507 cycle=554ec8e7
+2026-06-19 16:30:48,721 [INFO] resource_resolver.polling_engine: [Polling][OneView] Collection complete | host=oneview-01.mgmt.local devices=1009 elapsed_ms=384
+2026-06-19 16:30:48,724 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=385
+2026-06-19 16:30:48,726 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=1009 cycle=554ec8e7
+2026-06-19 16:30:48,727 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=554ec8e7
+2026-06-19 16:30:48,730 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Collection complete | host=mock-network-manager.local devices=200 elapsed_ms=389
+2026-06-19 16:30:48,734 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=392
+2026-06-19 16:30:48,735 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=200 cycle=554ec8e7
+2026-06-19 16:30:48,736 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=554ec8e7
+2026-06-19 16:30:49,079 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-19 16:30:49,085 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=200 elapsed_ms=745
+2026-06-19 16:30:49,087 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=200 cycle=554ec8e7
+2026-06-19 16:30:49,100 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=554ec8e7 sources=6 collection_ms=765
+2026-06-19 16:30:49,103 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=554ec8e7
+2026-06-19 16:30:49,104 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=554ec8e7
+2026-06-19 16:30:49,105 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=554ec8e7
+2026-06-19 16:30:49,106 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=554ec8e7
+2026-06-19 16:30:49,107 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=554ec8e7
+2026-06-19 16:30:49,108 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=554ec8e7
+2026-06-19 16:30:49,108 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=554ec8e7 total_ms=773 success=6 failed=0
+2026-06-19 16:30:49,691 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='vlan' action_key='OFF'
+2026-06-19 16:30:49,691 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='vlan' action_key='OFF' — using fallback path /rest/vlan/558a63f0-1dc9-4952-a4d6-a2a5082dd92c
+2026-06-19 16:30:49,693 [INFO] resource_resolver.resolver: [Resolver] sn:vlan-cfg-007 -> mock_network/mock-network-manager.local cache=hit 1ms
+2026-06-19 16:30:50,038 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=vlan&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 16:30:50,042 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='vlan' action_key='OFF'
+2026-06-19 16:30:50,043 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='vlan' action_key='OFF' — using fallback path /rest/vlan/558a63f0-1dc9-4952-a4d6-a2a5082dd92c
+2026-06-19 16:30:50,070 [INFO] resource_resolver.resolver: [Resolver] sn:vlan-cfg-007 -> mock_network/mock-network-manager.local cache=hit 0ms
+2026-06-19 16:30:50,422 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=vlan&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 16:30:50,423 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> network-agent | url=http://127.0.0.1:8006/network-agent/execute-task
+2026-06-19 16:30:51,133 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8006/network-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 16:30:53,189 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 16:32:24,789 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 16:32:24,795 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='vlan' action_key='ON'
+2026-06-19 16:32:24,795 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='vlan' action_key='ON' — using fallback path /rest/vlan/558a63f0-1dc9-4952-a4d6-a2a5082dd92c
+2026-06-19 16:32:24,799 [INFO] resource_resolver.resolver: [Resolver] sn:vlan-cfg-007 -> mock_network/mock-network-manager.local cache=hit 0ms
+2026-06-19 16:32:25,177 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=vlan&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 16:32:25,183 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='vlan' action_key='ON'
+2026-06-19 16:32:25,183 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='vlan' action_key='ON' — using fallback path /rest/vlan/558a63f0-1dc9-4952-a4d6-a2a5082dd92c
+2026-06-19 16:32:25,202 [INFO] resource_resolver.resolver: [Resolver] sn:vlan-cfg-007 -> mock_network/mock-network-manager.local cache=hit 0ms
+2026-06-19 16:32:25,566 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=vlan&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 16:32:25,567 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> network-agent | url=http://127.0.0.1:8006/network-agent/execute-task
+2026-06-19 16:32:26,369 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8006/network-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 16:32:26,376 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 16:33:52,511 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 16:34:21,783 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 16:40:49,111 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=54ad7e26 max_workers=8
+2026-06-19 16:40:49,112 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=54ad7e26 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-19 16:40:49,113 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting collection | host=oneview-01.mgmt.local
+2026-06-19 16:40:49,114 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting collection | acid=coms-01.cloud.local
+2026-06-19 16:40:49,115 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-19 16:40:49,126 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-19 16:40:49,155 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting collection | host=mock-network-manager.local
+2026-06-19 16:40:49,157 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting collection | host=mock-cloud-manager.local
+2026-06-19 16:40:49,199 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection complete | acid=coms-01.cloud.local devices=507 elapsed_ms=84
+2026-06-19 16:40:49,207 [INFO] resource_resolver.polling_engine: [Polling][OneView] Collection complete | host=oneview-01.mgmt.local devices=1009 elapsed_ms=93
+2026-06-19 16:40:49,211 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=507 cycle=54ad7e26
+2026-06-19 16:40:49,214 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=99
+2026-06-19 16:40:49,218 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=1009 cycle=54ad7e26
+2026-06-19 16:40:49,222 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=61
+2026-06-19 16:40:49,224 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Collection complete | host=mock-network-manager.local devices=200 elapsed_ms=68
+2026-06-19 16:40:49,224 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=54ad7e26
+2026-06-19 16:40:49,225 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=54ad7e26
+2026-06-19 16:40:49,225 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=200 cycle=54ad7e26
+2026-06-19 16:40:49,515 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-19 16:40:49,518 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=200 elapsed_ms=363
+2026-06-19 16:40:49,518 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=200 cycle=54ad7e26
+2026-06-19 16:40:49,519 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=54ad7e26 sources=6 collection_ms=408
+2026-06-19 16:40:49,521 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=54ad7e26
+2026-06-19 16:40:49,522 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=54ad7e26
+2026-06-19 16:40:49,522 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=54ad7e26
+2026-06-19 16:40:49,523 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=54ad7e26
+2026-06-19 16:40:49,524 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=54ad7e26
+2026-06-19 16:40:49,524 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=54ad7e26
+2026-06-19 16:40:49,524 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=54ad7e26 total_ms=413 success=6 failed=0
+2026-06-19 17:07:22,151 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=a8b28e49 max_workers=8
+2026-06-19 17:07:22,151 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=a8b28e49 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-19 17:07:22,152 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting collection | host=oneview-01.mgmt.local
+2026-06-19 17:07:22,153 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting collection | acid=coms-01.cloud.local
+2026-06-19 17:07:22,153 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-19 17:07:22,183 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-19 17:07:22,185 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting collection | host=mock-network-manager.local
+2026-06-19 17:07:22,185 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting collection | host=mock-cloud-manager.local
+2026-06-19 17:07:22,217 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection complete | acid=coms-01.cloud.local devices=507 elapsed_ms=63
+2026-06-19 17:07:22,218 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=507 cycle=a8b28e49
+2026-06-19 17:07:22,231 [INFO] resource_resolver.polling_engine: [Polling][OneView] Collection complete | host=oneview-01.mgmt.local devices=1009 elapsed_ms=78
+2026-06-19 17:07:22,232 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=1009 cycle=a8b28e49
+2026-06-19 17:07:22,237 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=82
+2026-06-19 17:07:22,237 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=a8b28e49
+2026-06-19 17:07:22,244 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=57
+2026-06-19 17:07:22,244 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=a8b28e49
+2026-06-19 17:07:22,247 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Collection complete | host=mock-network-manager.local devices=200 elapsed_ms=62
+2026-06-19 17:07:22,248 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=200 cycle=a8b28e49
+2026-06-19 17:07:22,567 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-19 17:07:22,570 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=200 elapsed_ms=386
+2026-06-19 17:07:22,570 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=200 cycle=a8b28e49
+2026-06-19 17:07:22,572 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=a8b28e49 sources=6 collection_ms=420
+2026-06-19 17:07:22,574 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=a8b28e49
+2026-06-19 17:07:22,576 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=a8b28e49
+2026-06-19 17:07:22,577 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=a8b28e49
+2026-06-19 17:07:22,579 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=a8b28e49
+2026-06-19 17:07:22,580 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=a8b28e49
+2026-06-19 17:07:22,581 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=a8b28e49
+2026-06-19 17:07:22,581 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=a8b28e49 total_ms=430 success=6 failed=0
+2026-06-19 17:08:11,087 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 17:08:11,892 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=edge-r03-10022
+2026-06-19 17:08:11,893 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=edge-r03-10022
+2026-06-19 17:08:11,902 [INFO] resource_resolver.resolver: [Resolver] sn:edge-r03-10022 -> coms/coms-01.cloud.local cache=miss 4ms
+2026-06-19 17:08:12,306 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=router&provider=coms "HTTP/1.1 200 OK"
+2026-06-19 17:08:12,312 [INFO] resource_resolver.resolver: [Resolver] sn:edge-r03-10022 -> coms/coms-01.cloud.local cache=hit 0ms
+2026-06-19 17:08:12,634 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=router&provider=coms "HTTP/1.1 200 OK"
+2026-06-19 17:08:12,635 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> onprem-agent | url=http://127.0.0.1:8008/tasks
+2026-06-19 17:08:13,706 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8008/tasks "HTTP/1.1 200 OK"
+2026-06-19 17:08:13,711 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 17:08:18,616 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 17:08:18,620 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=ap-floor-006
+2026-06-19 17:08:18,621 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=ap-floor-006
+2026-06-19 17:08:18,624 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='access_point' action_key='STATUS'
+2026-06-19 17:08:18,625 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='access_point' action_key='STATUS' — using fallback path /rest/access_point/7dabb793-79bd-4761-ae66-0b8dd67d0b68
+2026-06-19 17:08:18,644 [INFO] resource_resolver.resolver: [Resolver] sn:ap-floor-006 -> mock_network/mock-network-manager.local cache=miss 4ms
+2026-06-19 17:08:19,041 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=access_point&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 17:08:19,045 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='access_point' action_key='STATUS'
+2026-06-19 17:08:19,045 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='access_point' action_key='STATUS' — using fallback path /rest/access_point/7dabb793-79bd-4761-ae66-0b8dd67d0b68
+2026-06-19 17:08:19,048 [INFO] resource_resolver.resolver: [Resolver] sn:ap-floor-006 -> mock_network/mock-network-manager.local cache=hit 0ms
+2026-06-19 17:08:19,396 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=access_point&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 17:08:19,396 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> network-agent | url=http://127.0.0.1:8006/network-agent/execute-task
+2026-06-19 17:08:20,077 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8006/network-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 17:08:20,080 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 17:08:23,839 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 17:08:23,842 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=stg-array-14
+2026-06-19 17:08:23,843 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=stg-array-14
+2026-06-19 17:08:23,848 [INFO] resource_resolver.resolver: [Resolver] sn:stg-array-14 -> oneview/oneview-01.mgmt.local cache=miss 3ms
+2026-06-19 17:08:24,201 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=storage&provider=oneview "HTTP/1.1 200 OK"
+2026-06-19 17:08:24,222 [INFO] resource_resolver.resolver: [Resolver] sn:stg-array-14 -> oneview/oneview-01.mgmt.local cache=hit 0ms
+2026-06-19 17:08:24,551 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=storage&provider=oneview "HTTP/1.1 200 OK"
+2026-06-19 17:08:24,552 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> onprem-agent | url=http://127.0.0.1:8008/tasks
+2026-06-19 17:08:25,495 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8008/tasks "HTTP/1.1 200 OK"
+2026-06-19 17:08:25,499 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 17:08:27,498 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 17:08:27,502 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=alletra-array-008
+2026-06-19 17:08:27,504 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=alletra-array-008
+2026-06-19 17:08:27,508 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_storage' device_type='snapshot' action_key='STATUS'
+2026-06-19 17:08:27,508 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_storage' device_type='snapshot' action_key='STATUS' — using fallback path /data-services/v1beta1/devices/40b3da26-2494-4949-8f27-74bf1ef392fe
+2026-06-19 17:08:27,529 [INFO] resource_resolver.resolver: [Resolver] sn:alletra-array-008 -> mock_storage/mock-storage-manager.local cache=miss 5ms
+2026-06-19 17:08:27,871 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=snapshot&provider=mock_storage "HTTP/1.1 200 OK"
+2026-06-19 17:08:27,876 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_storage' device_type='snapshot' action_key='STATUS'
+2026-06-19 17:08:27,876 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_storage' device_type='snapshot' action_key='STATUS' — using fallback path /data-services/v1beta1/devices/40b3da26-2494-4949-8f27-74bf1ef392fe
+2026-06-19 17:08:27,896 [INFO] resource_resolver.resolver: [Resolver] sn:alletra-array-008 -> mock_storage/mock-storage-manager.local cache=hit 0ms
+2026-06-19 17:08:28,239 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=snapshot&provider=mock_storage "HTTP/1.1 200 OK"
+2026-06-19 17:08:28,240 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> storage-agent | url=http://127.0.0.1:8007/storage-agent/execute-task
+2026-06-19 17:08:28,985 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8007/storage-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 17:08:28,988 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 17:15:41,428 [INFO] db: [DB] Connection pool created: 2-10 connections to postgres@localhost:5432/hpe_agentic_ai
+2026-06-19 17:15:41,454 [INFO] db: [DB] Connection test successful
+2026-06-19 17:15:41,454 [INFO] resource_resolver.db_loader: [DB Loader] PostgreSQL registry verified and connected
+2026-06-19 17:15:43,484 [INFO] resource_resolver.cache: [Cache] Memurai connected at localhost:6379/db=0 ttl=900s
+2026-06-19 17:15:43,486 [INFO] resource_resolver.polling_engine: [Polling] Starting background polling thread (interval=600s)
+2026-06-19 17:15:43,537 [INFO] mcp.server.lowlevel.server: Processing request of type ListToolsRequest
+2026-06-19 17:15:43,539 [INFO] mcp.server.lowlevel.server: Processing request of type ListPromptsRequest
+2026-06-19 17:15:43,540 [INFO] mcp.server.lowlevel.server: Processing request of type ListResourcesRequest
+2026-06-19 17:15:48,492 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=1b3c5a42 max_workers=8
+2026-06-19 17:15:48,493 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=1b3c5a42 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-19 17:15:48,523 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting collection | host=oneview-01.mgmt.local
+2026-06-19 17:15:48,528 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting collection | acid=coms-01.cloud.local
+2026-06-19 17:15:48,529 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-19 17:15:48,530 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-19 17:15:48,531 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting collection | host=mock-network-manager.local
+2026-06-19 17:15:48,532 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting collection | host=mock-cloud-manager.local
+2026-06-19 17:15:48,720 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection complete | acid=coms-01.cloud.local devices=507 elapsed_ms=191
+2026-06-19 17:15:48,725 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=507 cycle=1b3c5a42
+2026-06-19 17:15:48,730 [INFO] resource_resolver.polling_engine: [Polling][OneView] Collection complete | host=oneview-01.mgmt.local devices=1009 elapsed_ms=206
+2026-06-19 17:15:48,733 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=203
+2026-06-19 17:15:48,734 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=1009 cycle=1b3c5a42
+2026-06-19 17:15:48,736 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Collection complete | host=mock-network-manager.local devices=200 elapsed_ms=204
+2026-06-19 17:15:48,737 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=1b3c5a42
+2026-06-19 17:15:48,739 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=206
+2026-06-19 17:15:48,740 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=200 cycle=1b3c5a42
+2026-06-19 17:15:48,741 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=1b3c5a42
+2026-06-19 17:15:49,008 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-19 17:15:49,011 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=200 elapsed_ms=481
+2026-06-19 17:15:49,012 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=200 cycle=1b3c5a42
+2026-06-19 17:15:49,013 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=1b3c5a42 sources=6 collection_ms=521
+2026-06-19 17:15:49,020 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=1b3c5a42
+2026-06-19 17:15:49,021 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=1b3c5a42
+2026-06-19 17:15:49,021 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=1b3c5a42
+2026-06-19 17:15:49,022 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=1b3c5a42
+2026-06-19 17:15:49,022 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=1b3c5a42
+2026-06-19 17:15:49,023 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=1b3c5a42
+2026-06-19 17:15:49,023 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=1b3c5a42 total_ms=530 success=6 failed=0
+2026-06-19 17:21:50,177 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 17:21:57,910 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 17:21:57,951 [INFO] resource_resolver.resolver: [Resolver] sn:edge-r03-10022 -> coms/coms-01.cloud.local cache=hit 26ms
+2026-06-19 17:21:58,306 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=router&provider=coms "HTTP/1.1 200 OK"
+2026-06-19 17:21:58,310 [INFO] resource_resolver.resolver: [Resolver] sn:edge-r03-10022 -> coms/coms-01.cloud.local cache=hit 0ms
+2026-06-19 17:21:58,656 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=router&provider=coms "HTTP/1.1 200 OK"
+2026-06-19 17:21:58,656 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> onprem-agent | url=http://127.0.0.1:8008/tasks
+2026-06-19 17:21:59,655 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8008/tasks "HTTP/1.1 200 OK"
+2026-06-19 17:22:01,688 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 17:22:04,862 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 17:22:04,866 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='access_point' action_key='STATUS'
+2026-06-19 17:22:04,866 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='access_point' action_key='STATUS' — using fallback path /rest/access_point/7dabb793-79bd-4761-ae66-0b8dd67d0b68
+2026-06-19 17:22:04,868 [INFO] resource_resolver.resolver: [Resolver] sn:ap-floor-006 -> mock_network/mock-network-manager.local cache=hit 1ms
+2026-06-19 17:22:05,302 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=access_point&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 17:22:05,305 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='access_point' action_key='STATUS'
+2026-06-19 17:22:05,306 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='access_point' action_key='STATUS' — using fallback path /rest/access_point/7dabb793-79bd-4761-ae66-0b8dd67d0b68
+2026-06-19 17:22:05,323 [INFO] resource_resolver.resolver: [Resolver] sn:ap-floor-006 -> mock_network/mock-network-manager.local cache=hit 0ms
+2026-06-19 17:22:05,675 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=access_point&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 17:22:05,675 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> network-agent | url=http://127.0.0.1:8006/network-agent/execute-task
+2026-06-19 17:22:06,483 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8006/network-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 17:22:06,488 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 17:22:08,972 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 17:22:08,993 [INFO] resource_resolver.resolver: [Resolver] sn:stg-array-14 -> oneview/oneview-01.mgmt.local cache=hit 0ms
+2026-06-19 17:22:09,318 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=storage&provider=oneview "HTTP/1.1 200 OK"
+2026-06-19 17:22:09,340 [INFO] resource_resolver.resolver: [Resolver] sn:stg-array-14 -> oneview/oneview-01.mgmt.local cache=hit 0ms
+2026-06-19 17:22:09,665 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=storage&provider=oneview "HTTP/1.1 200 OK"
+2026-06-19 17:22:09,665 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> onprem-agent | url=http://127.0.0.1:8008/tasks
+2026-06-19 17:22:10,650 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8008/tasks "HTTP/1.1 200 OK"
+2026-06-19 17:22:10,655 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 17:22:12,563 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 17:22:12,566 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_storage' device_type='snapshot' action_key='STATUS'
+2026-06-19 17:22:12,566 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_storage' device_type='snapshot' action_key='STATUS' — using fallback path /data-services/v1beta1/devices/40b3da26-2494-4949-8f27-74bf1ef392fe
+2026-06-19 17:22:12,585 [INFO] resource_resolver.resolver: [Resolver] sn:alletra-array-008 -> mock_storage/mock-storage-manager.local cache=hit 0ms
+2026-06-19 17:22:12,929 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=snapshot&provider=mock_storage "HTTP/1.1 200 OK"
+2026-06-19 17:22:12,934 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_storage' device_type='snapshot' action_key='STATUS'
+2026-06-19 17:22:12,934 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_storage' device_type='snapshot' action_key='STATUS' — using fallback path /data-services/v1beta1/devices/40b3da26-2494-4949-8f27-74bf1ef392fe
+2026-06-19 17:22:12,952 [INFO] resource_resolver.resolver: [Resolver] sn:alletra-array-008 -> mock_storage/mock-storage-manager.local cache=hit 0ms
+2026-06-19 17:22:13,316 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=snapshot&provider=mock_storage "HTTP/1.1 200 OK"
+2026-06-19 17:22:13,317 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> storage-agent | url=http://127.0.0.1:8007/storage-agent/execute-task
+2026-06-19 17:22:13,994 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8007/storage-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 17:22:13,997 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 17:25:49,052 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=fb76e286 max_workers=8
+2026-06-19 17:25:49,066 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=fb76e286 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-19 17:25:49,077 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting collection | host=oneview-01.mgmt.local
+2026-06-19 17:25:49,089 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting collection | acid=coms-01.cloud.local
+2026-06-19 17:25:49,092 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-19 17:25:49,100 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-19 17:25:49,112 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting collection | host=mock-network-manager.local
+2026-06-19 17:25:49,115 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting collection | host=mock-cloud-manager.local
+2026-06-19 17:25:49,543 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection complete | acid=coms-01.cloud.local devices=507 elapsed_ms=453
+2026-06-19 17:25:49,550 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=507 cycle=fb76e286
+2026-06-19 17:25:49,551 [INFO] resource_resolver.polling_engine: [Polling][OneView] Collection complete | host=oneview-01.mgmt.local devices=1009 elapsed_ms=473
+2026-06-19 17:25:49,553 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=460
+2026-06-19 17:25:49,556 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=1009 cycle=fb76e286
+2026-06-19 17:25:49,558 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Collection complete | host=mock-network-manager.local devices=200 elapsed_ms=444
+2026-06-19 17:25:49,559 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=fb76e286
+2026-06-19 17:25:49,561 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=442
+2026-06-19 17:25:49,562 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=200 cycle=fb76e286
+2026-06-19 17:25:49,563 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=fb76e286
+2026-06-19 17:25:49,728 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-19 17:25:49,732 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=200 elapsed_ms=630
+2026-06-19 17:25:49,733 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=200 cycle=fb76e286
+2026-06-19 17:25:49,734 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=fb76e286 sources=6 collection_ms=690
+2026-06-19 17:25:49,739 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=fb76e286
+2026-06-19 17:25:49,740 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=fb76e286
+2026-06-19 17:25:49,741 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=fb76e286
+2026-06-19 17:25:49,742 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=fb76e286
+2026-06-19 17:25:49,743 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=fb76e286
+2026-06-19 17:25:49,743 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=fb76e286
+2026-06-19 17:25:49,744 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=fb76e286 total_ms=700 success=6 failed=0
+2026-06-19 17:35:49,746 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=b9d7dc39 max_workers=8
+2026-06-19 17:35:49,746 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=b9d7dc39 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-19 17:35:49,774 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting collection | host=oneview-01.mgmt.local
+2026-06-19 17:35:49,775 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting collection | acid=coms-01.cloud.local
+2026-06-19 17:35:49,776 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-19 17:35:49,802 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-19 17:35:49,813 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting collection | host=mock-network-manager.local
+2026-06-19 17:35:49,817 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting collection | host=mock-cloud-manager.local
+2026-06-19 17:35:49,860 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection complete | acid=coms-01.cloud.local devices=507 elapsed_ms=84
+2026-06-19 17:35:49,863 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=507 cycle=b9d7dc39
+2026-06-19 17:35:49,871 [INFO] resource_resolver.polling_engine: [Polling][OneView] Collection complete | host=oneview-01.mgmt.local devices=1009 elapsed_ms=96
+2026-06-19 17:35:49,873 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=96
+2026-06-19 17:35:49,876 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Collection complete | host=mock-network-manager.local devices=200 elapsed_ms=61
+2026-06-19 17:35:49,877 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=1009 cycle=b9d7dc39
+2026-06-19 17:35:49,879 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=b9d7dc39
+2026-06-19 17:35:49,880 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=200 cycle=b9d7dc39
+2026-06-19 17:35:49,882 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=65
+2026-06-19 17:35:49,883 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=b9d7dc39
+2026-06-19 17:35:50,210 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-19 17:35:50,224 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=200 elapsed_ms=417
+2026-06-19 17:35:50,224 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=200 cycle=b9d7dc39
+2026-06-19 17:35:50,225 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=b9d7dc39 sources=6 collection_ms=479
+2026-06-19 17:35:50,227 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=b9d7dc39
+2026-06-19 17:35:50,228 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=b9d7dc39
+2026-06-19 17:35:50,230 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=b9d7dc39
+2026-06-19 17:35:50,232 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=b9d7dc39
+2026-06-19 17:35:50,233 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=b9d7dc39
+2026-06-19 17:35:50,234 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=b9d7dc39
+2026-06-19 17:35:50,234 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=b9d7dc39 total_ms=488 success=6 failed=0
+2026-06-19 17:45:07,376 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 17:45:08,298 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=edge-r03-10022
+2026-06-19 17:45:08,310 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=edge-r03-10022
+2026-06-19 17:45:08,327 [INFO] resource_resolver.resolver: [Resolver] sn:edge-r03-10022 -> coms/coms-01.cloud.local cache=miss 27ms
+2026-06-19 17:45:08,744 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=router&provider=coms "HTTP/1.1 200 OK"
+2026-06-19 17:45:08,751 [INFO] resource_resolver.resolver: [Resolver] sn:edge-r03-10022 -> coms/coms-01.cloud.local cache=hit 2ms
+2026-06-19 17:45:09,086 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=router&provider=coms "HTTP/1.1 200 OK"
+2026-06-19 17:45:09,086 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> onprem-agent | url=http://127.0.0.1:8008/tasks
+2026-06-19 17:45:10,316 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8008/tasks "HTTP/1.1 200 OK"
+2026-06-19 17:45:10,341 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 17:45:11,897 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 17:45:11,919 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=ap-floor-006
+2026-06-19 17:45:11,920 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=ap-floor-006
+2026-06-19 17:45:11,926 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='access_point' action_key='STATUS'
+2026-06-19 17:45:11,927 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='access_point' action_key='STATUS' — using fallback path /rest/access_point/7dabb793-79bd-4761-ae66-0b8dd67d0b68
+2026-06-19 17:45:11,928 [INFO] resource_resolver.resolver: [Resolver] sn:ap-floor-006 -> mock_network/mock-network-manager.local cache=miss 21ms
+2026-06-19 17:45:12,397 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=access_point&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 17:45:12,403 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_network' device_type='access_point' action_key='STATUS'
+2026-06-19 17:45:12,403 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_network' device_type='access_point' action_key='STATUS' — using fallback path /rest/access_point/7dabb793-79bd-4761-ae66-0b8dd67d0b68
+2026-06-19 17:45:12,406 [INFO] resource_resolver.resolver: [Resolver] sn:ap-floor-006 -> mock_network/mock-network-manager.local cache=hit 0ms
+2026-06-19 17:45:12,861 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=access_point&provider=mock_network "HTTP/1.1 200 OK"
+2026-06-19 17:45:12,862 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> network-agent | url=http://127.0.0.1:8006/network-agent/execute-task
+2026-06-19 17:45:13,914 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8006/network-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 17:45:13,918 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 17:45:15,386 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 17:45:15,390 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=stg-array-14
+2026-06-19 17:45:15,391 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=stg-array-14
+2026-06-19 17:45:15,412 [INFO] resource_resolver.resolver: [Resolver] sn:stg-array-14 -> oneview/oneview-01.mgmt.local cache=miss 3ms
+2026-06-19 17:45:15,811 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=storage&provider=oneview "HTTP/1.1 200 OK"
+2026-06-19 17:45:15,819 [INFO] resource_resolver.resolver: [Resolver] sn:stg-array-14 -> oneview/oneview-01.mgmt.local cache=hit 0ms
+2026-06-19 17:45:16,223 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=storage&provider=oneview "HTTP/1.1 200 OK"
+2026-06-19 17:45:16,224 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> onprem-agent | url=http://127.0.0.1:8008/tasks
+2026-06-19 17:45:17,380 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8008/tasks "HTTP/1.1 200 OK"
+2026-06-19 17:45:17,386 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 17:45:18,757 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 17:45:18,762 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=alletra-array-008
+2026-06-19 17:45:18,763 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=alletra-array-008
+2026-06-19 17:45:18,765 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_storage' device_type='snapshot' action_key='STATUS'
+2026-06-19 17:45:18,765 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_storage' device_type='snapshot' action_key='STATUS' — using fallback path /data-services/v1beta1/devices/40b3da26-2494-4949-8f27-74bf1ef392fe
+2026-06-19 17:45:18,767 [INFO] resource_resolver.resolver: [Resolver] sn:alletra-array-008 -> mock_storage/mock-storage-manager.local cache=miss 4ms
+2026-06-19 17:45:19,374 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=snapshot&provider=mock_storage "HTTP/1.1 200 OK"
+2026-06-19 17:45:19,391 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_storage' device_type='snapshot' action_key='STATUS'
+2026-06-19 17:45:19,392 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_storage' device_type='snapshot' action_key='STATUS' — using fallback path /data-services/v1beta1/devices/40b3da26-2494-4949-8f27-74bf1ef392fe
+2026-06-19 17:45:19,412 [INFO] resource_resolver.resolver: [Resolver] sn:alletra-array-008 -> mock_storage/mock-storage-manager.local cache=hit 3ms
+2026-06-19 17:45:19,910 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=snapshot&provider=mock_storage "HTTP/1.1 200 OK"
+2026-06-19 17:45:19,910 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> storage-agent | url=http://127.0.0.1:8007/storage-agent/execute-task
+2026-06-19 17:45:20,799 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8007/storage-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-19 17:45:20,807 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 17:45:50,236 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=d25c6c21 max_workers=8
+2026-06-19 17:45:50,236 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=d25c6c21 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-19 17:45:50,237 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting collection | host=oneview-01.mgmt.local
+2026-06-19 17:45:50,237 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting collection | acid=coms-01.cloud.local
+2026-06-19 17:45:50,238 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-19 17:45:50,239 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-19 17:45:50,239 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting collection | host=mock-network-manager.local
+2026-06-19 17:45:50,240 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting collection | host=mock-cloud-manager.local
+2026-06-19 17:45:50,406 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection complete | acid=coms-01.cloud.local devices=507 elapsed_ms=168
+2026-06-19 17:45:50,412 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=507 cycle=d25c6c21
+2026-06-19 17:45:50,416 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=177
+2026-06-19 17:45:50,422 [INFO] resource_resolver.polling_engine: [Polling][OneView] Collection complete | host=oneview-01.mgmt.local devices=1009 elapsed_ms=184
+2026-06-19 17:45:50,425 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Collection complete | host=mock-network-manager.local devices=200 elapsed_ms=184
+2026-06-19 17:45:50,426 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=d25c6c21
+2026-06-19 17:45:50,429 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=188
+2026-06-19 17:45:50,431 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=1009 cycle=d25c6c21
+2026-06-19 17:45:50,431 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=200 cycle=d25c6c21
+2026-06-19 17:45:50,432 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=d25c6c21
+2026-06-19 17:45:50,674 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-19 17:45:50,677 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=200 elapsed_ms=437
+2026-06-19 17:45:50,677 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=200 cycle=d25c6c21
+2026-06-19 17:45:50,678 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=d25c6c21 sources=6 collection_ms=442
+2026-06-19 17:45:50,680 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=d25c6c21
+2026-06-19 17:45:50,682 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=d25c6c21
+2026-06-19 17:45:50,683 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=d25c6c21
+2026-06-19 17:45:50,684 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=d25c6c21
+2026-06-19 17:45:50,685 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=d25c6c21
+2026-06-19 17:45:50,685 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=d25c6c21
+2026-06-19 17:45:50,685 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=d25c6c21 total_ms=449 success=6 failed=0
+2026-06-19 17:46:26,538 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-19 17:46:26,551 [INFO] resource_resolver.resolver: [Resolver] sn:edge-r03-10022 -> coms/coms-01.cloud.local cache=hit 0ms
+2026-06-19 17:46:26,977 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=router&provider=coms "HTTP/1.1 200 OK"
+2026-06-19 17:46:26,984 [INFO] resource_resolver.resolver: [Resolver] sn:edge-r03-10022 -> coms/coms-01.cloud.local cache=hit 1ms
+2026-06-19 17:46:27,336 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=router&provider=coms "HTTP/1.1 200 OK"
+2026-06-19 17:46:27,337 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> onprem-agent | url=http://127.0.0.1:8008/tasks
+2026-06-19 17:46:28,385 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8008/tasks "HTTP/1.1 200 OK"
+2026-06-19 17:46:28,390 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-19 17:55:50,689 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=5a4f9c97 max_workers=8
+2026-06-19 17:55:50,690 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=5a4f9c97 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-19 17:55:50,691 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting collection | host=oneview-01.mgmt.local
+2026-06-19 17:55:50,692 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting collection | acid=coms-01.cloud.local
+2026-06-19 17:55:50,696 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-19 17:55:50,727 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-19 17:55:50,757 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting collection | host=mock-network-manager.local
+2026-06-19 17:55:50,758 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting collection | host=mock-cloud-manager.local
+2026-06-19 17:55:50,925 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection complete | acid=coms-01.cloud.local devices=507 elapsed_ms=232
+2026-06-19 17:55:50,935 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=507 cycle=5a4f9c97
+2026-06-19 17:55:50,948 [INFO] resource_resolver.polling_engine: [Polling][OneView] Collection complete | host=oneview-01.mgmt.local devices=1009 elapsed_ms=255
+2026-06-19 17:55:50,961 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=264
+2026-06-19 17:55:50,964 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Collection complete | host=mock-network-manager.local devices=200 elapsed_ms=206
+2026-06-19 17:55:50,967 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=1009 cycle=5a4f9c97
+2026-06-19 17:55:50,971 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=211
+2026-06-19 17:55:50,971 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=5a4f9c97
+2026-06-19 17:55:50,972 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=200 cycle=5a4f9c97
+2026-06-19 17:55:50,973 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=5a4f9c97
+2026-06-19 17:55:51,282 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-19 17:55:51,305 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=200 elapsed_ms=577
+2026-06-19 17:55:51,305 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=200 cycle=5a4f9c97
+2026-06-19 17:55:51,306 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=5a4f9c97 sources=6 collection_ms=618
+2026-06-19 17:55:51,308 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=5a4f9c97
+2026-06-19 17:55:51,309 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=5a4f9c97
+2026-06-19 17:55:51,310 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=5a4f9c97
+2026-06-19 17:55:51,311 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=5a4f9c97
+2026-06-19 17:55:51,311 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=5a4f9c97
+2026-06-19 17:55:51,312 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=relation "poll_snapshots" does not exist
+LINE 3:                     FROM poll_snapshots
+                                 ^
+ cycle=5a4f9c97
+2026-06-19 17:55:51,312 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=5a4f9c97 total_ms=623 success=6 failed=0

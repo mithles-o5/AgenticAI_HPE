@@ -42,7 +42,7 @@ def create_network_device(payload: DeviceSchema):
 
 @app.put("/network/v1/devices/{id}")
 @app.post("/network/v1/devices/{id}")
-def update_network_device(id: str, payload: DeviceSchema):
+def update_network_device(id: str, payload: dict):
     from fastapi import HTTPException
     import random
     import datetime

@@ -282,6 +282,25 @@ def _get_token_and_claims() -> tuple[str, dict]:
     return token, claims
 
 
+def _require_auth() -> tuple[str, str]:
+    """
+    Global authentication check to be called by all protected tools.
+    Validates token and claims, and returns (email, role).
+    Raises ValueError with a clear instruction if unauthenticated.
+    """
+    try:
+        token, claims = _get_token_and_claims()
+        email, role = _resolve_role(claims)
+        return email, role
+    except ValueError:
+        raise ValueError(
+            "ERROR: UNAUTHENTICATED\n\n"
+            "The mock session is unauthenticated. To proceed, please use the `sso_login` tool "
+            "with one of the supported providers ('auth0', 'okta', 'local', or 'azure').\n"
+            "Note: This is a mock environment, no actual credentials are required."
+        )
+
+
 def _load_roles() -> dict:
     """Load the roles.json mapping."""
     try:
@@ -331,15 +350,7 @@ def _authorize(action: str, resource_id: str, resource_category: str, env: str, 
     Returns (allowed: bool, reason: str, identity: str)
     Raises ValueError if the user is not authenticated (caller handles asking them to login).
     """
-    try:
-        token, claims = _get_token_and_claims()
-    except ValueError:
-        raise ValueError(
-            "You are not logged in. "
-            "Please choose a provider to login with before performing any server operations."
-        )
-
-    email, role   = _resolve_role(claims)
+    email, role = _require_auth()
 
     payload  = TokenPayload(
         user_id=email.split("@")[0],
@@ -428,10 +439,12 @@ def check_access() -> str:
     Automatically prompts login if no session exists.
     """
     try:
+        email, role = _require_auth()
         token, claims = _get_token_and_claims()
-        email, role   = _resolve_role(claims)
         active_provider = load_provider() or PROVIDER
-    except (RuntimeError, ValueError) as e:
+    except ValueError as e:
+        return str(e)
+    except RuntimeError as e:
         return f"❌ {e}"
 
     identity = claims.get("email") or claims.get("nickname") or claims.get("sub", "Unknown")
@@ -469,9 +482,10 @@ def logout() -> str:
     End the current session and clear the saved token.
     You will need to login again to use server management tools.
     """
+    # Simply clear token cache to logout locally
     clear_token()
-    _CLAIMS_CACHE.clear()   # ← also evict in-memory claims cache on logout
-    return f"✅ Logged out. Session cleared."
+    _CLAIMS_CACHE.clear()   # ← evict in-memory claims cache on logout
+    return "✅ Logged out. Session cleared."
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -505,15 +519,9 @@ async def _execute_agent_command(
 
     # ── Step 1: Authentication ────────────────────────────────────────────────
     try:
-        token, claims = _get_token_and_claims()
-        email, role   = _resolve_role(claims)
-    except ValueError:
-        return (
-            "ERROR: UNAUTHENTICATED\n\n"
-            "The mock session is unauthenticated. To proceed, please use the `sso_login` tool "
-            "with one of the supported providers ('auth0', 'okta', or 'azure').\n"
-            "Note: This is a mock environment, no actual credentials are required."
-        )
+        email, role = _require_auth()
+    except ValueError as e:
+        return str(e)
 
     # ── Step 2: Task Planning & Preliminary Parsing ───────────────────────────
     # Task Planner parses the request to determine actions and resource ID.
@@ -989,19 +997,26 @@ async def _execute_agent_command(
         resolved_provider = provider_or_protocol
         resolved_credentials_ref = None
 
-    if is_creation:
+    if is_creation or resolved_provider in {"mock_storage", "mock_network", "mock_server", "mock_cloud", "oneview"}:
         if resolved_provider == "mock_storage":
-            api_path = "/data-services/v1beta1/devices"
+            if action == "STATUS" and normalized_category != "storage-systems":
+                api_path = "/data-services/v1beta1/devices/{id}"
+            else:
+                api_path = "/data-services/v1beta1/devices"
         elif resolved_provider in {"mock_server", "oneview"}:
-            api_path = "/rest/server-hardware"
+            api_path = "/rest/server-hardware/{id}" if not is_creation else "/rest/server-hardware"
         elif resolved_provider == "mock_network":
-            api_path = "/network/v1/devices"
+            api_path = "/network/v1/devices/{id}" if not is_creation else "/network/v1/devices"
         elif resolved_provider == "mock_cloud":
-            api_path = "/api/v1/devices"
+            api_path = "/api/v1/devices/{id}" if not is_creation else "/api/v1/devices"
 
-
-    # ── Step 4: Dispatch to Execution Engine / Storage Agent ──────────────────
-    loop = asyncio.get_event_loop()
+    # Agent task payload mapping
+    agent_task_action = action
+    if action == "STATUS":
+        if normalized_category in {"storage-systems", "storage-pools", "storage-volumes", "fc-sans"}:
+            agent_task_action = "health_check" if (resource_type or "").lower() == "snapshot" else "fetch_capacity_and_performance"
+        else:
+            agent_task_action = "fetch_metrics"
 
     # ── UPDATE (PATCH) — handled directly via mock REST API ────────────────
     if action == "UPDATE":
@@ -1089,11 +1104,12 @@ async def _execute_agent_command(
         dispatch_params["payload"] = payload_to_dispatch
         dispatch_params["http_method"] = "POST"
         
+    loop = asyncio.get_event_loop()
     result = await loop.run_in_executor(
         None,
         lambda: _dispatcher.dispatch(
             agent_type=agent_type,
-            query_action=action,
+            query_action=agent_task_action,
             resource_type=resource_type,
             resource_id=identifier,
             provider_or_protocol=resolved_provider,

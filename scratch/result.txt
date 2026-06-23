@@ -1,19 +1,45 @@
 Agent command succeeded
 User         : devasksr@gmail.com (Role: Infrastructure administrator)
-Agent        : onprem-agent
-Resource     : router/wan-r08-10017
-Power State  : ON
+Agent        : network-agent
+Resource     : access_point/ap-floor-006
+Power State  : OFF
 Health Status: HEALTHY
-Provider     : coms
-Action       : STATUS
+Provider     : mock_network
+Action       : OFF
 Status       : success
 Actions taken:
-  • fetch_metrics
+  • Selected protocol adapter: mock.
+  • Action 'off' executed.
 Metrics:
 {
-  "cpu_utilization_percent": 48.3,
-  "memory_utilization_percent": 53.5,
-  "power_draw_watts": 227.6,
-  "temperature_celsius": 22.7,
-  "power_state": "ON"
+  "id": "8df89bc6-f664-578b-8e0a-3c41b22eafba",
+  "serial_number": "ap-floor-006",
+  "ip_address": null,
+  "fqdn": null,
+  "management_source": "mock_network",
+  "source_host": null,
+  "source_device_id": "ap-floor-006",
+  "device_type": "access_point",
+  "last_seen": null,
+  "created_at": null,
+  "updated_at": "2026-06-19 16:29:57+05:30",
+  "name": "ap-floor-006",
+  "firmware_version": null,
+  "total_capacity_gb": null,
+  "free_capacity_gb": null,
+  "temperature_celsius": 0.0,
+  "storage_capacity_gb": null,
+  "free_storage_gb": null,
+  "memory_gb": null,
+  "cpu_cores": null,
+  "health_status": "OK",
+  "power_state": "OFF",
+  "active_vms": null,
+  "allocated_vcpu": null,
+  "allocated_ram_gb": null,
+  "ports": null,
+  "configured_vlans": null,
+  "cpu_utilization_percent": 0.0,
+  "memory_utilization_percent": 0.0,
+  "power_draw_watts": 0.0
 }

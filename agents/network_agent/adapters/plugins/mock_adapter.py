@@ -68,6 +68,19 @@ class MockNetworkAdapter(BaseNetworkAdapter):
             return {"result": "failed", "detail": "Dynamic routing failed: No api_path provided by orchestrator. The agent is strictly dynamic."}
         return self._dynamic_call(parameters.get("http_method", "POST"), api_path, device_id, parameters.get("payload", {}), parameters.get("base_url", ""))
 
+    def execute_action(self, device_id, action, credentials, parameters) -> Dict[str, Any]:
+        api_path = parameters.get("api_path")
+        if not api_path:
+            return {"result": "failed", "detail": "Dynamic routing failed: No api_path provided by orchestrator. The agent is strictly dynamic."}
+        
+        # Power action mapping for mock server
+        if action.upper() in {"ON", "OFF"}:
+            payload = {"action": action.upper()}
+        else:
+            payload = parameters.get("payload", {})
+            
+        return self._dynamic_call("PUT", api_path, device_id, payload, parameters.get("base_url", ""))
+
     def discover_neighbors(self, device_id, credentials, parameters) -> List[Dict[str, Any]]:
         api_path = parameters.get("api_path")
         if not api_path:

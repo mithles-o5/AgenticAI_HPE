@@ -21,11 +21,11 @@ import asyncio
 async def test_flow():
     print("\n\n=== EXECUTING FLOW TEST ===")
     res = await ms._execute_agent_command(
-        query="wan-r08-10017",
+        query="power off ap-floor-006",
         env="dev",
         agent_type="unknown",
         provider_or_protocol="unknown",
-        resource_type="router"
+        resource_type="access_point"
     )
     with open("scratch/result.txt", "w", encoding="utf-8") as f:
         f.write(res)
