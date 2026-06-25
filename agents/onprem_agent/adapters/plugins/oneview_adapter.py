@@ -34,89 +34,43 @@ class OneViewAdapter(BaseAdapter):
 
     async def health_check(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> dict:
         async with await self._get_client(credentials) as client:
-            if resource_type in ("server_profile", "server_hardware", "server-hardware") or (not resource_type and resource_id.startswith("OV")):
-                resp = await client.get(f"/rest/server-hardware/{resource_id}")
-                if resp.status_code == 200:
-                    return {"resource_type": resource_type or "server_hardware", "raw": resp.json()}
-                else:
-                    return {
-                        "resource_type": resource_type,
-                        "raw": {
-                            "uuid": resource_id,
-                            "name": f"OV-Mock-{resource_id[-6:]}",
-                            "health": "Warning",
-                            "powerState": "On",
-                            "status": "NotFoundFallback"
-                        }
-                    }
-            elif resource_type == "enclosure":
+            if resource_type == "enclosure":
                 resp = await client.get(f"/rest/rack-managers/{resource_id}")
                 if resp.status_code == 200:
                     return {"resource_type": "enclosure", "raw": resp.json()}
                 else:
-                    return {
-                        "resource_type": "enclosure",
-                        "raw": {
-                            "uuid": resource_id,
-                            "name": f"Enclosure-OV-{resource_id[-4:]}",
-                            "health": "OK",
-                            "state": "Normal"
-                        }
-                    }
+                    return {"status": "failed", "error": f"Resource not found. Status code: {resp.status_code}"}
             else:
-                # Interconnect, logical_switch, composable_resource, etc.
-                return {
-                    "resource_type": resource_type,
-                    "raw": {
-                        "uuid": resource_id,
-                        "name": f"OneView-{resource_type}-{resource_id[-6:]}",
-                        "health": "OK",
-                        "state": "Configured",
-                        "status": "Simulated"
-                    }
-                }
+                resp = await client.get(f"/rest/server-hardware/{resource_id}")
+                if resp.status_code == 200:
+                    data = resp.json()
+                    # map health_status and power_state for generic skills
+                    if "health_status" in data and "health" not in data:
+                        data["health"] = data["health_status"]
+                    if "power_state" in data and "powerState" not in data:
+                        data["powerState"] = data["power_state"]
+                    return {"resource_type": resource_type or "server_hardware", "raw": data}
+                else:
+                    return {"status": "failed", "error": f"Resource not found. Status code: {resp.status_code}"}
 
     async def fetch_metrics(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> dict:
         async with await self._get_client(credentials) as client:
-            power_state = "On"
-            if resource_type in ("server_profile", "server_hardware", "server-hardware") or (not resource_type and resource_id.startswith("OV")):
+            metrics = {}
+            if resource_type != "enclosure":
                 resp = await client.get(f"/rest/server-hardware/{resource_id}")
                 if resp.status_code == 200:
-                    power_state = resp.json().get("powerState", "On")
-
-            if power_state == "Off":
-                metrics = {
-                    "cpu_utilization_percent": 0.0,
-                    "memory_utilization_percent": 0.0,
-                    "power_draw_watts": 15.0,
-                    "temperature_celsius": 20.0,
-                    "power_state": "Off"
-                }
-            else:
-                metrics = {
-                    "cpu_utilization_percent": 45.2,
-                    "memory_utilization_percent": 60.8,
-                    "power_draw_watts": 280.0,
-                    "temperature_celsius": 32.5,
-                    "power_state": "On"
-                }
-                
-                # Query real endpoint thermal if resource is server
-                if resource_type in ("server_profile", "server_hardware", "server-hardware") or (not resource_type and resource_id.startswith("OV")):
-                    resp = await client.get(f"/rest/server-hardware/{resource_id}/thermal")
-                    if resp.status_code == 200:
-                        thermal_data = resp.json()
-                        temp = thermal_data.get("temperatureCelsius")
-                        if temp:
-                            metrics["temperature_celsius"] = float(temp)
+                    data = resp.json()
+                    metrics = data
             
             # Query chassis utilization if enclosure
             if resource_type == "enclosure":
                 resp = await client.get(f"/rest/rack-managers/{resource_id}/chassis/utilization")
                 if resp.status_code == 200:
                     util_data = resp.json()
-                    metrics["power_draw_watts"] = util_data.get("powerWatts", 350.0)
+                    metrics.update(util_data)
             
+            if not metrics:
+                 return {"status": "failed", "error": "No metrics or resource found in DB"}
             return metrics
 
     async def fetch_alerts(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> list:

@@ -33,6 +33,16 @@ class BaseNetworkAdapter(ABC):
         """Push configuration to the device. Returns {"result": str, "detail": Any}."""
 
     @abstractmethod
+    def execute_action(
+        self,
+        device_id: str,
+        action: str,
+        credentials: Dict[str, Any],
+        parameters: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """Execute a control action (e.g. ON, OFF, RESET). Returns result detail."""
+
+    @abstractmethod
     def discover_neighbors(
         self,
         device_id: str,

@@ -13,6 +13,7 @@ from adapters.plugins.mock_adapter import MockCloudAdapter
 from adapters.plugins.aws_adapter import AWSCloudAdapter
 from adapters.plugins.azure_adapter import AzureCloudAdapter
 from adapters.plugins.gcp_adapter import GCPCloudAdapter
+from adapters.plugins.com_adapter import ComOpsAdapter
 
 # ── Provider Registry ─────────────────────────────────────────────────────────
 # Key: provider label as sent in TaskRequest.provider (lower-case)
@@ -22,7 +23,9 @@ REGISTRY: Dict[str, Type[BaseCloudAdapter]] = {
     "aws":        AWSCloudAdapter,
     "azure":      AzureCloudAdapter,
     "gcp":        GCPCloudAdapter,
-    # Add on-prem adapters here — e.g. "openstack": OpenStackAdapter
+    "com":        ComOpsAdapter,
+    "composable": ComOpsAdapter,
+    "coms":       ComOpsAdapter,
 }
 
 

@@ -26,7 +26,7 @@ def get_mcp_tool_target(management_source: str) -> str:
     """Map a management source to the MCP tool the orchestrator should invoke."""
     source = normalize_management_source(management_source)
     env_key = f"{source.upper()}_MCP_TOOL"
-    default_tool = "compute_ops" if source == "coms" else source
+    default_tool = "onprem" if source == "coms" else source
     return os.getenv(env_key, default_tool)
 
 

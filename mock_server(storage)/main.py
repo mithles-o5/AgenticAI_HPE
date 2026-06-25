@@ -20,6 +20,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/data-services/v1beta1/async-operations")
 def get_data_services_v1beta1_async_operations():
     """
@@ -632,6 +633,7 @@ def get_storage_device_by_id(id: str):
     """
     from fastapi import HTTPException
     collection_path = "/data-services/v1beta1/devices"
+
     device = db.get_item(collection_path, id)
     if not device:
         store = db.get_collection(collection_path)
@@ -642,6 +644,7 @@ def get_storage_device_by_id(id: str):
     if not device:
         raise HTTPException(status_code=404, detail="Device not found")
     return device
+
 
 
 @app.post("/data-services/v1beta1/devices")
@@ -662,6 +665,10 @@ def put_storage_device(id: str, payload: dict):
     CRUD Route: PUT /data-services/v1beta1/devices/{id}
     """
     collection_path = "/data-services/v1beta1/devices"
+    item = db.get_item(collection_path, id)
+    if item:
+        return item
+    raise HTTPException(status_code=404, detail="Device not found")
     device = db.get_item(collection_path, id)
     if not device:
         store = db.get_collection(collection_path)

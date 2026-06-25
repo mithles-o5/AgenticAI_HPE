@@ -76,6 +76,13 @@ class NetworkExecutionEngine:
                 status_level = "healthy"
                 insights = []
 
+            elif action == "execute_action":
+                result = self._execute_action(adapter, request, credentials)
+                metrics = result
+                actions.append(f"Action '{request.parameters.get('action_verb', 'unspecified')}' executed.")
+                status_level = "healthy"
+                insights = []
+
             elif action == "discover_topology":
                 raw_neighbors = self._discover(adapter, request, credentials)
                 norm_neighbors = normalize_neighbor_list(raw_neighbors)
@@ -133,6 +140,11 @@ class NetworkExecutionEngine:
     def _push_config(self, adapter, req, creds):
         @_retry()
         def _c(): return adapter.push_config(req.resource_id, req.parameters.get("config", {}), creds, req.parameters)
+        return _c()
+
+    def _execute_action(self, adapter, req, creds):
+        @_retry()
+        def _c(): return adapter.execute_action(req.resource_id, req.parameters.get("action_verb", req.action), creds, req.parameters)
         return _c()
 
     def _discover(self, adapter, req, creds):

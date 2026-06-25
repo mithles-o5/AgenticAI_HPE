@@ -82,6 +82,7 @@ class RouteResolution:
     management_source: str
     resource: dict
     action: dict
+    http_method: Optional[str] = None
 
     def to_dict(self) -> dict:
         return {
@@ -94,6 +95,7 @@ class RouteResolution:
             "cache_status": self.cache_status.value,
             "resolution_ms": self.resolution_ms,
             "api_endpoint": self.api_endpoint,
+            "http_method": self.http_method,
             "resource": self.resource,
             "action": self.action,
             "device": self.device.to_dict(),

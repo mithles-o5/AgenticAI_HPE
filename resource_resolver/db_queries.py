@@ -190,7 +190,26 @@ class DeviceQueries:
         source = normalize_management_source(management_source)
         device_rows = list(devices)
         incoming_sns = {str(d["serial_number"]).strip() for d in device_rows}
+
+        # No-op gracefully when PostgreSQL is unavailable
+        if not db_manager._pg_available:
+            return {
+                "source_type": source,
+                "source_host": source_host,
+                "devices_found": len(device_rows),
+                "devices_added": 0,
+                "devices_removed": 0,
+            }
+
         conn = db_manager.get_connection()
+        if conn is None:
+            return {
+                "source_type": source,
+                "source_host": source_host,
+                "devices_found": len(device_rows),
+                "devices_added": 0,
+                "devices_removed": 0,
+            }
 
         try:
             with conn.cursor() as cur:

@@ -191,18 +191,9 @@ mcp = FastMCP(
     All login flows open a secure browser window. Credentials NEVER pass through chat.
 
     CRITICAL LOGIN RULES (Follow strictly):
-    1. If the user is not logged in, reply with EXACTLY:
-       "You are not logged in. Please choose an SSO provider:
-       • [auth0](https://auth0.com) — Auth0 SSO Login
-       • [okta](https://okta.com) — Okta SSO Login
-       • [azure](https://azure.microsoft.com) — Azure AD SSO Login
-
-       Reply with your choice: auth0, okta, or azure."
-
-    2. STOP. Wait for the user to reply with their choice.
-    3. Once the user replies, call `sso_login(provider="<their choice>")`.
-    4. NEVER ask for a username or password in the chat.
-    5. NEVER auto-select a provider.
+    1. If a tool returns an unauthenticated error, you must use the `sso_login` tool to authenticate the mock session.
+    2. Because this is a mock environment, you can use any of the mock providers (e.g. 'auth0', 'okta', 'azure') without needing real credentials.
+    3. You can either ask the user which mock provider to use, or if they have already given permission, just call `sso_login` directly.
 
     CRITICAL LOGOUT RULES:
     If the user asks to logout or end the session, you MUST execute the `logout()` tool.
@@ -291,6 +282,25 @@ def _get_token_and_claims() -> tuple[str, dict]:
     return token, claims
 
 
+def _require_auth() -> tuple[str, str]:
+    """
+    Global authentication check to be called by all protected tools.
+    Validates token and claims, and returns (email, role).
+    Raises ValueError with a clear instruction if unauthenticated.
+    """
+    try:
+        token, claims = _get_token_and_claims()
+        email, role = _resolve_role(claims)
+        return email, role
+    except ValueError:
+        raise ValueError(
+            "ERROR: UNAUTHENTICATED\n\n"
+            "The mock session is unauthenticated. To proceed, please use the `sso_login` tool "
+            "with one of the supported providers ('auth0', 'okta', 'local', or 'azure').\n"
+            "Note: This is a mock environment, no actual credentials are required."
+        )
+
+
 def _load_roles() -> dict:
     """Load the roles.json mapping."""
     try:
@@ -340,15 +350,7 @@ def _authorize(action: str, resource_id: str, resource_category: str, env: str, 
     Returns (allowed: bool, reason: str, identity: str)
     Raises ValueError if the user is not authenticated (caller handles asking them to login).
     """
-    try:
-        token, claims = _get_token_and_claims()
-    except ValueError:
-        raise ValueError(
-            "You are not logged in. "
-            "Please choose a provider to login with before performing any server operations."
-        )
-
-    email, role   = _resolve_role(claims)
+    email, role = _require_auth()
 
     payload  = TokenPayload(
         user_id=email.split("@")[0],
@@ -437,10 +439,12 @@ def check_access() -> str:
     Automatically prompts login if no session exists.
     """
     try:
+        email, role = _require_auth()
         token, claims = _get_token_and_claims()
-        email, role   = _resolve_role(claims)
         active_provider = load_provider() or PROVIDER
-    except (RuntimeError, ValueError) as e:
+    except ValueError as e:
+        return str(e)
+    except RuntimeError as e:
         return f"❌ {e}"
 
     identity = claims.get("email") or claims.get("nickname") or claims.get("sub", "Unknown")
@@ -478,9 +482,17 @@ def logout() -> str:
     End the current session and clear the saved token.
     You will need to login again to use server management tools.
     """
+    try:
+        _require_auth()
+    except ValueError as e:
+        return str(e)
+    except Exception as e:
+        return f"❌ {e}"
+
+    # Simply clear token cache to logout locally
     clear_token()
-    _CLAIMS_CACHE.clear()   # ← also evict in-memory claims cache on logout
-    return f"✅ Logged out. Session cleared."
+    _CLAIMS_CACHE.clear()   # ← evict in-memory claims cache on logout
+    return "✅ Logged out. Session cleared."
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -514,38 +526,43 @@ async def _execute_agent_command(
 
     # ── Step 1: Authentication ────────────────────────────────────────────────
     try:
-        token, claims = _get_token_and_claims()
-        email, role   = _resolve_role(claims)
-    except ValueError:
-        return (
-            "ERROR: UNAUTHENTICATED\n\n"
-            "CRITICAL INSTRUCTION FOR THE AGENT:\n"
-            "DO NOT call the `sso_login` tool yet! You MUST stop and ask the user which provider they want to use.\n"
-            "Relay this exact message to the user:\n\n"
-            "\"You are not logged in. Please choose an SSO provider:\n"
-            "• [auth0](https://auth0.com) — Auth0 SSO Login\n"
-            "• [okta](https://okta.com) — Okta SSO Login\n"
-            "• [azure](https://azure.microsoft.com) — Azure AD SSO Login\n\n"
-            "Reply with your choice: auth0, okta, or azure.\"\n\n"
-            "Wait for the user's reply before calling sso_login."
-        )
+        email, role = _require_auth()
+    except ValueError as e:
+        return str(e)
 
-    # ── Step 2: Task Planning & Preliminary Parsing ───────────────────────────
-    # Task Planner parses the request to determine actions and resource ID.
-    tasks = TaskPlanner.decompose_instruction(query)
+    import json
+    
+    tasks = None
+    try:
+        # If the LLM passes a raw JSON string like '{"identifier": "gl-ns-008", ...}'
+        parsed = json.loads(query)
+        if isinstance(parsed, dict) and "identifier" in parsed:
+            tasks = [Task(
+                action=parsed.get("action", "STATUS"),
+                category=parsed.get("category", "Operational"),
+                identifier=parsed.get("identifier")
+            )]
+    except json.JSONDecodeError:
+        pass
+
     if not tasks:
-        parsed = QueryAgent.parse_query(query)
-        tasks = [Task(
-            action=parsed.get("action", "STATUS"),
-            category=parsed.get("category", "Operational"),
-            identifier=parsed.get("identifier") or query.strip()
-        )]
+        tasks = TaskPlanner.decompose_instruction(query)
+        if not tasks:
+            parsed = QueryAgent.parse_query(query)
+            tasks = [Task(
+                action=parsed.get("action", "STATUS"),
+                category=parsed.get("category", "Operational"),
+                identifier=parsed.get("identifier") or query.strip()
+            )]
 
     task = tasks[0]
     action = task.action
     identifier = task.identifier
     if identifier.lower().startswith("of "):
         identifier = identifier[3:].strip()
+
+
+    # ── Step 2.5: Resource Resolver Validation & CMDB Check ───────────────────
 
     is_list = action == "LIST"
     if is_list:
@@ -585,7 +602,7 @@ async def _execute_agent_command(
         # If authorized, query Postgres CMDB
         try:
             import psycopg2
-            conn = psycopg2.connect(dbname="postgres", user="postgres", password="mithles", host="localhost")
+            conn = psycopg2.connect(dbname="hpe_agentic_ai", user="postgres", password="Mithles", host="localhost")
             with conn.cursor() as cur:
                 cur.execute(
                     "SELECT serial_number, ip_address, device_type, management_source FROM devices WHERE device_type = %s",
@@ -611,18 +628,20 @@ async def _execute_agent_command(
     # ── Step 2.5: Verify CMDB Resource Existence ─────────────────────────────
     device = None
     api_path = ""
+    resolution = None
     try:
         resolution = _resolver.resolve({
             "identifier": identifier,
             "action": action,
-            "category": "Operational"
+            "category": task.category
         })
         device = resolution.device
         api_path = resolution.api_endpoint
-    except Exception:
+    except Exception as e:
+        print(f"Resolver error for {identifier}: {e}")
         pass
 
-    # Conversational memory fallback (ONLY if no explicit identifier was provided or generic)
+    # Conversational memory fallback
     if not device and identifier.lower() in {"", "it", "this", "that", "the device", "the resource"}:
         try:
             last_target = recall(SESSION_ID, "last_target_id")
@@ -630,7 +649,7 @@ async def _execute_agent_command(
                 resolution = _resolver.resolve({
                     "identifier": last_target,
                     "action": action,
-                    "category": "Operational"
+                    "category": task.category
                 })
                 device = resolution.device
                 api_path = resolution.api_endpoint
@@ -664,6 +683,41 @@ async def _execute_agent_command(
 
     if not device and not is_creation:
         return f"❌ Resource '{identifier}' not found in the CMDB registry. Unable to route task."
+
+
+    # ── Step 3: Authorization (RBAC + ABAC) ───────────────────────────────────
+    action_verb_map = {
+        "ON": "execute", "OFF": "execute", "RESET": "execute",
+        "COLD_BOOT": "execute", "STATUS": "read",
+        "CREATE": "create", "ALLOCATE": "create",
+        "DEALLOCATE": "delete", "DELETE": "delete",
+        "RESCAN": "read", "RELOAD": "execute",
+        "FAILOVER": "execute", "POLICY_SYNC": "execute",
+    }
+    rbac_action = action_verb_map.get(action, "execute")
+    resource_id_for_authz = identifier or "unknown"
+
+    try:
+        allowed, reason, identity = _authorize(
+            rbac_action, resource_id_for_authz, resource_type, env, "HPE"
+        )
+    except (RuntimeError, ValueError) as e:
+        return f"Authorization error for '{identifier}': {e}"
+
+    if not allowed:
+        return f"Access Denied for {email} (Role: {role}) on '{identifier}'\nReason: {reason}"
+
+    # ── Step 3.5: Vendor Synthesizer ──────────────────────────────────────────
+    from synthesizer import VendorSynthesizer
+    try:
+        # Pass the task and resolution to the synthesizer
+        batches = VendorSynthesizer.synthesize_batches([(task, resolution)])
+        if batches:
+            batch = list(batches.values())[0]
+            # Verify the batch grouped it correctly
+            provider_or_protocol = batch.management_source
+    except Exception as e:
+        print(f"Vendor Synthesizer warning: {e}")
 
     # Fallback routing variables for creation
     payload_to_dispatch = {}
@@ -749,7 +803,7 @@ async def _execute_agent_command(
         # Insert into Postgres CMDB
         try:
             import psycopg2
-            conn = psycopg2.connect(dbname="postgres", user="postgres", password="mithles", host="localhost")
+            conn = psycopg2.connect(dbname="hpe_agentic_ai", user="postgres", password="Mithles", host="localhost")
             with conn.cursor() as cur:
                 cur.execute(
                     """
@@ -819,6 +873,11 @@ async def _execute_agent_command(
                         agent_type = agent_name[:-6]  # strip "-agent"
         except Exception as e:
             print(f"Warning: Failed to lookup agent in capability registry: {e}")
+
+
+    # Use resolver-derived routing metadata, management source, and credentials ref.
+    resolved_provider = provider_or_protocol
+    resolved_credentials_ref = resolution.credential_ref
 
 
     if device:
@@ -960,18 +1019,23 @@ async def _execute_agent_command(
         resolved_provider = provider_or_protocol
         resolved_credentials_ref = None
 
-    if is_creation:
+    if is_creation or resolved_provider in {"mock_storage", "mock_network", "mock_server", "mock_cloud", "oneview"}:
         if resolved_provider == "mock_storage":
-            api_path = "/data-services/v1beta1/devices"
+            api_path = "/data-services/v1beta1/devices/{id}" if not is_creation else "/data-services/v1beta1/devices"
         elif resolved_provider in {"mock_server", "oneview"}:
-            api_path = "/rest/server-hardware"
+            api_path = "/rest/server-hardware/{id}" if not is_creation else "/rest/server-hardware"
         elif resolved_provider == "mock_network":
-            api_path = "/network/v1/devices"
+            api_path = "/network/v1/devices/{id}" if not is_creation else "/network/v1/devices"
         elif resolved_provider == "mock_cloud":
-            api_path = "/api/v1/devices"
+            api_path = "/api/v1/devices/{id}" if not is_creation else "/api/v1/devices"
 
-    # ── Step 4: Dispatch to Execution Engine / Storage Agent ──────────────────
-    loop = asyncio.get_event_loop()
+    # Agent task payload mapping
+    agent_task_action = action
+    if action == "STATUS":
+        if normalized_category in {"storage-systems", "storage-pools", "storage-volumes", "fc-sans"}:
+            agent_task_action = "health_check" if (resource_type or "").lower() == "snapshot" else "fetch_capacity_and_performance"
+        else:
+            agent_task_action = "fetch_metrics"
 
     # ── UPDATE (PATCH) — handled directly via mock REST API ────────────────
     if action == "UPDATE":
@@ -1050,6 +1114,9 @@ async def _execute_agent_command(
         "api_path": api_path,
         "user_email": email
     } if api_path else {"user_email": email}
+
+    if resolution and hasattr(resolution, "http_method"):
+        dispatch_params["http_method"] = resolution.http_method
     
     is_deletion = action in {"DELETE", "DEALLOCATE"}
     if is_deletion:
@@ -1059,11 +1126,12 @@ async def _execute_agent_command(
         dispatch_params["payload"] = payload_to_dispatch
         dispatch_params["http_method"] = "POST"
         
+    loop = asyncio.get_event_loop()
     result = await loop.run_in_executor(
         None,
         lambda: _dispatcher.dispatch(
             agent_type=agent_type,
-            query_action=action,
+            query_action=agent_task_action,
             resource_type=resource_type,
             resource_id=identifier,
             provider_or_protocol=resolved_provider,
@@ -1160,8 +1228,11 @@ def mcp_list_sessions() -> str:
     List all active session IDs in the Redis memory database (for debugging).
     """
     try:
+        _require_auth()
         sessions = list_sessions()
         return f"📋 Active Redis sessions:\n" + json.dumps(sessions, indent=2)
+    except ValueError as e:
+        return str(e)
     except Exception as e:
         return f"❌ Failed to list sessions: {e}"
 

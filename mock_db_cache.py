@@ -376,11 +376,66 @@ def _seed_devices():
         (str(uuid.uuid4()), "backup-san-01", "10.200.1.22", "backup-san-01.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-backupsan01", "storage"),
 
         # OASF Mock Testing Devices
-        (str(uuid.uuid4()), "demo-vm-001", "10.300.1.1", "demo-vm-001.cloud.local", "mock_cloud", "localhost:8003", "cloud-uuid-001", "vm"),
-        (str(uuid.uuid4()), "core-sw-01", "10.400.1.1", "core-sw-01.network.local", "mock_network", "localhost:8006", "net-uuid-001", "switch"),
-        (str(uuid.uuid4()), "core-switch-01", "10.400.1.2", "core-switch-01.network.local", "mock_network", "localhost:8006", "net-uuid-002", "switch"),
-        (str(uuid.uuid4()), "prod-vol-001", "10.500.1.1", "prod-vol-001.storage.local", "mock_storage", "localhost:8004", "storage-uuid-001", "volume"),
+        (str(uuid.uuid4()), "demo-vm-001", "10.300.1.1", "demo-vm-001.cloud.local", "mock_cloud", "localhost:8003", "demo-vm-001", "vm"),
+        (str(uuid.uuid4()), "core-sw-01", "10.400.1.1", "core-sw-01.network.local", "mock_network", "localhost:8006", "core-sw-01", "switch"),
+        (str(uuid.uuid4()), "core-switch-01", "10.400.1.2", "core-switch-01.network.local", "mock_network", "localhost:8006", "core-switch-01", "switch"),
+        (str(uuid.uuid4()), "prod-vol-001", "10.500.1.1", "prod-vol-001.storage.local", "mock_storage", "localhost:8004", "prod-vol-001", "volume"),
     ]
+
+    # Generate 800 Mock Provider Devices (mock_server, mock_storage, mock_network, mock_cloud)
+    server_types = ["server", "blade_server", "rack_server", "compute_node", "hypervisor"]
+    server_prefixes = ["dl360-prod", "dl380-prod", "synergy-comp", "apollo-node", "esx-host"]
+
+    storage_types = ["storage_system", "storage_pool", "volume", "volume_set", "filesystem", "host", "host_group", "snapshot", "replication_group"]
+    storage_prefixes = ["alletra-array", "nimble-prod", "primera-san", "3par-array", "storeonce-backup", "nas-prod", "san-host"]
+
+    network_types = ["switch", "router", "firewall", "gateway", "wireless_controller", "access_point", "vlan", "port_channel"]
+    network_prefixes = ["aruba-cx", "core-sw", "edge-router", "wireless-ctrl", "net-gateway", "ap-floor", "vlan-cfg", "port-channel-cfg"]
+
+    cloud_types = ["virtual_machine", "kubernetes_cluster", "database_service", "storage_service", "virtual_network", "subnet", "load_balancer", "namespace"]
+    cloud_prefixes = ["gl-vm", "gl-k8s", "gl-db", "gl-storage", "gl-vnet", "gl-subnet", "gl-lb", "gl-ns"]
+
+    count_per_source = 200
+    
+    # 1. mock_server
+    for i in range(count_per_source):
+        dev_type = server_types[i % len(server_types)]
+        prefix = server_prefixes[i % len(server_prefixes)]
+        serial = f"{prefix}-{i+1:03d}"
+        ip = f"10.11.{(i // 250) + 1}.{(i % 250) + 1}"
+        fqdn = f"{serial}.server.local"
+        host = "mock-server-manager.local"
+        testing_devices.append((str(uuid.uuid4()), serial, ip, fqdn, "mock_server", host, serial, dev_type))
+
+    # 2. mock_storage
+    for i in range(count_per_source):
+        dev_type = storage_types[i % len(storage_types)]
+        prefix = storage_prefixes[i % len(storage_prefixes)]
+        serial = f"{prefix}-{i+1:03d}"
+        ip = f"10.12.{(i // 250) + 1}.{(i % 250) + 1}"
+        fqdn = f"{serial}.storage.local"
+        host = "mock-storage-manager.local"
+        testing_devices.append((str(uuid.uuid4()), serial, ip, fqdn, "mock_storage", host, serial, dev_type))
+
+    # 3. mock_network
+    for i in range(count_per_source):
+        dev_type = network_types[i % len(network_types)]
+        prefix = network_prefixes[i % len(network_prefixes)]
+        serial = f"{prefix}-{i+1:03d}"
+        ip = f"10.13.{(i // 250) + 1}.{(i % 250) + 1}"
+        fqdn = f"{serial}.network.local"
+        host = "mock-network-manager.local"
+        testing_devices.append((str(uuid.uuid4()), serial, ip, fqdn, "mock_network", host, serial, dev_type))
+
+    # 4. mock_cloud
+    for i in range(count_per_source):
+        dev_type = cloud_types[i % len(cloud_types)]
+        prefix = cloud_prefixes[i % len(cloud_prefixes)]
+        serial = f"{prefix}-{i+1:03d}"
+        ip = f"10.14.{(i // 250) + 1}.{(i % 250) + 1}"
+        fqdn = f"{serial}.cloud.local"
+        host = "mock-cloud-manager.local"
+        testing_devices.append((str(uuid.uuid4()), serial, ip, fqdn, "mock_cloud", host, serial, dev_type))
 
     cur = _shared_conn.cursor()
     insert_sql = """
@@ -445,6 +500,30 @@ def _seed_endpoints():
                 seen.add(key)
                 rows_to_insert.append((
                     str(uuid.uuid4()), vendor, dtype, act, method, path
+                ))
+
+    # Explicitly seed mock_cloud endpoints for all cloud resource types
+    cloud_types = [
+        "vm", "virtual_machine", "kubernetes_cluster", "database_service",
+        "storage_service", "virtual_network", "subnet", "load_balancer", "namespace"
+    ]
+    for dtype in cloud_types:
+        cloud_endpoints = [
+            ("STATUS", "GET", "/api/v1/devices/{id}"),
+            ("ON", "POST", "/api/v1/devices/{id}/power"),
+            ("OFF", "POST", "/api/v1/devices/{id}/power"),
+            ("RESET", "POST", "/api/v1/devices/{id}/power"),
+            ("COLD_BOOT", "POST", "/api/v1/devices/{id}/power"),
+            ("LIST", "GET", "/api/v1/devices"),
+            ("RESCAN", "GET", "/api/v1/devices"),
+            ("UPDATE", "PATCH", "/api/v1/devices/{id}"),
+        ]
+        for act, method, path in cloud_endpoints:
+            key = ("mock_cloud", dtype, act, method, path)
+            if key not in seen:
+                seen.add(key)
+                rows_to_insert.append((
+                    str(uuid.uuid4()), "mock_cloud", dtype, act, method, path
                 ))
 
     cur = _shared_conn.cursor()

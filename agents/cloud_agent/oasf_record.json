@@ -15,7 +15,7 @@
     {"type": "openapi", "url": "http://cloud-agent:8005/openapi.json"}
   ],
   "modules": {
-    "protocols": ["rest", "mock", "mock_cloud", "aws", "azure", "gcp"],
+    "protocols": ["rest", "mock", "mock_cloud", "aws", "azure", "gcp", "coms"],
     "resource_types": ["vm", "container", "function", "storage_bucket", "network_interface", "cluster_node"]
   }
 }

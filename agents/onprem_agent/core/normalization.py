@@ -31,16 +31,6 @@ def normalize_server_data(provider: str, raw_data: dict) -> dict:
                 "health_status": normalize_status(raw_data.get("health") or raw_data.get("status")),
                 "location": raw_data.get("location", "Datacenter Rack")
             }
-        elif provider == "com":
-            return {
-                "id": raw_data.get("uuid") or raw_data.get("id", ""),
-                "name": raw_data.get("name", "Unknown Cloud Server"),
-                "model": raw_data.get("model", "HPE GreenLake Instance"),
-                "ip_address": raw_data.get("ip_address") or raw_data.get("ipAddress", ""),
-                "power_state": raw_data.get("powerState", "Unknown"),
-                "health_status": normalize_status(raw_data.get("health") or raw_data.get("status")),
-                "location": raw_data.get("location", "GreenLake Cloud")
-            }
         else: # Mock or default
             return {
                 "id": raw_data.get("uuid") or raw_data.get("id", ""),

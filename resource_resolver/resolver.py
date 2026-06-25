@@ -116,7 +116,8 @@ class ResourceResolver:
             api_endpoint="",
             management_source=device.management_source,
             resource={},
-            action={}
+            action={},
+            http_method=None
         )
         exec_ctx = executor.build_execution_context(temp_resolution, action, category)
 
@@ -137,7 +138,8 @@ class ResourceResolver:
             action={
                 "category": exec_ctx["category"],
                 "action": exec_ctx["action"]
-            }
+            },
+            http_method=exec_ctx["http_method"]
         )
 
         self.registry.log_routing_audit(
