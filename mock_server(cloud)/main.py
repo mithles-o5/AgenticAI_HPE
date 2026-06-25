@@ -1,5 +1,5 @@
 import uuid
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 import json
 import os
@@ -19,6 +19,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 @app.get("/api/v1/access-controls")
 def get_access_controls():

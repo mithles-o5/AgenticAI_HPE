@@ -17,6 +17,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/network/v1/devices")
 def get_network_devices():
     collection_path = "/network/v1/devices"

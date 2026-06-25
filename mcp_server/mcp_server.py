@@ -482,6 +482,13 @@ def logout() -> str:
     End the current session and clear the saved token.
     You will need to login again to use server management tools.
     """
+    try:
+        _require_auth()
+    except ValueError as e:
+        return str(e)
+    except Exception as e:
+        return f"❌ {e}"
+
     # Simply clear token cache to logout locally
     clear_token()
     _CLAIMS_CACHE.clear()   # ← evict in-memory claims cache on logout
@@ -523,16 +530,30 @@ async def _execute_agent_command(
     except ValueError as e:
         return str(e)
 
-    # ── Step 2: Task Planning & Preliminary Parsing ───────────────────────────
-    # Task Planner parses the request to determine actions and resource ID.
-    tasks = TaskPlanner.decompose_instruction(query)
+    import json
+    
+    tasks = None
+    try:
+        # If the LLM passes a raw JSON string like '{"identifier": "gl-ns-008", ...}'
+        parsed = json.loads(query)
+        if isinstance(parsed, dict) and "identifier" in parsed:
+            tasks = [Task(
+                action=parsed.get("action", "STATUS"),
+                category=parsed.get("category", "Operational"),
+                identifier=parsed.get("identifier")
+            )]
+    except json.JSONDecodeError:
+        pass
+
     if not tasks:
-        parsed = QueryAgent.parse_query(query)
-        tasks = [Task(
-            action=parsed.get("action", "STATUS"),
-            category=parsed.get("category", "Operational"),
-            identifier=parsed.get("identifier") or query.strip()
-        )]
+        tasks = TaskPlanner.decompose_instruction(query)
+        if not tasks:
+            parsed = QueryAgent.parse_query(query)
+            tasks = [Task(
+                action=parsed.get("action", "STATUS"),
+                category=parsed.get("category", "Operational"),
+                identifier=parsed.get("identifier") or query.strip()
+            )]
 
     task = tasks[0]
     action = task.action
@@ -616,7 +637,8 @@ async def _execute_agent_command(
         })
         device = resolution.device
         api_path = resolution.api_endpoint
-    except Exception:
+    except Exception as e:
+        print(f"Resolver error for {identifier}: {e}")
         pass
 
     # Conversational memory fallback
@@ -999,10 +1021,7 @@ async def _execute_agent_command(
 
     if is_creation or resolved_provider in {"mock_storage", "mock_network", "mock_server", "mock_cloud", "oneview"}:
         if resolved_provider == "mock_storage":
-            if action == "STATUS" and normalized_category != "storage-systems":
-                api_path = "/data-services/v1beta1/devices/{id}"
-            else:
-                api_path = "/data-services/v1beta1/devices"
+            api_path = "/data-services/v1beta1/devices/{id}" if not is_creation else "/data-services/v1beta1/devices"
         elif resolved_provider in {"mock_server", "oneview"}:
             api_path = "/rest/server-hardware/{id}" if not is_creation else "/rest/server-hardware"
         elif resolved_provider == "mock_network":
@@ -1095,6 +1114,9 @@ async def _execute_agent_command(
         "api_path": api_path,
         "user_email": email
     } if api_path else {"user_email": email}
+
+    if resolution and hasattr(resolution, "http_method"):
+        dispatch_params["http_method"] = resolution.http_method
     
     is_deletion = action in {"DELETE", "DEALLOCATE"}
     if is_deletion:
@@ -1113,11 +1135,6 @@ async def _execute_agent_command(
             resource_type=resource_type,
             resource_id=identifier,
             provider_or_protocol=resolved_provider,
-            parameters={
-                "api_path": api_path,
-                "http_method": resolution.http_method,
-                "user_email": email
-            } if api_path else {"user_email": email},
             parameters=dispatch_params,
             credentials_ref=resolved_credentials_ref,
         ),
@@ -1211,8 +1228,11 @@ def mcp_list_sessions() -> str:
     List all active session IDs in the Redis memory database (for debugging).
     """
     try:
+        _require_auth()
         sessions = list_sessions()
         return f"📋 Active Redis sessions:\n" + json.dumps(sessions, indent=2)
+    except ValueError as e:
+        return str(e)
     except Exception as e:
         return f"❌ Failed to list sessions: {e}"
 
