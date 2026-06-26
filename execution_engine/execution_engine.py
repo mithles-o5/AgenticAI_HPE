@@ -186,6 +186,10 @@ class AgentDispatcher:
             protocol_key = "provider"
         prov_val = provider_or_protocol
 
+        # Normalize resource_type for server-agent
+        if agent_key == "server" and resource_type not in {"server", "bmc", "sensor", "firmware", "event_log"}:
+            resource_type = "server"
+
         payload: Dict[str, Any] = {
             "task_id":          str(uuid.uuid4()),
             "task_type":        self._resolve_task_type(query_action),

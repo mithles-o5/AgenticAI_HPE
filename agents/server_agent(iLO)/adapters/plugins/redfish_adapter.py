@@ -12,7 +12,18 @@ class RedfishAdapter(ServerAdapter):
         self.password = credentials.get("password")
         self.verify_ssl = credentials.get("verify_ssl", True)
         self.session_token: Optional[str] = None
-        self.base_url = f"https://{self.host}/redfish/v1"
+        
+        host = self.host or ""
+        protocol = "https"
+        if host.startswith("http://"):
+            protocol = "http"
+            host = host[7:]
+        elif host.startswith("https://"):
+            protocol = "https"
+            host = host[8:]
+        elif "127.0.0.1" in host or "localhost" in host:
+            protocol = "http"
+        self.base_url = f"{protocol}://{host}/redfish/v1"
 
     def _get_headers(self) -> Dict[str, str]:
         headers = {"Content-Type": "application/json"}
@@ -25,7 +36,7 @@ class RedfishAdapter(ServerAdapter):
             logger.warning("Redfish credentials missing, skipping actual login")
             return
         
-        login_url = f"{self.base_url}/SessionService/Sessions"
+        login_url = f"{self.base_url}/sessionservice/sessions"
         payload = {"UserName": self.username, "Password": self.password}
         try:
             with httpx.Client(verify=self.verify_ssl, timeout=10.0) as client:
@@ -38,7 +49,24 @@ class RedfishAdapter(ServerAdapter):
             raise
 
     def _request(self, method: str, path: str, json_data: Optional[Dict[str, Any]] = None) -> httpx.Response:
-        url = f"{self.base_url}{path}"
+        lower_path = path
+        for old, new in [
+            ("/Systems", "/systems"),
+            ("/Chassis", "/chassis"),
+            ("/Managers", "/managers"),
+            ("/SessionService", "/sessionservice"),
+            ("/Sessions", "/sessions"),
+            ("/Memory", "/memory"),
+            ("/Processors", "/processors"),
+            ("/Power", "/power"),
+            ("/Thermal", "/thermal"),
+            ("/Storage", "/storage"),
+            ("/LogServices", "/logservices"),
+            ("/Entries", "/entries"),
+            ("/Actions", "/actions")
+        ]:
+            lower_path = lower_path.replace(old, new)
+        url = f"{self.base_url}{lower_path}"
         if not self.session_token:
             try:
                 self._login()

@@ -8,18 +8,20 @@ PG_USER = "postgres"
 PG_HOST = "localhost"
 
 # Map of SQLite DBs
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SQLITE_DBS = {
-    "Comops": r"d:\HPE CPP\MCP_Integrated\mock_server(Comops)\compute_ops_db.sqlite",
-    "Storage": r"d:\HPE CPP\MCP_Integrated\mock_server(storage)\storage_db.sqlite",
-    "Cloud": r"d:\HPE CPP\MCP_Integrated\mock_server(cloud)\cloud_db.sqlite",
-    "Network": r"d:\HPE CPP\MCP_Integrated\mock_server(network)\network_db.sqlite",
-    "OneView": r"d:\HPE CPP\MCP_Integrated\mock_server(oneview)\oneview_db.sqlite"
+    "Comops": os.path.join(BASE_DIR, "mock_server(Comops)", "compute_ops_db.sqlite"),
+    "Storage": os.path.join(BASE_DIR, "mock_server(storage)", "storage_db.sqlite"),
+    "Cloud": os.path.join(BASE_DIR, "mock_server(cloud)", "cloud_db.sqlite"),
+    "Network": os.path.join(BASE_DIR, "mock_server(network)", "network_db.sqlite"),
+    "OneView": os.path.join(BASE_DIR, "mock_server(oneview)", "oneview_db.sqlite"),
+    "iLO": os.path.join(BASE_DIR, "mock_server(iLO)", "ilo_db.sqlite")
 }
 
 # Column mappings: if SQLite has the right-side column, update it using Postgres's left-side column
 COL_MAPPING = {
     'ip_address': ['ip_address', 'ipAddress'],
-    'serial_number': ['serial_number', 'serialNumber'],
+    'serial_number': ['serial_number', 'serialNumber', 'id'], # Map to id for Redfish systems where id contains the serial
     'device_type': ['device_type', 'type'],
     'fqdn': ['fqdn', 'hostname'],
     'management_source': ['management_source'],
@@ -31,7 +33,7 @@ COL_MAPPING = {
 }
 
 def get_postgres_data():
-    conn = psycopg2.connect(dbname=PG_DB, user=PG_USER, password="Mithles", host=PG_HOST)
+    conn = psycopg2.connect(dbname=PG_DB, user=PG_USER, password="mithles", host=PG_HOST)
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     cur.execute("SELECT * FROM devices")
     rows = cur.fetchall()
@@ -65,7 +67,7 @@ def sync_sqlite_db(name, path, pg_data):
         
         # Determine which column serves as the serial identifier in this table
         serial_col = None
-        for cand in ['serial_number', 'serialNumber']:
+        for cand in ['serial_number', 'serialNumber', 'SerialNumber']:
             if cand in columns:
                 serial_col = cand
                 break

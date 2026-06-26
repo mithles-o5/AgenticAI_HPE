@@ -145,7 +145,7 @@ def get_redfish_v1_accountservice_oem_hpe_appaccounts_appaccount_id(appaccount_i
     static_val = db.get_static("get_redfish_v1_accountservice_oem_hpe_appaccounts_appaccount_id")
     if static_val:
         static_val = dict(static_val)
-        if str(appaccount_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/accountservice/Oem/Hpe/appaccounts/{appaccount_id}"
             static_val["Id"] = appaccount_id
             return static_val
@@ -184,7 +184,7 @@ def delete_redfish_v1_accountservice_oem_hpe_appaccounts_appaccount_id(appaccoun
     static_val = db.get_static("delete_redfish_v1_accountservice_oem_hpe_appaccounts_appaccoget_redfish_v1_accountservice_oem_hpe_appaccounts_appaccount_id")
     if static_val:
         static_val = dict(static_val)
-        if str(appaccount_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": appaccount_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -283,7 +283,7 @@ def get_redfish_v1_accountservice_accounts_account_id(account_id: str):
     static_val = db.get_static("get_redfish_v1_accountservice_accounts_account_id")
     if static_val:
         static_val = dict(static_val)
-        if str(account_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/accountservice/accounts/{account_id}"
             static_val["Id"] = account_id
             return static_val
@@ -322,7 +322,7 @@ def delete_redfish_v1_accountservice_accounts_account_id(account_id: str):
     static_val = db.get_static("delete_redfish_v1_accountservice_accounts_accoget_redfish_v1_accountservice_accounts_account_id")
     if static_val:
         static_val = dict(static_val)
-        if str(account_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": account_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -332,7 +332,7 @@ def get_redfish_v1_accountservice_accounts_account_id_keys(account_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/accountservice/accounts/{account_id}/keys
     Type: Collection ofKeySchema
     """
-    collection_path = "/redfish/v1/accountservice/accounts/{account_id}/keys"
+    collection_path = f"/redfish/v1/accountservice/accounts/{account_id}/keys"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_accountservice_accounts_account_id_keys", dict())
     if not dynamic_items:
@@ -358,7 +358,7 @@ def post_redfish_v1_accountservice_accounts_account_id_keys(account_id: str, pay
     iLO Redfish Endpoint: POST /redfish/v1/accountservice/accounts/{account_id}/keys
     Type: Collection ofKeySchema
     """
-    collection_path = "/redfish/v1/accountservice/accounts/{account_id}/keys"
+    collection_path = f"/redfish/v1/accountservice/accounts/{account_id}/keys"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -380,7 +380,7 @@ def get_redfish_v1_accountservice_accounts_account_id_keys_key_id(account_id: st
     static_val = db.get_static("get_redfish_v1_accountservice_accounts_account_id_keys_key_id")
     if static_val:
         static_val = dict(static_val)
-        if str(key_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/accountservice/accounts/{account_id}/keys/{key_id}"
             static_val["Id"] = key_id
             return static_val
@@ -419,7 +419,7 @@ def delete_redfish_v1_accountservice_accounts_account_id_keys_key_id(account_id:
     static_val = db.get_static("delete_redfish_v1_accountservice_accounts_account_id_keys_get_redfish_v1_accountservice_accounts_account_id_keys_key_id")
     if static_val:
         static_val = dict(static_val)
-        if str(key_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": key_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -518,7 +518,7 @@ def get_redfish_v1_accountservice_externalaccountproviders_ldap_certificates_cer
     static_val = db.get_static("get_redfish_v1_accountservice_externalaccountproviders_ldap_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/accountservice/externalaccountproviders/ldap/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -557,7 +557,7 @@ def delete_redfish_v1_accountservice_externalaccountproviders_ldap_certificates_
     static_val = db.get_static("delete_redfish_v1_accountservice_externalaccountproviders_ldap_certificates_certifiget_redfish_v1_accountservice_externalaccountproviders_ldap_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -615,7 +615,7 @@ def get_redfish_v1_accountservice_roles_rol_id(rol_id: str):
     static_val = db.get_static("get_redfish_v1_accountservice_roles_rol_id")
     if static_val:
         static_val = dict(static_val)
-        if str(rol_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/accountservice/roles/{rol_id}"
             static_val["Id"] = rol_id
             return static_val
@@ -654,7 +654,7 @@ def delete_redfish_v1_accountservice_roles_rol_id(rol_id: str):
     static_val = db.get_static("delete_redfish_v1_accountservice_roles_get_redfish_v1_accountservice_roles_rol_id")
     if static_val:
         static_val = dict(static_val)
-        if str(rol_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": rol_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -712,7 +712,7 @@ def get_redfish_v1_accountservice_usercertificatemapping_usercertificatemapping_
     static_val = db.get_static("get_redfish_v1_accountservice_usercertificatemapping_usercertificatemapping_id")
     if static_val:
         static_val = dict(static_val)
-        if str(usercertificatemapping_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/accountservice/usercertificatemapping/{usercertificatemapping_id}"
             static_val["Id"] = usercertificatemapping_id
             return static_val
@@ -751,7 +751,7 @@ def delete_redfish_v1_accountservice_usercertificatemapping_usercertificatemappi
     static_val = db.get_static("delete_redfish_v1_accountservice_usercertificatemapping_usercertificatemappget_redfish_v1_accountservice_usercertificatemapping_usercertificatemapping_id")
     if static_val:
         static_val = dict(static_val)
-        if str(usercertificatemapping_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": usercertificatemapping_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -850,7 +850,7 @@ def get_redfish_v1_certificateservice_certificateenrollments_certificateenrollme
     static_val = db.get_static("get_redfish_v1_certificateservice_certificateenrollments_certificateenrollment_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificateenrollment_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/certificateservice/certificateenrollments/{certificateenrollment_id}"
             static_val["Id"] = certificateenrollment_id
             return static_val
@@ -889,7 +889,7 @@ def delete_redfish_v1_certificateservice_certificateenrollments_certificateenrol
     static_val = db.get_static("delete_redfish_v1_certificateservice_certificateenrollments_certificateenrollmget_redfish_v1_certificateservice_certificateenrollments_certificateenrollment_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificateenrollment_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificateenrollment_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -988,7 +988,7 @@ def get_redfish_v1_certificateservice_enrollmentcacertificates_enrollmentcacerti
     static_val = db.get_static("get_redfish_v1_certificateservice_enrollmentcacertificates_enrollmentcacertificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(enrollmentcacertificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/certificateservice/enrollmentCAcertificates/{enrollmentcacertificat_id}"
             static_val["Id"] = enrollmentcacertificat_id
             return static_val
@@ -1027,7 +1027,7 @@ def delete_redfish_v1_certificateservice_enrollmentcacertificates_enrollmentcace
     static_val = db.get_static("delete_redfish_v1_certificateservice_enrollmentcacertificates_enrollmentcacertifiget_redfish_v1_certificateservice_enrollmentcacertificates_enrollmentcacertificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(enrollmentcacertificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": enrollmentcacertificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -1085,7 +1085,7 @@ def get_redfish_v1_chassis_chassi_id(chassi_id: str):
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id")
     if static_val:
         static_val = dict(static_val)
-        if str(chassi_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/chassis/{chassi_id}"
             static_val["Id"] = chassi_id
             return static_val
@@ -1124,7 +1124,7 @@ def delete_redfish_v1_chassis_chassi_id(chassi_id: str):
     static_val = db.get_static("delete_redfish_v1_chassis_chaget_redfish_v1_chassis_chassi_id")
     if static_val:
         static_val = dict(static_val)
-        if str(chassi_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": chassi_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -1134,7 +1134,7 @@ def get_redfish_v1_chassis_chassi_id_pciedevices_pciedevic_id_assembly(chassi_id
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/PCIeDevices/{pciedevic_id}/assembly
     Type: Assembly
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/PCIeDevices/{pciedevic_id}/assembly"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/PCIeDevices/{pciedevic_id}/assembly"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_pciedevices_pciedevic_id_assembly", dict())
     if not dynamic_items:
@@ -1160,7 +1160,7 @@ def post_redfish_v1_chassis_chassi_id_pciedevices_pciedevic_id_assembly(chassi_i
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/PCIeDevices/{pciedevic_id}/assembly
     Type: Assembly
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/PCIeDevices/{pciedevic_id}/assembly"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/PCIeDevices/{pciedevic_id}/assembly"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -1175,7 +1175,7 @@ def get_redfish_v1_chassis_chassi_id_assembly(chassi_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/assembly
     Type: Assembly
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/assembly"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/assembly"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_assembly", dict())
     if not dynamic_items:
@@ -1201,7 +1201,7 @@ def post_redfish_v1_chassis_chassi_id_assembly(chassi_id: str, payload: dict = N
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/assembly
     Type: Assembly
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/assembly"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/assembly"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -1216,7 +1216,7 @@ def get_redfish_v1_chassis_chassi_id_basefrus(chassi_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/basefrus
     Type: Collection ofHpeiLOFrus
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/basefrus"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/basefrus"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_basefrus", dict())
     if not dynamic_items:
@@ -1242,7 +1242,7 @@ def post_redfish_v1_chassis_chassi_id_basefrus(chassi_id: str, payload: dict = N
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/basefrus
     Type: Collection ofHpeiLOFrus
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/basefrus"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/basefrus"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -1264,7 +1264,7 @@ def get_redfish_v1_chassis_chassi_id_basefrus_basefru_id(chassi_id: str, basefru
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_basefrus_basefru_id")
     if static_val:
         static_val = dict(static_val)
-        if str(basefru_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/chassis/{chassi_id}/basefrus/{basefru_id}"
             static_val["Id"] = basefru_id
             return static_val
@@ -1303,7 +1303,7 @@ def delete_redfish_v1_chassis_chassi_id_basefrus_basefru_id(chassi_id: str, base
     static_val = db.get_static("delete_redfish_v1_chassis_chassi_id_basefrus_baseget_redfish_v1_chassis_chassi_id_basefrus_basefru_id")
     if static_val:
         static_val = dict(static_val)
-        if str(basefru_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": basefru_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -1313,7 +1313,7 @@ def get_redfish_v1_chassis_chassi_id_basefrus_basefru_id_details(chassi_id: str,
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/basefrus/{basefru_id}/details
     Type: HpeiLOFrus
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/basefrus/{basefru_id}/details"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/basefrus/{basefru_id}/details"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_basefrus_basefru_id_details", dict())
     if not dynamic_items:
@@ -1339,7 +1339,7 @@ def post_redfish_v1_chassis_chassi_id_basefrus_basefru_id_details(chassi_id: str
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/basefrus/{basefru_id}/details
     Type: HpeiLOFrus
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/basefrus/{basefru_id}/details"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/basefrus/{basefru_id}/details"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -1354,7 +1354,7 @@ def get_redfish_v1_chassis_chassi_id_devices(chassi_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/devices
     Type: Collection ofHpeServerDevice
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/devices"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/devices"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_devices", dict())
     if not dynamic_items:
@@ -1380,7 +1380,7 @@ def post_redfish_v1_chassis_chassi_id_devices(chassi_id: str, payload: dict = No
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/devices
     Type: Collection ofHpeServerDevice
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/devices"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/devices"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -1402,7 +1402,7 @@ def get_redfish_v1_chassis_chassi_id_devices_devic_id(chassi_id: str, devic_id: 
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_devices_devic_id")
     if static_val:
         static_val = dict(static_val)
-        if str(devic_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/chassis/{chassi_id}/devices/{devic_id}"
             static_val["Id"] = devic_id
             return static_val
@@ -1441,7 +1441,7 @@ def delete_redfish_v1_chassis_chassi_id_devices_devic_id(chassi_id: str, devic_i
     static_val = db.get_static("delete_redfish_v1_chassis_chassi_id_devices_deget_redfish_v1_chassis_chassi_id_devices_devic_id")
     if static_val:
         static_val = dict(static_val)
-        if str(devic_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": devic_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -1451,7 +1451,7 @@ def get_redfish_v1_chassis_chassi_id_drives_driv_id_assembly(chassi_id: str, dri
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/drives/{driv_id}/assembly
     Type: Assembly
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/drives/{driv_id}/assembly"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/drives/{driv_id}/assembly"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_drives_driv_id_assembly", dict())
     if not dynamic_items:
@@ -1477,7 +1477,7 @@ def post_redfish_v1_chassis_chassi_id_drives_driv_id_assembly(chassi_id: str, dr
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/drives/{driv_id}/assembly
     Type: Assembly
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/drives/{driv_id}/assembly"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/drives/{driv_id}/assembly"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -1492,7 +1492,7 @@ def get_redfish_v1_chassis_chassi_id_drives_driv_id_environmentmetrics(chassi_id
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/drives/{driv_id}/environmentmetrics
     Type: EnvironmentMetrics
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/drives/{driv_id}/environmentmetrics"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/drives/{driv_id}/environmentmetrics"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_drives_driv_id_environmentmetrics", dict())
     if not dynamic_items:
@@ -1518,7 +1518,7 @@ def post_redfish_v1_chassis_chassi_id_drives_driv_id_environmentmetrics(chassi_i
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/drives/{driv_id}/environmentmetrics
     Type: EnvironmentMetrics
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/drives/{driv_id}/environmentmetrics"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/drives/{driv_id}/environmentmetrics"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -1533,7 +1533,7 @@ def get_redfish_v1_chassis_chassi_id_environmentmetrics(chassi_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/environmentmetrics
     Type: EnvironmentMetrics
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/environmentmetrics"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/environmentmetrics"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_environmentmetrics", dict())
     if not dynamic_items:
@@ -1559,7 +1559,7 @@ def post_redfish_v1_chassis_chassi_id_environmentmetrics(chassi_id: str, payload
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/environmentmetrics
     Type: EnvironmentMetrics
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/environmentmetrics"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/environmentmetrics"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -1574,7 +1574,7 @@ def get_redfish_v1_chassis_chassi_id_mezzfrus(chassi_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/mezzfrus
     Type: Collection ofHpeiLOFrus
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/mezzfrus"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/mezzfrus"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_mezzfrus", dict())
     if not dynamic_items:
@@ -1600,7 +1600,7 @@ def post_redfish_v1_chassis_chassi_id_mezzfrus(chassi_id: str, payload: dict = N
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/mezzfrus
     Type: Collection ofHpeiLOFrus
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/mezzfrus"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/mezzfrus"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -1622,7 +1622,7 @@ def get_redfish_v1_chassis_chassi_id_mezzfrus_mezzfru_id(chassi_id: str, mezzfru
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_mezzfrus_mezzfru_id")
     if static_val:
         static_val = dict(static_val)
-        if str(mezzfru_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/chassis/{chassi_id}/mezzfrus/{mezzfru_id}"
             static_val["Id"] = mezzfru_id
             return static_val
@@ -1661,7 +1661,7 @@ def delete_redfish_v1_chassis_chassi_id_mezzfrus_mezzfru_id(chassi_id: str, mezz
     static_val = db.get_static("delete_redfish_v1_chassis_chassi_id_mezzfrus_mezzget_redfish_v1_chassis_chassi_id_mezzfrus_mezzfru_id")
     if static_val:
         static_val = dict(static_val)
-        if str(mezzfru_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": mezzfru_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -1671,7 +1671,7 @@ def get_redfish_v1_chassis_chassi_id_mezzfrus_mezzfru_id_details(chassi_id: str,
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/mezzfrus/{mezzfru_id}/details
     Type: HpeiLOFrus
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/mezzfrus/{mezzfru_id}/details"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/mezzfrus/{mezzfru_id}/details"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_mezzfrus_mezzfru_id_details", dict())
     if not dynamic_items:
@@ -1697,7 +1697,7 @@ def post_redfish_v1_chassis_chassi_id_mezzfrus_mezzfru_id_details(chassi_id: str
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/mezzfrus/{mezzfru_id}/details
     Type: HpeiLOFrus
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/mezzfrus/{mezzfru_id}/details"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/mezzfrus/{mezzfru_id}/details"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -1712,7 +1712,7 @@ def get_redfish_v1_chassis_chassi_id_networkadapters(chassi_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/networkadapters
     Type: Collection ofNetworkAdapter
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/networkadapters"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/networkadapters"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_networkadapters", dict())
     if not dynamic_items:
@@ -1738,7 +1738,7 @@ def post_redfish_v1_chassis_chassi_id_networkadapters(chassi_id: str, payload: d
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/networkadapters
     Type: Collection ofNetworkAdapter
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/networkadapters"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/networkadapters"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -1760,7 +1760,7 @@ def get_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id(chassi_id
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id")
     if static_val:
         static_val = dict(static_val)
-        if str(networkadapter_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}"
             static_val["Id"] = networkadapter_id
             return static_val
@@ -1799,7 +1799,7 @@ def delete_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id(chassi
     static_val = db.get_static("delete_redfish_v1_chassis_chassi_id_networkadapters_networkadapget_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id")
     if static_val:
         static_val = dict(static_val)
-        if str(networkadapter_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": networkadapter_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -1809,7 +1809,7 @@ def get_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_assembly(
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/assembly
     Type: Assembly
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/assembly"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/assembly"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_assembly", dict())
     if not dynamic_items:
@@ -1835,7 +1835,7 @@ def post_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_assembly
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/assembly
     Type: Assembly
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/assembly"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/assembly"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -1850,7 +1850,7 @@ def get_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_networkde
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/networkdevicefunctions
     Type: Collection ofNetworkDeviceFunction
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/networkdevicefunctions"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/networkdevicefunctions"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_networkdevicefunctions", dict())
     if not dynamic_items:
@@ -1876,7 +1876,7 @@ def post_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_networkd
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/networkdevicefunctions
     Type: Collection ofNetworkDeviceFunction
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/networkdevicefunctions"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/networkdevicefunctions"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -1898,7 +1898,7 @@ def get_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_networkde
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_networkdevicefunctions_networkdevicefunction_id")
     if static_val:
         static_val = dict(static_val)
-        if str(networkdevicefunction_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/networkdevicefunctions/{networkdevicefunction_id}"
             static_val["Id"] = networkdevicefunction_id
             return static_val
@@ -1937,7 +1937,7 @@ def delete_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_networ
     static_val = db.get_static("delete_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_networkdevicefunctions_networkdevicefunctget_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_networkdevicefunctions_networkdevicefunction_id")
     if static_val:
         static_val = dict(static_val)
-        if str(networkdevicefunction_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": networkdevicefunction_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -1947,7 +1947,7 @@ def get_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_networkde
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/networkdevicefunctions/{networkdevicefunction_id}/settings
     Type: NetworkDeviceFunction
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/networkdevicefunctions/{networkdevicefunction_id}/settings"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/networkdevicefunctions/{networkdevicefunction_id}/settings"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_networkdevicefunctions_networkdevicefunction_id_settings", dict())
     if not dynamic_items:
@@ -1973,7 +1973,7 @@ def post_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_networkd
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/networkdevicefunctions/{networkdevicefunction_id}/settings
     Type: NetworkDeviceFunction
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/networkdevicefunctions/{networkdevicefunction_id}/settings"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/networkdevicefunctions/{networkdevicefunction_id}/settings"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -1988,7 +1988,7 @@ def get_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_ports(cha
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/ports
     Type: Collection ofPort
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/ports"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/ports"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_ports", dict())
     if not dynamic_items:
@@ -2014,7 +2014,7 @@ def post_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_ports(ch
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/ports
     Type: Collection ofPort
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/ports"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/ports"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -2036,7 +2036,7 @@ def get_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_ports_por
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_ports_port_id")
     if static_val:
         static_val = dict(static_val)
-        if str(port_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/ports/{port_id}"
             static_val["Id"] = port_id
             return static_val
@@ -2075,7 +2075,7 @@ def delete_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_ports_
     static_val = db.get_static("delete_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_ports_pget_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_ports_port_id")
     if static_val:
         static_val = dict(static_val)
-        if str(port_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": port_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -2085,7 +2085,7 @@ def get_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_ports_por
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/ports/{port_id}/settings
     Type: Port
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/ports/{port_id}/settings"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/ports/{port_id}/settings"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_ports_port_id_settings", dict())
     if not dynamic_items:
@@ -2111,7 +2111,7 @@ def post_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_ports_po
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/ports/{port_id}/settings
     Type: Port
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/ports/{port_id}/settings"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/ports/{port_id}/settings"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -2126,7 +2126,7 @@ def get_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_settings(
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/settings
     Type: NetworkAdapter
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/settings"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/settings"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_settings", dict())
     if not dynamic_items:
@@ -2152,7 +2152,7 @@ def post_redfish_v1_chassis_chassi_id_networkadapters_networkadapter_id_settings
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/settings
     Type: NetworkAdapter
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/settings"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/networkadapters/{networkadapter_id}/settings"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -2167,7 +2167,7 @@ def get_redfish_v1_chassis_chassi_id_pciedevices(chassi_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/pciedevices
     Type: Collection ofPCIeDevice
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/pciedevices"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/pciedevices"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_pciedevices", dict())
     if not dynamic_items:
@@ -2193,7 +2193,7 @@ def post_redfish_v1_chassis_chassi_id_pciedevices(chassi_id: str, payload: dict 
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/pciedevices
     Type: Collection ofPCIeDevice
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/pciedevices"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/pciedevices"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -2215,7 +2215,7 @@ def get_redfish_v1_chassis_chassi_id_pciedevices_pciedevic_id(chassi_id: str, pc
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_pciedevices_pciedevic_id")
     if static_val:
         static_val = dict(static_val)
-        if str(pciedevic_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/chassis/{chassi_id}/pciedevices/{pciedevic_id}"
             static_val["Id"] = pciedevic_id
             return static_val
@@ -2254,7 +2254,7 @@ def delete_redfish_v1_chassis_chassi_id_pciedevices_pciedevic_id(chassi_id: str,
     static_val = db.get_static("delete_redfish_v1_chassis_chassi_id_pciedevices_pciedeget_redfish_v1_chassis_chassi_id_pciedevices_pciedevic_id")
     if static_val:
         static_val = dict(static_val)
-        if str(pciedevic_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": pciedevic_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -2264,7 +2264,7 @@ def get_redfish_v1_chassis_chassi_id_pciedevices_pciedevic_id_pciefunctions(chas
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/pciedevices/{pciedevic_id}/pciefunctions
     Type: Collection ofPCIeFunction
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/pciedevices/{pciedevic_id}/pciefunctions"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/pciedevices/{pciedevic_id}/pciefunctions"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_pciedevices_pciedevic_id_pciefunctions", dict())
     if not dynamic_items:
@@ -2290,7 +2290,7 @@ def post_redfish_v1_chassis_chassi_id_pciedevices_pciedevic_id_pciefunctions(cha
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/pciedevices/{pciedevic_id}/pciefunctions
     Type: Collection ofPCIeFunction
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/pciedevices/{pciedevic_id}/pciefunctions"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/pciedevices/{pciedevic_id}/pciefunctions"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -2312,7 +2312,7 @@ def get_redfish_v1_chassis_chassi_id_pciedevices_pciedevic_id_pciefunctions_pcie
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_pciedevices_pciedevic_id_pciefunctions_pciefunction_id")
     if static_val:
         static_val = dict(static_val)
-        if str(pciefunction_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/chassis/{chassi_id}/pciedevices/{pciedevic_id}/pciefunctions/{pciefunction_id}"
             static_val["Id"] = pciefunction_id
             return static_val
@@ -2351,7 +2351,7 @@ def delete_redfish_v1_chassis_chassi_id_pciedevices_pciedevic_id_pciefunctions_p
     static_val = db.get_static("delete_redfish_v1_chassis_chassi_id_pciedevices_pciedevic_id_pciefunctions_pciefunctget_redfish_v1_chassis_chassi_id_pciedevices_pciedevic_id_pciefunctions_pciefunction_id")
     if static_val:
         static_val = dict(static_val)
-        if str(pciefunction_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": pciefunction_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -2361,7 +2361,7 @@ def get_redfish_v1_chassis_chassi_id_pcieslots(chassi_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/pcieslots
     Type: PCIeSlots
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/pcieslots"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/pcieslots"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_pcieslots", dict())
     if not dynamic_items:
@@ -2387,7 +2387,7 @@ def post_redfish_v1_chassis_chassi_id_pcieslots(chassi_id: str, payload: dict = 
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/pcieslots
     Type: PCIeSlots
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/pcieslots"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/pcieslots"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -2402,7 +2402,7 @@ def get_redfish_v1_chassis_chassi_id_power(chassi_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/power
     Type: Power
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/power"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/power"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_power", dict())
     if not dynamic_items:
@@ -2428,7 +2428,7 @@ def post_redfish_v1_chassis_chassi_id_power(chassi_id: str, payload: dict = None
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/power
     Type: Power
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/power"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/power"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -2443,7 +2443,7 @@ def get_redfish_v1_chassis_chassi_id_power_fastpowermeter(chassi_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/power/fastpowermeter
     Type: HpePowerMeter
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/power/fastpowermeter"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/power/fastpowermeter"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_power_fastpowermeter", dict())
     if not dynamic_items:
@@ -2469,7 +2469,7 @@ def post_redfish_v1_chassis_chassi_id_power_fastpowermeter(chassi_id: str, paylo
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/power/fastpowermeter
     Type: HpePowerMeter
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/power/fastpowermeter"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/power/fastpowermeter"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -2484,7 +2484,7 @@ def get_redfish_v1_chassis_chassi_id_power_powermeter(chassi_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/power/powermeter
     Type: HpePowerMeter
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/power/powermeter"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/power/powermeter"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_power_powermeter", dict())
     if not dynamic_items:
@@ -2510,7 +2510,7 @@ def post_redfish_v1_chassis_chassi_id_power_powermeter(chassi_id: str, payload: 
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/power/powermeter
     Type: HpePowerMeter
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/power/powermeter"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/power/powermeter"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -2525,7 +2525,7 @@ def get_redfish_v1_chassis_chassi_id_powersubsystem(chassi_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/powersubsystem
     Type: PowerSubsystem
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/powersubsystem"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/powersubsystem"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_powersubsystem", dict())
     if not dynamic_items:
@@ -2551,7 +2551,7 @@ def post_redfish_v1_chassis_chassi_id_powersubsystem(chassi_id: str, payload: di
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/powersubsystem
     Type: PowerSubsystem
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/powersubsystem"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/powersubsystem"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -2566,7 +2566,7 @@ def get_redfish_v1_chassis_chassi_id_powersubsystem_batteries(chassi_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/powersubsystem/batteries
     Type: Collection ofBattery
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/powersubsystem/batteries"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/powersubsystem/batteries"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_powersubsystem_batteries", dict())
     if not dynamic_items:
@@ -2592,7 +2592,7 @@ def post_redfish_v1_chassis_chassi_id_powersubsystem_batteries(chassi_id: str, p
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/powersubsystem/batteries
     Type: Collection ofBattery
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/powersubsystem/batteries"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/powersubsystem/batteries"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -2614,7 +2614,7 @@ def get_redfish_v1_chassis_chassi_id_powersubsystem_batteries_battery_id(chassi_
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_powersubsystem_batteries_battery_id")
     if static_val:
         static_val = dict(static_val)
-        if str(battery_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/chassis/{chassi_id}/powersubsystem/batteries/{battery_id}"
             static_val["Id"] = battery_id
             return static_val
@@ -2653,7 +2653,7 @@ def delete_redfish_v1_chassis_chassi_id_powersubsystem_batteries_battery_id(chas
     static_val = db.get_static("delete_redfish_v1_chassis_chassi_id_powersubsystem_batteries_battget_redfish_v1_chassis_chassi_id_powersubsystem_batteries_battery_id")
     if static_val:
         static_val = dict(static_val)
-        if str(battery_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": battery_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -2663,7 +2663,7 @@ def get_redfish_v1_chassis_chassi_id_powersubsystem_powersupplies(chassi_id: str
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies
     Type: Collection ofPowerSupply
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_powersubsystem_powersupplies", dict())
     if not dynamic_items:
@@ -2689,7 +2689,7 @@ def post_redfish_v1_chassis_chassi_id_powersubsystem_powersupplies(chassi_id: st
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies
     Type: Collection ofPowerSupply
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -2711,7 +2711,7 @@ def get_redfish_v1_chassis_chassi_id_powersubsystem_powersupplies_powersupply_id
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_powersubsystem_powersupplies_powersupply_id")
     if static_val:
         static_val = dict(static_val)
-        if str(powersupply_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies/{powersupply_id}"
             static_val["Id"] = powersupply_id
             return static_val
@@ -2750,7 +2750,7 @@ def delete_redfish_v1_chassis_chassi_id_powersubsystem_powersupplies_powersupply
     static_val = db.get_static("delete_redfish_v1_chassis_chassi_id_powersubsystem_powersupplies_powersupget_redfish_v1_chassis_chassi_id_powersubsystem_powersupplies_powersupply_id")
     if static_val:
         static_val = dict(static_val)
-        if str(powersupply_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": powersupply_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -2760,7 +2760,7 @@ def get_redfish_v1_chassis_chassi_id_powersubsystem_powersupplies_powersupply_id
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies/{powersupply_id}/assembly
     Type: Assembly
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies/{powersupply_id}/assembly"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies/{powersupply_id}/assembly"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_powersubsystem_powersupplies_powersupply_id_assembly", dict())
     if not dynamic_items:
@@ -2786,7 +2786,7 @@ def post_redfish_v1_chassis_chassi_id_powersubsystem_powersupplies_powersupply_i
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies/{powersupply_id}/assembly
     Type: Assembly
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies/{powersupply_id}/assembly"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies/{powersupply_id}/assembly"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -2801,7 +2801,7 @@ def get_redfish_v1_chassis_chassi_id_powersubsystem_powersupplies_powersupply_id
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies/{powersupply_id}/metrics
     Type: PowerSupplyMetrics
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies/{powersupply_id}/metrics"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies/{powersupply_id}/metrics"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_powersubsystem_powersupplies_powersupply_id_metrics", dict())
     if not dynamic_items:
@@ -2827,7 +2827,7 @@ def post_redfish_v1_chassis_chassi_id_powersubsystem_powersupplies_powersupply_i
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies/{powersupply_id}/metrics
     Type: PowerSupplyMetrics
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies/{powersupply_id}/metrics"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/powersubsystem/powersupplies/{powersupply_id}/metrics"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -2849,7 +2849,7 @@ def get_redfish_v1_chassis_chassi_id_sensors_sensor_id(chassi_id: str, sensor_id
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_sensors_sensor_id")
     if static_val:
         static_val = dict(static_val)
-        if str(sensor_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/chassis/{chassi_id}/sensors/{sensor_id}"
             static_val["Id"] = sensor_id
             return static_val
@@ -2888,7 +2888,7 @@ def delete_redfish_v1_chassis_chassi_id_sensors_sensor_id(chassi_id: str, sensor
     static_val = db.get_static("delete_redfish_v1_chassis_chassi_id_sensors_senget_redfish_v1_chassis_chassi_id_sensors_sensor_id")
     if static_val:
         static_val = dict(static_val)
-        if str(sensor_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": sensor_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -2898,7 +2898,7 @@ def get_redfish_v1_chassis_chassi_id_thermal(chassi_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/thermal
     Type: Thermal
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/thermal"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/thermal"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_thermal", dict())
     if not dynamic_items:
@@ -2924,7 +2924,7 @@ def post_redfish_v1_chassis_chassi_id_thermal(chassi_id: str, payload: dict = No
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/thermal
     Type: Thermal
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/thermal"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/thermal"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -2939,7 +2939,7 @@ def get_redfish_v1_chassis_chassi_id_thermalsubsystem(chassi_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/thermalsubsystem
     Type: ThermalSubsystem
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/thermalsubsystem"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/thermalsubsystem"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_thermalsubsystem", dict())
     if not dynamic_items:
@@ -2965,7 +2965,7 @@ def post_redfish_v1_chassis_chassi_id_thermalsubsystem(chassi_id: str, payload: 
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/thermalsubsystem
     Type: ThermalSubsystem
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/thermalsubsystem"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/thermalsubsystem"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -2980,7 +2980,7 @@ def get_redfish_v1_chassis_chassi_id_thermalsubsystem_fans(chassi_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/thermalsubsystem/fans
     Type: Collection ofFan
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/thermalsubsystem/fans"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/thermalsubsystem/fans"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_thermalsubsystem_fans", dict())
     if not dynamic_items:
@@ -3006,7 +3006,7 @@ def post_redfish_v1_chassis_chassi_id_thermalsubsystem_fans(chassi_id: str, payl
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/thermalsubsystem/fans
     Type: Collection ofFan
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/thermalsubsystem/fans"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/thermalsubsystem/fans"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -3028,7 +3028,7 @@ def get_redfish_v1_chassis_chassi_id_thermalsubsystem_fans_fan_id(chassi_id: str
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_thermalsubsystem_fans_fan_id")
     if static_val:
         static_val = dict(static_val)
-        if str(fan_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/chassis/{chassi_id}/thermalsubsystem/fans/{fan_id}"
             static_val["Id"] = fan_id
             return static_val
@@ -3067,7 +3067,7 @@ def delete_redfish_v1_chassis_chassi_id_thermalsubsystem_fans_fan_id(chassi_id: 
     static_val = db.get_static("delete_redfish_v1_chassis_chassi_id_thermalsubsystem_fans_get_redfish_v1_chassis_chassi_id_thermalsubsystem_fans_fan_id")
     if static_val:
         static_val = dict(static_val)
-        if str(fan_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": fan_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -3077,7 +3077,7 @@ def get_redfish_v1_chassis_chassi_id_thermalsubsystem_fans_fan_id_assembly(chass
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/thermalsubsystem/fans/{fan_id}/assembly
     Type: Assembly
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/thermalsubsystem/fans/{fan_id}/assembly"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/thermalsubsystem/fans/{fan_id}/assembly"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_thermalsubsystem_fans_fan_id_assembly", dict())
     if not dynamic_items:
@@ -3103,7 +3103,7 @@ def post_redfish_v1_chassis_chassi_id_thermalsubsystem_fans_fan_id_assembly(chas
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/thermalsubsystem/fans/{fan_id}/assembly
     Type: Assembly
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/thermalsubsystem/fans/{fan_id}/assembly"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/thermalsubsystem/fans/{fan_id}/assembly"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -3118,7 +3118,7 @@ def get_redfish_v1_chassis_chassi_id_thermalsubsystem_pumps(chassi_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/thermalsubsystem/pumps
     Type: Collection ofPump
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/thermalsubsystem/pumps"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/thermalsubsystem/pumps"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_thermalsubsystem_pumps", dict())
     if not dynamic_items:
@@ -3144,7 +3144,7 @@ def post_redfish_v1_chassis_chassi_id_thermalsubsystem_pumps(chassi_id: str, pay
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/thermalsubsystem/pumps
     Type: Collection ofPump
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/thermalsubsystem/pumps"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/thermalsubsystem/pumps"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -3159,7 +3159,7 @@ def get_redfish_v1_chassis_chassi_id_thermalsubsystem_pumps_pump_id_assembly(cha
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/thermalsubsystem/pumps/{pump_id}/assembly
     Type: Pump
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/thermalsubsystem/pumps/{pump_id}/assembly"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/thermalsubsystem/pumps/{pump_id}/assembly"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_thermalsubsystem_pumps_pump_id_assembly", dict())
     if not dynamic_items:
@@ -3185,7 +3185,7 @@ def post_redfish_v1_chassis_chassi_id_thermalsubsystem_pumps_pump_id_assembly(ch
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/thermalsubsystem/pumps/{pump_id}/assembly
     Type: Pump
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/thermalsubsystem/pumps/{pump_id}/assembly"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/thermalsubsystem/pumps/{pump_id}/assembly"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -3200,7 +3200,7 @@ def get_redfish_v1_chassis_chassi_id_thermalsubsystem_thermalmetrics(chassi_id: 
     iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassi_id}/thermalsubsystem/thermalmetrics
     Type: ThermalMetrics
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/thermalsubsystem/thermalmetrics"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/thermalsubsystem/thermalmetrics"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_chassis_chassi_id_thermalsubsystem_thermalmetrics", dict())
     if not dynamic_items:
@@ -3226,7 +3226,7 @@ def post_redfish_v1_chassis_chassi_id_thermalsubsystem_thermalmetrics(chassi_id:
     iLO Redfish Endpoint: POST /redfish/v1/chassis/{chassi_id}/thermalsubsystem/thermalmetrics
     Type: ThermalMetrics
     """
-    collection_path = "/redfish/v1/chassis/{chassi_id}/thermalsubsystem/thermalmetrics"
+    collection_path = f"/redfish/v1/chassis/{chassi_id}/thermalsubsystem/thermalmetrics"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -3289,7 +3289,7 @@ def get_redfish_v1_componentintegrity_componentintegrity_id(componentintegrity_i
     static_val = db.get_static("get_redfish_v1_componentintegrity_componentintegrity_id")
     if static_val:
         static_val = dict(static_val)
-        if str(componentintegrity_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/componentintegrity/{componentintegrity_id}"
             static_val["Id"] = componentintegrity_id
             return static_val
@@ -3328,7 +3328,7 @@ def delete_redfish_v1_componentintegrity_componentintegrity_id(componentintegrit
     static_val = db.get_static("delete_redfish_v1_componentintegrity_componentintegrget_redfish_v1_componentintegrity_componentintegrity_id")
     if static_val:
         static_val = dict(static_val)
-        if str(componentintegrity_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": componentintegrity_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -3427,7 +3427,7 @@ def get_redfish_v1_eventservice_cacertificates_cacertificat_id(cacertificat_id: 
     static_val = db.get_static("get_redfish_v1_eventservice_cacertificates_cacertificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(cacertificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/eventservice/cacertificates/{cacertificat_id}"
             static_val["Id"] = cacertificat_id
             return static_val
@@ -3466,7 +3466,7 @@ def delete_redfish_v1_eventservice_cacertificates_cacertificat_id(cacertificat_i
     static_val = db.get_static("delete_redfish_v1_eventservice_cacertificates_cacertifiget_redfish_v1_eventservice_cacertificates_cacertificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(cacertificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": cacertificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -3524,7 +3524,7 @@ def get_redfish_v1_eventservice_subscriptions_subscription_id(subscription_id: s
     static_val = db.get_static("get_redfish_v1_eventservice_subscriptions_subscription_id")
     if static_val:
         static_val = dict(static_val)
-        if str(subscription_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/eventservice/subscriptions/{subscription_id}"
             static_val["Id"] = subscription_id
             return static_val
@@ -3563,7 +3563,7 @@ def delete_redfish_v1_eventservice_subscriptions_subscription_id(subscription_id
     static_val = db.get_static("delete_redfish_v1_eventservice_subscriptions_subscriptget_redfish_v1_eventservice_subscriptions_subscription_id")
     if static_val:
         static_val = dict(static_val)
-        if str(subscription_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": subscription_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -3621,7 +3621,7 @@ def get_redfish_v1_fabrics_fabric_id(fabric_id: str):
     static_val = db.get_static("get_redfish_v1_fabrics_fabric_id")
     if static_val:
         static_val = dict(static_val)
-        if str(fabric_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/fabrics/{fabric_id}"
             static_val["Id"] = fabric_id
             return static_val
@@ -3660,7 +3660,7 @@ def delete_redfish_v1_fabrics_fabric_id(fabric_id: str):
     static_val = db.get_static("delete_redfish_v1_fabrics_fabget_redfish_v1_fabrics_fabric_id")
     if static_val:
         static_val = dict(static_val)
-        if str(fabric_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": fabric_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -3670,7 +3670,7 @@ def get_redfish_v1_fabrics_fabric_id_switches(fabric_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/fabrics/{fabric_id}/switches
     Type: Collection ofSwitch
     """
-    collection_path = "/redfish/v1/fabrics/{fabric_id}/switches"
+    collection_path = f"/redfish/v1/fabrics/{fabric_id}/switches"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_fabrics_fabric_id_switches", dict())
     if not dynamic_items:
@@ -3696,7 +3696,7 @@ def post_redfish_v1_fabrics_fabric_id_switches(fabric_id: str, payload: dict = N
     iLO Redfish Endpoint: POST /redfish/v1/fabrics/{fabric_id}/switches
     Type: Collection ofSwitch
     """
-    collection_path = "/redfish/v1/fabrics/{fabric_id}/switches"
+    collection_path = f"/redfish/v1/fabrics/{fabric_id}/switches"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -3718,7 +3718,7 @@ def get_redfish_v1_fabrics_fabric_id_switches_switch_id(fabric_id: str, switch_i
     static_val = db.get_static("get_redfish_v1_fabrics_fabric_id_switches_switch_id")
     if static_val:
         static_val = dict(static_val)
-        if str(switch_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/fabrics/{fabric_id}/switches/{switch_id}"
             static_val["Id"] = switch_id
             return static_val
@@ -3757,7 +3757,7 @@ def delete_redfish_v1_fabrics_fabric_id_switches_switch_id(fabric_id: str, switc
     static_val = db.get_static("delete_redfish_v1_fabrics_fabric_id_switches_swiget_redfish_v1_fabrics_fabric_id_switches_switch_id")
     if static_val:
         static_val = dict(static_val)
-        if str(switch_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": switch_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -3767,7 +3767,7 @@ def get_redfish_v1_fabrics_fabric_id_switches_switch_id_ports(fabric_id: str, sw
     iLO Redfish Endpoint: GET /redfish/v1/fabrics/{fabric_id}/switches/{switch_id}/ports
     Type: Collection ofPort
     """
-    collection_path = "/redfish/v1/fabrics/{fabric_id}/switches/{switch_id}/ports"
+    collection_path = f"/redfish/v1/fabrics/{fabric_id}/switches/{switch_id}/ports"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_fabrics_fabric_id_switches_switch_id_ports", dict())
     if not dynamic_items:
@@ -3793,7 +3793,7 @@ def post_redfish_v1_fabrics_fabric_id_switches_switch_id_ports(fabric_id: str, s
     iLO Redfish Endpoint: POST /redfish/v1/fabrics/{fabric_id}/switches/{switch_id}/ports
     Type: Collection ofPort
     """
-    collection_path = "/redfish/v1/fabrics/{fabric_id}/switches/{switch_id}/ports"
+    collection_path = f"/redfish/v1/fabrics/{fabric_id}/switches/{switch_id}/ports"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -3815,7 +3815,7 @@ def get_redfish_v1_fabrics_fabric_id_switches_switch_id_ports_port_id(fabric_id:
     static_val = db.get_static("get_redfish_v1_fabrics_fabric_id_switches_switch_id_ports_port_id")
     if static_val:
         static_val = dict(static_val)
-        if str(port_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/fabrics/{fabric_id}/switches/{switch_id}/ports/{port_id}"
             static_val["Id"] = port_id
             return static_val
@@ -3854,7 +3854,7 @@ def delete_redfish_v1_fabrics_fabric_id_switches_switch_id_ports_port_id(fabric_
     static_val = db.get_static("delete_redfish_v1_fabrics_fabric_id_switches_switch_id_ports_pget_redfish_v1_fabrics_fabric_id_switches_switch_id_ports_port_id")
     if static_val:
         static_val = dict(static_val)
-        if str(port_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": port_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -3912,7 +3912,7 @@ def get_redfish_v1_jsonschemas_jsonschema_id(jsonschema_id: str):
     static_val = db.get_static("get_redfish_v1_jsonschemas_jsonschema_id")
     if static_val:
         static_val = dict(static_val)
-        if str(jsonschema_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/jsonschemas/{jsonschema_id}"
             static_val["Id"] = jsonschema_id
             return static_val
@@ -3951,7 +3951,7 @@ def delete_redfish_v1_jsonschemas_jsonschema_id(jsonschema_id: str):
     static_val = db.get_static("delete_redfish_v1_jsonschemas_jsonschget_redfish_v1_jsonschemas_jsonschema_id")
     if static_val:
         static_val = dict(static_val)
-        if str(jsonschema_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": jsonschema_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -4009,7 +4009,7 @@ def get_redfish_v1_managers_manager_id(manager_id: str):
     static_val = db.get_static("get_redfish_v1_managers_manager_id")
     if static_val:
         static_val = dict(static_val)
-        if str(manager_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}"
             static_val["Id"] = manager_id
             return static_val
@@ -4048,7 +4048,7 @@ def delete_redfish_v1_managers_manager_id(manager_id: str):
     static_val = db.get_static("delete_redfish_v1_managers_managet_redfish_v1_managers_manager_id")
     if static_val:
         static_val = dict(static_val)
-        if str(manager_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": manager_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -4058,7 +4058,7 @@ def get_redfish_v1_managers_manager_id_managerdiagnosticdata(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/ManagerDiagnosticData
     Type: ManagerDiagnosticData
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/ManagerDiagnosticData"
+    collection_path = f"/redfish/v1/managers/{manager_id}/ManagerDiagnosticData"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_managerdiagnosticdata", dict())
     if not dynamic_items:
@@ -4084,7 +4084,7 @@ def post_redfish_v1_managers_manager_id_managerdiagnosticdata(manager_id: str, p
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/ManagerDiagnosticData
     Type: ManagerDiagnosticData
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/ManagerDiagnosticData"
+    collection_path = f"/redfish/v1/managers/{manager_id}/ManagerDiagnosticData"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -4099,7 +4099,7 @@ def get_redfish_v1_managers_manager_id_activehealthsystem(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/activehealthsystem
     Type: HpeiLOActiveHealthSystem
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/activehealthsystem"
+    collection_path = f"/redfish/v1/managers/{manager_id}/activehealthsystem"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_activehealthsystem", dict())
     if not dynamic_items:
@@ -4125,7 +4125,7 @@ def post_redfish_v1_managers_manager_id_activehealthsystem(manager_id: str, payl
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/activehealthsystem
     Type: HpeiLOActiveHealthSystem
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/activehealthsystem"
+    collection_path = f"/redfish/v1/managers/{manager_id}/activehealthsystem"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -4140,7 +4140,7 @@ def get_redfish_v1_managers_manager_id_backuprestoreservice(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/backuprestoreservice
     Type: HpeiLOBackupRestoreService
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/backuprestoreservice"
+    collection_path = f"/redfish/v1/managers/{manager_id}/backuprestoreservice"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_backuprestoreservice", dict())
     if not dynamic_items:
@@ -4166,7 +4166,7 @@ def post_redfish_v1_managers_manager_id_backuprestoreservice(manager_id: str, pa
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/backuprestoreservice
     Type: HpeiLOBackupRestoreService
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/backuprestoreservice"
+    collection_path = f"/redfish/v1/managers/{manager_id}/backuprestoreservice"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -4181,7 +4181,7 @@ def get_redfish_v1_managers_manager_id_backuprestoreservice_backupfiles(manager_
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/backuprestoreservice/backupfiles
     Type: Collection ofHpeiLOBackupFile
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/backuprestoreservice/backupfiles"
+    collection_path = f"/redfish/v1/managers/{manager_id}/backuprestoreservice/backupfiles"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_backuprestoreservice_backupfiles", dict())
     if not dynamic_items:
@@ -4207,7 +4207,7 @@ def post_redfish_v1_managers_manager_id_backuprestoreservice_backupfiles(manager
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/backuprestoreservice/backupfiles
     Type: Collection ofHpeiLOBackupFile
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/backuprestoreservice/backupfiles"
+    collection_path = f"/redfish/v1/managers/{manager_id}/backuprestoreservice/backupfiles"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -4229,7 +4229,7 @@ def get_redfish_v1_managers_manager_id_backuprestoreservice_backupfiles_backupfi
     static_val = db.get_static("get_redfish_v1_managers_manager_id_backuprestoreservice_backupfiles_backupfil_id")
     if static_val:
         static_val = dict(static_val)
-        if str(backupfil_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/backuprestoreservice/backupfiles/{backupfil_id}"
             static_val["Id"] = backupfil_id
             return static_val
@@ -4268,7 +4268,7 @@ def delete_redfish_v1_managers_manager_id_backuprestoreservice_backupfiles_backu
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_backuprestoreservice_backupfiles_backupget_redfish_v1_managers_manager_id_backuprestoreservice_backupfiles_backupfil_id")
     if static_val:
         static_val = dict(static_val)
-        if str(backupfil_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": backupfil_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -4278,7 +4278,7 @@ def get_redfish_v1_managers_manager_id_datetime(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/datetime
     Type: HpeiLODateTime
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/datetime"
+    collection_path = f"/redfish/v1/managers/{manager_id}/datetime"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_datetime", dict())
     if not dynamic_items:
@@ -4304,7 +4304,7 @@ def post_redfish_v1_managers_manager_id_datetime(manager_id: str, payload: dict 
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/datetime
     Type: HpeiLODateTime
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/datetime"
+    collection_path = f"/redfish/v1/managers/{manager_id}/datetime"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -4319,7 +4319,7 @@ def get_redfish_v1_managers_manager_id_dedicatednetworkports(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/dedicatednetworkports
     Type: Collection ofPort
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/dedicatednetworkports"
+    collection_path = f"/redfish/v1/managers/{manager_id}/dedicatednetworkports"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_dedicatednetworkports", dict())
     if not dynamic_items:
@@ -4345,7 +4345,7 @@ def post_redfish_v1_managers_manager_id_dedicatednetworkports(manager_id: str, p
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/dedicatednetworkports
     Type: Collection ofPort
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/dedicatednetworkports"
+    collection_path = f"/redfish/v1/managers/{manager_id}/dedicatednetworkports"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -4367,7 +4367,7 @@ def get_redfish_v1_managers_manager_id_dedicatednetworkports_dedicatednetworkpor
     static_val = db.get_static("get_redfish_v1_managers_manager_id_dedicatednetworkports_dedicatednetworkport_id")
     if static_val:
         static_val = dict(static_val)
-        if str(dedicatednetworkport_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/dedicatednetworkports/{dedicatednetworkport_id}"
             static_val["Id"] = dedicatednetworkport_id
             return static_val
@@ -4406,7 +4406,7 @@ def delete_redfish_v1_managers_manager_id_dedicatednetworkports_dedicatednetwork
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_dedicatednetworkports_dedicatednetworkpget_redfish_v1_managers_manager_id_dedicatednetworkports_dedicatednetworkport_id")
     if static_val:
         static_val = dict(static_val)
-        if str(dedicatednetworkport_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": dedicatednetworkport_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -4416,7 +4416,7 @@ def get_redfish_v1_managers_manager_id_ethernetinterfaces(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/ethernetinterfaces
     Type: Collection ofEthernetInterface
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/ethernetinterfaces"
+    collection_path = f"/redfish/v1/managers/{manager_id}/ethernetinterfaces"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_ethernetinterfaces", dict())
     if not dynamic_items:
@@ -4442,7 +4442,7 @@ def post_redfish_v1_managers_manager_id_ethernetinterfaces(manager_id: str, payl
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/ethernetinterfaces
     Type: Collection ofEthernetInterface
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/ethernetinterfaces"
+    collection_path = f"/redfish/v1/managers/{manager_id}/ethernetinterfaces"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -4464,7 +4464,7 @@ def get_redfish_v1_managers_manager_id_ethernetinterfaces_ethernetinterfac_id(ma
     static_val = db.get_static("get_redfish_v1_managers_manager_id_ethernetinterfaces_ethernetinterfac_id")
     if static_val:
         static_val = dict(static_val)
-        if str(ethernetinterfac_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/ethernetinterfaces/{ethernetinterfac_id}"
             static_val["Id"] = ethernetinterfac_id
             return static_val
@@ -4503,7 +4503,7 @@ def delete_redfish_v1_managers_manager_id_ethernetinterfaces_ethernetinterfac_id
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_ethernetinterfaces_ethernetinterget_redfish_v1_managers_manager_id_ethernetinterfaces_ethernetinterfac_id")
     if static_val:
         static_val = dict(static_val)
-        if str(ethernetinterfac_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": ethernetinterfac_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -4513,7 +4513,7 @@ def get_redfish_v1_managers_manager_id_hostinterfaces(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/hostinterfaces
     Type: Collection ofHostInterface
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/hostinterfaces"
+    collection_path = f"/redfish/v1/managers/{manager_id}/hostinterfaces"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_hostinterfaces", dict())
     if not dynamic_items:
@@ -4539,7 +4539,7 @@ def post_redfish_v1_managers_manager_id_hostinterfaces(manager_id: str, payload:
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/hostinterfaces
     Type: Collection ofHostInterface
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/hostinterfaces"
+    collection_path = f"/redfish/v1/managers/{manager_id}/hostinterfaces"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -4561,7 +4561,7 @@ def get_redfish_v1_managers_manager_id_hostinterfaces_hostinterfac_id(manager_id
     static_val = db.get_static("get_redfish_v1_managers_manager_id_hostinterfaces_hostinterfac_id")
     if static_val:
         static_val = dict(static_val)
-        if str(hostinterfac_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/hostinterfaces/{hostinterfac_id}"
             static_val["Id"] = hostinterfac_id
             return static_val
@@ -4600,7 +4600,7 @@ def delete_redfish_v1_managers_manager_id_hostinterfaces_hostinterfac_id(manager
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_hostinterfaces_hostinterget_redfish_v1_managers_manager_id_hostinterfaces_hostinterfac_id")
     if static_val:
         static_val = dict(static_val)
-        if str(hostinterfac_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": hostinterfac_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -4610,7 +4610,7 @@ def get_redfish_v1_managers_manager_id_licenseservice(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/licenseservice
     Type: Collection ofHpeiLOLicense
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/licenseservice"
+    collection_path = f"/redfish/v1/managers/{manager_id}/licenseservice"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_licenseservice", dict())
     if not dynamic_items:
@@ -4636,7 +4636,7 @@ def post_redfish_v1_managers_manager_id_licenseservice(manager_id: str, payload:
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/licenseservice
     Type: Collection ofHpeiLOLicense
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/licenseservice"
+    collection_path = f"/redfish/v1/managers/{manager_id}/licenseservice"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -4658,7 +4658,7 @@ def get_redfish_v1_managers_manager_id_licenseservice_licenseservice_id(manager_
     static_val = db.get_static("get_redfish_v1_managers_manager_id_licenseservice_licenseservice_id")
     if static_val:
         static_val = dict(static_val)
-        if str(licenseservice_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/licenseservice/{licenseservice_id}"
             static_val["Id"] = licenseservice_id
             return static_val
@@ -4697,7 +4697,7 @@ def delete_redfish_v1_managers_manager_id_licenseservice_licenseservice_id(manag
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_licenseservice_licenseservget_redfish_v1_managers_manager_id_licenseservice_licenseservice_id")
     if static_val:
         static_val = dict(static_val)
-        if str(licenseservice_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": licenseservice_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -4707,7 +4707,7 @@ def get_redfish_v1_managers_manager_id_logservices(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/logservices
     Type: Collection ofLogService
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/logservices"
+    collection_path = f"/redfish/v1/managers/{manager_id}/logservices"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_logservices", dict())
     if not dynamic_items:
@@ -4733,7 +4733,7 @@ def post_redfish_v1_managers_manager_id_logservices(manager_id: str, payload: di
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/logservices
     Type: Collection ofLogService
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/logservices"
+    collection_path = f"/redfish/v1/managers/{manager_id}/logservices"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -4748,7 +4748,7 @@ def get_redfish_v1_managers_manager_id_logservices_iel(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/logservices/iel
     Type: LogService
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/logservices/iel"
+    collection_path = f"/redfish/v1/managers/{manager_id}/logservices/iel"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_logservices_iel", dict())
     if not dynamic_items:
@@ -4774,7 +4774,7 @@ def post_redfish_v1_managers_manager_id_logservices_iel(manager_id: str, payload
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/logservices/iel
     Type: LogService
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/logservices/iel"
+    collection_path = f"/redfish/v1/managers/{manager_id}/logservices/iel"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -4789,7 +4789,7 @@ def get_redfish_v1_managers_manager_id_logservices_iel_entries(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/logservices/iel/entries
     Type: Collection ofLogEntry
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/logservices/iel/entries"
+    collection_path = f"/redfish/v1/managers/{manager_id}/logservices/iel/entries"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_logservices_iel_entries", dict())
     if not dynamic_items:
@@ -4815,7 +4815,7 @@ def post_redfish_v1_managers_manager_id_logservices_iel_entries(manager_id: str,
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/logservices/iel/entries
     Type: Collection ofLogEntry
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/logservices/iel/entries"
+    collection_path = f"/redfish/v1/managers/{manager_id}/logservices/iel/entries"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -4837,7 +4837,7 @@ def get_redfish_v1_managers_manager_id_logservices_iel_entries_entry_id(manager_
     static_val = db.get_static("get_redfish_v1_managers_manager_id_logservices_iel_entries_entry_id")
     if static_val:
         static_val = dict(static_val)
-        if str(entry_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/logservices/iel/entries/{entry_id}"
             static_val["Id"] = entry_id
             return static_val
@@ -4876,7 +4876,7 @@ def delete_redfish_v1_managers_manager_id_logservices_iel_entries_entry_id(manag
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_logservices_iel_entries_enget_redfish_v1_managers_manager_id_logservices_iel_entries_entry_id")
     if static_val:
         static_val = dict(static_val)
-        if str(entry_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": entry_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -4886,7 +4886,7 @@ def get_redfish_v1_managers_manager_id_networkprotocol(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/networkprotocol
     Type: ManagerNetworkProtocol
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/networkprotocol"
+    collection_path = f"/redfish/v1/managers/{manager_id}/networkprotocol"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_networkprotocol", dict())
     if not dynamic_items:
@@ -4912,7 +4912,7 @@ def post_redfish_v1_managers_manager_id_networkprotocol(manager_id: str, payload
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/networkprotocol
     Type: ManagerNetworkProtocol
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/networkprotocol"
+    collection_path = f"/redfish/v1/managers/{manager_id}/networkprotocol"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -4927,7 +4927,7 @@ def get_redfish_v1_managers_manager_id_networkprotocol_https_certificates(manage
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/networkprotocol/HTTPS/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/networkprotocol/HTTPS/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/networkprotocol/HTTPS/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_networkprotocol_https_certificates", dict())
     if not dynamic_items:
@@ -4953,7 +4953,7 @@ def post_redfish_v1_managers_manager_id_networkprotocol_https_certificates(manag
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/networkprotocol/HTTPS/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/networkprotocol/HTTPS/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/networkprotocol/HTTPS/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -4975,7 +4975,7 @@ def get_redfish_v1_managers_manager_id_networkprotocol_https_certificates_certif
     static_val = db.get_static("get_redfish_v1_managers_manager_id_networkprotocol_https_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/networkprotocol/HTTPS/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -5014,7 +5014,7 @@ def delete_redfish_v1_managers_manager_id_networkprotocol_https_certificates_cer
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_networkprotocol_https_certificates_certifiget_redfish_v1_managers_manager_id_networkprotocol_https_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -5024,7 +5024,7 @@ def get_redfish_v1_managers_manager_id_remotesupportservice(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/remotesupportservice
     Type: HpeRemoteSupport
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/remotesupportservice"
+    collection_path = f"/redfish/v1/managers/{manager_id}/remotesupportservice"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_remotesupportservice", dict())
     if not dynamic_items:
@@ -5050,7 +5050,7 @@ def post_redfish_v1_managers_manager_id_remotesupportservice(manager_id: str, pa
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/remotesupportservice
     Type: HpeRemoteSupport
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/remotesupportservice"
+    collection_path = f"/redfish/v1/managers/{manager_id}/remotesupportservice"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -5065,7 +5065,7 @@ def get_redfish_v1_managers_manager_id_remotesupportservice_serviceeventlogs(man
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/remotesupportservice/serviceeventlogs
     Type: Collection ofLogEntry
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/remotesupportservice/serviceeventlogs"
+    collection_path = f"/redfish/v1/managers/{manager_id}/remotesupportservice/serviceeventlogs"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_remotesupportservice_serviceeventlogs", dict())
     if not dynamic_items:
@@ -5091,7 +5091,7 @@ def post_redfish_v1_managers_manager_id_remotesupportservice_serviceeventlogs(ma
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/remotesupportservice/serviceeventlogs
     Type: Collection ofLogEntry
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/remotesupportservice/serviceeventlogs"
+    collection_path = f"/redfish/v1/managers/{manager_id}/remotesupportservice/serviceeventlogs"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -5113,7 +5113,7 @@ def get_redfish_v1_managers_manager_id_remotesupportservice_serviceeventlogs_ser
     static_val = db.get_static("get_redfish_v1_managers_manager_id_remotesupportservice_serviceeventlogs_serviceeventlog_id")
     if static_val:
         static_val = dict(static_val)
-        if str(serviceeventlog_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/remotesupportservice/serviceeventlogs/{serviceeventlog_id}"
             static_val["Id"] = serviceeventlog_id
             return static_val
@@ -5152,7 +5152,7 @@ def delete_redfish_v1_managers_manager_id_remotesupportservice_serviceeventlogs_
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_remotesupportservice_serviceeventlogs_serviceeventget_redfish_v1_managers_manager_id_remotesupportservice_serviceeventlogs_serviceeventlog_id")
     if static_val:
         static_val = dict(static_val)
-        if str(serviceeventlog_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": serviceeventlog_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -5162,7 +5162,7 @@ def get_redfish_v1_managers_manager_id_securityservice(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/securityservice
     Type: HpeSecurityService
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice", dict())
     if not dynamic_items:
@@ -5188,7 +5188,7 @@ def post_redfish_v1_managers_manager_id_securityservice(manager_id: str, payload
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/securityservice
     Type: HpeSecurityService
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -5203,7 +5203,7 @@ def get_redfish_v1_managers_manager_id_securityservice_bmchpeldevid_certificates
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/securityservice/bmchpeldevid/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/bmchpeldevid/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/bmchpeldevid/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_bmchpeldevid_certificates", dict())
     if not dynamic_items:
@@ -5229,7 +5229,7 @@ def post_redfish_v1_managers_manager_id_securityservice_bmchpeldevid_certificate
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/securityservice/bmchpeldevid/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/bmchpeldevid/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/bmchpeldevid/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -5251,7 +5251,7 @@ def get_redfish_v1_managers_manager_id_securityservice_bmchpeldevid_certificates
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_bmchpeldevid_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/securityservice/bmchpeldevid/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -5290,7 +5290,7 @@ def delete_redfish_v1_managers_manager_id_securityservice_bmchpeldevid_certifica
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_securityservice_bmchpeldevid_certificates_certifiget_redfish_v1_managers_manager_id_securityservice_bmchpeldevid_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -5300,7 +5300,7 @@ def get_redfish_v1_managers_manager_id_securityservice_bmciak_certificates(manag
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/securityservice/bmciak/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/bmciak/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/bmciak/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_bmciak_certificates", dict())
     if not dynamic_items:
@@ -5326,7 +5326,7 @@ def post_redfish_v1_managers_manager_id_securityservice_bmciak_certificates(mana
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/securityservice/bmciak/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/bmciak/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/bmciak/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -5348,7 +5348,7 @@ def get_redfish_v1_managers_manager_id_securityservice_bmciak_certificates_certi
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_bmciak_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/securityservice/bmciak/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -5387,7 +5387,7 @@ def delete_redfish_v1_managers_manager_id_securityservice_bmciak_certificates_ce
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_securityservice_bmciak_certificates_certifiget_redfish_v1_managers_manager_id_securityservice_bmciak_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -5397,7 +5397,7 @@ def get_redfish_v1_managers_manager_id_securityservice_bmcidevidpca_certificates
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/securityservice/bmcidevidpca/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/bmcidevidpca/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/bmcidevidpca/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_bmcidevidpca_certificates", dict())
     if not dynamic_items:
@@ -5423,7 +5423,7 @@ def post_redfish_v1_managers_manager_id_securityservice_bmcidevidpca_certificate
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/securityservice/bmcidevidpca/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/bmcidevidpca/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/bmcidevidpca/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -5445,7 +5445,7 @@ def get_redfish_v1_managers_manager_id_securityservice_bmcidevidpca_certificates
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_bmcidevidpca_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/securityservice/bmcidevidpca/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -5484,7 +5484,7 @@ def delete_redfish_v1_managers_manager_id_securityservice_bmcidevidpca_certifica
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_securityservice_bmcidevidpca_certificates_certifiget_redfish_v1_managers_manager_id_securityservice_bmcidevidpca_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -5494,7 +5494,7 @@ def get_redfish_v1_managers_manager_id_securityservice_bmclak_certificates(manag
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/securityservice/bmclak/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/bmclak/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/bmclak/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_bmclak_certificates", dict())
     if not dynamic_items:
@@ -5520,7 +5520,7 @@ def post_redfish_v1_managers_manager_id_securityservice_bmclak_certificates(mana
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/securityservice/bmclak/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/bmclak/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/bmclak/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -5542,7 +5542,7 @@ def get_redfish_v1_managers_manager_id_securityservice_bmclak_certificates_certi
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_bmclak_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/securityservice/bmclak/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -5581,7 +5581,7 @@ def delete_redfish_v1_managers_manager_id_securityservice_bmclak_certificates_ce
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_securityservice_bmclak_certificates_certifiget_redfish_v1_managers_manager_id_securityservice_bmclak_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -5591,7 +5591,7 @@ def get_redfish_v1_managers_manager_id_securityservice_certificateauthentication
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/securityservice/certificateauthentication
     Type: HpeCertAuth
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/certificateauthentication"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/certificateauthentication"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_certificateauthentication", dict())
     if not dynamic_items:
@@ -5617,7 +5617,7 @@ def post_redfish_v1_managers_manager_id_securityservice_certificateauthenticatio
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/securityservice/certificateauthentication
     Type: HpeCertAuth
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/certificateauthentication"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/certificateauthentication"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -5632,7 +5632,7 @@ def get_redfish_v1_managers_manager_id_securityservice_certificateauthentication
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/securityservice/certificateauthentication/cacertificates
     Type: Collection ofHpeCertificate
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/certificateauthentication/cacertificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/certificateauthentication/cacertificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_certificateauthentication_cacertificates", dict())
     if not dynamic_items:
@@ -5658,7 +5658,7 @@ def post_redfish_v1_managers_manager_id_securityservice_certificateauthenticatio
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/securityservice/certificateauthentication/cacertificates
     Type: Collection ofHpeCertificate
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/certificateauthentication/cacertificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/certificateauthentication/cacertificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -5680,7 +5680,7 @@ def get_redfish_v1_managers_manager_id_securityservice_certificateauthentication
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_certificateauthentication_cacertificates_cacertificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(cacertificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/securityservice/certificateauthentication/cacertificates/{cacertificat_id}"
             static_val["Id"] = cacertificat_id
             return static_val
@@ -5719,7 +5719,7 @@ def delete_redfish_v1_managers_manager_id_securityservice_certificateauthenticat
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_securityservice_certificateauthentication_cacertificates_cacertifiget_redfish_v1_managers_manager_id_securityservice_certificateauthentication_cacertificates_cacertificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(cacertificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": cacertificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -5729,7 +5729,7 @@ def get_redfish_v1_managers_manager_id_securityservice_eskm(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/securityservice/eskm
     Type: HpeESKM
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/eskm"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/eskm"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_eskm", dict())
     if not dynamic_items:
@@ -5755,7 +5755,7 @@ def post_redfish_v1_managers_manager_id_securityservice_eskm(manager_id: str, pa
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/securityservice/eskm
     Type: HpeESKM
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/eskm"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/eskm"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -5770,7 +5770,7 @@ def get_redfish_v1_managers_manager_id_securityservice_httpscert(manager_id: str
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/securityservice/httpscert
     Type: HpeHttpsCert
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/httpscert"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/httpscert"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_httpscert", dict())
     if not dynamic_items:
@@ -5796,7 +5796,7 @@ def post_redfish_v1_managers_manager_id_securityservice_httpscert(manager_id: st
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/securityservice/httpscert
     Type: HpeHttpsCert
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/httpscert"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/httpscert"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -5811,7 +5811,7 @@ def get_redfish_v1_managers_manager_id_securityservice_platformcert_certificates
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/securityservice/platformcert/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/platformcert/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/platformcert/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_platformcert_certificates", dict())
     if not dynamic_items:
@@ -5837,7 +5837,7 @@ def post_redfish_v1_managers_manager_id_securityservice_platformcert_certificate
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/securityservice/platformcert/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/platformcert/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/platformcert/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -5859,7 +5859,7 @@ def get_redfish_v1_managers_manager_id_securityservice_platformcert_certificates
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_platformcert_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/securityservice/platformcert/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -5898,7 +5898,7 @@ def delete_redfish_v1_managers_manager_id_securityservice_platformcert_certifica
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_securityservice_platformcert_certificates_certifiget_redfish_v1_managers_manager_id_securityservice_platformcert_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -5908,7 +5908,7 @@ def get_redfish_v1_managers_manager_id_securityservice_securitydashboard(manager
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/securityservice/securitydashboard
     Type: HpeiLOSecurityDashboard
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/securitydashboard"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/securitydashboard"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_securitydashboard", dict())
     if not dynamic_items:
@@ -5934,7 +5934,7 @@ def post_redfish_v1_managers_manager_id_securityservice_securitydashboard(manage
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/securityservice/securitydashboard
     Type: HpeiLOSecurityDashboard
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/securitydashboard"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/securitydashboard"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -5949,7 +5949,7 @@ def get_redfish_v1_managers_manager_id_securityservice_securitydashboard_securit
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/securityservice/securitydashboard/securityparams
     Type: Collection ofHpeiLOSecurityParam
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/securitydashboard/securityparams"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/securitydashboard/securityparams"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_securitydashboard_securityparams", dict())
     if not dynamic_items:
@@ -5975,7 +5975,7 @@ def post_redfish_v1_managers_manager_id_securityservice_securitydashboard_securi
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/securityservice/securitydashboard/securityparams
     Type: Collection ofHpeiLOSecurityParam
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/securitydashboard/securityparams"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/securitydashboard/securityparams"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -5997,7 +5997,7 @@ def get_redfish_v1_managers_manager_id_securityservice_securitydashboard_securit
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_securitydashboard_securityparams_securityparam_id")
     if static_val:
         static_val = dict(static_val)
-        if str(securityparam_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/securityservice/securitydashboard/securityparams/{securityparam_id}"
             static_val["Id"] = securityparam_id
             return static_val
@@ -6036,7 +6036,7 @@ def delete_redfish_v1_managers_manager_id_securityservice_securitydashboard_secu
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_securityservice_securitydashboard_securityparams_securitypaget_redfish_v1_managers_manager_id_securityservice_securitydashboard_securityparams_securityparam_id")
     if static_val:
         static_val = dict(static_val)
-        if str(securityparam_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": securityparam_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -6046,7 +6046,7 @@ def get_redfish_v1_managers_manager_id_securityservice_sso(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/securityservice/sso
     Type: HpeiLOSSO
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/sso"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/sso"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_sso", dict())
     if not dynamic_items:
@@ -6072,7 +6072,7 @@ def post_redfish_v1_managers_manager_id_securityservice_sso(manager_id: str, pay
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/securityservice/sso
     Type: HpeiLOSSO
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/sso"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/sso"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -6087,7 +6087,7 @@ def get_redfish_v1_managers_manager_id_securityservice_systemiak_certificates(ma
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/securityservice/systemiak/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/systemiak/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/systemiak/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_systemiak_certificates", dict())
     if not dynamic_items:
@@ -6113,7 +6113,7 @@ def post_redfish_v1_managers_manager_id_securityservice_systemiak_certificates(m
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/securityservice/systemiak/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/systemiak/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/systemiak/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -6135,7 +6135,7 @@ def get_redfish_v1_managers_manager_id_securityservice_systemiak_certificates_ce
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_systemiak_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/securityservice/systemiak/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -6174,7 +6174,7 @@ def delete_redfish_v1_managers_manager_id_securityservice_systemiak_certificates
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_securityservice_systemiak_certificates_certifiget_redfish_v1_managers_manager_id_securityservice_systemiak_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -6184,7 +6184,7 @@ def get_redfish_v1_managers_manager_id_securityservice_systemidevid_certificates
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/securityservice/systemidevid/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/systemidevid/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/systemidevid/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_systemidevid_certificates", dict())
     if not dynamic_items:
@@ -6210,7 +6210,7 @@ def post_redfish_v1_managers_manager_id_securityservice_systemidevid_certificate
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/securityservice/systemidevid/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/systemidevid/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/systemidevid/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -6232,7 +6232,7 @@ def get_redfish_v1_managers_manager_id_securityservice_systemidevid_certificates
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_systemidevid_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/securityservice/systemidevid/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -6271,7 +6271,7 @@ def delete_redfish_v1_managers_manager_id_securityservice_systemidevid_certifica
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_securityservice_systemidevid_certificates_certifiget_redfish_v1_managers_manager_id_securityservice_systemidevid_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -6281,7 +6281,7 @@ def get_redfish_v1_managers_manager_id_securityservice_systemlak_certificates(ma
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/securityservice/systemlak/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/systemlak/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/systemlak/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_systemlak_certificates", dict())
     if not dynamic_items:
@@ -6307,7 +6307,7 @@ def post_redfish_v1_managers_manager_id_securityservice_systemlak_certificates(m
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/securityservice/systemlak/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/systemlak/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/systemlak/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -6329,7 +6329,7 @@ def get_redfish_v1_managers_manager_id_securityservice_systemlak_certificates_ce
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_systemlak_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/securityservice/systemlak/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -6368,7 +6368,7 @@ def delete_redfish_v1_managers_manager_id_securityservice_systemlak_certificates
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_securityservice_systemlak_certificates_certifiget_redfish_v1_managers_manager_id_securityservice_systemlak_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -6378,7 +6378,7 @@ def get_redfish_v1_managers_manager_id_securityservice_systemldevid_certificates
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/securityservice/systemldevid/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/systemldevid/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/systemldevid/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_systemldevid_certificates", dict())
     if not dynamic_items:
@@ -6404,7 +6404,7 @@ def post_redfish_v1_managers_manager_id_securityservice_systemldevid_certificate
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/securityservice/systemldevid/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/securityservice/systemldevid/certificates"
+    collection_path = f"/redfish/v1/managers/{manager_id}/securityservice/systemldevid/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -6426,7 +6426,7 @@ def get_redfish_v1_managers_manager_id_securityservice_systemldevid_certificates
     static_val = db.get_static("get_redfish_v1_managers_manager_id_securityservice_systemldevid_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/securityservice/systemldevid/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -6465,7 +6465,7 @@ def delete_redfish_v1_managers_manager_id_securityservice_systemldevid_certifica
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_securityservice_systemldevid_certificates_certifiget_redfish_v1_managers_manager_id_securityservice_systemldevid_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -6475,7 +6475,7 @@ def get_redfish_v1_managers_manager_id_sharednetworkports(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/sharednetworkports
     Type: Collection ofPort
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/sharednetworkports"
+    collection_path = f"/redfish/v1/managers/{manager_id}/sharednetworkports"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_sharednetworkports", dict())
     if not dynamic_items:
@@ -6501,7 +6501,7 @@ def post_redfish_v1_managers_manager_id_sharednetworkports(manager_id: str, payl
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/sharednetworkports
     Type: Collection ofPort
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/sharednetworkports"
+    collection_path = f"/redfish/v1/managers/{manager_id}/sharednetworkports"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -6523,7 +6523,7 @@ def get_redfish_v1_managers_manager_id_sharednetworkports_sharednetworkport_id(m
     static_val = db.get_static("get_redfish_v1_managers_manager_id_sharednetworkports_sharednetworkport_id")
     if static_val:
         static_val = dict(static_val)
-        if str(sharednetworkport_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/sharednetworkports/{sharednetworkport_id}"
             static_val["Id"] = sharednetworkport_id
             return static_val
@@ -6562,7 +6562,7 @@ def delete_redfish_v1_managers_manager_id_sharednetworkports_sharednetworkport_i
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_sharednetworkports_sharednetworkpget_redfish_v1_managers_manager_id_sharednetworkports_sharednetworkport_id")
     if static_val:
         static_val = dict(static_val)
-        if str(sharednetworkport_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": sharednetworkport_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -6572,7 +6572,7 @@ def get_redfish_v1_managers_manager_id_snmpservice(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/snmpservice
     Type: HpeiLOSnmpService
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/snmpservice"
+    collection_path = f"/redfish/v1/managers/{manager_id}/snmpservice"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_snmpservice", dict())
     if not dynamic_items:
@@ -6598,7 +6598,7 @@ def post_redfish_v1_managers_manager_id_snmpservice(manager_id: str, payload: di
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/snmpservice
     Type: HpeiLOSnmpService
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/snmpservice"
+    collection_path = f"/redfish/v1/managers/{manager_id}/snmpservice"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -6613,7 +6613,7 @@ def get_redfish_v1_managers_manager_id_snmpservice_snmpalertdestinations(manager
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/snmpservice/snmpalertdestinations
     Type: Collection ofHpeSNMPAlertDestination
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/snmpservice/snmpalertdestinations"
+    collection_path = f"/redfish/v1/managers/{manager_id}/snmpservice/snmpalertdestinations"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_snmpservice_snmpalertdestinations", dict())
     if not dynamic_items:
@@ -6639,7 +6639,7 @@ def post_redfish_v1_managers_manager_id_snmpservice_snmpalertdestinations(manage
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/snmpservice/snmpalertdestinations
     Type: Collection ofHpeSNMPAlertDestination
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/snmpservice/snmpalertdestinations"
+    collection_path = f"/redfish/v1/managers/{manager_id}/snmpservice/snmpalertdestinations"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -6661,7 +6661,7 @@ def get_redfish_v1_managers_manager_id_snmpservice_snmpalertdestinations_snmpale
     static_val = db.get_static("get_redfish_v1_managers_manager_id_snmpservice_snmpalertdestinations_snmpalertdestination_id")
     if static_val:
         static_val = dict(static_val)
-        if str(snmpalertdestination_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/snmpservice/snmpalertdestinations/{snmpalertdestination_id}"
             static_val["Id"] = snmpalertdestination_id
             return static_val
@@ -6700,7 +6700,7 @@ def delete_redfish_v1_managers_manager_id_snmpservice_snmpalertdestinations_snmp
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_snmpservice_snmpalertdestinations_snmpalertdestinatget_redfish_v1_managers_manager_id_snmpservice_snmpalertdestinations_snmpalertdestination_id")
     if static_val:
         static_val = dict(static_val)
-        if str(snmpalertdestination_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": snmpalertdestination_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -6710,7 +6710,7 @@ def get_redfish_v1_managers_manager_id_snmpservice_snmpusers(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/snmpservice/snmpusers
     Type: Collection ofHpeSNMPUser
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/snmpservice/snmpusers"
+    collection_path = f"/redfish/v1/managers/{manager_id}/snmpservice/snmpusers"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_snmpservice_snmpusers", dict())
     if not dynamic_items:
@@ -6736,7 +6736,7 @@ def post_redfish_v1_managers_manager_id_snmpservice_snmpusers(manager_id: str, p
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/snmpservice/snmpusers
     Type: Collection ofHpeSNMPUser
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/snmpservice/snmpusers"
+    collection_path = f"/redfish/v1/managers/{manager_id}/snmpservice/snmpusers"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -6758,7 +6758,7 @@ def get_redfish_v1_managers_manager_id_snmpservice_snmpusers_snmpuser_id(manager
     static_val = db.get_static("get_redfish_v1_managers_manager_id_snmpservice_snmpusers_snmpuser_id")
     if static_val:
         static_val = dict(static_val)
-        if str(snmpuser_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/snmpservice/snmpusers/{snmpuser_id}"
             static_val["Id"] = snmpuser_id
             return static_val
@@ -6797,7 +6797,7 @@ def delete_redfish_v1_managers_manager_id_snmpservice_snmpusers_snmpuser_id(mana
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_snmpservice_snmpusers_snmpuget_redfish_v1_managers_manager_id_snmpservice_snmpusers_snmpuser_id")
     if static_val:
         static_val = dict(static_val)
-        if str(snmpuser_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": snmpuser_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -6807,7 +6807,7 @@ def get_redfish_v1_managers_manager_id_virtualmedia(manager_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/managers/{manager_id}/virtualmedia
     Type: Collection ofVirtualMedia
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/virtualmedia"
+    collection_path = f"/redfish/v1/managers/{manager_id}/virtualmedia"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_managers_manager_id_virtualmedia", dict())
     if not dynamic_items:
@@ -6833,7 +6833,7 @@ def post_redfish_v1_managers_manager_id_virtualmedia(manager_id: str, payload: d
     iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/virtualmedia
     Type: Collection ofVirtualMedia
     """
-    collection_path = "/redfish/v1/managers/{manager_id}/virtualmedia"
+    collection_path = f"/redfish/v1/managers/{manager_id}/virtualmedia"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -6855,7 +6855,7 @@ def get_redfish_v1_managers_manager_id_virtualmedia_virtualmedia_id(manager_id: 
     static_val = db.get_static("get_redfish_v1_managers_manager_id_virtualmedia_virtualmedia_id")
     if static_val:
         static_val = dict(static_val)
-        if str(virtualmedia_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/managers/{manager_id}/virtualmedia/{virtualmedia_id}"
             static_val["Id"] = virtualmedia_id
             return static_val
@@ -6894,7 +6894,7 @@ def delete_redfish_v1_managers_manager_id_virtualmedia_virtualmedia_id(manager_i
     static_val = db.get_static("delete_redfish_v1_managers_manager_id_virtualmedia_virtualmeget_redfish_v1_managers_manager_id_virtualmedia_virtualmedia_id")
     if static_val:
         static_val = dict(static_val)
-        if str(virtualmedia_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": virtualmedia_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -6952,7 +6952,7 @@ def get_redfish_v1_registries_registry_id(registry_id: str):
     static_val = db.get_static("get_redfish_v1_registries_registry_id")
     if static_val:
         static_val = dict(static_val)
-        if str(registry_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/registries/{registry_id}"
             static_val["Id"] = registry_id
             return static_val
@@ -6991,7 +6991,7 @@ def delete_redfish_v1_registries_registry_id(registry_id: str):
     static_val = db.get_static("delete_redfish_v1_registries_regisget_redfish_v1_registries_registry_id")
     if static_val:
         static_val = dict(static_val)
-        if str(registry_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": registry_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -7131,7 +7131,7 @@ def get_redfish_v1_sessionservice_sessions_session_id(session_id: str):
     static_val = db.get_static("get_redfish_v1_sessionservice_sessions_session_id")
     if static_val:
         static_val = dict(static_val)
-        if str(session_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/sessionservice/sessions/{session_id}"
             static_val["Id"] = session_id
             return static_val
@@ -7170,7 +7170,7 @@ def delete_redfish_v1_sessionservice_sessions_session_id(session_id: str):
     static_val = db.get_static("delete_redfish_v1_sessionservice_sessions_sessget_redfish_v1_sessionservice_sessions_session_id")
     if static_val:
         static_val = dict(static_val)
-        if str(session_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": session_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -7206,14 +7206,111 @@ def post_redfish_v1_systems(payload: dict = None):
     iLO Redfish Endpoint: POST /redfish/v1/systems
     Type: Collection ofComputerSystem
     """
+    import uuid as _uuid
+    from datetime import datetime, timezone
     collection_path = "/redfish/v1/systems"
     payload_dict = payload if payload is not None else {}
-    item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
-    payload_dict["Id"] = item_id
-    payload_dict["id"] = item_id
-    payload_dict["@odata.id"] = f"/redfish/v1/systems/{item_id}"
-    db.upsert_item(collection_path, item_id, payload_dict)
-    return payload_dict
+
+    # The server name/serial from the payload — used as search key, never as UUID
+    name = (payload_dict.get("Name") or payload_dict.get("name")
+            or payload_dict.get("serial_number") or payload_dict.get("SerialNumber"))
+
+    # --- Always resolve UUID from PostgreSQL by serial_number ---
+    device_uuid = None
+    pg_ip = None
+    pg_fqdn = None
+    pg_device_type = None
+    pg_source_device_id = None
+    if name:
+        try:
+            import psycopg2
+            pg_conn = psycopg2.connect(
+                dbname="hpe_agentic_ai", user="postgres",
+                password="mithles", host="localhost", connect_timeout=3
+            )
+            pg_cur = pg_conn.cursor()
+            pg_cur.execute(
+                "SELECT id, ip_address, fqdn, device_type, source_device_id FROM devices WHERE serial_number = %s LIMIT 1",
+                (name,)
+            )
+            row = pg_cur.fetchone()
+            if row:
+                device_uuid        = str(row[0])
+                pg_ip              = str(row[1]) if row[1] else None
+                pg_fqdn            = row[2]
+                pg_device_type     = row[3]
+                pg_source_device_id = row[4]
+            pg_conn.close()
+        except Exception:
+            pass  # PG unavailable
+
+    # UUID = PG device id (real UUID) or fresh uuid4 — never the server name
+    item_id  = device_uuid or str(_uuid.uuid4())
+    now      = datetime.now(timezone.utc).isoformat()
+    hostname = name or item_id
+    fqdn     = pg_fqdn or f"{hostname}.server.local"
+
+    # Build defaults — payload values override these
+    defaults = {
+        # Redfish standard fields
+        "@odata.type"       : "#ComputerSystem.v1_17_0.ComputerSystem",
+        "SystemType"        : "Physical",
+        "Manufacturer"      : "HPE",
+        "Model"             : "ProLiant DL360 Gen10",
+        "SerialNumber"      : name or item_id,
+        "serial_number"     : name or item_id,
+        "UUID"              : item_id,
+        "PowerState"        : "On",
+        "Status"            : {"State": "Enabled", "Health": "OK"},
+        "Bios"              : {"@odata.id": f"/redfish/v1/systems/{item_id}/bios"},
+        "Processors"        : {"@odata.id": f"/redfish/v1/systems/{item_id}/processors"},
+        "Memory"            : {"@odata.id": f"/redfish/v1/systems/{item_id}/memory"},
+        "Storage"           : {"@odata.id": f"/redfish/v1/systems/{item_id}/storage"},
+        # Custom tracking fields
+        "name"              : hostname,
+        "ip_address"        : pg_ip or "0.0.0.0",
+        "fqdn"              : fqdn,
+        "management_source" : "mock_server",
+        "source_host"       : "mock-server-manager.local",
+        "source_device_id"  : pg_source_device_id or item_id,
+        "device_type"       : pg_device_type or "server",
+        "last_seen"         : now,
+        "created_at"        : now,
+        "updated_at"        : now,
+        "firmware_version"  : "iLO 5 v2.92",
+        "health_status"     : "OK",
+        "cpu_cores"         : 16,
+        "total_capacity"    : 0,
+        "free_capacity"     : 0,
+        "temperature"       : 0.0,
+        "temperature_celsius": 0.0,
+        "storage_utilization": 0.0,
+        "free_storage"      : 0,
+        "memory_utilization": 0.0,
+        "active_vms"        : 0,
+        "allocated_cpu"     : 0,
+        "allocated_memory"  : 0,
+        "ports"             : 2,
+        "configured_vlans"  : 1,
+        "cpu_utilization"   : 0.0,
+        "memory_usage"      : 0.0,
+        "power_draw"        : 0.0,
+    }
+
+    # Merge: defaults first, then payload overrides
+    merged = {**defaults, **payload_dict}
+
+    # Always force-set these — payload must never override UUID/id
+    merged["Id"]               = item_id
+    merged["id"]               = item_id
+    merged["UUID"]             = item_id
+    merged["source_device_id"] = pg_source_device_id or item_id
+    merged["@odata.id"]        = f"/redfish/v1/systems/{item_id}"
+    merged["updated_at"]       = now
+
+    db.upsert_item(collection_path, item_id, merged)
+    return merged
+
 
 @app.api_route("/redfish/v1/systems/{system_id}", methods=["GET"])
 def get_redfish_v1_systems_system_id(system_id: str):
@@ -7228,7 +7325,7 @@ def get_redfish_v1_systems_system_id(system_id: str):
     static_val = db.get_static("get_redfish_v1_systems_system_id")
     if static_val:
         static_val = dict(static_val)
-        if str(system_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}"
             static_val["Id"] = system_id
             return static_val
@@ -7267,7 +7364,7 @@ def delete_redfish_v1_systems_system_id(system_id: str):
     static_val = db.get_static("delete_redfish_v1_systems_sysget_redfish_v1_systems_system_id")
     if static_val:
         static_val = dict(static_val)
-        if str(system_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": system_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -7277,7 +7374,7 @@ def get_redfish_v1_systems_system_id_bios(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios
     Type: Bios
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios", dict())
     if not dynamic_items:
@@ -7303,7 +7400,7 @@ def post_redfish_v1_systems_system_id_bios(system_id: str, payload: dict = None)
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios
     Type: Bios
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -7318,7 +7415,7 @@ def get_redfish_v1_systems_system_id_bios_baseconfigs(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios/baseconfigs
     Type: HpeBaseConfigs
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/baseconfigs"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/baseconfigs"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios_baseconfigs", dict())
     if not dynamic_items:
@@ -7344,7 +7441,7 @@ def post_redfish_v1_systems_system_id_bios_baseconfigs(system_id: str, payload: 
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios/baseconfigs
     Type: HpeBaseConfigs
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/baseconfigs"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/baseconfigs"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -7359,7 +7456,7 @@ def get_redfish_v1_systems_system_id_bios_boot(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios/boot
     Type: HpeServerBootSettings
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/boot"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/boot"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios_boot", dict())
     if not dynamic_items:
@@ -7385,7 +7482,7 @@ def post_redfish_v1_systems_system_id_bios_boot(system_id: str, payload: dict = 
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios/boot
     Type: HpeServerBootSettings
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/boot"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/boot"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -7400,7 +7497,7 @@ def get_redfish_v1_systems_system_id_bios_boot_baseconfigs(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios/boot/baseconfigs
     Type: HpeBaseConfigs
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/boot/baseconfigs"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/boot/baseconfigs"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios_boot_baseconfigs", dict())
     if not dynamic_items:
@@ -7426,7 +7523,7 @@ def post_redfish_v1_systems_system_id_bios_boot_baseconfigs(system_id: str, payl
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios/boot/baseconfigs
     Type: HpeBaseConfigs
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/boot/baseconfigs"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/boot/baseconfigs"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -7441,7 +7538,7 @@ def get_redfish_v1_systems_system_id_bios_boot_settings(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios/boot/settings
     Type: HpeServerBootSettings
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/boot/settings"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/boot/settings"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios_boot_settings", dict())
     if not dynamic_items:
@@ -7467,7 +7564,7 @@ def post_redfish_v1_systems_system_id_bios_boot_settings(system_id: str, payload
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios/boot/settings
     Type: HpeServerBootSettings
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/boot/settings"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/boot/settings"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -7482,7 +7579,7 @@ def get_redfish_v1_systems_system_id_bios_iscsi(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios/iscsi
     Type: HpeiSCSISoftwareInitiator
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/iscsi"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/iscsi"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios_iscsi", dict())
     if not dynamic_items:
@@ -7508,7 +7605,7 @@ def post_redfish_v1_systems_system_id_bios_iscsi(system_id: str, payload: dict =
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios/iscsi
     Type: HpeiSCSISoftwareInitiator
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/iscsi"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/iscsi"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -7523,7 +7620,7 @@ def get_redfish_v1_systems_system_id_bios_iscsi_baseconfigs(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios/iscsi/baseconfigs
     Type: HpeBaseConfigs
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/iscsi/baseconfigs"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/iscsi/baseconfigs"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios_iscsi_baseconfigs", dict())
     if not dynamic_items:
@@ -7549,7 +7646,7 @@ def post_redfish_v1_systems_system_id_bios_iscsi_baseconfigs(system_id: str, pay
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios/iscsi/baseconfigs
     Type: HpeBaseConfigs
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/iscsi/baseconfigs"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/iscsi/baseconfigs"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -7564,7 +7661,7 @@ def get_redfish_v1_systems_system_id_bios_iscsi_settings(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios/iscsi/settings
     Type: HpeiSCSISoftwareInitiator
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/iscsi/settings"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/iscsi/settings"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios_iscsi_settings", dict())
     if not dynamic_items:
@@ -7590,7 +7687,7 @@ def post_redfish_v1_systems_system_id_bios_iscsi_settings(system_id: str, payloa
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios/iscsi/settings
     Type: HpeiSCSISoftwareInitiator
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/iscsi/settings"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/iscsi/settings"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -7605,7 +7702,7 @@ def get_redfish_v1_systems_system_id_bios_kmsconfig(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios/kmsconfig
     Type: HpeKmsConfig
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/kmsconfig"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/kmsconfig"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios_kmsconfig", dict())
     if not dynamic_items:
@@ -7631,7 +7728,7 @@ def post_redfish_v1_systems_system_id_bios_kmsconfig(system_id: str, payload: di
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios/kmsconfig
     Type: HpeKmsConfig
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/kmsconfig"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/kmsconfig"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -7646,7 +7743,7 @@ def get_redfish_v1_systems_system_id_bios_kmsconfig_baseconfigs(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios/kmsconfig/baseconfigs
     Type: HpeBaseConfigs
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/kmsconfig/baseconfigs"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/kmsconfig/baseconfigs"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios_kmsconfig_baseconfigs", dict())
     if not dynamic_items:
@@ -7672,7 +7769,7 @@ def post_redfish_v1_systems_system_id_bios_kmsconfig_baseconfigs(system_id: str,
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios/kmsconfig/baseconfigs
     Type: HpeBaseConfigs
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/kmsconfig/baseconfigs"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/kmsconfig/baseconfigs"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -7687,7 +7784,7 @@ def get_redfish_v1_systems_system_id_bios_kmsconfig_settings(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios/kmsconfig/settings
     Type: HpeKmsConfig
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/kmsconfig/settings"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/kmsconfig/settings"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios_kmsconfig_settings", dict())
     if not dynamic_items:
@@ -7713,7 +7810,7 @@ def post_redfish_v1_systems_system_id_bios_kmsconfig_settings(system_id: str, pa
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios/kmsconfig/settings
     Type: HpeKmsConfig
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/kmsconfig/settings"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/kmsconfig/settings"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -7728,7 +7825,7 @@ def get_redfish_v1_systems_system_id_bios_mappings(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios/mappings
     Type: HpeBiosMapping
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/mappings"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/mappings"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios_mappings", dict())
     if not dynamic_items:
@@ -7754,7 +7851,7 @@ def post_redfish_v1_systems_system_id_bios_mappings(system_id: str, payload: dic
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios/mappings
     Type: HpeBiosMapping
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/mappings"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/mappings"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -7769,7 +7866,7 @@ def get_redfish_v1_systems_system_id_bios_oem_hpe_tlsconfig(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios/oem/hpe/tlsconfig
     Type: HpeTlsConfig
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/oem/hpe/tlsconfig"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/oem/hpe/tlsconfig"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios_oem_hpe_tlsconfig", dict())
     if not dynamic_items:
@@ -7795,7 +7892,7 @@ def post_redfish_v1_systems_system_id_bios_oem_hpe_tlsconfig(system_id: str, pay
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios/oem/hpe/tlsconfig
     Type: HpeTlsConfig
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/oem/hpe/tlsconfig"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/oem/hpe/tlsconfig"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -7810,7 +7907,7 @@ def get_redfish_v1_systems_system_id_bios_oem_hpe_tlsconfig_baseconfigs(system_i
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios/oem/hpe/tlsconfig/baseconfigs
     Type: HpeBaseConfigs
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/oem/hpe/tlsconfig/baseconfigs"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/oem/hpe/tlsconfig/baseconfigs"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios_oem_hpe_tlsconfig_baseconfigs", dict())
     if not dynamic_items:
@@ -7836,7 +7933,7 @@ def post_redfish_v1_systems_system_id_bios_oem_hpe_tlsconfig_baseconfigs(system_
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios/oem/hpe/tlsconfig/baseconfigs
     Type: HpeBaseConfigs
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/oem/hpe/tlsconfig/baseconfigs"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/oem/hpe/tlsconfig/baseconfigs"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -7851,7 +7948,7 @@ def get_redfish_v1_systems_system_id_bios_oem_hpe_tlsconfig_settings(system_id: 
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios/oem/hpe/tlsconfig/settings
     Type: HpeTlsConfig
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/oem/hpe/tlsconfig/settings"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/oem/hpe/tlsconfig/settings"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios_oem_hpe_tlsconfig_settings", dict())
     if not dynamic_items:
@@ -7877,7 +7974,7 @@ def post_redfish_v1_systems_system_id_bios_oem_hpe_tlsconfig_settings(system_id:
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios/oem/hpe/tlsconfig/settings
     Type: HpeTlsConfig
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/oem/hpe/tlsconfig/settings"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/oem/hpe/tlsconfig/settings"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -7892,7 +7989,7 @@ def get_redfish_v1_systems_system_id_bios_serverconfiglock(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios/serverconfiglock
     Type: HpeServerConfigLock
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/serverconfiglock"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/serverconfiglock"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios_serverconfiglock", dict())
     if not dynamic_items:
@@ -7918,7 +8015,7 @@ def post_redfish_v1_systems_system_id_bios_serverconfiglock(system_id: str, payl
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios/serverconfiglock
     Type: HpeServerConfigLock
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/serverconfiglock"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/serverconfiglock"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -7933,7 +8030,7 @@ def get_redfish_v1_systems_system_id_bios_serverconfiglock_baseconfigs(system_id
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios/serverconfiglock/baseconfigs
     Type: HpeBaseConfigs
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/serverconfiglock/baseconfigs"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/serverconfiglock/baseconfigs"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios_serverconfiglock_baseconfigs", dict())
     if not dynamic_items:
@@ -7959,7 +8056,7 @@ def post_redfish_v1_systems_system_id_bios_serverconfiglock_baseconfigs(system_i
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios/serverconfiglock/baseconfigs
     Type: HpeBaseConfigs
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/serverconfiglock/baseconfigs"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/serverconfiglock/baseconfigs"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -7974,7 +8071,7 @@ def get_redfish_v1_systems_system_id_bios_serverconfiglock_settings(system_id: s
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios/serverconfiglock/settings
     Type: HpeServerConfigLock
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/serverconfiglock/settings"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/serverconfiglock/settings"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios_serverconfiglock_settings", dict())
     if not dynamic_items:
@@ -8000,7 +8097,7 @@ def post_redfish_v1_systems_system_id_bios_serverconfiglock_settings(system_id: 
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios/serverconfiglock/settings
     Type: HpeServerConfigLock
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/serverconfiglock/settings"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/serverconfiglock/settings"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -8015,7 +8112,7 @@ def get_redfish_v1_systems_system_id_bios_settings(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bios/settings
     Type: Bios
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/settings"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/settings"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bios_settings", dict())
     if not dynamic_items:
@@ -8041,7 +8138,7 @@ def post_redfish_v1_systems_system_id_bios_settings(system_id: str, payload: dic
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bios/settings
     Type: Bios
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bios/settings"
+    collection_path = f"/redfish/v1/systems/{system_id}/bios/settings"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -8056,7 +8153,7 @@ def get_redfish_v1_systems_system_id_bootoptions(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/bootoptions
     Type: Collection ofBootOption
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bootoptions"
+    collection_path = f"/redfish/v1/systems/{system_id}/bootoptions"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_bootoptions", dict())
     if not dynamic_items:
@@ -8082,7 +8179,7 @@ def post_redfish_v1_systems_system_id_bootoptions(system_id: str, payload: dict 
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/bootoptions
     Type: Collection ofBootOption
     """
-    collection_path = "/redfish/v1/systems/{system_id}/bootoptions"
+    collection_path = f"/redfish/v1/systems/{system_id}/bootoptions"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -8104,7 +8201,7 @@ def get_redfish_v1_systems_system_id_bootoptions_bootoption_id(system_id: str, b
     static_val = db.get_static("get_redfish_v1_systems_system_id_bootoptions_bootoption_id")
     if static_val:
         static_val = dict(static_val)
-        if str(bootoption_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/bootoptions/{bootoption_id}"
             static_val["Id"] = bootoption_id
             return static_val
@@ -8143,7 +8240,7 @@ def delete_redfish_v1_systems_system_id_bootoptions_bootoption_id(system_id: str
     static_val = db.get_static("delete_redfish_v1_systems_system_id_bootoptions_bootoptget_redfish_v1_systems_system_id_bootoptions_bootoption_id")
     if static_val:
         static_val = dict(static_val)
-        if str(bootoption_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": bootoption_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -8153,7 +8250,7 @@ def get_redfish_v1_systems_system_id_ethernetinterfaces(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/ethernetinterfaces
     Type: Collection ofEthernetInterface
     """
-    collection_path = "/redfish/v1/systems/{system_id}/ethernetinterfaces"
+    collection_path = f"/redfish/v1/systems/{system_id}/ethernetinterfaces"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_ethernetinterfaces", dict())
     if not dynamic_items:
@@ -8179,7 +8276,7 @@ def post_redfish_v1_systems_system_id_ethernetinterfaces(system_id: str, payload
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/ethernetinterfaces
     Type: Collection ofEthernetInterface
     """
-    collection_path = "/redfish/v1/systems/{system_id}/ethernetinterfaces"
+    collection_path = f"/redfish/v1/systems/{system_id}/ethernetinterfaces"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -8201,7 +8298,7 @@ def get_redfish_v1_systems_system_id_ethernetinterfaces_ethernetinterfac_id(syst
     static_val = db.get_static("get_redfish_v1_systems_system_id_ethernetinterfaces_ethernetinterfac_id")
     if static_val:
         static_val = dict(static_val)
-        if str(ethernetinterfac_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/ethernetinterfaces/{ethernetinterfac_id}"
             static_val["Id"] = ethernetinterfac_id
             return static_val
@@ -8240,7 +8337,7 @@ def delete_redfish_v1_systems_system_id_ethernetinterfaces_ethernetinterfac_id(s
     static_val = db.get_static("delete_redfish_v1_systems_system_id_ethernetinterfaces_ethernetinterget_redfish_v1_systems_system_id_ethernetinterfaces_ethernetinterfac_id")
     if static_val:
         static_val = dict(static_val)
-        if str(ethernetinterfac_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": ethernetinterfac_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -8250,7 +8347,7 @@ def get_redfish_v1_systems_system_id_keymanagement_kmipcertificates(system_id: s
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/keymanagement/KMIPcertificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/keymanagement/KMIPcertificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/keymanagement/KMIPcertificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_keymanagement_kmipcertificates", dict())
     if not dynamic_items:
@@ -8276,7 +8373,7 @@ def post_redfish_v1_systems_system_id_keymanagement_kmipcertificates(system_id: 
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/keymanagement/KMIPcertificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/keymanagement/KMIPcertificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/keymanagement/KMIPcertificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -8298,7 +8395,7 @@ def get_redfish_v1_systems_system_id_keymanagement_kmipcertificates_kmipcertific
     static_val = db.get_static("get_redfish_v1_systems_system_id_keymanagement_kmipcertificates_kmipcertificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(kmipcertificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/keymanagement/KMIPcertificates/{kmipcertificat_id}"
             static_val["Id"] = kmipcertificat_id
             return static_val
@@ -8337,7 +8434,7 @@ def delete_redfish_v1_systems_system_id_keymanagement_kmipcertificates_kmipcerti
     static_val = db.get_static("delete_redfish_v1_systems_system_id_keymanagement_kmipcertificates_kmipcertifiget_redfish_v1_systems_system_id_keymanagement_kmipcertificates_kmipcertificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(kmipcertificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": kmipcertificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -8347,7 +8444,7 @@ def get_redfish_v1_systems_system_id_keymanagement_kmipclientcertificates(system
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/keymanagement/KMIPclientcertificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/keymanagement/KMIPclientcertificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/keymanagement/KMIPclientcertificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_keymanagement_kmipclientcertificates", dict())
     if not dynamic_items:
@@ -8373,7 +8470,7 @@ def post_redfish_v1_systems_system_id_keymanagement_kmipclientcertificates(syste
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/keymanagement/KMIPclientcertificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/keymanagement/KMIPclientcertificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/keymanagement/KMIPclientcertificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -8395,7 +8492,7 @@ def get_redfish_v1_systems_system_id_keymanagement_kmipclientcertificates_kmipcl
     static_val = db.get_static("get_redfish_v1_systems_system_id_keymanagement_kmipclientcertificates_kmipclientcertificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(kmipclientcertificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/keymanagement/KMIPclientcertificates/{kmipclientcertificat_id}"
             static_val["Id"] = kmipclientcertificat_id
             return static_val
@@ -8434,7 +8531,7 @@ def delete_redfish_v1_systems_system_id_keymanagement_kmipclientcertificates_kmi
     static_val = db.get_static("delete_redfish_v1_systems_system_id_keymanagement_kmipclientcertificates_kmipclientcertifiget_redfish_v1_systems_system_id_keymanagement_kmipclientcertificates_kmipclientcertificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(kmipclientcertificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": kmipclientcertificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -8444,7 +8541,7 @@ def get_redfish_v1_systems_system_id_logservices(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/logservices
     Type: Collection ofLogService
     """
-    collection_path = "/redfish/v1/systems/{system_id}/logservices"
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_logservices", dict())
     if not dynamic_items:
@@ -8470,7 +8567,7 @@ def post_redfish_v1_systems_system_id_logservices(system_id: str, payload: dict 
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/logservices
     Type: Collection ofLogService
     """
-    collection_path = "/redfish/v1/systems/{system_id}/logservices"
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -8485,7 +8582,7 @@ def get_redfish_v1_systems_system_id_logservices_dpu(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/logservices/dpu
     Type: LogService
     """
-    collection_path = "/redfish/v1/systems/{system_id}/logservices/dpu"
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices/dpu"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_logservices_dpu", dict())
     if not dynamic_items:
@@ -8511,7 +8608,7 @@ def post_redfish_v1_systems_system_id_logservices_dpu(system_id: str, payload: d
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/logservices/dpu
     Type: LogService
     """
-    collection_path = "/redfish/v1/systems/{system_id}/logservices/dpu"
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices/dpu"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -8526,7 +8623,7 @@ def get_redfish_v1_systems_system_id_logservices_dpu_entries(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/logservices/dpu/entries
     Type: Collection ofLogEntry
     """
-    collection_path = "/redfish/v1/systems/{system_id}/logservices/dpu/entries"
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices/dpu/entries"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_logservices_dpu_entries", dict())
     if not dynamic_items:
@@ -8552,7 +8649,7 @@ def post_redfish_v1_systems_system_id_logservices_dpu_entries(system_id: str, pa
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/logservices/dpu/entries
     Type: Collection ofLogEntry
     """
-    collection_path = "/redfish/v1/systems/{system_id}/logservices/dpu/entries"
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices/dpu/entries"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -8574,7 +8671,7 @@ def get_redfish_v1_systems_system_id_logservices_dpu_entries_entry_id(system_id:
     static_val = db.get_static("get_redfish_v1_systems_system_id_logservices_dpu_entries_entry_id")
     if static_val:
         static_val = dict(static_val)
-        if str(entry_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/logservices/dpu/entries/{entry_id}"
             static_val["Id"] = entry_id
             return static_val
@@ -8613,7 +8710,7 @@ def delete_redfish_v1_systems_system_id_logservices_dpu_entries_entry_id(system_
     static_val = db.get_static("delete_redfish_v1_systems_system_id_logservices_dpu_entries_enget_redfish_v1_systems_system_id_logservices_dpu_entries_entry_id")
     if static_val:
         static_val = dict(static_val)
-        if str(entry_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": entry_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -8623,7 +8720,7 @@ def get_redfish_v1_systems_system_id_logservices_event(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/logservices/event
     Type: LogService
     """
-    collection_path = "/redfish/v1/systems/{system_id}/logservices/event"
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices/event"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_logservices_event", dict())
     if not dynamic_items:
@@ -8649,7 +8746,7 @@ def post_redfish_v1_systems_system_id_logservices_event(system_id: str, payload:
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/logservices/event
     Type: LogService
     """
-    collection_path = "/redfish/v1/systems/{system_id}/logservices/event"
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices/event"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -8664,7 +8761,7 @@ def get_redfish_v1_systems_system_id_logservices_event_entries(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/logservices/event/entries
     Type: Collection ofLogEntry
     """
-    collection_path = "/redfish/v1/systems/{system_id}/logservices/event/entries"
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices/event/entries"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_logservices_event_entries", dict())
     if not dynamic_items:
@@ -8690,7 +8787,7 @@ def post_redfish_v1_systems_system_id_logservices_event_entries(system_id: str, 
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/logservices/event/entries
     Type: Collection ofLogEntry
     """
-    collection_path = "/redfish/v1/systems/{system_id}/logservices/event/entries"
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices/event/entries"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -8712,7 +8809,7 @@ def get_redfish_v1_systems_system_id_logservices_event_entries_entry_id(system_i
     static_val = db.get_static("get_redfish_v1_systems_system_id_logservices_event_entries_entry_id")
     if static_val:
         static_val = dict(static_val)
-        if str(entry_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/logservices/event/entries/{entry_id}"
             static_val["Id"] = entry_id
             return static_val
@@ -8751,7 +8848,7 @@ def delete_redfish_v1_systems_system_id_logservices_event_entries_entry_id(syste
     static_val = db.get_static("delete_redfish_v1_systems_system_id_logservices_event_entries_enget_redfish_v1_systems_system_id_logservices_event_entries_entry_id")
     if static_val:
         static_val = dict(static_val)
-        if str(entry_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": entry_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -8761,7 +8858,7 @@ def get_redfish_v1_systems_system_id_logservices_iml(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/logservices/iml
     Type: LogService
     """
-    collection_path = "/redfish/v1/systems/{system_id}/logservices/iml"
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices/iml"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_logservices_iml", dict())
     if not dynamic_items:
@@ -8787,7 +8884,7 @@ def post_redfish_v1_systems_system_id_logservices_iml(system_id: str, payload: d
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/logservices/iml
     Type: LogService
     """
-    collection_path = "/redfish/v1/systems/{system_id}/logservices/iml"
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices/iml"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -8802,7 +8899,7 @@ def get_redfish_v1_systems_system_id_logservices_iml_entries(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/logservices/iml/entries
     Type: Collection ofLogEntry
     """
-    collection_path = "/redfish/v1/systems/{system_id}/logservices/iml/entries"
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices/iml/entries"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_logservices_iml_entries", dict())
     if not dynamic_items:
@@ -8828,7 +8925,7 @@ def post_redfish_v1_systems_system_id_logservices_iml_entries(system_id: str, pa
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/logservices/iml/entries
     Type: Collection ofLogEntry
     """
-    collection_path = "/redfish/v1/systems/{system_id}/logservices/iml/entries"
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices/iml/entries"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -8850,7 +8947,7 @@ def get_redfish_v1_systems_system_id_logservices_iml_entries_entry_id(system_id:
     static_val = db.get_static("get_redfish_v1_systems_system_id_logservices_iml_entries_entry_id")
     if static_val:
         static_val = dict(static_val)
-        if str(entry_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/logservices/iml/entries/{entry_id}"
             static_val["Id"] = entry_id
             return static_val
@@ -8889,7 +8986,7 @@ def delete_redfish_v1_systems_system_id_logservices_iml_entries_entry_id(system_
     static_val = db.get_static("delete_redfish_v1_systems_system_id_logservices_iml_entries_enget_redfish_v1_systems_system_id_logservices_iml_entries_entry_id")
     if static_val:
         static_val = dict(static_val)
-        if str(entry_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": entry_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -8899,7 +8996,7 @@ def get_redfish_v1_systems_system_id_logservices_sl(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/logservices/sl
     Type: LogService
     """
-    collection_path = "/redfish/v1/systems/{system_id}/logservices/sl"
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices/sl"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_logservices_sl", dict())
     if not dynamic_items:
@@ -8925,7 +9022,7 @@ def post_redfish_v1_systems_system_id_logservices_sl(system_id: str, payload: di
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/logservices/sl
     Type: LogService
     """
-    collection_path = "/redfish/v1/systems/{system_id}/logservices/sl"
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices/sl"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -8940,7 +9037,7 @@ def get_redfish_v1_systems_system_id_logservices_sl_entries(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/logservices/sl/entries
     Type: Collection ofLogEntry
     """
-    collection_path = "/redfish/v1/systems/{system_id}/logservices/sl/entries"
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices/sl/entries"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_logservices_sl_entries", dict())
     if not dynamic_items:
@@ -8966,7 +9063,7 @@ def post_redfish_v1_systems_system_id_logservices_sl_entries(system_id: str, pay
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/logservices/sl/entries
     Type: Collection ofLogEntry
     """
-    collection_path = "/redfish/v1/systems/{system_id}/logservices/sl/entries"
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices/sl/entries"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -8988,7 +9085,7 @@ def get_redfish_v1_systems_system_id_logservices_sl_entries_entry_id(system_id: 
     static_val = db.get_static("get_redfish_v1_systems_system_id_logservices_sl_entries_entry_id")
     if static_val:
         static_val = dict(static_val)
-        if str(entry_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/logservices/sl/entries/{entry_id}"
             static_val["Id"] = entry_id
             return static_val
@@ -9027,7 +9124,7 @@ def delete_redfish_v1_systems_system_id_logservices_sl_entries_entry_id(system_i
     static_val = db.get_static("delete_redfish_v1_systems_system_id_logservices_sl_entries_enget_redfish_v1_systems_system_id_logservices_sl_entries_entry_id")
     if static_val:
         static_val = dict(static_val)
-        if str(entry_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": entry_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -9037,7 +9134,7 @@ def get_redfish_v1_systems_system_id_memory(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/memory
     Type: Collection ofMemory
     """
-    collection_path = "/redfish/v1/systems/{system_id}/memory"
+    collection_path = f"/redfish/v1/systems/{system_id}/memory"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_memory", dict())
     if not dynamic_items:
@@ -9063,7 +9160,7 @@ def post_redfish_v1_systems_system_id_memory(system_id: str, payload: dict = Non
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/memory
     Type: Collection ofMemory
     """
-    collection_path = "/redfish/v1/systems/{system_id}/memory"
+    collection_path = f"/redfish/v1/systems/{system_id}/memory"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -9085,7 +9182,7 @@ def get_redfish_v1_systems_system_id_memory_memory_id(system_id: str, memory_id:
     static_val = db.get_static("get_redfish_v1_systems_system_id_memory_memory_id")
     if static_val:
         static_val = dict(static_val)
-        if str(memory_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/memory/{memory_id}"
             static_val["Id"] = memory_id
             return static_val
@@ -9124,7 +9221,7 @@ def delete_redfish_v1_systems_system_id_memory_memory_id(system_id: str, memory_
     static_val = db.get_static("delete_redfish_v1_systems_system_id_memory_memget_redfish_v1_systems_system_id_memory_memory_id")
     if static_val:
         static_val = dict(static_val)
-        if str(memory_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": memory_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -9134,7 +9231,7 @@ def get_redfish_v1_systems_system_id_memory_memory_id_memorymetrics(system_id: s
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/memory/{memory_id}/memorymetrics
     Type: MemoryMetrics
     """
-    collection_path = "/redfish/v1/systems/{system_id}/memory/{memory_id}/memorymetrics"
+    collection_path = f"/redfish/v1/systems/{system_id}/memory/{memory_id}/memorymetrics"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_memory_memory_id_memorymetrics", dict())
     if not dynamic_items:
@@ -9160,7 +9257,7 @@ def post_redfish_v1_systems_system_id_memory_memory_id_memorymetrics(system_id: 
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/memory/{memory_id}/memorymetrics
     Type: MemoryMetrics
     """
-    collection_path = "/redfish/v1/systems/{system_id}/memory/{memory_id}/memorymetrics"
+    collection_path = f"/redfish/v1/systems/{system_id}/memory/{memory_id}/memorymetrics"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -9175,7 +9272,7 @@ def get_redfish_v1_systems_system_id_memorydomains(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/memorydomains
     Type: Collection ofMemoryDomain
     """
-    collection_path = "/redfish/v1/systems/{system_id}/memorydomains"
+    collection_path = f"/redfish/v1/systems/{system_id}/memorydomains"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_memorydomains", dict())
     if not dynamic_items:
@@ -9201,7 +9298,7 @@ def post_redfish_v1_systems_system_id_memorydomains(system_id: str, payload: dic
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/memorydomains
     Type: Collection ofMemoryDomain
     """
-    collection_path = "/redfish/v1/systems/{system_id}/memorydomains"
+    collection_path = f"/redfish/v1/systems/{system_id}/memorydomains"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -9223,7 +9320,7 @@ def get_redfish_v1_systems_system_id_memorydomains_memorydomain_id(system_id: st
     static_val = db.get_static("get_redfish_v1_systems_system_id_memorydomains_memorydomain_id")
     if static_val:
         static_val = dict(static_val)
-        if str(memorydomain_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/memorydomains/{memorydomain_id}"
             static_val["Id"] = memorydomain_id
             return static_val
@@ -9262,7 +9359,7 @@ def delete_redfish_v1_systems_system_id_memorydomains_memorydomain_id(system_id:
     static_val = db.get_static("delete_redfish_v1_systems_system_id_memorydomains_memorydomget_redfish_v1_systems_system_id_memorydomains_memorydomain_id")
     if static_val:
         static_val = dict(static_val)
-        if str(memorydomain_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": memorydomain_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -9272,7 +9369,7 @@ def get_redfish_v1_systems_system_id_memorydomains_memorydomain_id_memorychunks(
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/memorydomains/{memorydomain_id}/memorychunks
     Type: Collection ofMemoryChunks
     """
-    collection_path = "/redfish/v1/systems/{system_id}/memorydomains/{memorydomain_id}/memorychunks"
+    collection_path = f"/redfish/v1/systems/{system_id}/memorydomains/{memorydomain_id}/memorychunks"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_memorydomains_memorydomain_id_memorychunks", dict())
     if not dynamic_items:
@@ -9298,7 +9395,7 @@ def post_redfish_v1_systems_system_id_memorydomains_memorydomain_id_memorychunks
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/memorydomains/{memorydomain_id}/memorychunks
     Type: Collection ofMemoryChunks
     """
-    collection_path = "/redfish/v1/systems/{system_id}/memorydomains/{memorydomain_id}/memorychunks"
+    collection_path = f"/redfish/v1/systems/{system_id}/memorydomains/{memorydomain_id}/memorychunks"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -9320,7 +9417,7 @@ def get_redfish_v1_systems_system_id_memorydomains_memorydomain_id_memorychunks_
     static_val = db.get_static("get_redfish_v1_systems_system_id_memorydomains_memorydomain_id_memorychunks_memorychunk_id")
     if static_val:
         static_val = dict(static_val)
-        if str(memorychunk_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/memorydomains/{memorydomain_id}/memorychunks/{memorychunk_id}"
             static_val["Id"] = memorychunk_id
             return static_val
@@ -9359,7 +9456,7 @@ def delete_redfish_v1_systems_system_id_memorydomains_memorydomain_id_memorychun
     static_val = db.get_static("delete_redfish_v1_systems_system_id_memorydomains_memorydomain_id_memorychunks_memorychget_redfish_v1_systems_system_id_memorydomains_memorydomain_id_memorychunks_memorychunk_id")
     if static_val:
         static_val = dict(static_val)
-        if str(memorychunk_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": memorychunk_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -9369,7 +9466,7 @@ def get_redfish_v1_systems_system_id_networkinterfaces(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/networkinterfaces
     Type: Collection ofNetworkInterface
     """
-    collection_path = "/redfish/v1/systems/{system_id}/networkinterfaces"
+    collection_path = f"/redfish/v1/systems/{system_id}/networkinterfaces"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_networkinterfaces", dict())
     if not dynamic_items:
@@ -9395,7 +9492,7 @@ def post_redfish_v1_systems_system_id_networkinterfaces(system_id: str, payload:
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/networkinterfaces
     Type: Collection ofNetworkInterface
     """
-    collection_path = "/redfish/v1/systems/{system_id}/networkinterfaces"
+    collection_path = f"/redfish/v1/systems/{system_id}/networkinterfaces"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -9417,7 +9514,7 @@ def get_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id(system
     static_val = db.get_static("get_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id")
     if static_val:
         static_val = dict(static_val)
-        if str(networkinterfac_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}"
             static_val["Id"] = networkinterfac_id
             return static_val
@@ -9456,7 +9553,7 @@ def delete_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id(sys
     static_val = db.get_static("delete_redfish_v1_systems_system_id_networkinterfaces_networkinterget_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id")
     if static_val:
         static_val = dict(static_val)
-        if str(networkinterfac_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": networkinterfac_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -9466,7 +9563,7 @@ def get_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_networ
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/networkdevicefunctions
     Type: Collection ofNetworkDeviceFunction
     """
-    collection_path = "/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/networkdevicefunctions"
+    collection_path = f"/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/networkdevicefunctions"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_networkdevicefunctions", dict())
     if not dynamic_items:
@@ -9492,7 +9589,7 @@ def post_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_netwo
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/networkdevicefunctions
     Type: Collection ofNetworkDeviceFunction
     """
-    collection_path = "/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/networkdevicefunctions"
+    collection_path = f"/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/networkdevicefunctions"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -9514,7 +9611,7 @@ def get_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_networ
     static_val = db.get_static("get_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_networkdevicefunctions_networkdevicefunction_id")
     if static_val:
         static_val = dict(static_val)
-        if str(networkdevicefunction_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/networkdevicefunctions/{networkdevicefunction_id}"
             static_val["Id"] = networkdevicefunction_id
             return static_val
@@ -9553,7 +9650,7 @@ def delete_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_net
     static_val = db.get_static("delete_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_networkdevicefunctions_networkdevicefunctget_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_networkdevicefunctions_networkdevicefunction_id")
     if static_val:
         static_val = dict(static_val)
-        if str(networkdevicefunction_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": networkdevicefunction_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -9563,7 +9660,7 @@ def get_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_networ
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/networkdevicefunctions/{networkdevicefunction_id}/settings
     Type: NetworkDeviceFunction
     """
-    collection_path = "/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/networkdevicefunctions/{networkdevicefunction_id}/settings"
+    collection_path = f"/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/networkdevicefunctions/{networkdevicefunction_id}/settings"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_networkdevicefunctions_networkdevicefunction_id_settings", dict())
     if not dynamic_items:
@@ -9589,7 +9686,7 @@ def post_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_netwo
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/networkdevicefunctions/{networkdevicefunction_id}/settings
     Type: NetworkDeviceFunction
     """
-    collection_path = "/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/networkdevicefunctions/{networkdevicefunction_id}/settings"
+    collection_path = f"/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/networkdevicefunctions/{networkdevicefunction_id}/settings"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -9604,7 +9701,7 @@ def get_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_ports(
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/ports
     Type: Collection ofPort
     """
-    collection_path = "/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/ports"
+    collection_path = f"/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/ports"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_ports", dict())
     if not dynamic_items:
@@ -9630,7 +9727,7 @@ def post_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_ports
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/ports
     Type: Collection ofPort
     """
-    collection_path = "/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/ports"
+    collection_path = f"/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/ports"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -9652,7 +9749,7 @@ def get_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_ports_
     static_val = db.get_static("get_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_ports_port_id")
     if static_val:
         static_val = dict(static_val)
-        if str(port_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/ports/{port_id}"
             static_val["Id"] = port_id
             return static_val
@@ -9691,7 +9788,7 @@ def delete_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_por
     static_val = db.get_static("delete_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_ports_pget_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_ports_port_id")
     if static_val:
         static_val = dict(static_val)
-        if str(port_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": port_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -9701,7 +9798,7 @@ def get_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_ports_
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/ports/{port_id}/settings
     Type: Port
     """
-    collection_path = "/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/ports/{port_id}/settings"
+    collection_path = f"/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/ports/{port_id}/settings"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_ports_port_id_settings", dict())
     if not dynamic_items:
@@ -9727,7 +9824,7 @@ def post_redfish_v1_systems_system_id_networkinterfaces_networkinterfac_id_ports
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/ports/{port_id}/settings
     Type: Port
     """
-    collection_path = "/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/ports/{port_id}/settings"
+    collection_path = f"/redfish/v1/systems/{system_id}/networkinterfaces/{networkinterfac_id}/ports/{port_id}/settings"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -9742,7 +9839,7 @@ def get_redfish_v1_systems_system_id_pcidevices(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/pcidevices
     Type: Collection ofHpeServerPciDevice
     """
-    collection_path = "/redfish/v1/systems/{system_id}/pcidevices"
+    collection_path = f"/redfish/v1/systems/{system_id}/pcidevices"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_pcidevices", dict())
     if not dynamic_items:
@@ -9768,7 +9865,7 @@ def post_redfish_v1_systems_system_id_pcidevices(system_id: str, payload: dict =
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/pcidevices
     Type: Collection ofHpeServerPciDevice
     """
-    collection_path = "/redfish/v1/systems/{system_id}/pcidevices"
+    collection_path = f"/redfish/v1/systems/{system_id}/pcidevices"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -9790,7 +9887,7 @@ def get_redfish_v1_systems_system_id_pcidevices_pcidevic_id(system_id: str, pcid
     static_val = db.get_static("get_redfish_v1_systems_system_id_pcidevices_pcidevic_id")
     if static_val:
         static_val = dict(static_val)
-        if str(pcidevic_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/pcidevices/{pcidevic_id}"
             static_val["Id"] = pcidevic_id
             return static_val
@@ -9829,7 +9926,7 @@ def delete_redfish_v1_systems_system_id_pcidevices_pcidevic_id(system_id: str, p
     static_val = db.get_static("delete_redfish_v1_systems_system_id_pcidevices_pcideget_redfish_v1_systems_system_id_pcidevices_pcidevic_id")
     if static_val:
         static_val = dict(static_val)
-        if str(pcidevic_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": pcidevic_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -9839,7 +9936,7 @@ def get_redfish_v1_systems_system_id_pcislots(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/pcislots
     Type: Collection ofHpeServerPCISlot
     """
-    collection_path = "/redfish/v1/systems/{system_id}/pcislots"
+    collection_path = f"/redfish/v1/systems/{system_id}/pcislots"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_pcislots", dict())
     if not dynamic_items:
@@ -9865,7 +9962,7 @@ def post_redfish_v1_systems_system_id_pcislots(system_id: str, payload: dict = N
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/pcislots
     Type: Collection ofHpeServerPCISlot
     """
-    collection_path = "/redfish/v1/systems/{system_id}/pcislots"
+    collection_path = f"/redfish/v1/systems/{system_id}/pcislots"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -9887,7 +9984,7 @@ def get_redfish_v1_systems_system_id_pcislots_pcislot_id(system_id: str, pcislot
     static_val = db.get_static("get_redfish_v1_systems_system_id_pcislots_pcislot_id")
     if static_val:
         static_val = dict(static_val)
-        if str(pcislot_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/pcislots/{pcislot_id}"
             static_val["Id"] = pcislot_id
             return static_val
@@ -9926,7 +10023,7 @@ def delete_redfish_v1_systems_system_id_pcislots_pcislot_id(system_id: str, pcis
     static_val = db.get_static("delete_redfish_v1_systems_system_id_pcislots_pcisget_redfish_v1_systems_system_id_pcislots_pcislot_id")
     if static_val:
         static_val = dict(static_val)
-        if str(pcislot_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": pcislot_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -9936,7 +10033,7 @@ def get_redfish_v1_systems_system_id_processors(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/processors
     Type: Collection ofProcessor
     """
-    collection_path = "/redfish/v1/systems/{system_id}/processors"
+    collection_path = f"/redfish/v1/systems/{system_id}/processors"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_processors", dict())
     if not dynamic_items:
@@ -9962,7 +10059,7 @@ def post_redfish_v1_systems_system_id_processors(system_id: str, payload: dict =
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/processors
     Type: Collection ofProcessor
     """
-    collection_path = "/redfish/v1/systems/{system_id}/processors"
+    collection_path = f"/redfish/v1/systems/{system_id}/processors"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -9984,7 +10081,7 @@ def get_redfish_v1_systems_system_id_processors_processor_id(system_id: str, pro
     static_val = db.get_static("get_redfish_v1_systems_system_id_processors_processor_id")
     if static_val:
         static_val = dict(static_val)
-        if str(processor_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/processors/{processor_id}"
             static_val["Id"] = processor_id
             return static_val
@@ -10023,7 +10120,7 @@ def delete_redfish_v1_systems_system_id_processors_processor_id(system_id: str, 
     static_val = db.get_static("delete_redfish_v1_systems_system_id_processors_procesget_redfish_v1_systems_system_id_processors_processor_id")
     if static_val:
         static_val = dict(static_val)
-        if str(processor_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": processor_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -10033,7 +10130,7 @@ def get_redfish_v1_systems_system_id_processors_processor_id_environmentmetrics(
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/processors/{processor_id}/environmentmetrics
     Type: EnvironmentMetrics
     """
-    collection_path = "/redfish/v1/systems/{system_id}/processors/{processor_id}/environmentmetrics"
+    collection_path = f"/redfish/v1/systems/{system_id}/processors/{processor_id}/environmentmetrics"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_processors_processor_id_environmentmetrics", dict())
     if not dynamic_items:
@@ -10059,7 +10156,7 @@ def post_redfish_v1_systems_system_id_processors_processor_id_environmentmetrics
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/processors/{processor_id}/environmentmetrics
     Type: EnvironmentMetrics
     """
-    collection_path = "/redfish/v1/systems/{system_id}/processors/{processor_id}/environmentmetrics"
+    collection_path = f"/redfish/v1/systems/{system_id}/processors/{processor_id}/environmentmetrics"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -10074,7 +10171,7 @@ def get_redfish_v1_systems_system_id_processors_processor_id_processormetrics(sy
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/processors/{processor_id}/processormetrics
     Type: ProcessorMetrics
     """
-    collection_path = "/redfish/v1/systems/{system_id}/processors/{processor_id}/processormetrics"
+    collection_path = f"/redfish/v1/systems/{system_id}/processors/{processor_id}/processormetrics"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_processors_processor_id_processormetrics", dict())
     if not dynamic_items:
@@ -10100,7 +10197,7 @@ def post_redfish_v1_systems_system_id_processors_processor_id_processormetrics(s
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/processors/{processor_id}/processormetrics
     Type: ProcessorMetrics
     """
-    collection_path = "/redfish/v1/systems/{system_id}/processors/{processor_id}/processormetrics"
+    collection_path = f"/redfish/v1/systems/{system_id}/processors/{processor_id}/processormetrics"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -10115,7 +10212,7 @@ def get_redfish_v1_systems_system_id_secureboot(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot
     Type: SecureBoot
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot", dict())
     if not dynamic_items:
@@ -10141,7 +10238,7 @@ def post_redfish_v1_systems_system_id_secureboot(system_id: str, payload: dict =
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot
     Type: SecureBoot
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -10156,7 +10253,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases(system_id: s
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases
     Type: Collection ofSecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases", dict())
     if not dynamic_items:
@@ -10182,7 +10279,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases(system_id: 
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases
     Type: Collection ofSecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -10197,7 +10294,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_db(system_id
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_db", dict())
     if not dynamic_items:
@@ -10223,7 +10320,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_db(system_i
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -10238,7 +10335,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_db_certifica
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_db_certificates", dict())
     if not dynamic_items:
@@ -10264,7 +10361,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_db_certific
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -10286,7 +10383,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_db_certifica
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_db_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -10325,7 +10422,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_db_certif
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_db_certificates_certifiget_redfish_v1_systems_system_id_secureboot_securebootdatabases_db_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -10335,7 +10432,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_db_signature
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db/signatures
     Type: Collection ofSignature
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db/signatures"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db/signatures"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_db_signatures", dict())
     if not dynamic_items:
@@ -10361,7 +10458,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_db_signatur
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db/signatures
     Type: Collection ofSignature
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db/signatures"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db/signatures"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -10383,7 +10480,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_db_signature
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_db_signatures_signatur_id")
     if static_val:
         static_val = dict(static_val)
-        if str(signatur_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/db/signatures/{signatur_id}"
             static_val["Id"] = signatur_id
             return static_val
@@ -10422,7 +10519,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_db_signat
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_db_signatures_signaget_redfish_v1_systems_system_id_secureboot_securebootdatabases_db_signatures_signatur_id")
     if static_val:
         static_val = dict(static_val)
-        if str(signatur_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": signatur_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -10432,7 +10529,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault(sy
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault", dict())
     if not dynamic_items:
@@ -10458,7 +10555,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault(s
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -10473,7 +10570,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault_ce
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault_certificates", dict())
     if not dynamic_items:
@@ -10499,7 +10596,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault_c
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -10521,7 +10618,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault_ce
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -10560,7 +10657,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault_certificates_certifiget_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -10570,7 +10667,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault_si
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault/signatures
     Type: Collection ofSignature
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault/signatures"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault/signatures"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault_signatures", dict())
     if not dynamic_items:
@@ -10596,7 +10693,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault_s
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault/signatures
     Type: Collection ofSignature
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault/signatures"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault/signatures"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -10618,7 +10715,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault_si
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault_signatures_signatur_id")
     if static_val:
         static_val = dict(static_val)
-        if str(signatur_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbdefault/signatures/{signatur_id}"
             static_val["Id"] = signatur_id
             return static_val
@@ -10657,7 +10754,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault_signatures_signaget_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbdefault_signatures_signatur_id")
     if static_val:
         static_val = dict(static_val)
-        if str(signatur_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": signatur_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -10667,7 +10764,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr(system_i
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr", dict())
     if not dynamic_items:
@@ -10693,7 +10790,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr(system_
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -10708,7 +10805,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr_certific
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr_certificates", dict())
     if not dynamic_items:
@@ -10734,7 +10831,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr_certifi
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -10756,7 +10853,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr_certific
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -10795,7 +10892,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr_certi
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr_certificates_certifiget_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -10805,7 +10902,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr_signatur
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr/signatures
     Type: Collection ofSignature
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr/signatures"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr/signatures"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr_signatures", dict())
     if not dynamic_items:
@@ -10831,7 +10928,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr_signatu
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr/signatures
     Type: Collection ofSignature
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr/signatures"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr/signatures"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -10853,7 +10950,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr_signatur
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr_signatures_signatur_id")
     if static_val:
         static_val = dict(static_val)
-        if str(signatur_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbr/signatures/{signatur_id}"
             static_val["Id"] = signatur_id
             return static_val
@@ -10892,7 +10989,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr_signa
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr_signatures_signaget_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbr_signatures_signatur_id")
     if static_val:
         static_val = dict(static_val)
-        if str(signatur_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": signatur_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -10902,7 +10999,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefault(s
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefault", dict())
     if not dynamic_items:
@@ -10928,7 +11025,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefault(
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -10943,7 +11040,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefault_c
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefault_certificates", dict())
     if not dynamic_items:
@@ -10969,7 +11066,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefault_
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -10991,7 +11088,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefault_c
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefault_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -11030,7 +11127,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefaul
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefault_certificates_certifiget_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefault_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -11040,7 +11137,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefault_s
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault/signatures
     Type: Collection ofSignature
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault/signatures"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault/signatures"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefault_signatures", dict())
     if not dynamic_items:
@@ -11066,7 +11163,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefault_
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault/signatures
     Type: Collection ofSignature
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault/signatures"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault/signatures"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -11088,7 +11185,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefault_s
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefault_signatures_signatur_id")
     if static_val:
         static_val = dict(static_val)
-        if str(signatur_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbrdefault/signatures/{signatur_id}"
             static_val["Id"] = signatur_id
             return static_val
@@ -11127,7 +11224,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefaul
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefault_signatures_signaget_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbrdefault_signatures_signatur_id")
     if static_val:
         static_val = dict(static_val)
-        if str(signatur_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": signatur_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -11137,7 +11234,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt(system_i
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt", dict())
     if not dynamic_items:
@@ -11163,7 +11260,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt(system_
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -11178,7 +11275,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt_certific
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt_certificates", dict())
     if not dynamic_items:
@@ -11204,7 +11301,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt_certifi
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -11226,7 +11323,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt_certific
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -11265,7 +11362,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt_certi
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt_certificates_certifiget_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -11275,7 +11372,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt_signatur
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt/signatures
     Type: Collection ofSignature
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt/signatures"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt/signatures"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt_signatures", dict())
     if not dynamic_items:
@@ -11301,7 +11398,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt_signatu
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt/signatures
     Type: Collection ofSignature
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt/signatures"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt/signatures"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -11323,7 +11420,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt_signatur
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt_signatures_signatur_id")
     if static_val:
         static_val = dict(static_val)
-        if str(signatur_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbt/signatures/{signatur_id}"
             static_val["Id"] = signatur_id
             return static_val
@@ -11362,7 +11459,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt_signa
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt_signatures_signaget_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbt_signatures_signatur_id")
     if static_val:
         static_val = dict(static_val)
-        if str(signatur_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": signatur_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -11372,7 +11469,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefault(s
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefault", dict())
     if not dynamic_items:
@@ -11398,7 +11495,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefault(
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -11413,7 +11510,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefault_c
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefault_certificates", dict())
     if not dynamic_items:
@@ -11439,7 +11536,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefault_
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -11461,7 +11558,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefault_c
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefault_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -11500,7 +11597,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefaul
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefault_certificates_certifiget_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefault_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -11510,7 +11607,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefault_s
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault/signatures
     Type: Collection ofSignature
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault/signatures"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault/signatures"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefault_signatures", dict())
     if not dynamic_items:
@@ -11536,7 +11633,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefault_
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault/signatures
     Type: Collection ofSignature
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault/signatures"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault/signatures"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -11558,7 +11655,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefault_s
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefault_signatures_signatur_id")
     if static_val:
         static_val = dict(static_val)
-        if str(signatur_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbtdefault/signatures/{signatur_id}"
             static_val["Id"] = signatur_id
             return static_val
@@ -11597,7 +11694,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefaul
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefault_signatures_signaget_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbtdefault_signatures_signatur_id")
     if static_val:
         static_val = dict(static_val)
-        if str(signatur_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": signatur_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -11607,7 +11704,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx(system_i
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx", dict())
     if not dynamic_items:
@@ -11633,7 +11730,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx(system_
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -11648,7 +11745,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx_certific
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx_certificates", dict())
     if not dynamic_items:
@@ -11674,7 +11771,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx_certifi
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -11696,7 +11793,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx_certific
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -11735,7 +11832,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx_certi
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx_certificates_certifiget_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -11745,7 +11842,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx_signatur
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx/signatures
     Type: Collection ofSignature
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx/signatures"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx/signatures"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx_signatures", dict())
     if not dynamic_items:
@@ -11771,7 +11868,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx_signatu
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx/signatures
     Type: Collection ofSignature
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx/signatures"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx/signatures"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -11793,7 +11890,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx_signatur
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx_signatures_signatur_id")
     if static_val:
         static_val = dict(static_val)
-        if str(signatur_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbx/signatures/{signatur_id}"
             static_val["Id"] = signatur_id
             return static_val
@@ -11832,7 +11929,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx_signa
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx_signatures_signaget_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbx_signatures_signatur_id")
     if static_val:
         static_val = dict(static_val)
-        if str(signatur_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": signatur_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -11842,7 +11939,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefault(s
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefault", dict())
     if not dynamic_items:
@@ -11868,7 +11965,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefault(
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -11883,7 +11980,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefault_c
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefault_certificates", dict())
     if not dynamic_items:
@@ -11909,7 +12006,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefault_
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -11931,7 +12028,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefault_c
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefault_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -11970,7 +12067,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefaul
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefault_certificates_certifiget_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefault_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -11980,7 +12077,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefault_s
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault/signatures
     Type: Collection ofSignature
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault/signatures"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault/signatures"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefault_signatures", dict())
     if not dynamic_items:
@@ -12006,7 +12103,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefault_
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault/signatures
     Type: Collection ofSignature
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault/signatures"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault/signatures"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -12028,7 +12125,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefault_s
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefault_signatures_signatur_id")
     if static_val:
         static_val = dict(static_val)
-        if str(signatur_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/dbxdefault/signatures/{signatur_id}"
             static_val["Id"] = signatur_id
             return static_val
@@ -12067,7 +12164,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefaul
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefault_signatures_signaget_redfish_v1_systems_system_id_secureboot_securebootdatabases_dbxdefault_signatures_signatur_id")
     if static_val:
         static_val = dict(static_val)
-        if str(signatur_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": signatur_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -12077,7 +12174,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_kek(system_i
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kek
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kek"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kek"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_kek", dict())
     if not dynamic_items:
@@ -12103,7 +12200,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_kek(system_
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kek
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kek"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kek"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -12118,7 +12215,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_kek_certific
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kek/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kek/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kek/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_kek_certificates", dict())
     if not dynamic_items:
@@ -12144,7 +12241,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_kek_certifi
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kek/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kek/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kek/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -12166,7 +12263,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_kek_certific
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_kek_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kek/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -12205,7 +12302,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_kek_certi
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_kek_certificates_certifiget_redfish_v1_systems_system_id_secureboot_securebootdatabases_kek_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -12215,7 +12312,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_kekdefault(s
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kekdefault
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kekdefault"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kekdefault"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_kekdefault", dict())
     if not dynamic_items:
@@ -12241,7 +12338,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_kekdefault(
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kekdefault
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kekdefault"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kekdefault"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -12256,7 +12353,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_kekdefault_c
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kekdefault/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kekdefault/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kekdefault/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_kekdefault_certificates", dict())
     if not dynamic_items:
@@ -12282,7 +12379,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_kekdefault_
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kekdefault/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kekdefault/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kekdefault/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -12304,7 +12401,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_kekdefault_c
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_kekdefault_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/kekdefault/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -12343,7 +12440,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_kekdefaul
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_kekdefault_certificates_certifiget_redfish_v1_systems_system_id_secureboot_securebootdatabases_kekdefault_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -12353,7 +12450,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_pk(system_id
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pk
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pk"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pk"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_pk", dict())
     if not dynamic_items:
@@ -12379,7 +12476,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_pk(system_i
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pk
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pk"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pk"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -12394,7 +12491,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_pk_certifica
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pk/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pk/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pk/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_pk_certificates", dict())
     if not dynamic_items:
@@ -12420,7 +12517,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_pk_certific
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pk/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pk/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pk/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -12442,7 +12539,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_pk_certifica
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_pk_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pk/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -12481,7 +12578,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_pk_certif
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_pk_certificates_certifiget_redfish_v1_systems_system_id_secureboot_securebootdatabases_pk_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -12491,7 +12588,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_pkdefault(sy
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pkdefault
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pkdefault"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pkdefault"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_pkdefault", dict())
     if not dynamic_items:
@@ -12517,7 +12614,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_pkdefault(s
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pkdefault
     Type: SecureBootDatabase
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pkdefault"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pkdefault"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -12532,7 +12629,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_pkdefault_ce
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pkdefault/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pkdefault/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pkdefault/certificates"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_pkdefault_certificates", dict())
     if not dynamic_items:
@@ -12558,7 +12655,7 @@ def post_redfish_v1_systems_system_id_secureboot_securebootdatabases_pkdefault_c
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pkdefault/certificates
     Type: CertificateCollection
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pkdefault/certificates"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pkdefault/certificates"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -12580,7 +12677,7 @@ def get_redfish_v1_systems_system_id_secureboot_securebootdatabases_pkdefault_ce
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureboot_securebootdatabases_pkdefault_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureboot/securebootdatabases/pkdefault/certificates/{certificat_id}"
             static_val["Id"] = certificat_id
             return static_val
@@ -12619,7 +12716,7 @@ def delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_pkdefault
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureboot_securebootdatabases_pkdefault_certificates_certifiget_redfish_v1_systems_system_id_secureboot_securebootdatabases_pkdefault_certificates_certificat_id")
     if static_val:
         static_val = dict(static_val)
-        if str(certificat_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": certificat_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -12629,7 +12726,7 @@ def get_redfish_v1_systems_system_id_secureerasereportservice(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureerasereportservice
     Type: HpeSecureEraseReportService
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureerasereportservice"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureerasereportservice"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureerasereportservice", dict())
     if not dynamic_items:
@@ -12655,7 +12752,7 @@ def post_redfish_v1_systems_system_id_secureerasereportservice(system_id: str, p
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureerasereportservice
     Type: HpeSecureEraseReportService
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureerasereportservice"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureerasereportservice"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -12670,7 +12767,7 @@ def get_redfish_v1_systems_system_id_secureerasereportservice_secureerasereporte
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/secureerasereportservice/secureerasereportentries
     Type: Collection ofHpeSecureEraseReport
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureerasereportservice/secureerasereportentries"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureerasereportservice/secureerasereportentries"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureerasereportservice_secureerasereportentries", dict())
     if not dynamic_items:
@@ -12696,7 +12793,7 @@ def post_redfish_v1_systems_system_id_secureerasereportservice_secureerasereport
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/secureerasereportservice/secureerasereportentries
     Type: Collection ofHpeSecureEraseReport
     """
-    collection_path = "/redfish/v1/systems/{system_id}/secureerasereportservice/secureerasereportentries"
+    collection_path = f"/redfish/v1/systems/{system_id}/secureerasereportservice/secureerasereportentries"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -12718,7 +12815,7 @@ def get_redfish_v1_systems_system_id_secureerasereportservice_secureerasereporte
     static_val = db.get_static("get_redfish_v1_systems_system_id_secureerasereportservice_secureerasereportentries_secureerasereportentry_id")
     if static_val:
         static_val = dict(static_val)
-        if str(secureerasereportentry_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/secureerasereportservice/secureerasereportentries/{secureerasereportentry_id}"
             static_val["Id"] = secureerasereportentry_id
             return static_val
@@ -12757,7 +12854,7 @@ def delete_redfish_v1_systems_system_id_secureerasereportservice_secureeraserepo
     static_val = db.get_static("delete_redfish_v1_systems_system_id_secureerasereportservice_secureerasereportentries_secureerasereportenget_redfish_v1_systems_system_id_secureerasereportservice_secureerasereportentries_secureerasereportentry_id")
     if static_val:
         static_val = dict(static_val)
-        if str(secureerasereportentry_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": secureerasereportentry_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -12767,7 +12864,7 @@ def get_redfish_v1_systems_system_id_storage(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/storage
     Type: Collection ofStorage
     """
-    collection_path = "/redfish/v1/systems/{system_id}/storage"
+    collection_path = f"/redfish/v1/systems/{system_id}/storage"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_storage", dict())
     if not dynamic_items:
@@ -12793,7 +12890,7 @@ def post_redfish_v1_systems_system_id_storage(system_id: str, payload: dict = No
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/storage
     Type: Collection ofStorage
     """
-    collection_path = "/redfish/v1/systems/{system_id}/storage"
+    collection_path = f"/redfish/v1/systems/{system_id}/storage"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -12815,7 +12912,7 @@ def get_redfish_v1_systems_system_id_storage_storage_id(system_id: str, storage_
     static_val = db.get_static("get_redfish_v1_systems_system_id_storage_storage_id")
     if static_val:
         static_val = dict(static_val)
-        if str(storage_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/storage/{storage_id}"
             static_val["Id"] = storage_id
             return static_val
@@ -12854,7 +12951,7 @@ def delete_redfish_v1_systems_system_id_storage_storage_id(system_id: str, stora
     static_val = db.get_static("delete_redfish_v1_systems_system_id_storage_storget_redfish_v1_systems_system_id_storage_storage_id")
     if static_val:
         static_val = dict(static_val)
-        if str(storage_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": storage_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -12864,7 +12961,7 @@ def get_redfish_v1_systems_system_id_storage_storage_id_controllers(system_id: s
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/
     Type: Collection ofStorageController
     """
-    collection_path = "/redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/"
+    collection_path = f"/redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_storage_storage_id_controllers", dict())
     if not dynamic_items:
@@ -12890,7 +12987,7 @@ def post_redfish_v1_systems_system_id_storage_storage_id_controllers(system_id: 
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/
     Type: Collection ofStorageController
     """
-    collection_path = "/redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/"
+    collection_path = f"/redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -12912,7 +13009,7 @@ def get_redfish_v1_systems_system_id_storage_storage_id_controllers_controller_i
     static_val = db.get_static("get_redfish_v1_systems_system_id_storage_storage_id_controllers_controller_id")
     if static_val:
         static_val = dict(static_val)
-        if str(controller_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/{controller_id}"
             static_val["Id"] = controller_id
             return static_val
@@ -12951,7 +13048,7 @@ def delete_redfish_v1_systems_system_id_storage_storage_id_controllers_controlle
     static_val = db.get_static("delete_redfish_v1_systems_system_id_storage_storage_id_controllers_controlget_redfish_v1_systems_system_id_storage_storage_id_controllers_controller_id")
     if static_val:
         static_val = dict(static_val)
-        if str(controller_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": controller_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -12961,7 +13058,7 @@ def get_redfish_v1_systems_system_id_storage_storage_id_controllers_controller_i
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/{controller_id}/assembly
     Type: Assembly
     """
-    collection_path = "/redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/{controller_id}/assembly"
+    collection_path = f"/redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/{controller_id}/assembly"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_storage_storage_id_controllers_controller_id_assembly", dict())
     if not dynamic_items:
@@ -12987,7 +13084,7 @@ def post_redfish_v1_systems_system_id_storage_storage_id_controllers_controller_
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/{controller_id}/assembly
     Type: Assembly
     """
-    collection_path = "/redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/{controller_id}/assembly"
+    collection_path = f"/redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/{controller_id}/assembly"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -13002,7 +13099,7 @@ def get_redfish_v1_systems_system_id_storage_storage_id_controllers_controller_i
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/{controller_id}/ports
     Type: Collection ofPort
     """
-    collection_path = "/redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/{controller_id}/ports"
+    collection_path = f"/redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/{controller_id}/ports"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_storage_storage_id_controllers_controller_id_ports", dict())
     if not dynamic_items:
@@ -13028,7 +13125,7 @@ def post_redfish_v1_systems_system_id_storage_storage_id_controllers_controller_
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/{controller_id}/ports
     Type: Collection ofPort
     """
-    collection_path = "/redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/{controller_id}/ports"
+    collection_path = f"/redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/{controller_id}/ports"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -13050,7 +13147,7 @@ def get_redfish_v1_systems_system_id_storage_storage_id_controllers_controller_i
     static_val = db.get_static("get_redfish_v1_systems_system_id_storage_storage_id_controllers_controller_id_ports_port_id")
     if static_val:
         static_val = dict(static_val)
-        if str(port_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/storage/{storage_id}/controllers/{controller_id}/ports/{port_id}"
             static_val["Id"] = port_id
             return static_val
@@ -13089,7 +13186,7 @@ def delete_redfish_v1_systems_system_id_storage_storage_id_controllers_controlle
     static_val = db.get_static("delete_redfish_v1_systems_system_id_storage_storage_id_controllers_controller_id_ports_pget_redfish_v1_systems_system_id_storage_storage_id_controllers_controller_id_ports_port_id")
     if static_val:
         static_val = dict(static_val)
-        if str(port_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": port_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -13106,7 +13203,7 @@ def get_redfish_v1_systems_system_id_storage_storage_id_drives_driv_id(system_id
     static_val = db.get_static("get_redfish_v1_systems_system_id_storage_storage_id_drives_driv_id")
     if static_val:
         static_val = dict(static_val)
-        if str(driv_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/storage/{storage_id}/drives/{driv_id}"
             static_val["Id"] = driv_id
             return static_val
@@ -13145,7 +13242,7 @@ def delete_redfish_v1_systems_system_id_storage_storage_id_drives_driv_id(system
     static_val = db.get_static("delete_redfish_v1_systems_system_id_storage_storage_id_drives_dget_redfish_v1_systems_system_id_storage_storage_id_drives_driv_id")
     if static_val:
         static_val = dict(static_val)
-        if str(driv_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": driv_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -13155,7 +13252,7 @@ def get_redfish_v1_systems_system_id_storage_storage_id_storagecontrollers_stora
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/storage/{storage_id}/storagecontrollers/{storagecontroller_id}/ports
     Type: Collection ofPort
     """
-    collection_path = "/redfish/v1/systems/{system_id}/storage/{storage_id}/storagecontrollers/{storagecontroller_id}/ports"
+    collection_path = f"/redfish/v1/systems/{system_id}/storage/{storage_id}/storagecontrollers/{storagecontroller_id}/ports"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_storage_storage_id_storagecontrollers_storagecontroller_id_ports", dict())
     if not dynamic_items:
@@ -13181,7 +13278,7 @@ def post_redfish_v1_systems_system_id_storage_storage_id_storagecontrollers_stor
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/storage/{storage_id}/storagecontrollers/{storagecontroller_id}/ports
     Type: Collection ofPort
     """
-    collection_path = "/redfish/v1/systems/{system_id}/storage/{storage_id}/storagecontrollers/{storagecontroller_id}/ports"
+    collection_path = f"/redfish/v1/systems/{system_id}/storage/{storage_id}/storagecontrollers/{storagecontroller_id}/ports"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -13203,7 +13300,7 @@ def get_redfish_v1_systems_system_id_storage_storage_id_storagecontrollers_stora
     static_val = db.get_static("get_redfish_v1_systems_system_id_storage_storage_id_storagecontrollers_storagecontroller_id_ports_port_id")
     if static_val:
         static_val = dict(static_val)
-        if str(port_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/storage/{storage_id}/storagecontrollers/{storagecontroller_id}/ports/{port_id}"
             static_val["Id"] = port_id
             return static_val
@@ -13242,7 +13339,7 @@ def delete_redfish_v1_systems_system_id_storage_storage_id_storagecontrollers_st
     static_val = db.get_static("delete_redfish_v1_systems_system_id_storage_storage_id_storagecontrollers_storagecontroller_id_ports_pget_redfish_v1_systems_system_id_storage_storage_id_storagecontrollers_storagecontroller_id_ports_port_id")
     if static_val:
         static_val = dict(static_val)
-        if str(port_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": port_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -13252,7 +13349,7 @@ def get_redfish_v1_systems_system_id_storage_storage_id_volumes(system_id: str, 
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/storage/{storage_id}/volumes
     Type: Collection ofVolume
     """
-    collection_path = "/redfish/v1/systems/{system_id}/storage/{storage_id}/volumes"
+    collection_path = f"/redfish/v1/systems/{system_id}/storage/{storage_id}/volumes"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_storage_storage_id_volumes", dict())
     if not dynamic_items:
@@ -13278,7 +13375,7 @@ def post_redfish_v1_systems_system_id_storage_storage_id_volumes(system_id: str,
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/storage/{storage_id}/volumes
     Type: Collection ofVolume
     """
-    collection_path = "/redfish/v1/systems/{system_id}/storage/{storage_id}/volumes"
+    collection_path = f"/redfish/v1/systems/{system_id}/storage/{storage_id}/volumes"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -13300,7 +13397,7 @@ def get_redfish_v1_systems_system_id_storage_storage_id_volumes_volum_id(system_
     static_val = db.get_static("get_redfish_v1_systems_system_id_storage_storage_id_volumes_volum_id")
     if static_val:
         static_val = dict(static_val)
-        if str(volum_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/storage/{storage_id}/volumes/{volum_id}"
             static_val["Id"] = volum_id
             return static_val
@@ -13339,7 +13436,7 @@ def delete_redfish_v1_systems_system_id_storage_storage_id_volumes_volum_id(syst
     static_val = db.get_static("delete_redfish_v1_systems_system_id_storage_storage_id_volumes_voget_redfish_v1_systems_system_id_storage_storage_id_volumes_volum_id")
     if static_val:
         static_val = dict(static_val)
-        if str(volum_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": volum_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -13349,7 +13446,7 @@ def get_redfish_v1_systems_system_id_usbdevices(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/usbdevices
     Type: Collection ofHpeUSBDevice
     """
-    collection_path = "/redfish/v1/systems/{system_id}/usbdevices"
+    collection_path = f"/redfish/v1/systems/{system_id}/usbdevices"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_usbdevices", dict())
     if not dynamic_items:
@@ -13375,7 +13472,7 @@ def post_redfish_v1_systems_system_id_usbdevices(system_id: str, payload: dict =
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/usbdevices
     Type: Collection ofHpeUSBDevice
     """
-    collection_path = "/redfish/v1/systems/{system_id}/usbdevices"
+    collection_path = f"/redfish/v1/systems/{system_id}/usbdevices"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -13397,7 +13494,7 @@ def get_redfish_v1_systems_system_id_usbdevices_usbdevic_id(system_id: str, usbd
     static_val = db.get_static("get_redfish_v1_systems_system_id_usbdevices_usbdevic_id")
     if static_val:
         static_val = dict(static_val)
-        if str(usbdevic_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/usbdevices/{usbdevic_id}"
             static_val["Id"] = usbdevic_id
             return static_val
@@ -13436,7 +13533,7 @@ def delete_redfish_v1_systems_system_id_usbdevices_usbdevic_id(system_id: str, u
     static_val = db.get_static("delete_redfish_v1_systems_system_id_usbdevices_usbdeget_redfish_v1_systems_system_id_usbdevices_usbdevic_id")
     if static_val:
         static_val = dict(static_val)
-        if str(usbdevic_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": usbdevic_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -13446,7 +13543,7 @@ def get_redfish_v1_systems_system_id_usbports(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/usbports
     Type: Collection ofHpeUSBPort
     """
-    collection_path = "/redfish/v1/systems/{system_id}/usbports"
+    collection_path = f"/redfish/v1/systems/{system_id}/usbports"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_usbports", dict())
     if not dynamic_items:
@@ -13472,7 +13569,7 @@ def post_redfish_v1_systems_system_id_usbports(system_id: str, payload: dict = N
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/usbports
     Type: Collection ofHpeUSBPort
     """
-    collection_path = "/redfish/v1/systems/{system_id}/usbports"
+    collection_path = f"/redfish/v1/systems/{system_id}/usbports"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -13494,7 +13591,7 @@ def get_redfish_v1_systems_system_id_usbports_usbport_id(system_id: str, usbport
     static_val = db.get_static("get_redfish_v1_systems_system_id_usbports_usbport_id")
     if static_val:
         static_val = dict(static_val)
-        if str(usbport_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/usbports/{usbport_id}"
             static_val["Id"] = usbport_id
             return static_val
@@ -13533,7 +13630,7 @@ def delete_redfish_v1_systems_system_id_usbports_usbport_id(system_id: str, usbp
     static_val = db.get_static("delete_redfish_v1_systems_system_id_usbports_usbpget_redfish_v1_systems_system_id_usbports_usbport_id")
     if static_val:
         static_val = dict(static_val)
-        if str(usbport_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": usbport_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -13543,7 +13640,7 @@ def get_redfish_v1_systems_system_id_workloadperformanceadvisor(system_id: str):
     iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/workloadperformanceadvisor
     Type: Collection ofHpeWorkloadPerformanceAdvisor
     """
-    collection_path = "/redfish/v1/systems/{system_id}/workloadperformanceadvisor"
+    collection_path = f"/redfish/v1/systems/{system_id}/workloadperformanceadvisor"
     dynamic_items = db.get_all(collection_path)
     static_val = db.get_static("get_redfish_v1_systems_system_id_workloadperformanceadvisor", dict())
     if not dynamic_items:
@@ -13569,7 +13666,7 @@ def post_redfish_v1_systems_system_id_workloadperformanceadvisor(system_id: str,
     iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/workloadperformanceadvisor
     Type: Collection ofHpeWorkloadPerformanceAdvisor
     """
-    collection_path = "/redfish/v1/systems/{system_id}/workloadperformanceadvisor"
+    collection_path = f"/redfish/v1/systems/{system_id}/workloadperformanceadvisor"
     payload_dict = payload if payload is not None else {}
     item_id = str(payload_dict.get("Id") or payload_dict.get("id") or payload_dict.get("UserName") or payload_dict.get("Name") or len(db.get_all(collection_path)) + 1)
     payload_dict["Id"] = item_id
@@ -13591,7 +13688,7 @@ def get_redfish_v1_systems_system_id_workloadperformanceadvisor_workloadperforma
     static_val = db.get_static("get_redfish_v1_systems_system_id_workloadperformanceadvisor_workloadperformanceadvisor_id")
     if static_val:
         static_val = dict(static_val)
-        if str(workloadperformanceadvisor_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/systems/{system_id}/workloadperformanceadvisor/{workloadperformanceadvisor_id}"
             static_val["Id"] = workloadperformanceadvisor_id
             return static_val
@@ -13630,7 +13727,7 @@ def delete_redfish_v1_systems_system_id_workloadperformanceadvisor_workloadperfo
     static_val = db.get_static("delete_redfish_v1_systems_system_id_workloadperformanceadvisor_workloadperformanceadviget_redfish_v1_systems_system_id_workloadperformanceadvisor_workloadperformanceadvisor_id")
     if static_val:
         static_val = dict(static_val)
-        if str(workloadperformanceadvisor_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": workloadperformanceadvisor_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -13729,7 +13826,7 @@ def get_redfish_v1_taskservice_tasks_task_id(task_id: str):
     static_val = db.get_static("get_redfish_v1_taskservice_tasks_task_id")
     if static_val:
         static_val = dict(static_val)
-        if str(task_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/taskservice/tasks/{task_id}"
             static_val["Id"] = task_id
             return static_val
@@ -13768,7 +13865,7 @@ def delete_redfish_v1_taskservice_tasks_task_id(task_id: str):
     static_val = db.get_static("delete_redfish_v1_taskservice_tasks_tget_redfish_v1_taskservice_tasks_task_id")
     if static_val:
         static_val = dict(static_val)
-        if str(task_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": task_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -13867,7 +13964,7 @@ def get_redfish_v1_telemetryservice_metricdefinitions_metricdefinition_id(metric
     static_val = db.get_static("get_redfish_v1_telemetryservice_metricdefinitions_metricdefinition_id")
     if static_val:
         static_val = dict(static_val)
-        if str(metricdefinition_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/telemetryservice/metricdefinitions/{metricdefinition_id}"
             static_val["Id"] = metricdefinition_id
             return static_val
@@ -13906,7 +14003,7 @@ def delete_redfish_v1_telemetryservice_metricdefinitions_metricdefinition_id(met
     static_val = db.get_static("delete_redfish_v1_telemetryservice_metricdefinitions_metricdefinitget_redfish_v1_telemetryservice_metricdefinitions_metricdefinition_id")
     if static_val:
         static_val = dict(static_val)
-        if str(metricdefinition_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": metricdefinition_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -13964,7 +14061,7 @@ def get_redfish_v1_telemetryservice_metricreportdefinitions_metricreportdefiniti
     static_val = db.get_static("get_redfish_v1_telemetryservice_metricreportdefinitions_metricreportdefinition_id")
     if static_val:
         static_val = dict(static_val)
-        if str(metricreportdefinition_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/telemetryservice/metricreportdefinitions/{metricreportdefinition_id}"
             static_val["Id"] = metricreportdefinition_id
             return static_val
@@ -14003,7 +14100,7 @@ def delete_redfish_v1_telemetryservice_metricreportdefinitions_metricreportdefin
     static_val = db.get_static("delete_redfish_v1_telemetryservice_metricreportdefinitions_metricreportdefinitget_redfish_v1_telemetryservice_metricreportdefinitions_metricreportdefinition_id")
     if static_val:
         static_val = dict(static_val)
-        if str(metricreportdefinition_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": metricreportdefinition_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -14061,7 +14158,7 @@ def get_redfish_v1_telemetryservice_metricreports_metricreport_id(metricreport_i
     static_val = db.get_static("get_redfish_v1_telemetryservice_metricreports_metricreport_id")
     if static_val:
         static_val = dict(static_val)
-        if str(metricreport_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/telemetryservice/metricreports/{metricreport_id}"
             static_val["Id"] = metricreport_id
             return static_val
@@ -14100,7 +14197,7 @@ def delete_redfish_v1_telemetryservice_metricreports_metricreport_id(metricrepor
     static_val = db.get_static("delete_redfish_v1_telemetryservice_metricreports_metricrepget_redfish_v1_telemetryservice_metricreports_metricreport_id")
     if static_val:
         static_val = dict(static_val)
-        if str(metricreport_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": metricreport_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -14158,7 +14255,7 @@ def get_redfish_v1_telemetryservice_triggers_trigger_id(trigger_id: str):
     static_val = db.get_static("get_redfish_v1_telemetryservice_triggers_trigger_id")
     if static_val:
         static_val = dict(static_val)
-        if str(trigger_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/telemetryservice/triggers/{trigger_id}"
             static_val["Id"] = trigger_id
             return static_val
@@ -14197,7 +14294,7 @@ def delete_redfish_v1_telemetryservice_triggers_trigger_id(trigger_id: str):
     static_val = db.get_static("delete_redfish_v1_telemetryservice_triggers_trigget_redfish_v1_telemetryservice_triggers_trigger_id")
     if static_val:
         static_val = dict(static_val)
-        if str(trigger_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": trigger_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -14296,7 +14393,7 @@ def get_redfish_v1_updateservice_componentrepository_componentrepository_id(comp
     static_val = db.get_static("get_redfish_v1_updateservice_componentrepository_componentrepository_id")
     if static_val:
         static_val = dict(static_val)
-        if str(componentrepository_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/updateservice/componentrepository/{componentrepository_id}"
             static_val["Id"] = componentrepository_id
             return static_val
@@ -14335,7 +14432,7 @@ def delete_redfish_v1_updateservice_componentrepository_componentrepository_id(c
     static_val = db.get_static("delete_redfish_v1_updateservice_componentrepository_componentrepositget_redfish_v1_updateservice_componentrepository_componentrepository_id")
     if static_val:
         static_val = dict(static_val)
-        if str(componentrepository_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": componentrepository_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -14393,7 +14490,7 @@ def get_redfish_v1_updateservice_firmwareinventory_firmwareinventory_id(firmware
     static_val = db.get_static("get_redfish_v1_updateservice_firmwareinventory_firmwareinventory_id")
     if static_val:
         static_val = dict(static_val)
-        if str(firmwareinventory_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/updateservice/firmwareinventory/{firmwareinventory_id}"
             static_val["Id"] = firmwareinventory_id
             return static_val
@@ -14432,7 +14529,7 @@ def delete_redfish_v1_updateservice_firmwareinventory_firmwareinventory_id(firmw
     static_val = db.get_static("delete_redfish_v1_updateservice_firmwareinventory_firmwareinventget_redfish_v1_updateservice_firmwareinventory_firmwareinventory_id")
     if static_val:
         static_val = dict(static_val)
-        if str(firmwareinventory_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": firmwareinventory_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -14490,7 +14587,7 @@ def get_redfish_v1_updateservice_installsets_installset_id(installset_id: str):
     static_val = db.get_static("get_redfish_v1_updateservice_installsets_installset_id")
     if static_val:
         static_val = dict(static_val)
-        if str(installset_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/updateservice/installsets/{installset_id}"
             static_val["Id"] = installset_id
             return static_val
@@ -14529,7 +14626,7 @@ def delete_redfish_v1_updateservice_installsets_installset_id(installset_id: str
     static_val = db.get_static("delete_redfish_v1_updateservice_installsets_installget_redfish_v1_updateservice_installsets_installset_id")
     if static_val:
         static_val = dict(static_val)
-        if str(installset_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": installset_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -14587,7 +14684,7 @@ def get_redfish_v1_updateservice_invalidimagerepository_invalidimagerepository_i
     static_val = db.get_static("get_redfish_v1_updateservice_invalidimagerepository_invalidimagerepository_id")
     if static_val:
         static_val = dict(static_val)
-        if str(invalidimagerepository_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/updateservice/invalidimagerepository/{invalidimagerepository_id}"
             static_val["Id"] = invalidimagerepository_id
             return static_val
@@ -14626,7 +14723,7 @@ def delete_redfish_v1_updateservice_invalidimagerepository_invalidimagerepositor
     static_val = db.get_static("delete_redfish_v1_updateservice_invalidimagerepository_invalidimagerepositget_redfish_v1_updateservice_invalidimagerepository_invalidimagerepository_id")
     if static_val:
         static_val = dict(static_val)
-        if str(invalidimagerepository_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": invalidimagerepository_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -14684,7 +14781,7 @@ def get_redfish_v1_updateservice_maintenancewindows_maintenancewindow_id(mainten
     static_val = db.get_static("get_redfish_v1_updateservice_maintenancewindows_maintenancewindow_id")
     if static_val:
         static_val = dict(static_val)
-        if str(maintenancewindow_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/updateservice/maintenancewindows/{maintenancewindow_id}"
             static_val["Id"] = maintenancewindow_id
             return static_val
@@ -14723,7 +14820,7 @@ def delete_redfish_v1_updateservice_maintenancewindows_maintenancewindow_id(main
     static_val = db.get_static("delete_redfish_v1_updateservice_maintenancewindows_maintenancewinget_redfish_v1_updateservice_maintenancewindows_maintenancewindow_id")
     if static_val:
         static_val = dict(static_val)
-        if str(maintenancewindow_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": maintenancewindow_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -14781,7 +14878,7 @@ def get_redfish_v1_updateservice_runningsoftwareinventory_runningsoftwareinvento
     static_val = db.get_static("get_redfish_v1_updateservice_runningsoftwareinventory_runningsoftwareinventory_id")
     if static_val:
         static_val = dict(static_val)
-        if str(runningsoftwareinventory_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/updateservice/runningsoftwareinventory/{runningsoftwareinventory_id}"
             static_val["Id"] = runningsoftwareinventory_id
             return static_val
@@ -14820,7 +14917,7 @@ def delete_redfish_v1_updateservice_runningsoftwareinventory_runningsoftwareinve
     static_val = db.get_static("delete_redfish_v1_updateservice_runningsoftwareinventory_runningsoftwareinventget_redfish_v1_updateservice_runningsoftwareinventory_runningsoftwareinventory_id")
     if static_val:
         static_val = dict(static_val)
-        if str(runningsoftwareinventory_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": runningsoftwareinventory_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -14878,7 +14975,7 @@ def get_redfish_v1_updateservice_softwareinventory_softwareinventory_id(software
     static_val = db.get_static("get_redfish_v1_updateservice_softwareinventory_softwareinventory_id")
     if static_val:
         static_val = dict(static_val)
-        if str(softwareinventory_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/updateservice/softwareinventory/{softwareinventory_id}"
             static_val["Id"] = softwareinventory_id
             return static_val
@@ -14917,7 +15014,7 @@ def delete_redfish_v1_updateservice_softwareinventory_softwareinventory_id(softw
     static_val = db.get_static("delete_redfish_v1_updateservice_softwareinventory_softwareinventget_redfish_v1_updateservice_softwareinventory_softwareinventory_id")
     if static_val:
         static_val = dict(static_val)
-        if str(softwareinventory_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": softwareinventory_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -14975,7 +15072,7 @@ def get_redfish_v1_updateservice_updatetaskqueue_updatetaskqueue_id(updatetaskqu
     static_val = db.get_static("get_redfish_v1_updateservice_updatetaskqueue_updatetaskqueue_id")
     if static_val:
         static_val = dict(static_val)
-        if str(updatetaskqueue_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             static_val["@odata.id"] = f"/redfish/v1/updateservice/updatetaskqueue/{updatetaskqueue_id}"
             static_val["Id"] = updatetaskqueue_id
             return static_val
@@ -15014,6 +15111,35 @@ def delete_redfish_v1_updateservice_updatetaskqueue_updatetaskqueue_id(updatetas
     static_val = db.get_static("delete_redfish_v1_updateservice_updatetaskqueue_updatetaskquget_redfish_v1_updateservice_updatetaskqueue_updatetaskqueue_id")
     if static_val:
         static_val = dict(static_val)
-        if str(updatetaskqueue_id) == str(static_val.get("Id") or static_val.get("id") or "1"):
+        if True: # Bypass strict ID check
             return {"message": "Deleted successfully (static default removal simulated)", "id": updatetaskqueue_id}
     raise HTTPException(status_code=404, detail="Resource not found")
+
+
+@app.post("/redfish/v1/systems/{system_id}")
+@app.post("/redfish/v1/systems/{system_id}/actions/computersystem.reset")
+@app.post("/redfish/v1/systems/{system_id}/Actions/ComputerSystem.Reset")
+def post_redfish_v1_systems_system_id(system_id: str, payload: dict = None):
+    collection_path = f"/redfish/v1/systems"
+    payload_dict = payload if payload is not None else {}
+    reset_type = payload_dict.get("ResetType") or payload_dict.get("powerState") or "On"
+
+    # Map ResetType to PowerState
+    if reset_type.lower() in ("forceoff", "gracefulshutdown", "off"):
+        new_power_state = "Off"
+    else:
+        new_power_state = "On"
+
+    existing = db.get_item(collection_path, system_id) or {}
+    if not existing:
+        static_val = db.get_static("get_redfish_v1_systems_system_id")
+        if static_val:
+            existing = dict(static_val)
+            existing["Id"] = system_id
+            existing["@odata.id"] = f"/redfish/v1/systems/{system_id}"
+
+    existing["PowerState"] = new_power_state   # Redfish standard field — single source of truth
+    existing.pop("power_state", None)           # Remove stale duplicate if present
+    db.upsert_item(collection_path, system_id, existing)
+    return {"status": "success", "ResetType": reset_type, "PowerState": new_power_state}
+

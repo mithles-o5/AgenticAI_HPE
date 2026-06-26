@@ -59,6 +59,12 @@ def main():
             cwd=os.path.join(ROOT_DIR, "mock_server(storage)")
         ))
 
+        print("[+] Starting iLO Mock Server on port 8010...")
+        processes.append(subprocess.Popen(
+            [sys.executable, "-m", "uvicorn", "main:app", "--port", "8010", "--log-level", "error"],
+            cwd=os.path.join(ROOT_DIR, "mock_server(iLO)")
+        ))
+
         # 3. Start OASF Agents
         print("[+] Starting Cloud Agent on port 8005...")
         processes.append(subprocess.Popen(
@@ -87,7 +93,7 @@ def main():
         print("[+] Starting Server Agent on port 8009...")
         processes.append(subprocess.Popen(
             [sys.executable, "-m", "uvicorn", "main:app", "--port", "8009", "--log-level", "error"],
-            cwd=os.path.join(AGENTS_DIR, "server_agent")
+            cwd=os.path.join(AGENTS_DIR, "server_agent(iLO)")
         ))
 
         print("\n" + "=" * 60)

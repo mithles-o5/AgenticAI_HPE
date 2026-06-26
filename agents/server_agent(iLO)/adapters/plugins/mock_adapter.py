@@ -8,7 +8,7 @@ class MockAdapter(ServerAdapter):
         from urllib.parse import urlparse
         try:
             parsed = urlparse(api_path)
-            api_path = f"http://127.0.0.1:8002{parsed.path}"
+            api_path = f"http://127.0.0.1:8010{parsed.path}"
             if parsed.query:
                 api_path += f"?{parsed.query}"
 
@@ -56,7 +56,16 @@ class MockAdapter(ServerAdapter):
         api_path = parameters.get("api_path")
         if not api_path:
             return {"result": "failed", "detail": "Dynamic routing failed: No api_path provided by orchestrator. The agent is strictly dynamic."}
-        return self._dynamic_call(parameters.get("http_method", "POST"), api_path, resource_id, parameters.get("payload", {}), parameters.get("base_url", ""))
+        
+        payload = parameters.get("payload") or {}
+        if not payload:
+            payload = {"ResetType": "On" if action.lower() in ("on", "poweron") else "ForceOff", "powerState": action.upper()}
+            
+        method = parameters.get("http_method", "POST")
+        if method == "GET":
+            method = "POST"
+            
+        return self._dynamic_call(method, api_path, resource_id, payload, parameters.get("base_url", ""))
 
     def set_boot_order(self, resource_id: str, boot_order: List[str], parameters: Dict[str, Any] = None) -> Dict[str, Any]:
         parameters = parameters or {}

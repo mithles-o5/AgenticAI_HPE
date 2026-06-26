@@ -433,6 +433,28 @@ def main() -> None:
                 "api_path": path
             })
 
+    # Explicitly seed mock_server endpoints for server types
+    server_types = ["server", "server-hardware"]
+    for dtype in server_types:
+        server_endpoints = [
+            ("STATUS", "GET", "/redfish/v1/systems/{id}"),
+            ("ON", "POST", "/redfish/v1/systems/{id}/actions/computersystem.reset"),
+            ("OFF", "POST", "/redfish/v1/systems/{id}/actions/computersystem.reset"),
+            ("RESET", "POST", "/redfish/v1/systems/{id}/actions/computersystem.reset"),
+            ("COLD_BOOT", "POST", "/redfish/v1/systems/{id}/actions/computersystem.reset"),
+            ("LIST", "GET", "/redfish/v1/systems"),
+            ("RESCAN", "GET", "/redfish/v1/systems"),
+            ("UPDATE", "PATCH", "/redfish/v1/systems/{id}"),
+        ]
+        for act, method, path in server_endpoints:
+            rows.append({
+                "vendor": "mock_server",
+                "device_type": dtype,
+                "action_key": act,
+                "http_method": method,
+                "api_path": path
+            })
+
     # Breakdown before insert
     breakdown: dict[str, dict[str, int]] = {}
     for r in rows:

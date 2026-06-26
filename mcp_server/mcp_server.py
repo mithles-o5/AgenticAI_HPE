@@ -602,7 +602,7 @@ async def _execute_agent_command(
         # If authorized, query Postgres CMDB
         try:
             import psycopg2
-            conn = psycopg2.connect(dbname="hpe_agentic_ai", user="postgres", password="Mithles", host="localhost")
+            conn = psycopg2.connect(dbname="hpe_agentic_ai", user="postgres", password="mithles", host="localhost")
             with conn.cursor() as cur:
                 cur.execute(
                     "SELECT serial_number, ip_address, device_type, management_source FROM devices WHERE device_type = %s",
@@ -803,7 +803,7 @@ async def _execute_agent_command(
         # Insert into Postgres CMDB
         try:
             import psycopg2
-            conn = psycopg2.connect(dbname="hpe_agentic_ai", user="postgres", password="Mithles", host="localhost")
+            conn = psycopg2.connect(dbname="hpe_agentic_ai", user="postgres", password="mithles", host="localhost")
             with conn.cursor() as cur:
                 cur.execute(
                     """
@@ -1022,8 +1022,10 @@ async def _execute_agent_command(
     if is_creation or resolved_provider in {"mock_storage", "mock_network", "mock_server", "mock_cloud", "oneview"}:
         if resolved_provider == "mock_storage":
             api_path = "/data-services/v1beta1/devices/{id}" if not is_creation else "/data-services/v1beta1/devices"
-        elif resolved_provider in {"mock_server", "oneview"}:
+        elif resolved_provider == "oneview":
             api_path = "/rest/server-hardware/{id}" if not is_creation else "/rest/server-hardware"
+        elif resolved_provider == "mock_server":
+            api_path = "/redfish/v1/systems/{id}" if not is_creation else "/redfish/v1/systems"
         elif resolved_provider == "mock_network":
             api_path = "/network/v1/devices/{id}" if not is_creation else "/network/v1/devices"
         elif resolved_provider == "mock_cloud":
@@ -1054,7 +1056,7 @@ async def _execute_agent_command(
         # Route to the correct mock server based on device source
         _MOCK_URLS = {
             "mock_storage": os.getenv("MOCK_STORAGE_URL", "http://127.0.0.1:8004"),
-            "mock_server":  os.getenv("MOCK_SERVER_URL",  "http://127.0.0.1:8000"),
+            "mock_server":  os.getenv("MOCK_SERVER_URL",  "http://127.0.0.1:8010"),
             "mock_network": os.getenv("MOCK_NETWORK_URL", "http://127.0.0.1:8002"),
             "mock_cloud":   os.getenv("MOCK_CLOUD_URL",   "http://127.0.0.1:8003"),
             "oneview":      os.getenv("HPE_OV_URL",       "http://127.0.0.1:8000"),
@@ -1066,8 +1068,10 @@ async def _execute_agent_command(
             src = device.management_source
             if src == "mock_storage":
                 patch_url = f"{base_url}/data-services/v1beta1/devices/{device.source_device_id or identifier}"
-            elif src in {"mock_server", "oneview"}:
+            elif src == "oneview":
                 patch_url = f"{base_url}/rest/server-hardware/{device.source_device_id or identifier}"
+            elif src == "mock_server":
+                patch_url = f"{base_url}/redfish/v1/systems/{device.source_device_id or identifier}"
             elif src == "mock_network":
                 patch_url = f"{base_url}/network/v1/devices/{device.source_device_id or identifier}"
             elif src == "mock_cloud":
@@ -1152,7 +1156,7 @@ async def _execute_agent_command(
         # Delete from PostgreSQL CMDB
         try:
             import psycopg2
-            conn = psycopg2.connect(dbname="postgres", user="postgres", password="mithles", host="localhost")
+            conn = psycopg2.connect(dbname="hpe_agentic_ai", user="postgres", password="mithles", host="localhost")
             with conn.cursor() as cur:
                 cur.execute("DELETE FROM devices WHERE serial_number = %s", (identifier,))
             conn.commit()

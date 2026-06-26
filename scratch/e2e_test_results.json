@@ -1,0 +1,97 @@
+{
+  "1. Create Server": {
+    "pass": true,
+    "pg_records": [
+      [
+        "val-test-srv",
+        "10.11.99.5",
+        "server"
+      ]
+    ],
+    "sqlite_records": [
+      [
+        "val-test-srv",
+        "val-test-srv",
+        null,
+        "10.11.99.5"
+      ]
+    ],
+    "status_code_mcp": "OK"
+  },
+  "1b. Query Immediately After Create": {
+    "pass": false
+  },
+  "1c. Duplicate Server Creation": {
+    "pass": true
+  },
+  "2. List Servers": {
+    "pass": true,
+    "contained_created_server": true
+  },
+  "3. Get Server Status": {
+    "pass": true
+  },
+  "4. Update Server": {
+    "pass": false,
+    "sqlite_state": [
+      [
+        "apollo-node-104",
+        "37.3",
+        "WARNING"
+      ]
+    ]
+  },
+  "5. Power OFF": {
+    "pass": true,
+    "sqlite_state": [
+      [
+        "apollo-node-104",
+        "Off",
+        "Off"
+      ]
+    ]
+  },
+  "6. Power ON": {
+    "pass": true,
+    "sqlite_state": [
+      [
+        "apollo-node-104",
+        "On",
+        "On"
+      ]
+    ]
+  },
+  "7. Reset Server": {
+    "pass": false,
+    "sqlite_state": [
+      [
+        "apollo-node-104",
+        "Off",
+        "Off"
+      ]
+    ]
+  },
+  "8. Delete Server": {
+    "pass": true,
+    "pg_records": [],
+    "sqlite_records": []
+  },
+  "8b. Delete Server LIST verification": {
+    "pass": true
+  },
+  "8c. Delete Server STATUS verification": {
+    "pass": true
+  },
+  "9a. Invalid server ID status": {
+    "pass": true
+  },
+  "9b. Delete non-existent server": {
+    "pass": true
+  },
+  "9c. Update non-existent server": {
+    "pass": true
+  },
+  "9d. Power operation on non-existent server": {
+    "pass": true
+  }
+}
