@@ -106,14 +106,17 @@ def resolve_resource(
 
 
 @mcp.tool()
-def list_devices(page: int = 1, page_size: int = 50) -> str:
-    """List known devices from the resolver registry."""
+def list_devices(page: int = 1, page_size: int = 50, device_type: str = "") -> str:
+    """
+    List known devices from the resolver registry.
+    Use the device_type parameter to perform bulk enumeration or category-level queries (like 'gateway', 'switch', 'access_point', 'server').
+    """
     page = max(page, 1)
     if page_size < 1 or page_size > 500:
         page_size = 50
     offset = (page - 1) * page_size
-    total_count = DeviceQueries.count_total()
-    rows = DeviceQueries.list_all(limit=page_size, offset=offset)
+    total_count = DeviceQueries.count_total(device_type=device_type)
+    rows = DeviceQueries.list_all(limit=page_size, offset=offset, device_type=device_type)
     total_pages = (total_count + page_size - 1) // page_size
 
     return json.dumps(

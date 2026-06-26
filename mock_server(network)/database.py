@@ -36,9 +36,9 @@ class Database:
         
         # Add missing columns
         cursor = conn.execute(f"PRAGMA table_info({table_name})")
-        existing_cols = {row[1] for row in cursor.fetchall()}
+        existing_cols = {row[1].lower() for row in cursor.fetchall()}
         for k in data.keys():
-            if k not in existing_cols:
+            if k.lower() not in existing_cols:
                 conn.execute(f'ALTER TABLE {table_name} ADD COLUMN "{k}" TEXT')
 
     def get_collection(self, collection_path):
@@ -65,10 +65,46 @@ class Database:
             finally:
                 conn.close()
 
+    def _intercept_devices(self, collection_path):
+        """Intercept Aruba Central endpoints to read from main devices collection"""
+        path_lower = collection_path.lower()
+        parts = [p for p in path_lower.split('/') if p]
+        
+        # Only intercept the base endpoints or specific device lookup endpoints (len 3 or 4)
+        if len(parts) > 4:
+            return None
+            
+        if "/network/v1/devices" in path_lower:
+            return None
+            
+        if "network-monitoring/v1/aps" in path_lower or "network-monitoring/v1/swarms" in path_lower or "network-monitoring/v1/top-aps" in path_lower:
+            devices = list(self.get_collection("/network/v1/devices").values())
+            return [d for d in devices if d.get("device_type", "").lower() in ["ap", "iap", "access point", "access_point"]]
+            
+        if "network-monitoring/v1/switches" in path_lower:
+            devices = list(self.get_collection("/network/v1/devices").values())
+            return [d for d in devices if d.get("device_type", "").lower() in ["switch", "aos-s", "aos-cx", "cx"]]
+            
+        if "network-monitoring/v1/gateways" in path_lower:
+            devices = list(self.get_collection("/network/v1/devices").values())
+            return [d for d in devices if d.get("device_type", "").lower() in ["gateway", "mc", "mobility controller", "router", "firewall", "wireless_controller"]]
+            
+        return None
+
     def get_all(self, collection_path):
+        intercepted = self._intercept_devices(collection_path)
+        if intercepted is not None:
+            return intercepted
         return list(self.get_collection(collection_path).values())
 
     def get_item(self, collection_path, item_id):
+        intercepted = self._intercept_devices(collection_path)
+        if intercepted is not None:
+            for d in intercepted:
+                if d.get("id") == item_id or d.get("serial_number") == item_id or d.get("name") == item_id:
+                    return d
+            return None
+            
         table_name = self._get_table_name(collection_path)
         with self._lock:
             conn = sqlite3.connect(self.db_path, check_same_thread=False)

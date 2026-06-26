@@ -75,7 +75,11 @@ class MockNetworkAdapter(BaseNetworkAdapter):
         
         # Power action mapping for mock server
         if action.upper() in {"ON", "OFF"}:
-            payload = {"action": action.upper()}
+            payload = {
+                "action": action.upper(),
+                "serial_number": parameters.get("serial_number") or device_id,
+                "management_source": parameters.get("management_source") or "mock_network"
+            }
         else:
             payload = parameters.get("payload", {})
             

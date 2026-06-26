@@ -78,16 +78,28 @@ class DeviceQueries:
         return cls.get_by_serial(identifier)
 
     @staticmethod
-    def list_all(limit: int = 1000, offset: int = 0) -> list[dict]:
-        return db_manager.execute_query(
-            _device_select()
-            + """
-                ORDER BY d.serial_number
-                LIMIT %s OFFSET %s
-            """,
-            (limit, offset),
-            fetch_all=True,
-        ) or []
+    def list_all(limit: int = 1000, offset: int = 0, device_type: str = "") -> list[dict]:
+        if device_type:
+            return db_manager.execute_query(
+                _device_select()
+                + """
+                    WHERE lower(d.device_type) = lower(%s)
+                    ORDER BY d.serial_number
+                    LIMIT %s OFFSET %s
+                """,
+                (device_type, limit, offset),
+                fetch_all=True,
+            ) or []
+        else:
+            return db_manager.execute_query(
+                _device_select()
+                + """
+                    ORDER BY d.serial_number
+                    LIMIT %s OFFSET %s
+                """,
+                (limit, offset),
+                fetch_all=True,
+            ) or []
 
     @staticmethod
     def list_devices_by_management_source(
@@ -118,11 +130,18 @@ class DeviceQueries:
         return db_manager.execute_query(query, params, fetch_all=True) or []
 
     @staticmethod
-    def count_total() -> int:
-        row = db_manager.execute_query(
-            "SELECT COUNT(*) AS count FROM devices",
-            fetch_one=True,
-        )
+    def count_total(device_type: str = "") -> int:
+        if device_type:
+            row = db_manager.execute_query(
+                "SELECT COUNT(*) AS count FROM devices WHERE lower(device_type) = lower(%s)",
+                (device_type,),
+                fetch_one=True,
+            )
+        else:
+            row = db_manager.execute_query(
+                "SELECT COUNT(*) AS count FROM devices",
+                fetch_one=True,
+            )
         return int(row["count"]) if row else 0
 
     @staticmethod

@@ -503,6 +503,7 @@ def logout() -> str:
 async def manage_infrastructure_resource(query: str) -> str:
     """
     USE THIS TOOL to manage or check the status of ANY resource (cloud, network, storage, server, onprem).
+    You can also use this tool to LIST resources by category (e.g., query='{"action": "LIST", "identifier": "gateways"}').
     The backend CMDB and Capability Registry will automatically route it to the correct agent.
     """
     return await _execute_agent_command(
@@ -583,6 +584,18 @@ async def _execute_agent_command(
             normalized_category = "server-hardware"
             resource_type = "server"
             provider_or_protocol = "mock_server"
+        elif "gateway" in ident_lower or "router" in ident_lower:
+            normalized_category = "gateways"
+            resource_type = "gateway"
+            provider_or_protocol = "mock_network"
+        elif "switch" in ident_lower:
+            normalized_category = "switches"
+            resource_type = "switch"
+            provider_or_protocol = "mock_network"
+        elif "ap" in ident_lower or "access point" in ident_lower:
+            normalized_category = "aps"
+            resource_type = "access_point"
+            provider_or_protocol = "mock_network"
         else:
             normalized_category = "unknown"
             resource_type = "unknown"
@@ -1114,6 +1127,10 @@ async def _execute_agent_command(
         "api_path": api_path,
         "user_email": email
     } if api_path else {"user_email": email}
+
+    if device:
+        dispatch_params["serial_number"] = device.serial_number
+        dispatch_params["management_source"] = device.management_source
 
     if resolution and hasattr(resolution, "http_method"):
         dispatch_params["http_method"] = resolution.http_method
