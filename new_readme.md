@@ -60,20 +60,26 @@ Stratum is designed around a decoupled, microservice-based architecture that lev
 [ User Query ]
       │
       ▼
-[ MCP Server (mcp_server.py) ]
-      │
-      ├── Authentication & Identity Mapping (Roles JSON / OAuth)
-      ├── Intent Parsing & Decomposing (Task Planner & Query Agent)
-      ├── Resource Routing (Resource Resolver: Redis Cache / PostgreSQL CMDB)
-      ├── Policy Validation (RBAC Engine & ABAC Engine)
+[ Query Agent ]
       │
       ▼
-[ Execution Engine (AgentDispatcher) ] ── (Queries Capability Registry)
+[ MCP Orchestrator (mcp_server.py) ]
       │
-      ├── [ Server Agent ]   ──► [ iLO Mock / Compute Ops Mock ]
-      ├── [ Storage Agent ]  ──► [ Storage Mock API ]
-      ├── [ Network Agent ]  ──► [ Network Mock API ]
-      └── [ Cloud Agent ]    ──► [ Cloud Mock API ]
+      ├── Capability Registry
+      ├── Task Planner
+      ├── Resource Resolver (Redis + PostgreSQL CMDB)
+      ├── Policy Engine (RBAC + ABAC)
+      ├── Credential Vault
+      └── Memory Store
+      │
+      ▼
+[ Execution Engine (AgentDispatcher) ]
+      │
+      ├── [ Server Agent ]    ──► [ iLO Mock ]
+      ├── [ Storage Agent ]   ──► [ Storage API ]
+      ├── [ Network Agent ]   ──► [ Aruba Network Mock API ]
+      ├── [ Cloud Agent ]     ──► [ Compute Ops API ]
+      └── [ On Prem Agent ]   ──► [ OneView API ]
 ```
 
 ### Technical Architecture Explanation
