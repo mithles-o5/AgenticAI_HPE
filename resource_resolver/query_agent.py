@@ -27,35 +27,51 @@ def _compile(pattern: str) -> re.Pattern:
 #   1. Multi-word phrases BEFORE their single-word subsets.
 #   2. Within each alternation group, longer phrase left of shorter.
 _ACTION_MAPPINGS: tuple[_Mapping, ...] = (
-    # Power
-    _Mapping(_compile(r"\b(turn on|power on|start)\b"),              "ON",          "Operational"),
-    _Mapping(_compile(r"\b(turn off|power off|shutdown)\b"),          "OFF",         "Operational"),
-    _Mapping(_compile(r"\b(cold boot)\b"),                            "COLD_BOOT",   "Operational"),
+    # Power — longest phrase first
+    _Mapping(_compile(r"\b(turn on|power on|start)\b"),              "ON",            "Operational"),
+    _Mapping(_compile(r"\b(turn off|power off|shutdown)\b"),          "OFF",           "Operational"),
+    _Mapping(_compile(r"\b(cold boot)\b"),                            "COLD_BOOT",     "Operational"),
+
+    # ── Semantic intents — checked FIRST so they win over generic verbs ──────
+    # Event log / system event log (before "get"/"show" which would match STATUS)
+    _Mapping(_compile(r"\b(event log|event logs|system log|system logs|sel|log entries|iml|integrated management log)\b"),
+                                                                      "FETCH_EVENT_LOG", "Operational"),
+    # Clear / reset log
+    _Mapping(_compile(r"\b(clear.*log|reset.*log|wipe.*log|erase.*log)\b"),
+                                                                      "CLEAR_EVENT_LOG", "Operational"),
+    # Hardware inventory
+    _Mapping(_compile(r"\b(hardware inventory|inventory|discover.*hardware|hw inventory|discover.*inventory)\b"),
+                                                                      "DISCOVER_INVENTORY", "Operational"),
+    # Virtual media / ISO / image mount
+    _Mapping(_compile(r"\b(mount|virtual media|insert.*media|attach.*iso|mount.*iso|mount.*image|attach.*image)\b"),
+                                                                      "MOUNT_VIRTUAL_MEDIA", "Operational"),
+    # Sensor / environmental audit
+    _Mapping(_compile(r"\b(sensor|thermal|fan|psu|power supply|environmental|inlet temperature|fan speed)\b"),
+                                                                      "FETCH_SENSORS",  "Operational"),
+    # CMDB sync / poll cycle trigger
+    _Mapping(_compile(r"\b(cmdb sync|sync cmdb|poll cycle|trigger.*poll|manual poll|sync.*metrics|poll.*trigger)\b"),
+                                                                      "SYNC_CMDB",      "Operational"),
+
+    # Update / modify — BEFORE reset so "configure" wins
+    _Mapping(_compile(r"\b(change|update|set|modify|configure|patch)\b"), "UPDATE",    "Operational"),
     # Reset / reload
-    _Mapping(_compile(r"\b(reboot|restart|reset)\b"),                 "RESET",       "Operational"),
-    _Mapping(_compile(r"\b(reload)\b"),                               "RELOAD",      "Operational"),
+    _Mapping(_compile(r"\b(reboot|restart|reset)\b"),                 "RESET",         "Operational"),
+    _Mapping(_compile(r"\b(reload)\b"),                               "RELOAD",        "Operational"),
     # HA / network ops — policy sync BEFORE plain sync
-    _Mapping(_compile(r"\b(policy sync|sync)\b"),                     "POLICY_SYNC", "Operational"),
-    _Mapping(_compile(r"\b(failover)\b"),                             "FAILOVER",    "Operational"),
-    _Mapping(_compile(r"\b(failback)\b"),                             "FAILBACK",    "Operational"),
+    _Mapping(_compile(r"\b(policy sync|sync)\b"),                     "POLICY_SYNC",   "Operational"),
+    _Mapping(_compile(r"\b(failover)\b"),                             "FAILOVER",      "Operational"),
+    _Mapping(_compile(r"\b(failback)\b"),                             "FAILBACK",      "Operational"),
     # Storage / discovery
-    _Mapping(_compile(r"\b(rescan)\b"),                               "RESCAN",      "Operational"),
-    # Read / query
-    _Mapping(_compile(r"\b(list)\b"),                                 "LIST",        "Operational"),
-    _Mapping(_compile(r"\b(status|check|state|lookup|show|find|get)\b"), "STATUS",   "Operational"),
-    # Update / modify — must be BEFORE provisioning words so "update" is not swallowed
-    _Mapping(_compile(r"\b(change|update|set|modify|configure|patch)\b"), "UPDATE",  "Operational"),
+    _Mapping(_compile(r"\b(rescan)\b"),                               "RESCAN",        "Operational"),
+    # Read / query — STATUS is the last fallback for generic verbs
+    _Mapping(_compile(r"\b(list)\b"),                                 "LIST",          "Operational"),
+    _Mapping(_compile(r"\b(status|check|state|lookup|show|find|get|retrieve|fetch|read|display)\b"),
+                                                                      "STATUS",        "Operational"),
     # Provisioning
-    _Mapping(_compile(r"\b(provision|create)\b"),                     "CREATE",      "Provisioning"),
-    _Mapping(_compile(r"\b(allocate|deploy)\b"),                      "ALLOCATE",    "Provisioning"),
-    _Mapping(_compile(r"\b(deallocate|release)\b"),                   "DEALLOCATE",  "Provisioning"),
-    _Mapping(_compile(r"\b(deprovision|destroy|delete)\b"),           "DELETE",      "Provisioning"),
-    # Future extensibility — add new rows here, no flow logic changes needed:
-    # _Mapping(_compile(r"\b(migrate)\b"),                            "MIGRATE",     "Provisioning"),
-    # _Mapping(_compile(r"\b(quarantine)\b"),                         "QUARANTINE",  "Operational"),
-    # _Mapping(_compile(r"\b(snapshot)\b"),                           "SNAPSHOT",    "Operational"),
-    _Mapping(_compile(r"\b(update)\b"),                               "UPDATE",      "Operational"),
-    _Mapping(_compile(r"\b(patch)\b"),                                "PATCH",       "Operational"),
+    _Mapping(_compile(r"\b(provision|create)\b"),                     "CREATE",        "Provisioning"),
+    _Mapping(_compile(r"\b(allocate|deploy)\b"),                      "ALLOCATE",      "Provisioning"),
+    _Mapping(_compile(r"\b(deallocate|release)\b"),                   "DEALLOCATE",    "Provisioning"),
+    _Mapping(_compile(r"\b(deprovision|destroy|delete)\b"),           "DELETE",        "Provisioning"),
 )
 
 # Noise words stripped from the leading edge of the extracted identifier
@@ -157,6 +173,19 @@ class QueryAgent:
             if details and details.get("device"):
                 identifier = details["device"]
 
+        # For all semantic intent actions, apply dedicated device extraction
+        # because the matched phrase removal leaves garbled text (URLs, prepositions, etc.)
+        elif matched_action in {
+            "MOUNT_VIRTUAL_MEDIA", "FETCH_EVENT_LOG", "CLEAR_EVENT_LOG",
+            "DISCOVER_INVENTORY", "FETCH_SENSORS", "SYNC_CMDB"
+        }:
+            extracted = QueryAgent._extract_device_identifier(query_clean, matched_action)
+            if extracted:
+                identifier = extracted
+            # For SYNC_CMDB with no device context, use empty identifier (global sync)
+            elif matched_action == "SYNC_CMDB":
+                identifier = ""
+
         # --- 2. Collapse internal whitespace (multi-space → single space) ---
         identifier = re.sub(r"\s{2,}", " ", identifier)
 
@@ -190,6 +219,50 @@ class QueryAgent:
         }
 
     @staticmethod
+    def _extract_device_identifier(query: str, action: str) -> str:
+        """
+        Extract the actual device/server identifier from a semantic action query.
+
+        For queries like:
+          "Mount ISO http://... to server dl360-prod-091"
+          "Retrieve event logs for server apollo-node-104"
+          "Run sensor audit on synergy-comp-143"
+
+        Returns just the server serial/name (e.g. "dl360-prod-091").
+        Falls back to empty string if no match.
+        """
+        # Pattern: look for "server <id>", "node <id>", "host <id>", "device <id>"
+        server_keyword = re.search(
+            r"\b(?:server|node|host|device|system|bmc|of|on|for)\s+([\w][\w\-\.]{2,})\b",
+            query,
+            re.IGNORECASE,
+        )
+        if server_keyword:
+            candidate = server_keyword.group(1).strip()
+            # Exclude obvious non-device words
+            if candidate.lower() not in {
+                "all", "the", "a", "my", "its", "this", "that", "every",
+                "mock", "server", "servers", "devices", "metrics", "sync", "logs"
+            }:
+                return candidate
+
+        # Pattern: device-like token = word with hyphen/digits (e.g. dl360-prod-091, apollo-node-104)
+        # Looks for tokens like "word-word-digits" anywhere in the query
+        device_token = re.search(
+            r"\b([a-zA-Z][a-zA-Z0-9]*(?:[-_][a-zA-Z0-9]+){1,})\b",
+            query,
+        )
+        if device_token:
+            candidate = device_token.group(1)
+            # Skip if it looks like a URL fragment or very common word
+            if not candidate.startswith("http") and len(candidate) >= 5:
+                return candidate
+
+        return ""
+
+
+
+    @staticmethod
     def _coerce_value(raw_value: str) -> object:
         """Coerce raw string value into boolean, int, float, or string."""
         val_lower = raw_value.strip().lower()
@@ -212,6 +285,45 @@ class QueryAgent:
         Consolidated helper to parse UPDATE/PATCH queries.
         Returns a dict with 'device', 'attribute', and 'value' keys, or an empty dict.
         """
+        # Custom boot configuration pattern matching
+        # e.g., "Configure dl360-prod-091 to boot from PXE network on next restart"
+        # or "Set boot order of dl360-prod-091 to CD-ROM"
+        boot_match = re.search(
+            r"\b(?:change|set|update|modify|configure|patch|boot)\b"
+            r"\s+(?:the\s+)?(?:boot\s+order\s+of|boot\s+target\s+of|boot\s+of)?\s*"
+            r"(?P<device>[\w\-\.]+)"
+            r"\s+(?:to\s+boot\s+from|to\s+boot\s+order|to|boot\s+target)\s+"
+            r"(?P<target>pxe|cd|hdd|bios|uefi|dvd|usb|network)"
+            r"(?:\s+network|\s+rom|\s+setup)?",
+            query,
+            re.IGNORECASE
+        )
+        if boot_match:
+            raw_device = boot_match.group("device").strip()
+            raw_target = boot_match.group("target").strip().lower()
+            
+            # Map friendly names to standard Redfish BootSourceOverrideTarget values
+            target_map = {
+                "pxe": "Pxe",
+                "network": "Pxe",
+                "cd": "Cd",
+                "dvd": "Cd",
+                "usb": "Usb",
+                "hdd": "Hdd",
+                "bios": "BiosSetup",
+                "uefi": "UefiTarget"
+            }
+            target_value = target_map.get(raw_target, "Pxe")
+            
+            return {
+                "device": raw_device,
+                "attribute": "Boot",
+                "value": {
+                    "BootSourceOverrideTarget": target_value,
+                    "BootSourceOverrideEnabled": "Once"
+                }
+            }
+
         # Map natural language phrases to canonical field names
         _FIELD_ALIASES: dict[str, str] = {
             "temperature":           "temperature_celsius",

@@ -124,7 +124,83 @@ class Database:
             payload_dict["id"] = existing_item["id"]
         elif "id" not in payload_dict:
             payload_dict["id"] = item_id
-            
+
+        # Inject default values for newly created servers or partial mock upserts
+        if table_name == "dynamic_redfish_v1_systems":
+            defaults = {
+                "BiosVersion": "U46 v1.62",
+                "AssetTag": "AssetTag-Default",
+                "SKU": "SKU-872481-B21",
+                "PartNumber": "872481-B21",
+                "LocationIndicatorActive": "false",
+                "BootProgress": '{"LastState": "OSBootStarted"}',
+                "Oem": '{"Hpe": {"AggregateHealthStatus": {"Status": {"Health": "OK", "State": "Enabled"}}, "PostState": "OSBootStarted"}}',
+                "Processors": '{"Count": 2, "Model": "Intel(R) Xeon(R) Gold 6230 CPU @ 2.10GHz"}',
+                "Memory": '{"TotalSystemMemoryGiB": 128.0}',
+                "Storage": '{"Status": {"Health": "OK", "State": "Enabled"}}',
+                "SystemType": "Physical",
+                "Manufacturer": "HPE",
+                "Model": "ProLiant DL360 Gen11",
+                "PowerState": "On",
+                "cpu_utilization": "45.0",
+                "memory_utilization": "50.0",
+                "memory_usage": "50.0",
+                "temperature": "22.0",
+                "power_draw": "320.0"
+            }
+            if "HostName" not in payload_dict and "name" in payload_dict:
+                payload_dict["HostName"] = payload_dict["name"]
+            for k, v in defaults.items():
+                if k not in payload_dict:
+                    payload_dict[k] = v
+
+        elif table_name == "dynamic_redfish_v1_managers":
+            defaults = {
+                "ManagerType": "BMC",
+                "FirmwareVersion": "iLO 7 v1.21",
+                "Model": "iLO 7",
+                "Status": '{"Health": "OK", "State": "Enabled"}',
+                "DateTime": "2026-06-28T14:20:00Z",
+                "DateTimeLocalOffset": "+00:00",
+                "VirtualMedia": '{"@odata.id": "/redfish/v1/Managers/1/VirtualMedia"}',
+                "EthernetInterfaces": '{"@odata.id": "/redfish/v1/Managers/1/EthernetInterfaces"}',
+                "LogServices": '{"@odata.id": "/redfish/v1/Managers/1/LogServices"}',
+                "NetworkProtocol": '{"@odata.id": "/redfish/v1/Managers/1/NetworkProtocol"}',
+                "CommandShell": '{"ConnectTypesSupported": ["SSH", "Oem"], "Enabled": true}',
+                "SerialConsole": '{"ConnectTypesSupported": ["IPMI", "Oem"], "Enabled": true}',
+                "GraphicalConsole": '{"ConnectTypesSupported": ["KVMIP", "Oem"], "Enabled": true}',
+                "Oem": '{"Hpe": {"iLOSelfTestResults": [{"SelfTestName": "NAND", "Status": "OK"}]}}'
+            }
+            if "UUID" not in payload_dict and "id" in payload_dict:
+                payload_dict["UUID"] = payload_dict["id"]
+            for k, v in defaults.items():
+                if k not in payload_dict:
+                    payload_dict[k] = v
+
+        elif table_name == "dynamic_redfish_v1_chassis":
+            defaults = {
+                "ChassisType": "RackMount",
+                "Manufacturer": "HPE",
+                "Model": "ProLiant DL360 Gen11",
+                "PartNumber": "872481-B21",
+                "SKU": "SKU-872481-B21",
+                "AssetTag": "AssetTag-Default",
+                "Status": '{"Health": "OK", "State": "Enabled"}',
+                "PowerState": "On",
+                "Location": '{"PostalAddress": {"Country": "US"}, "Placement": {"Row": "Row-3", "Rack": "Rack-12"}}',
+                "LocationIndicatorActive": "false",
+                "Power": '{"@odata.id": "/redfish/v1/Chassis/1/Power"}',
+                "Thermal": '{"@odata.id": "/redfish/v1/Chassis/1/Thermal"}',
+                "PCIeDevices": '{"@odata.id": "/redfish/v1/Chassis/1/PCIeDevices"}',
+                "PhysicalSecurity": '{"IntrusionSensor": "Normal", "IntrusionSensorNumber": 1}',
+                "Oem": '{"Hpe": {"ChassisPowerWatts": 800}}'
+            }
+            if "SerialNumber" not in payload_dict and "name" in payload_dict:
+                payload_dict["SerialNumber"] = payload_dict["name"]
+            for k, v in defaults.items():
+                if k not in payload_dict:
+                    payload_dict[k] = v
+
         with self._lock:
             conn = sqlite3.connect(self.db_path, check_same_thread=False)
             try:

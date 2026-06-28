@@ -33,6 +33,7 @@ import logging
 import httpx
 import time
 import uuid
+import re
 from mcp.server.fastmcp import FastMCP
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -877,7 +878,7 @@ async def _execute_agent_command(
 
     # Use resolver-derived routing metadata, management source, and credentials ref.
     resolved_provider = provider_or_protocol
-    resolved_credentials_ref = resolution.credential_ref
+    resolved_credentials_ref = resolution.credential_ref if resolution else "mock"
 
 
     if device:
@@ -1012,7 +1013,7 @@ async def _execute_agent_command(
     # Use resolver-derived routing metadata, management source, and credentials ref.
     if device:
         resolved_provider = device.management_source
-        resolved_credentials_ref = resolution.credential_ref
+        resolved_credentials_ref = resolution.credential_ref if resolution else "mock"
         if api_path_step3:
             api_path = api_path_step3
     else:
@@ -1031,72 +1032,78 @@ async def _execute_agent_command(
         elif resolved_provider == "mock_cloud":
             api_path = "/api/v1/devices/{id}" if not is_creation else "/api/v1/devices"
 
-    # Agent task payload mapping
-    agent_task_action = action
-    if action == "STATUS":
-        if normalized_category in {"storage-systems", "storage-pools", "storage-volumes", "fc-sans"}:
-            agent_task_action = "health_check" if (resource_type or "").lower() == "snapshot" else "fetch_capacity_and_performance"
-        else:
-            agent_task_action = "fetch_metrics"
+    # ── Dynamic Intent Router ─────────────────────────────────────────────────
+    # Determines agent action, api_path, resource_type, and extra parameters
+    # dynamically based on the semantic action parsed from the query.
+    # MockAdapter is strictly dynamic — it needs api_path + action_type in params.
 
-    # ── UPDATE (PATCH) — handled directly via mock REST API ────────────────
+    _MOCK_BASE_URLS = {
+        "mock_storage": os.getenv("MOCK_STORAGE_URL", "http://127.0.0.1:8004"),
+        "mock_server":  os.getenv("MOCK_SERVER_URL",  "http://127.0.0.1:8010"),
+        "mock_network": os.getenv("MOCK_NETWORK_URL", "http://127.0.0.1:8002"),
+        "mock_cloud":   os.getenv("MOCK_CLOUD_URL",   "http://127.0.0.1:8003"),
+        "oneview":      os.getenv("HPE_OV_URL",       "http://127.0.0.1:8000"),
+    }
+
+    src = resolved_provider or ""
+    dev_id = (device.source_device_id if device else None) or identifier
+
+    def _server_api(path_template: str) -> str:
+        """Build full mock server URL from a Redfish path template."""
+        base = _MOCK_BASE_URLS.get(src, "http://127.0.0.1:8010")
+        return f"{base}{path_template.format(id=dev_id)}"
+
+    # ── UPDATE (PATCH) — direct HTTP PATCH to mock server ────────────────────
     if action == "UPDATE":
-        from query_agent import QueryAgent as _QA  # RESOLVER_DIR already in sys.path
+        from query_agent import QueryAgent as _QA
         update_payload = _QA.parse_update_payload(query)
         if not update_payload:
             return (
                 f"Could not extract attribute/value from query.\n"
                 f"Try: \"change the temperature of <device> to <value>\"\n"
-                f"  or: \"set health_status of <device> to DEGRADED\""
+                f"  or: \"set health_status of <device> to DEGRADED\"\n"
+                f"  or: \"configure <device> to boot from PXE\""
             )
-
         attribute = update_payload["attribute"]
         value     = update_payload["value"]
-
-        # Route to the correct mock server based on device source
-        _MOCK_URLS = {
-            "mock_storage": os.getenv("MOCK_STORAGE_URL", "http://127.0.0.1:8004"),
-            "mock_server":  os.getenv("MOCK_SERVER_URL",  "http://127.0.0.1:8010"),
-            "mock_network": os.getenv("MOCK_NETWORK_URL", "http://127.0.0.1:8002"),
-            "mock_cloud":   os.getenv("MOCK_CLOUD_URL",   "http://127.0.0.1:8003"),
-            "oneview":      os.getenv("HPE_OV_URL",       "http://127.0.0.1:8000"),
-        }
-
-        if device and device.management_source in _MOCK_URLS:
-            base_url = _MOCK_URLS[device.management_source]
-            # Determine per-source PATCH path
-            src = device.management_source
+        if device and src in _MOCK_BASE_URLS:
+            base_url = _MOCK_BASE_URLS[src]
             if src == "mock_storage":
-                patch_url = f"{base_url}/data-services/v1beta1/devices/{device.source_device_id or identifier}"
+                patch_url = f"{base_url}/data-services/v1beta1/devices/{dev_id}"
             elif src == "oneview":
-                patch_url = f"{base_url}/rest/server-hardware/{device.source_device_id or identifier}"
+                patch_url = f"{base_url}/rest/server-hardware/{dev_id}"
             elif src == "mock_server":
-                patch_url = f"{base_url}/redfish/v1/systems/{device.source_device_id or identifier}"
+                patch_url = f"{base_url}/redfish/v1/systems/{dev_id}"
             elif src == "mock_network":
-                patch_url = f"{base_url}/network/v1/devices/{device.source_device_id or identifier}"
+                patch_url = f"{base_url}/network/v1/devices/{dev_id}"
             elif src == "mock_cloud":
-                patch_url = f"{base_url}/api/v1/devices/{device.source_device_id or identifier}"
+                patch_url = f"{base_url}/api/v1/devices/{dev_id}"
             else:
                 patch_url = ""
-
             if patch_url:
                 try:
                     async with httpx.AsyncClient() as _client:
-                        patch_resp = await _client.patch(
-                            patch_url,
-                            json={attribute: value},
-                            timeout=10.0,
-                        )
+                        patch_resp = await _client.patch(patch_url, json={attribute: value}, timeout=10.0)
                     if patch_resp.is_success:
                         updated = patch_resp.json()
+                        if isinstance(value, dict):
+                            value_display = ", ".join(f"{k}={v}" for k, v in value.items())
+                            confirmed_raw = updated.get(attribute, value)
+                            confirmed_display = ", ".join(f"{k}={v}" for k, v in confirmed_raw.items()) if isinstance(confirmed_raw, dict) else str(confirmed_raw)
+                        else:
+                            value_display = str(value)
+                            confirmed_display = str(updated.get(attribute, value))
                         return (
-                            f"Update successful\n"
+                            f"✅ Update successful\n"
                             f"User       : {email} (Role: {role})\n"
                             f"Device     : {identifier}\n"
-                            f"Provider   : {device.management_source}\n"
+                            f"Provider   : {src}\n"
+                            f"IP Address : {getattr(device, 'ip_address', 'N/A')}\n"
+                            f"Source Host: {getattr(device, 'source_host', 'N/A')}\n"
                             f"Attribute  : {attribute}\n"
-                            f"New Value  : {value}\n"
-                            f"Confirmed  : {updated.get(attribute, value)}\n"
+                            f"New Value  : {value_display}\n"
+                            f"PATCH URL  : {patch_url}\n"
+                            f"Confirmed  : {confirmed_display}\n"
                         )
                     else:
                         return (
@@ -1107,31 +1114,104 @@ async def _execute_agent_command(
                 except Exception as patch_err:
                     return f"Update request failed: {patch_err}"
             else:
-                return f"No PATCH URL configured for provider '{device.management_source}'."
+                return f"No PATCH URL configured for provider '{src}'."
         else:
             return (
                 f"Device '{identifier}' not found in CMDB or provider not supported for updates.\n"
-                f"Supported providers: {list(_MOCK_URLS.keys())}"
+                f"Supported providers: {list(_MOCK_BASE_URLS.keys())}"
             )
-    
-    dispatch_params = {
-        "api_path": api_path,
-        "user_email": email
-    } if api_path else {"user_email": email}
 
-    if resolution and hasattr(resolution, "http_method"):
-        dispatch_params["http_method"] = resolution.http_method
-    
+    # ── Build dispatch_params dynamically per action type ────────────────────
+    agent_task_action = action
+    dispatch_params: dict = {"user_email": email}
+
+    if action == "STATUS":
+        if normalized_category in {"storage-systems", "storage-pools", "storage-volumes", "fc-sans"}:
+            agent_task_action = "fetch_capacity_and_performance"
+        else:
+            agent_task_action = "fetch_metrics"
+        dispatch_params["api_path"] = _server_api("/redfish/v1/systems/{id}") if src == "mock_server" else api_path
+        dispatch_params["http_method"] = "GET"
+
+    elif action == "FETCH_SENSORS":
+        agent_task_action = "FETCH_SENSORS"
+        resource_type = "sensor"
+        dispatch_params["api_path"] = _server_api("/redfish/v1/chassis/{id}/thermal")
+        dispatch_params["http_method"] = "GET"
+
+    elif action == "FETCH_EVENT_LOG":
+        agent_task_action = "FETCH_EVENT_LOG"
+        # Extract optional severity filter from query
+        sev_match = re.search(r"\b(critical|warning|info|fatal)\b", query, re.IGNORECASE)
+        dispatch_params["api_path"] = _server_api("/redfish/v1/systems/{id}/logservices/iml/entries")
+        dispatch_params["http_method"] = "GET"
+        dispatch_params["clear"] = False
+        if sev_match:
+            dispatch_params["severity"] = sev_match.group(1).lower()
+
+    elif action == "CLEAR_EVENT_LOG":
+        agent_task_action = "FETCH_EVENT_LOG"
+        dispatch_params["api_path"] = _server_api("/redfish/v1/systems/{id}/logservices/iml/entries")
+        dispatch_params["http_method"] = "GET"
+        dispatch_params["clear"] = True
+
+    elif action == "DISCOVER_INVENTORY":
+        agent_task_action = "DISCOVER_INVENTORY"
+        dispatch_params["api_path"] = _server_api("/redfish/v1/systems/{id}")
+        dispatch_params["http_method"] = "GET"
+
+    elif action == "MOUNT_VIRTUAL_MEDIA":
+        agent_task_action = "MOUNT_VIRTUAL_MEDIA"
+        # Extract media URL from query
+        url_match = re.search(r'(https?://[^\s\'"]+)', query)
+        media_url = url_match.group(1) if url_match else ""
+        # Detect device type from query keywords
+        media_type = "CD" if re.search(r"\b(iso|cd|dvd|cdrom)\b", query, re.IGNORECASE) else "USBStick"
+        dispatch_params["api_path"] = _server_api("/redfish/v1/managers/{id}/virtualmedia/2/actions/virtualmedia.insertmedia")
+        dispatch_params["http_method"] = "POST"
+        dispatch_params["action_type"] = "virtual_media"
+        dispatch_params["media_url"] = media_url
+        dispatch_params["device_type"] = media_type
+        dispatch_params["payload"] = {"Image": media_url, "TransferProtocolType": "HTTP", "Inserted": True, "WriteProtected": True}
+
+    elif action == "SYNC_CMDB":
+        agent_task_action = "SYNC_CMDB"
+        dispatch_params["api_path"] = _server_api("/redfish/v1/systems/{id}")
+        dispatch_params["http_method"] = "GET"
+
+    elif action in {"ON", "OFF", "RESET", "COLD_BOOT"}:
+        agent_task_action = action
+        reset_type_map = {"ON": "On", "OFF": "ForceOff", "RESET": "GracefulRestart", "COLD_BOOT": "PowerCycle"}
+        dispatch_params["api_path"] = _server_api("/redfish/v1/systems/{id}/actions/computersystem.reset")
+        dispatch_params["http_method"] = "POST"
+        dispatch_params["action_type"] = "power_action"
+        dispatch_params["action_verb"] = action.lower()
+        dispatch_params["power_state"] = action.lower()
+        dispatch_params["payload"] = {"ResetType": reset_type_map.get(action, "GracefulRestart")}
+
+    else:
+        # Generic fallback
+        dispatch_params["api_path"] = api_path
+        if resolution and hasattr(resolution, "http_method"):
+            dispatch_params["http_method"] = resolution.http_method
+
+    # Override api_path with resolver-derived endpoint if better
+    if api_path_step3 and action not in {"ON", "OFF", "RESET", "COLD_BOOT", "FETCH_EVENT_LOG",
+                                          "CLEAR_EVENT_LOG", "DISCOVER_INVENTORY", "MOUNT_VIRTUAL_MEDIA",
+                                          "FETCH_SENSORS", "SYNC_CMDB"}:
+        dispatch_params["api_path"] = api_path_step3
+
     is_deletion = action in {"DELETE", "DEALLOCATE"}
     if is_deletion:
         dispatch_params["http_method"] = "DELETE"
-        
+
     if payload_to_dispatch:
         dispatch_params["payload"] = payload_to_dispatch
         dispatch_params["http_method"] = "POST"
-        
+
     loop = asyncio.get_event_loop()
     result = await loop.run_in_executor(
+
         None,
         lambda: _dispatcher.dispatch(
             agent_type=agent_type,
@@ -1149,7 +1229,7 @@ async def _execute_agent_command(
     status_level = result.get("status_level", "")
     errors       = result.get("errors", [])
     insights     = result.get("insights", [])
-    metrics      = result.get("metrics", {})
+    metrics      = dict(result.get("metrics", {}))
     actions_taken = result.get("actions_taken", [])
 
     if status == "success" and not errors and is_deletion:
@@ -1204,6 +1284,24 @@ async def _execute_agent_command(
         f"Action       : {action}",
         f"Status       : {status}",
     ]
+    if device:
+        # Construct Action API Endpoint
+        if action in {"START", "STOP", "RESTART"} and resolved_provider == "mock_server":
+            action_api_endpoint = f"/redfish/v1/systems/{device.source_device_id or identifier}/Actions/ComputerSystem.Reset"
+        elif api_path:
+            action_api_endpoint = api_path.format(id=device.source_device_id or identifier)
+        else:
+            action_api_endpoint = "N/A"
+
+        lines.append(f"IP Address   : {getattr(device, 'ip_address', 'N/A')}")
+        lines.append(f"Source Host  : {getattr(device, 'source_host', 'N/A')}")
+        lines.append(f"Action API Endpoint: {action_api_endpoint}")
+
+        # Inject into metrics so they render in the status summary table in the UI
+        metrics["IP Address"] = getattr(device, 'ip_address', 'N/A')
+        metrics["Source Host"] = getattr(device, 'source_host', 'N/A')
+        metrics["Action API Endpoint"] = action_api_endpoint
+
     if insights:
         lines.append("Insights:")
         lines.extend(f"  • {i}" for i in insights)

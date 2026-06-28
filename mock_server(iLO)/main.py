@@ -13731,6 +13731,213 @@ def delete_redfish_v1_systems_system_id_workloadperformanceadvisor_workloadperfo
             return {"message": "Deleted successfully (static default removal simulated)", "id": workloadperformanceadvisor_id}
     raise HTTPException(status_code=404, detail="Resource not found")
 
+# ══════════════════════════════════════════════════════════════════════════════
+# IML / LogServices — Event Logs
+# ══════════════════════════════════════════════════════════════════════════════
+
+_SAMPLE_IML_ENTRIES = [
+    {"Id": "1", "Severity": "OK",       "Message": "Server power on at 2026-06-28T10:00:00Z", "Created": "2026-06-28T10:00:00Z"},
+    {"Id": "2", "Severity": "Warning",  "Message": "Memory training deviation detected on DIMM slot 4A", "Created": "2026-06-28T11:15:00Z"},
+    {"Id": "3", "Severity": "Critical", "Message": "Fan redundancy lost: Fan 4 failed, speed reading 0 RPM", "Created": "2026-06-28T12:30:00Z"},
+    {"Id": "4", "Severity": "OK",       "Message": "iLO reset: firmware update completed successfully", "Created": "2026-06-28T13:00:00Z"},
+    {"Id": "5", "Severity": "Warning",  "Message": "CPU 1 correctable error threshold reached", "Created": "2026-06-28T14:20:00Z"},
+    {"Id": "6", "Severity": "Critical", "Message": "Drive 2 (slot 1) predictive failure detected", "Created": "2026-06-28T15:45:00Z"},
+    {"Id": "7", "Severity": "OK",       "Message": "Automatic server recovery initiated by watchdog", "Created": "2026-06-28T16:00:00Z"},
+]
+
+@app.api_route("/redfish/v1/systems/{system_id}/logservices", methods=["GET"])
+def get_logservices(system_id: str):
+    """iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/logservices"""
+    return {
+        "@odata.type": "#LogServiceCollection.LogServiceCollection",
+        "@odata.id": f"/redfish/v1/systems/{system_id}/logservices",
+        "Name": "Log Services Collection",
+        "Members@odata.count": 1,
+        "Members": [{"@odata.id": f"/redfish/v1/systems/{system_id}/logservices/iml"}]
+    }
+
+@app.api_route("/redfish/v1/systems/{system_id}/logservices/iml", methods=["GET"])
+def get_iml_logservice(system_id: str):
+    """iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/logservices/iml"""
+    return {
+        "@odata.type": "#LogService.v1_1_0.LogService",
+        "@odata.id": f"/redfish/v1/systems/{system_id}/logservices/iml",
+        "Id": "IML",
+        "Name": "Integrated Management Log",
+        "MaxNumberOfRecords": 1000,
+        "OverWritePolicy": "WrapsWhenFull",
+        "Entries": {"@odata.id": f"/redfish/v1/systems/{system_id}/logservices/iml/entries"},
+        "Actions": {
+            "#LogService.ClearLog": {
+                "target": f"/redfish/v1/systems/{system_id}/logservices/iml/actions/logservice.clearlog"
+            }
+        }
+    }
+
+@app.api_route("/redfish/v1/systems/{system_id}/logservices/iml/entries", methods=["GET"])
+def get_iml_entries(system_id: str, severity: str = None):
+    """iLO Redfish Endpoint: GET /redfish/v1/systems/{system_id}/logservices/iml/entries"""
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices/iml/entries"
+    dynamic_items = db.get_all(collection_path)
+    entries = dynamic_items if dynamic_items else list(_SAMPLE_IML_ENTRIES)
+    if severity:
+        entries = [e for e in entries if str(e.get("Severity", "")).lower() == severity.lower()]
+    return {
+        "@odata.type": "#LogEntryCollection.LogEntryCollection",
+        "@odata.id": f"/redfish/v1/systems/{system_id}/logservices/iml/entries",
+        "Name": "Integrated Management Log Entries",
+        "Members@odata.count": len(entries),
+        "Members": entries
+    }
+
+@app.api_route("/redfish/v1/systems/{system_id}/logservices/iml/actions/logservice.clearlog", methods=["POST"])
+def clear_iml_log(system_id: str, payload: dict = None):
+    """iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/logservices/iml/actions/logservice.clearlog"""
+    collection_path = f"/redfish/v1/systems/{system_id}/logservices/iml/entries"
+    db._dynamic.pop(collection_path, None)
+    return {"message": f"IML log cleared for system {system_id}", "Members@odata.count": 0, "Members": []}
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Chassis — Thermal and Power sensors
+# ══════════════════════════════════════════════════════════════════════════════
+
+@app.api_route("/redfish/v1/chassis", methods=["GET"])
+def get_chassis_collection():
+    """iLO Redfish Endpoint: GET /redfish/v1/chassis"""
+    return {
+        "@odata.type": "#ChassisCollection.ChassisCollection",
+        "@odata.id": "/redfish/v1/chassis",
+        "Name": "Chassis Collection",
+        "Members@odata.count": 1,
+        "Members": [{"@odata.id": "/redfish/v1/chassis/1"}]
+    }
+
+@app.api_route("/redfish/v1/chassis/{chassis_id}", methods=["GET"])
+def get_chassis(chassis_id: str):
+    """iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassis_id}"""
+    return {
+        "@odata.type": "#Chassis.v1_14_0.Chassis",
+        "@odata.id": f"/redfish/v1/chassis/{chassis_id}",
+        "Id": chassis_id,
+        "Name": f"Computer System Chassis {chassis_id}",
+        "ChassisType": "RackMount",
+        "Thermal": {"@odata.id": f"/redfish/v1/chassis/{chassis_id}/thermal"},
+        "Power":   {"@odata.id": f"/redfish/v1/chassis/{chassis_id}/power"},
+    }
+
+@app.api_route("/redfish/v1/chassis/{chassis_id}/thermal", methods=["GET"])
+def get_chassis_thermal(chassis_id: str):
+    """iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassis_id}/thermal"""
+    return {
+        "@odata.type": "#Thermal.v1_6_1.Thermal",
+        "@odata.id": f"/redfish/v1/chassis/{chassis_id}/thermal",
+        "Id": "Thermal",
+        "Name": "Thermal Metrics",
+        "Temperatures": [
+            {"MemberId": "0", "Name": "01-Inlet Ambient", "ReadingCelsius": 24, "UpperThresholdCritical": 42, "Status": {"State": "Enabled", "Health": "OK"}},
+            {"MemberId": "1", "Name": "02-CPU 1",          "ReadingCelsius": 48, "UpperThresholdCritical": 70, "Status": {"State": "Enabled", "Health": "OK"}},
+            {"MemberId": "2", "Name": "03-CPU 2",          "ReadingCelsius": 46, "UpperThresholdCritical": 70, "Status": {"State": "Enabled", "Health": "OK"}},
+            {"MemberId": "3", "Name": "04-P1 DIMM 1-6",   "ReadingCelsius": 36, "UpperThresholdCritical": 85, "Status": {"State": "Enabled", "Health": "OK"}},
+        ],
+        "Fans": [
+            {"MemberId": "0", "Name": "Fan 1", "Reading": 4200, "ReadingUnits": "RPM", "Status": {"State": "Enabled", "Health": "OK"}},
+            {"MemberId": "1", "Name": "Fan 2", "Reading": 4100, "ReadingUnits": "RPM", "Status": {"State": "Enabled", "Health": "OK"}},
+            {"MemberId": "2", "Name": "Fan 3", "Reading": 4150, "ReadingUnits": "RPM", "Status": {"State": "Enabled", "Health": "OK"}},
+            {"MemberId": "3", "Name": "Fan 4", "Reading": 0,    "ReadingUnits": "RPM", "Status": {"State": "Enabled", "Health": "Critical"}},
+        ]
+    }
+
+@app.api_route("/redfish/v1/chassis/{chassis_id}/power", methods=["GET"])
+def get_chassis_power(chassis_id: str):
+    """iLO Redfish Endpoint: GET /redfish/v1/chassis/{chassis_id}/power"""
+    return {
+        "@odata.type": "#Power.v1_6_1.Power",
+        "@odata.id": f"/redfish/v1/chassis/{chassis_id}/power",
+        "Id": "Power",
+        "Name": "Power Metrics",
+        "PowerControl": [
+            {"MemberId": "0", "Name": "Server Power Control", "PowerConsumedWatts": 320, "PowerCapacityWatts": 800,
+             "Status": {"State": "Enabled", "Health": "OK"}}
+        ],
+        "PowerSupplies": [
+            {"MemberId": "0", "Name": "HpeServerPowerSupply 1", "PowerInputWatts": 165, "PowerOutputWatts": 160,
+             "Status": {"State": "Enabled", "Health": "OK"}, "Redundancy": [{"@odata.id": f"/redfish/v1/chassis/{chassis_id}/power#/Redundancy/0"}]},
+            {"MemberId": "1", "Name": "HpeServerPowerSupply 2", "PowerInputWatts": 160, "PowerOutputWatts": 155,
+             "Status": {"State": "Enabled", "Health": "OK"}, "Redundancy": [{"@odata.id": f"/redfish/v1/chassis/{chassis_id}/power#/Redundancy/0"}]},
+        ],
+        "Redundancy": [
+            {"MemberId": "0", "Name": "PowerSupply Redundancy Group 1", "Mode": "Failover",
+             "Status": {"State": "Enabled", "Health": "OK"}, "RedundancyEnabled": True}
+        ]
+    }
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ComputerSystem Actions — Reset (Power On/Off/Restart)
+# ══════════════════════════════════════════════════════════════════════════════
+
+@app.api_route("/redfish/v1/systems/{system_id}/actions/computersystem.reset", methods=["POST"])
+def system_reset_action(system_id: str, payload: dict = None):
+    """iLO Redfish Endpoint: POST /redfish/v1/systems/{system_id}/actions/computersystem.reset"""
+    payload_dict = payload or {}
+    reset_type = payload_dict.get("ResetType", "GracefulRestart")
+    # Update system power state accordingly
+    collection_path = "/redfish/v1/systems"
+    item = db.get_item(collection_path, system_id) or {}
+    new_state = {
+        "On": "On", "ForceOff": "Off", "GracefulShutdown": "Off",
+        "GracefulRestart": "On", "ForceRestart": "On", "PowerCycle": "On"
+    }.get(reset_type, "On")
+    item.update({"PowerState": new_state, "Id": system_id})
+    db.upsert_item(collection_path, system_id, item)
+    return {
+        "message": f"Reset action '{reset_type}' accepted for system {system_id}",
+        "PowerState": new_state,
+        "ResetType": reset_type,
+        "@odata.id": f"/redfish/v1/systems/{system_id}"
+    }
+
+# ══════════════════════════════════════════════════════════════════════════════
+# VirtualMedia — InsertMedia and EjectMedia Actions
+# ══════════════════════════════════════════════════════════════════════════════
+
+@app.api_route("/redfish/v1/managers/{manager_id}/virtualmedia/{media_id}/actions/virtualmedia.insertmedia", methods=["POST"])
+def insert_virtual_media(manager_id: str, media_id: str, payload: dict = None):
+    """iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/virtualmedia/{media_id}/actions/virtualmedia.insertmedia"""
+    payload_dict = payload or {}
+    image_url = payload_dict.get("Image", "")
+    transfer_protocol = payload_dict.get("TransferProtocolType", "HTTP")
+    collection_path = f"/redfish/v1/managers/{manager_id}/virtualmedia"
+    existing = db.get_item(collection_path, media_id) or {}
+    existing.update({
+        "Id": media_id,
+        "@odata.id": f"/redfish/v1/managers/{manager_id}/virtualmedia/{media_id}",
+        "Inserted": True,
+        "WriteProtected": payload_dict.get("WriteProtected", True),
+        "Image": image_url,
+        "TransferProtocolType": transfer_protocol,
+        "MediaTypes": ["CD", "DVD"] if "iso" in image_url.lower() else ["USBStick"],
+        "ConnectedVia": "URI",
+    })
+    db.upsert_item(collection_path, media_id, existing)
+    return {
+        "message": f"Virtual media inserted successfully on manager {manager_id}, slot {media_id}",
+        "Image": image_url,
+        "Inserted": True,
+        "TransferProtocolType": transfer_protocol,
+        "@odata.id": f"/redfish/v1/managers/{manager_id}/virtualmedia/{media_id}"
+    }
+
+@app.api_route("/redfish/v1/managers/{manager_id}/virtualmedia/{media_id}/actions/virtualmedia.ejectmedia", methods=["POST"])
+def eject_virtual_media(manager_id: str, media_id: str, payload: dict = None):
+    """iLO Redfish Endpoint: POST /redfish/v1/managers/{manager_id}/virtualmedia/{media_id}/actions/virtualmedia.ejectmedia"""
+    collection_path = f"/redfish/v1/managers/{manager_id}/virtualmedia"
+    existing = db.get_item(collection_path, media_id) or {}
+    existing.update({"Id": media_id, "Inserted": False, "Image": "", "ConnectedVia": "NotConnected"})
+    db.upsert_item(collection_path, media_id, existing)
+    return {"message": f"Virtual media ejected from manager {manager_id}, slot {media_id}", "Inserted": False}
+
+
+
 @app.api_route("/redfish/v1/taskservice", methods=["GET"])
 def get_redfish_v1_taskservice():
     """
@@ -15129,6 +15336,10 @@ def post_redfish_v1_systems_system_id(system_id: str, payload: dict = None):
         new_power_state = "Off"
     else:
         new_power_state = "On"
+
+    # Simulate hardware power transition delay
+    import time
+    time.sleep(5)
 
     existing = db.get_item(collection_path, system_id) or {}
     if not existing:

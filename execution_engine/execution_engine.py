@@ -27,21 +27,27 @@ _AGENT_REGISTRY: Dict[str, str] = {
 
 # Map action verbs from QueryAgent → agent action strings
 _ACTION_MAP: Dict[str, str] = {
-    "STATUS":      "fetch_metrics",
-    "ON":          "execute_action",
-    "OFF":         "execute_action",
-    "RESET":       "execute_action",
-    "COLD_BOOT":   "execute_action",
-    "CREATE":      "execute_action",
-    "DELETE":      "execute_action",
-    "ALLOCATE":    "execute_action",
-    "DEALLOCATE":  "execute_action",
-    "RELOAD":      "execute_action",
-    "RESCAN":      "discover_resources",
-    "FAILOVER":    "execute_action",
-    "POLICY_SYNC": "execute_action",
-    "UPDATE":      "execute_action",
-    "PATCH":       "execute_action",
+    "STATUS":               "fetch_metrics",
+    "FETCH_SENSORS":        "fetch_metrics",      # routed with resource_type=sensor
+    "ON":                   "execute_action",
+    "OFF":                  "execute_action",
+    "RESET":                "execute_action",
+    "COLD_BOOT":            "execute_action",
+    "CREATE":               "execute_action",
+    "DELETE":               "execute_action",
+    "ALLOCATE":             "execute_action",
+    "DEALLOCATE":           "execute_action",
+    "RELOAD":               "execute_action",
+    "FAILOVER":             "execute_action",
+    "POLICY_SYNC":          "execute_action",
+    "UPDATE":               "execute_action",
+    "PATCH":                "execute_action",
+    "MOUNT_VIRTUAL_MEDIA":  "execute_action",     # action_type=virtual_media injected by mcp_server
+    "RESCAN":               "discover_resources",
+    "FETCH_EVENT_LOG":      "fetch_event_log",
+    "CLEAR_EVENT_LOG":      "fetch_event_log",    # clear=True injected by mcp_server
+    "DISCOVER_INVENTORY":   "discover_inventory",
+    "SYNC_CMDB":            "sync_cmdb",
 }
 
 # Agent-specific action overrides by domain
@@ -124,10 +130,19 @@ class AgentDispatcher:
             }
             target_skill = action_skill_map.get(query_action)
         elif "server" in agent_name:
+            # Skill names MUST match oasf_record.json exactly
             action_skill_map = {
-                "STATUS": "server.monitoring.health",
-                "ON": "server.execute.power_action",
-                "OFF": "server.execute.power_action",
+                "STATUS":              "server.monitoring.health",
+                "FETCH_SENSORS":       "server.monitoring.sensors",
+                "ON":                  "server.execute.power_action",
+                "OFF":                 "server.execute.power_action",
+                "RESET":              "server.execute.power_action",
+                "COLD_BOOT":           "server.execute.power_action",
+                "MOUNT_VIRTUAL_MEDIA": "server.execute.virtual_media",
+                "FETCH_EVENT_LOG":     "server.monitoring.eventlog",
+                "CLEAR_EVENT_LOG":     "server.monitoring.eventlog",
+                "DISCOVER_INVENTORY":  "server.discover.inventory",
+                "SYNC_CMDB":           "server.sync.cmdb",
             }
             target_skill = action_skill_map.get(query_action)
         elif "onprem" in agent_name:
