@@ -425,3 +425,192 @@ class QueryAgent:
             "attribute": details["attribute"],
             "value": details["value"]
         }
+
+
+# ---------------------------------------------------------------------------
+# Hybrid LLM + Regex Parsing Layer (Added)
+# ---------------------------------------------------------------------------
+
+import json
+import urllib.request
+import urllib.error
+import ipaddress
+from typing import List, Literal, Union, Dict, Any, Optional
+from pydantic import BaseModel, Field
+
+# Module-level constants for Ollama tuning
+OLLAMA_MODEL: str = "qwen2.5:7b"
+OLLAMA_TIMEOUT: float = 3.0
+
+# Duplicate of internal field aliases to allow clean lookups in module functions
+_FIELD_ALIASES: Dict[str, str] = {
+    "temperature":           "temperature_celsius",
+    "temp":                  "temperature_celsius",
+    "health":                "health_status",
+    "health status":         "health_status",
+    "status":                "health_status",
+    "free capacity":         "free_capacity_gb",
+    "free_capacity":         "free_capacity_gb",
+    "free storage":          "free_storage_gb",
+    "total capacity":        "total_capacity_gb",
+    "total_capacity":        "total_capacity_gb",
+    "firmware":              "firmware_version",
+    "firmware version":      "firmware_version",
+    "power":                 "power_state",
+    "power state":           "power_state",
+    "memory":                "memory_gb",
+    "cpu":                   "cpu_cores",
+    "cpu cores":             "cpu_cores",
+}
+
+class AttributeItem(BaseModel):
+    key: str
+    value: Union[str, int, float, bool]
+
+class LLMQuerySchema(BaseModel):
+    identifier: str
+    action: Literal[
+        "ON", "OFF", "RESET", "RELOAD", "COLD_BOOT", "STATUS", "LIST",
+        "CREATE", "DELETE", "ALLOCATE", "DEALLOCATE", "UPDATE",
+        "FETCH_EVENT_LOG", "CLEAR_EVENT_LOG", "DISCOVER_INVENTORY",
+        "MOUNT_VIRTUAL_MEDIA", "FETCH_SENSORS", "SYNC_CMDB",
+        "POLICY_SYNC", "FAILOVER", "FAILBACK", "RESCAN"
+    ]
+    category: Literal["Operational", "Provisioning"]
+    attributes: List[AttributeItem] = Field(default_factory=list)
+    multi_intent: bool
+    unhandled: str
+    confidence: float
+
+def _validate_identifier(identifier: str) -> bool:
+    """Validate identifier against IP, FQDN, or Serial-number patterns."""
+    if not identifier:
+        return False
+    
+    # 1. IP check
+    try:
+        ipaddress.ip_address(identifier)
+        return True
+    except ValueError:
+        pass
+        
+    # 2. FQDN check (at least one dot and only valid hostname chars)
+    if "." in identifier:
+        if re.match(r"^[a-zA-Z0-9\-\.]+$", identifier):
+            return True
+            
+    # 3. Serial-number / Device Token check (min length 3, letters, digits, dashes, underscores, dots)
+    if re.match(r"^[a-zA-Z0-9\-\_\.]+$", identifier) and len(identifier) >= 3:
+        return True
+        
+    return False
+
+def llm_extract(query: str) -> dict | None:
+    """Call local Ollama using JSON schema formatting for structured query parsing."""
+    url = "http://localhost:11434/api/generate"
+    schema = LLMQuerySchema.model_json_schema()
+    prompt = (
+        "You are a deterministic natural language infrastructure command parser.\n"
+        "Extract details from this query and output ONLY a JSON object matching the JSON schema below.\n"
+        "Rules:\n"
+        "1. For boot order or target changes (e.g. CD, USB, PXE, BIOS Setup), set action=UPDATE and attributes=[{\"key\": \"Boot\", \"value\": \"<NormalizedTarget>\"}] using Pxe/Cd/Usb/Hdd/BiosSetup/UefiTarget.\n"
+        "2. If multiple actions are present (e.g. A and then B), parse only the first action/identifier, set multi_intent=true, and put the rest in unhandled.\n"
+        f"User query: {query}\n"
+        f"JSON Schema: {json.dumps(schema)}"
+    )
+    
+    payload = {
+        "model": OLLAMA_MODEL,
+        "prompt": prompt,
+        "format": schema,
+        "stream": False
+    }
+    
+    try:
+        data = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(
+            url,
+            data=data,
+            headers={"Content-Type": "application/json"}
+        )
+        with urllib.request.urlopen(req, timeout=OLLAMA_TIMEOUT) as response:
+            res_data = response.read().decode("utf-8")
+            
+            try:
+                res_json = json.loads(res_data)
+            except Exception as e:
+                return {"_error": f"JSONDecodeError: {type(e).__name__}: {e}"}
+                
+            response_text = res_json.get("response", "").strip()
+            
+            try:
+                # Pydantic v2
+                validated = LLMQuerySchema.model_validate_json(response_text)
+                return validated.model_dump()
+            except AttributeError:
+                try:
+                    # Pydantic v1 fallback
+                    validated = LLMQuerySchema.parse_raw(response_text)
+                    return validated.dict()
+                except Exception as e:
+                    return {"_error": f"PydanticValidationError: {type(e).__name__}: {e}"}
+            except Exception as e:
+                return {"_error": f"PydanticValidationError: {type(e).__name__}: {e}"}
+    except Exception as e:
+        return {"_error": f"{type(e).__name__}: {e}"}
+
+def parse_query_hybrid(query: str) -> dict:
+    """
+    Hybrid query parsing layer.
+    First attempts to resolve query using LLM extraction; falls back to deterministic regex parser on failure.
+    """
+    reason = ""
+    try:
+        llm_res = llm_extract(query)
+        if llm_res is None:
+            reason = "LLM extraction returned None (unexpected null response)"
+        elif "_error" in llm_res:
+            reason = llm_res["_error"]
+        else:
+            confidence = llm_res.get("confidence", 0.0)
+            identifier = llm_res.get("identifier", "").strip()
+            
+            if confidence >= 0.7 and identifier:
+                if _validate_identifier(identifier):
+                    action = llm_res.get("action", "STATUS")
+                    category = llm_res.get("category", "Operational")
+                    
+                    res = {
+                        "identifier": identifier,
+                        "action": action,
+                        "category": category
+                    }
+                    
+                    # For action=UPDATE, run attributes through existing _FIELD_ALIASES mapping before returning
+                    raw_attrs = llm_res.get("attributes") or []
+                    mapped_attrs = []
+                    for attr in raw_attrs:
+                        k = attr.get("key", "")
+                        v = attr.get("value")
+                        mapped_k = _FIELD_ALIASES.get(k.lower(), k.replace(" ", "_"))
+                        mapped_attrs.append({"key": mapped_k, "value": v})
+                        
+                    res["attributes"] = mapped_attrs
+                    
+                    logger.info(
+                        "[QueryAgent] Hybrid parse successful using LLM | query=%r action=%s category=%s identifier=%r",
+                        query, action, category, identifier
+                    )
+                    return res
+                else:
+                    reason = f"Identifier '{identifier}' validation failed against CMDB-style patterns"
+            else:
+                reason = f"LLM returned low confidence ({confidence}) or empty identifier ('{identifier}')"
+    except Exception as e:
+        reason = f"Exception in hybrid parse wrapper: {type(e).__name__}: {e}"
+        
+    logger.warning(
+        "[QueryAgent] Hybrid parse falling back to regex | query=%r reason=%r",
+        query, reason
+    )
+    return QueryAgent.parse_query(query)

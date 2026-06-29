@@ -107,7 +107,7 @@ from authorization.models import TokenPayload, Resource, Context  # noqa: E402
 from resource_resolver.resolver    import ResourceResolver   # noqa: E402
 from resource_resolver.cache       import ResourceCache     # noqa: E402
 from resource_resolver.db_loader   import load_registry_from_db  # noqa: E402
-from resource_resolver.query_agent import QueryAgent        # noqa: E402
+from resource_resolver.query_agent import QueryAgent, parse_query_hybrid        # noqa: E402
 from task_planner.planner     import TaskPlanner, Task  # noqa: E402
 from resource_resolver.errors      import ResolverError     # noqa: E402
 from enum        import Enum              # noqa: E402
@@ -549,7 +549,7 @@ async def _execute_agent_command(
     if not tasks:
         tasks = TaskPlanner.decompose_instruction(query)
         if not tasks:
-            parsed = QueryAgent.parse_query(query)
+            parsed = parse_query_hybrid(query)
             tasks = [Task(
                 action=parsed.get("action", "STATUS"),
                 category=parsed.get("category", "Operational"),

@@ -25,7 +25,7 @@ from db_loader import load_registry_from_db
 from db_queries import DeviceQueries, get_statistics
 from errors import ResolverError, UnsupportedManagementSourceError, InvalidCMDBRecordError
 from resolver import ResourceResolver
-from query_agent import QueryAgent
+from query_agent import QueryAgent, parse_query_hybrid
 
 
 logger.info("Starting resource resolver with PostgreSQL registry and Memurai cache")
@@ -49,7 +49,7 @@ def resolve_resource(
     identifier = query
     try:
         # 1. NLP preprocessing and classification belongs ONLY to QueryAgent
-        parsed_payload = QueryAgent.parse_query(query)
+        parsed_payload = parse_query_hybrid(query)
         identifier = parsed_payload.get("identifier", query)
 
         # 2. Resource Resolver handles deterministic routing resolution
