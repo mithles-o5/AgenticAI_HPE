@@ -14,7 +14,6 @@ Stratum is a vendor-agnostic Agentic AI platform that transforms enterprise infr
 * [Core Components](#core-components)
 * [Agent Ecosystem](#agent-ecosystem)
 * [Mock Infrastructure Environment](#mock-infrastructure-environment)
-* [Runtime Topology](#runtime-topology)
 * [Service Ports](#service-ports)
 * [Request Execution Flow](#request-execution-flow)
 * [Resource Resolver Subsystem](#resource-resolver-subsystem)
@@ -27,8 +26,6 @@ Stratum is a vendor-agnostic Agentic AI platform that transforms enterprise infr
 * [Repository Structure](#repository-structure)
 * [Getting Started](#getting-started)
 * [Running the Platform](#running-the-platform)
-* [Development Workflow](#development-workflow)
-* [Testing](#testing)
 * [Example Scenarios](#example-scenarios)
 * [Enterprise Use Cases](#enterprise-use-cases)
 * [Design Principles](#design-principles)
@@ -90,7 +87,7 @@ Stratum is designed around a decoupled, microservice-based architecture that lev
 4. **Resource Resolver & CMDB**: Isolates the target hardware. It matches query tokens (serial numbers, IPs, FQDNs) against a PostgreSQL registry (or Redis cache for hot-path lookup) to identify the target controller FQDN, device category, and REST endpoint template.
 5. **Capability Registry**: A centralized FastAPI registry where agents register their capabilities on startup. The execution engine queries this service to discover which agent can fulfill a given task type and action.
 6. **Execution Engine (Dispatcher)**: Orchestrates task distribution. It queries the Capability Registry, normalizes the target payload, and POSTs the structured request to the resolved agent.
-7. **Domain-Specific Agents**: Dedicated microservices (Server, Storage, Network, Cloud, On-Prem) that wrap vendor protocols (Redfish, SNMP, IPMI, S3) and translate standardized tasks into raw API calls.
+7. **Domain-Specific Agents**: Dedicated microservices (Server, Storage, Network, Cloud, On-Prem) that wrap vendor protocols (Redfish) and translate standardized tasks into raw API calls.
 8. **Vendor APIs / Mock Servers**: Simulated local environments mimicking HPE OneView, iLO, DSCC, Cisco switches, and AWS/Azure APIs to allow secure sandbox validation.
 
 ![Stratum Full Architecture](stratum_full_architecture.png)
@@ -180,10 +177,16 @@ Stratum features a vendor-agnostic agent ecosystem designed around **OASF (Open 
 * **Supported Operations**: `discover_topology`, `fetch_metrics` (interface statistics), `execute_config_push`.
 * **Supported Resources**: Switches, routers, interface cards, VLAN segments, and routing sessions.
 
+
 ### 4. Cloud Agent
-* **Purpose**: Operates multi-cloud endpoints.
+* **Purpose**: Operates multi-cloud endpoints and cloud-managed SaaS orchestrators (e.g., HPE Compute Ops Management).
 * **Supported Operations**: `fetch_metrics` (compute/memory loads), `health_check`, `discover_resources`, `execute_action` (instance control).
-* **Supported Resources**: VMs, containers, functions, buckets, and cloud network interfaces.
+* **Supported Resources**: VMs, containers, cloud-managed servers, functions, buckets, and cloud network interfaces.
+
+### 5. On-Premise Agent
+* **Purpose**: Manages high-level composable private cloud infrastructure via local orchestrators (e.g., HPE OneView).
+* **Supported Operations**: `fetch_metrics`, `health_check`, `discover_resources`, `execute_action`.
+* **Supported Resources**: Logical interconnects, enclosures, racks, power devices, and server profiles/profile templates.
 
 ### Vendor-Agnostic Design & Capability Execution
 Each agent abstracts vendor details through a pluggable adapter pattern:
@@ -204,34 +207,6 @@ To facilitate offline development, testing, and CI/CD pipelines, Stratum bundles
 
 ### Integration with Agents & Testing
 Agents are configured via environment variables to route requests to the Mock Servers (e.g., `MOCK_STORAGE_URL` or `MOCK_SERVER_URL`). Because the mock endpoints output the exact REST schemas expected from live environments, agents execute standard parsing, mapping, and error-handling logic without modifications, supporting robust validation.
-
----
-
-## Runtime Topology
-
-```
-                  [ Claude Desktop / Client ]
-                             │
-                             ▼ (Stdio / SSE)
-                    [ MCP Server (8001) ]
-                             │
-            ┌────────────────┼────────────────┐
-            ▼                ▼                ▼
-     [ Auth0 SSO ]  [ Postgres CMDB ]   [ Redis Cache ]
-      (dev-m8h0k)        (5432)            (6379)
-                             │
-                             ▼
-                 [ Capability Registry ] (8020)
-                             │
-       ┌──────────────┬──────┴──────┬──────────────┐
-       ▼ (8005)       ▼ (8006)      ▼ (8007)       ▼ (8009)
-[ Cloud Agent ] [ Network Agent ] [ Storage Agent ] [ Server Agent ]
-       │              │             │              │
-       ▼ (8003)       ▼ (8002)      ▼ (8004)       ▼ (8010)
-[ Mock Cloud ] [ Mock Network ]  [ Mock Storage ]  [ iLO Mock ]
-```
-
----
 
 ## Service Ports
 
@@ -582,68 +557,33 @@ This spawns all FastAPI applications on their dedicated ports.
 ### 4. Register MCP Server with Client
 Open your Claude Desktop configuration file `claude_desktop_config.json`:
 ```json
+Structure
 {
   "mcpServers": {
-    "stratum-ops": {
-      "command": "python",
-      "args": ["c:/AgenticAI_HPE/mcp_server/mcp_server.py"]
+    "name-of-mcp-server": {
+      "command": "path-to-python-executable",
+      "args": [
+        "path-to-mcp_server.py"
+      ]
     }
-  }
-}
+  },
+Where:
+- 'name-of-mcp-server' is the name given for Local MCP servers in Claude Desktop
+- 'path-to-python-executable' is the Python interpreter inside your virtual environment.
+- 'path-to-mcp_server.py' is the location of the MCP server entrypoint.
+
+Example 
+{
+  "mcpServers": {
+    "hpe-mcp": {
+      "command": "C:\\AgenticAI_HPE\\env\\Scripts\\python.exe",
+      "args": [
+        "C:\\AgenticAI_HPE\\mcp_server\\mcp_server.py"
+      ]
+    }
+  },
 ```
 Restart Claude Desktop to load the tools.
-
----
-
-## Development Workflow
-
-### Adding a New Agent
-1. Create a directory inside `agents/` (e.g. `firewall_agent`).
-2. Implement your routes, defining a POST endpoint to `/execute-task`.
-3. Add a valid `oasf_record.json` detailing the agent domain, resource types, and skill arrays.
-4. Call `/agents` endpoint on the Capability Registry (`8020`) during startup to register the new profile.
-
-### Adding a New API Endpoint Route
-To introduce a new API route mapping (e.g. a new vendor action or a modified path):
-1. Append the endpoint layout block to `resource_resolver/oneview_api_prompts.txt` or `resource_resolver/comops_api_prompts.txt`.
-   ```text
-   Action Key : UPDATE_BIOS
-   Method     : POST
-   API Path   : /rest/server-hardware/{id}/bios-settings
-   ==========================================
-   ```
-2. Re-run:
-   ```bash
-   python resource_resolver/seed_endpoint_registry.py
-   ```
-
-### Adding a Mock Resource
-1. Connect to the SQLite database (e.g., `mock_server(storage)/storage_db.sqlite`).
-2. Insert a new row containing your mock device attributes into the target collection table.
-
----
-
-## Testing
-
-Ensure your virtual environment is active. You can execute testing files using **pytest**:
-
-### 1. Test Agent Execution
-Run unit tests targeting the Cloud Agent:
-```bash
-pytest agents/cloud_agent/tests/ -v
-```
-
-### 2. Validate Resource Resolution Logic
-Test QueryAgent parsing and local database checks:
-```bash
-python test2.py
-```
-
-### 3. Test MCP Tool Execution
-Verify authorization checks and CMDB loading pathways:
-```bash
-python test.py
-```
 
 ---
 
