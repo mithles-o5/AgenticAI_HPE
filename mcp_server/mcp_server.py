@@ -532,14 +532,33 @@ async def _execute_agent_command(
         return str(e)
 
     import json
-    
+
+    # ── Canonical action normalizer — maps any LLM/user alias to the canonical action verb
+    _CANONICAL_ACTIONS: dict = {
+        # Power ON aliases
+        "TURN_ON":    "ON",  "POWER_ON":  "ON",  "START":      "ON",  "BOOT":    "ON",
+        "ENABLE":     "ON",  "WAKE":      "ON",  "POWER UP":   "ON",  "POWER_UP": "ON",
+        # Power OFF aliases
+        "TURN_OFF":   "OFF", "POWER_OFF": "OFF", "SHUTDOWN":   "OFF", "STOP":    "OFF",
+        "HALT":       "OFF", "DISABLE":   "OFF", "POWER DOWN": "OFF", "POWER_DOWN": "OFF",
+        # Reset aliases
+        "REBOOT":     "RESET", "RESTART": "RESET", "WARM_RESET": "RESET", "WARM_BOOT": "RESET",
+        # Status aliases
+        "CHECK":      "STATUS", "SHOW":   "STATUS", "GET":       "STATUS", "FETCH": "STATUS",
+        "QUERY":      "STATUS", "LOOKUP": "STATUS", "MONITOR":  "STATUS",
+        # Cold boot aliases
+        "COLD_BOOT":  "COLD_BOOT", "COLD BOOT": "COLD_BOOT",
+    }
+
     tasks = None
     try:
         # If the LLM passes a raw JSON string like '{"identifier": "gl-ns-008", ...}'
         parsed = json.loads(query)
         if isinstance(parsed, dict) and "identifier" in parsed:
+            raw_action = parsed.get("action", "STATUS").upper().strip()
+            canonical_action = _CANONICAL_ACTIONS.get(raw_action, raw_action)
             tasks = [Task(
-                action=parsed.get("action", "STATUS"),
+                action=canonical_action,
                 category=parsed.get("category", "Operational"),
                 identifier=parsed.get("identifier")
             )]
@@ -557,6 +576,8 @@ async def _execute_agent_command(
             )]
 
     task = tasks[0]
+    # Normalize the action from any task source
+    task.action = _CANONICAL_ACTIONS.get(task.action.upper().strip(), task.action.upper().strip())
     action = task.action
     identifier = task.identifier
     if identifier.lower().startswith("of "):
@@ -1202,9 +1223,19 @@ async def _execute_agent_command(
         )
 
     norm_data = result.get("normalized_data", {})
-    # Unpack power state or capacity metrics depending on agent type
-    power_state = norm_data.get("power_state") or (result.get("metrics", {})).get("power_state") or "N/A"
+    # Unpack power state: check normalized_data, metrics, top-level result, then deduce from action
+    _action_upper = action.upper()
+    _POWER_ON_ACTIONS  = {"ON", "POWER_ON", "TURN_ON", "START", "BOOT", "ENABLE", "POWER_UP", "COLD_BOOT"}
+    _POWER_OFF_ACTIONS = {"OFF", "POWER_OFF", "TURN_OFF", "SHUTDOWN", "STOP", "HALT", "DISABLE", "POWER_DOWN"}
+    power_state = (
+        norm_data.get("power_state")
+        or (result.get("metrics", {})).get("power_state")
+        or result.get("power_state")
+        or ("ON"  if _action_upper in _POWER_ON_ACTIONS  else
+            "OFF" if _action_upper in _POWER_OFF_ACTIONS else "N/A")
+    )
     health_status = status_level or norm_data.get("health_status") or "N/A"
+
 
     lines = [
         f"Agent command succeeded",

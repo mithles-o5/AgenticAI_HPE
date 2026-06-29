@@ -93,16 +93,21 @@ class PowerActionSkill(BaseSkill):
     async def execute(self, adapter, request, credentials: dict) -> dict:
         state = request.parameters.get("state")
         if not state:
-            action_verb = request.parameters.get("action_verb")
-            if action_verb:
-                if action_verb.lower() in ("power-off", "power_off"):
-                    state = "PowerOff"
-                elif action_verb.lower() in ("power-on", "power_on"):
-                    state = "PowerOn"
-                else:
-                    state = action_verb.capitalize()
+            action_verb = (request.parameters.get("action_verb") or "").lower()
+            _ON_VERBS  = {"on", "power_on", "power-on", "turn_on", "start", "boot", "enable", "power_up", "cold_boot"}
+            _OFF_VERBS = {"off", "power_off", "power-off", "turn_off", "shutdown", "stop", "halt", "disable", "power_down"}
+            _RST_VERBS = {"reset", "reboot", "restart", "warm_boot"}
+            if action_verb in _ON_VERBS:
+                state = "On"
+            elif action_verb in _OFF_VERBS:
+                state = "Off"
+            elif action_verb in _RST_VERBS:
+                state = "Reset"
+            else:
+                state = action_verb.capitalize() if action_verb else None
         if not state:
-            raise SkillError("Parameter 'state' (On/Off/Reset/PowerOff) is required for power_action.")
+            raise SkillError("Parameter 'state' (On/Off/Reset) is required for power_action.")
+
         
         params = {"action_type": "power", "state": state}
         res = await adapter.execute_action(
@@ -158,6 +163,36 @@ class ProfileAssignSkill(BaseSkill):
                 "actions_taken": [],
                 "status_level": "critical",
                 "errors": [res.get("error", "Profile assignment failed")]
+            }
+
+class GenericActionSkill(BaseSkill):
+    async def execute(self, adapter, request, credentials: dict) -> dict:
+        action_type = request.parameters.get("action_type", "").lower()
+        action_verb = request.parameters.get("action_verb", "").lower()
+        
+        params = request.parameters.copy()
+        res = await adapter.execute_action(
+            request.resource_type,
+            request.resource_id,
+            credentials,
+            params
+        )
+        
+        if res.get("status") == "success":
+            return {
+                "status": "success",
+                "metrics": {},
+                "actions_taken": [f"{action_type or action_verb}_resource"],
+                "status_level": "healthy",
+                "insights": [{"type": "lifecycle_event", "message": f"Successfully executed {action_type or action_verb} on {request.resource_id}"}]
+            }
+        else:
+            return {
+                "status": "failed",
+                "metrics": {},
+                "actions_taken": [],
+                "status_level": "critical",
+                "errors": [res.get("error", "Action failed")]
             }
 
 class FirmwareUpdateSkill(BaseSkill):
@@ -291,6 +326,7 @@ SKILLS: Dict[str, BaseSkill] = {
     "onprem.execute.power_action": PowerActionSkill(),
     "onprem.execute.profile_assign": ProfileAssignSkill(),
     "onprem.execute.firmware_update": FirmwareUpdateSkill(),
+    "onprem.execute.generic_action": GenericActionSkill(),
     "onprem.discover.inventory": InventorySkill(),
     "onprem.diagnose.anomaly": AnomalySkill(),
     "onprem.sync.cmdb": SyncCmdbSkill()
@@ -314,12 +350,18 @@ def resolve_skill_name(action: str, parameters: dict = None) -> str:
     elif act == "execute_action":
         action_type = (parameters or {}).get("action_type", "").lower()
         action_verb = (parameters or {}).get("action_verb", "").lower()
-        if action_type in ("power", "power-off", "power_off") or action_verb in ("on", "off", "reset", "cold_boot", "power-off", "power_off"):
+        _POWER_VERBS = {"on", "off", "reset", "cold_boot", "warm_boot", "reboot", "restart",
+                        "power-off", "power_off", "power-on", "power_on",
+                        "turn_on", "turn_off", "start", "stop", "shutdown",
+                        "boot", "halt", "enable", "disable", "power_up", "power_down"}
+        if action_type in ("power", "power-off", "power_off", "power-on", "power_on") or action_verb in _POWER_VERBS:
             return "onprem.execute.power_action"
         elif action_type == "profile_assign":
             return "onprem.execute.profile_assign"
         elif action_type == "firmware_update":
             return "onprem.execute.firmware_update"
+        elif action_type in ("add", "create", "remove", "delete") or action_verb in ("add", "create", "remove", "delete"):
+            return "onprem.execute.generic_action"
         else:
             raise SkillError(f"Unknown execute_action type: '{action_type}' or verb: '{action_verb}'")
     else:

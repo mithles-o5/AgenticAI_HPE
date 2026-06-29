@@ -72,7 +72,7 @@ def create_coms_source() -> int:
 
 def get_enterprise_name(device_type: str, index: int, parent_type: str) -> tuple[str, str]:
     """Generate a unique, realistic enterprise infrastructure name."""
-    domain = "datacenter.local" if parent_type == "oneview" else "cloud.local"
+    domain = "oneview.local" if parent_type == "oneview" else "cloud.local"
     t = (device_type or "server").lower()
     
     if t == "server":
@@ -277,15 +277,15 @@ def seed_current_schema(seed_oneview_count: int = 1000, seed_com_count: int = 50
     # Insert explicit testing devices matching exact enterprise naming guidelines
     testing_devices = [
         # OneView devices (management_source='oneview', source_host='oneview-01.mgmt.local')
-        ("dc1-a7", "10.100.1.10", "dc1-a7.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-dc1a7", "server"),
-        ("compute-22", "10.100.1.11", "compute-22.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-c22", "server"),
-        ("rack42-n3", "10.100.1.20", "rack42-n3.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-rack42n3", "server"),
-        ("edge-r1", "10.100.1.12", "edge-r1.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-edger1", "router"),
-        ("wan-r2", "10.100.1.21", "wan-r2.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-wanr2", "router"),
-        ("core-sw01", "10.100.1.13", "core-sw01.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-coresw01", "switch"),
-        ("leaf-sw12", "10.100.1.22", "leaf-sw12.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-leafsw12", "switch"),
-        ("fw-core-01", "10.100.1.14", "fw-core-01.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-fc01", "firewall"),
-        ("fw-edge-02", "10.100.1.23", "fw-edge-02.datacenter.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-fwedge02", "firewall"),
+        ("dc1-a7", "10.100.1.10", "dc1-a7.oneview.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-dc1a7", "server"),
+        ("compute-22", "10.100.1.11", "compute-22.oneview.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-c22", "server"),
+        ("rack42-n3", "10.100.1.20", "rack42-n3.oneview.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-rack42n3", "server"),
+        ("edge-r1", "10.100.1.12", "edge-r1.oneview.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-edger1", "router"),
+        ("wan-r2", "10.100.1.21", "wan-r2.oneview.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-wanr2", "router"),
+        ("core-sw01", "10.100.1.13", "core-sw01.oneview.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-coresw01", "switch"),
+        ("leaf-sw12", "10.100.1.22", "leaf-sw12.oneview.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-leafsw12", "switch"),
+        ("fw-core-01", "10.100.1.14", "fw-core-01.oneview.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-fc01", "firewall"),
+        ("fw-edge-02", "10.100.1.23", "fw-edge-02.oneview.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-fwedge02", "firewall"),
 
         # COMS devices (management_source='coms', source_host='coms-01.cloud.local')
         ("prod-x1", "10.200.1.13", "prod-x1.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-prodx1", "server"),

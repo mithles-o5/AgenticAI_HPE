@@ -27,11 +27,37 @@ _AGENT_REGISTRY: Dict[str, str] = {
 
 # Map action verbs from QueryAgent → agent action strings
 _ACTION_MAP: Dict[str, str] = {
+    # Status
     "STATUS":      "fetch_metrics",
+    "CHECK":       "fetch_metrics",
+    "SHOW":        "fetch_metrics",
+    "GET":         "fetch_metrics",
+    "FETCH":       "fetch_metrics",
+    "MONITOR":     "fetch_metrics",
+    # Power ON
     "ON":          "execute_action",
+    "POWER_ON":    "execute_action",
+    "TURN_ON":     "execute_action",
+    "START":       "execute_action",
+    "BOOT":        "execute_action",
+    "ENABLE":      "execute_action",
+    "POWER_UP":    "execute_action",
+    # Power OFF
     "OFF":         "execute_action",
+    "POWER_OFF":   "execute_action",
+    "TURN_OFF":    "execute_action",
+    "SHUTDOWN":    "execute_action",
+    "STOP":        "execute_action",
+    "HALT":        "execute_action",
+    "DISABLE":     "execute_action",
+    "POWER_DOWN":  "execute_action",
+    # Reset
     "RESET":       "execute_action",
+    "REBOOT":      "execute_action",
+    "RESTART":     "execute_action",
     "COLD_BOOT":   "execute_action",
+    "WARM_BOOT":   "execute_action",
+    # Other ops
     "CREATE":      "execute_action",
     "DELETE":      "execute_action",
     "ALLOCATE":    "execute_action",
@@ -128,6 +154,8 @@ class AgentDispatcher:
                 "STATUS": "server.monitoring.health",
                 "ON": "server.execute.power_action",
                 "OFF": "server.execute.power_action",
+                "POWER_ON": "server.execute.power_action",
+                "POWER_OFF": "server.execute.power_action",
             }
             target_skill = action_skill_map.get(query_action)
         elif "onprem" in agent_name:
@@ -135,6 +163,8 @@ class AgentDispatcher:
                 "STATUS": "onprem.monitoring.health",
                 "ON": "onprem.execute.power_action",
                 "OFF": "onprem.execute.power_action",
+                "POWER_ON": "onprem.execute.power_action",
+                "POWER_OFF": "onprem.execute.power_action",
             }
             target_skill = action_skill_map.get(query_action)
         elif "cloud" in agent_name:
@@ -204,9 +234,18 @@ class AgentDispatcher:
         # Add action_verb to parameters so execute_action knows what to do
         if agent_action == "execute_action":
             payload["parameters"]["action_verb"] = query_action.lower()
-            if query_action in {"ON", "OFF", "RESET", "COLD_BOOT"}:
+            _POWER_ON_ACTIONS  = {"ON", "POWER_ON", "TURN_ON", "START", "BOOT", "ENABLE", "POWER_UP", "COLD_BOOT"}
+            _POWER_OFF_ACTIONS = {"OFF", "POWER_OFF", "TURN_OFF", "SHUTDOWN", "STOP", "HALT", "DISABLE", "POWER_DOWN"}
+            _RESET_ACTIONS     = {"RESET", "REBOOT", "RESTART", "WARM_BOOT"}
+            if query_action in _POWER_ON_ACTIONS | _POWER_OFF_ACTIONS | _RESET_ACTIONS:
                 payload["parameters"]["action_type"] = "power"
-                payload["parameters"]["state"] = "On" if query_action in ("ON", "COLD_BOOT") else ("Off" if query_action == "OFF" else "Reset")
+                if query_action in _POWER_ON_ACTIONS:
+                    payload["parameters"]["state"] = "On"
+                elif query_action in _POWER_OFF_ACTIONS:
+                    payload["parameters"]["state"] = "Off"
+                else:
+                    payload["parameters"]["state"] = "Reset"
+
 
         # Route endpoint mapping
         if agent_key == "onprem":

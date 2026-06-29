@@ -294,6 +294,7 @@ class DeviceQueries:
                     )
 
                 # ── 3. Purge devices that disappeared from the live source ─────────────
+                deleted_rows = []
                 if incoming_sns:
                     cur.execute(
                         """
@@ -301,18 +302,22 @@ class DeviceQueries:
                         WHERE lower(management_source) = lower(%s)
                           AND lower(source_host) = lower(%s)
                           AND NOT (serial_number = ANY(%s))
+                        RETURNING serial_number, ip_address, fqdn, management_source, source_host, source_device_id, device_type, last_seen, poll_failures
                         """,
                         (source, source_host, list(incoming_sns)),
                     )
+                    deleted_rows = cur.fetchall()
                 else:
                     cur.execute(
                         """
                         DELETE FROM devices
                         WHERE lower(management_source) = lower(%s)
                           AND lower(source_host) = lower(%s)
+                        RETURNING serial_number, ip_address, fqdn, management_source, source_host, source_device_id, device_type, last_seen, poll_failures
                         """,
                         (source, source_host),
                     )
+                    deleted_rows = cur.fetchall()
 
                 # ── 4. Persist the new snapshot as the baseline for the next poll ──────
                 import json as _json
@@ -334,12 +339,26 @@ class DeviceQueries:
         finally:
             db_manager.return_connection(conn)
 
+        from db_queries import DeviceRecord
         return {
             "source_type": source,
             "source_host": source_host,
             "devices_found": len(device_rows),
             "devices_added": devices_added,
             "devices_removed": devices_removed,
+            "deleted_devices": [
+                DeviceRecord.from_row({
+                    "serial_number": r[0],
+                    "ip_address": r[1],
+                    "fqdn": r[2],
+                    "management_source": r[3],
+                    "source_host": r[4],
+                    "source_device_id": r[5],
+                    "device_type": r[6],
+                    "last_seen": r[7],
+                    "poll_failures": r[8]
+                }) for r in deleted_rows
+            ] if 'deleted_rows' in locals() else [],
         }
 
 

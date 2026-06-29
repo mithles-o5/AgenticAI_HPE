@@ -179,6 +179,17 @@ def cache_stats() -> str:
 
 
 @mcp.tool()
+def trigger_polling_cycle() -> str:
+    """Manually trigger an immediate background polling cycle to sync CMDB."""
+    from polling_engine import PollingEngine
+    pe = PollingEngine(_cache)
+    try:
+        results = pe.run_poll_cycle()
+        return json.dumps({"status": "success", "results": results}, indent=2)
+    except Exception as exc:
+        return json.dumps({"status": "failed", "error": str(exc)}, indent=2)
+
+@mcp.tool()
 def resolver_statistics() -> str:
     """Return PostgreSQL registry, routing-audit, and poll-history statistics."""
     return json.dumps({"status": "ok", "statistics": get_statistics()}, indent=2, default=str)

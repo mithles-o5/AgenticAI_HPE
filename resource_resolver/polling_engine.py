@@ -70,23 +70,36 @@ class PollingEngine:
         endpoint = f"{base_url}/rest/server-hardware"
         timeout = float(os.getenv("MOCK_ONEVIEW_TIMEOUT", "10"))
 
+        devices: list[dict] = []
+        
+        # 1. Fetch Server Hardware
         try:
-            response = httpx.get(endpoint, timeout=timeout)
+            response = httpx.get(f"{base_url}/rest/server-hardware", timeout=timeout)
             response.raise_for_status()
             raw_items: list[dict] = response.json().get("members", [])
         except httpx.HTTPError as exc:
             elapsed_ms = int((time.perf_counter() - t0) * 1000)
             logger.error(
-                "[Polling][OneView] HTTP request failed | host=%s url=%s error=%s elapsed_ms=%d",
-                ov_host, endpoint, exc, elapsed_ms,
+                "[Polling][OneView] HTTP request failed for server-hardware | host=%s url=%s error=%s elapsed_ms=%d",
+                ov_host, f"{base_url}/rest/server-hardware", exc, elapsed_ms,
             )
-            raise
-
-        devices: list[dict] = []
+            raw_items = []
+            
+        # 2. Fetch Rack Managers
+        try:
+            rm_response = httpx.get(f"{base_url}/rest/rack-managers", timeout=timeout)
+            rm_response.raise_for_status()
+            rack_items: list[dict] = rm_response.json().get("members", [])
+            raw_items.extend(rack_items)
+        except httpx.HTTPError as exc:
+            logger.warning(
+                "[Polling][OneView] HTTP request failed for rack-managers | host=%s error=%s",
+                ov_host, exc,
+            )
         for item in raw_items:
             serial = (
                 item.get("serialNumber")
-                or item.get("id")
+                or item.get("serial_number")
                 or ""
             )
             if not serial:
@@ -94,11 +107,11 @@ class PollingEngine:
             devices.append({
                 "serial_number":   str(serial),
                 "ip_address":      item.get("ipAddress"),
-                "fqdn":            item.get("name"),
+                "fqdn":            f"{item.get('name') or serial}.oneview.local",
                 "management_source": "oneview",
                 "source_host":     ov_host,
                 "source_device_id": str(item.get("id") or serial),
-                "device_type":     "server",
+                "device_type":     "enclosure" if "rack" in str(item.get("uri", "")).lower() or "rack" in str(item.get("type", "")).lower() or "rack" in str(item.get("id", "")).lower() else "server",
                 "last_seen":       item.get("updated_at") or item.get("last_seen"),
             })
 
@@ -134,7 +147,7 @@ class PollingEngine:
         for item in raw_items:
             serial = (
                 item.get("serial_number")
-                or item.get("id")
+                or item.get("serialNumber")
                 or ""
             )
             if not serial:
@@ -203,7 +216,7 @@ class PollingEngine:
         for item in raw_items:
             serial = (
                 item.get("serial_number")
-                or item.get("id")
+                or item.get("serialNumber")
                 or ""
             )
             if not serial:
@@ -254,7 +267,7 @@ class PollingEngine:
         for item in raw_items:
             serial = (
                 item.get("serial_number")
-                or item.get("id")
+                or item.get("serialNumber")
                 or ""
             )
             if not serial:
@@ -302,7 +315,7 @@ class PollingEngine:
         for item in raw_items:
             serial = (
                 item.get("serial_number")
-                or item.get("id")
+                or item.get("serialNumber")
                 or ""
             )
             if not serial:
@@ -397,9 +410,11 @@ class PollingEngine:
                 devices=item["devices"],
             )
 
-            # 4. Incremental warming is disabled during polling cycles to prevent bulk cache churn.
-            # Redis is populated lazily on demand when lookups occur.
-
+            # 4. Invalidate cache for deleted devices
+            deleted_devices = sync_res.get("deleted_devices", [])
+            for device in deleted_devices:
+                self.cache.invalidate_device(device)
+                
             # 5. Poll history — use DB-computed diff counts
             PollHistoryQueries.log({
                 "source_type": source_type,

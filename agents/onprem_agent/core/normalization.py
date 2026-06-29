@@ -27,33 +27,45 @@ def normalize_server_data(provider: str, raw_data: dict) -> dict:
                 "name": raw_data.get("name", "Unknown OneView Server"),
                 "model": raw_data.get("model", "HPE ProLiant Server"),
                 "ip_address": raw_data.get("ip_address") or raw_data.get("ipAddress", ""),
-                "power_state": raw_data.get("powerState", "Unknown"),
-                "health_status": normalize_status(raw_data.get("health") or raw_data.get("status")),
+                "power_state": raw_data.get("power_state") or raw_data.get("powerState", "Unknown"),
+                "health_status": normalize_status(raw_data.get("health_status") or raw_data.get("health") or raw_data.get("status")),
+                "status": raw_data.get("status") or raw_data.get("health_status") or raw_data.get("health", "Unknown"),
                 "location": raw_data.get("location", "Datacenter Rack")
             }
-        else: # Mock or default
+        else:  # Mock or default
             return {
                 "id": raw_data.get("uuid") or raw_data.get("id", ""),
                 "name": raw_data.get("name", "Mock Server"),
                 "model": raw_data.get("model", "Mock Model"),
                 "ip_address": raw_data.get("ip_address", "127.0.0.1"),
-                "power_state": raw_data.get("powerState", "On"),
-                "health_status": normalize_status(raw_data.get("health")),
+                "power_state": raw_data.get("power_state") or raw_data.get("powerState", "On"),
+                "health_status": normalize_status(raw_data.get("health_status") or raw_data.get("health")),
+                "status": raw_data.get("status") or raw_data.get("health_status") or raw_data.get("health", "Unknown"),
                 "location": raw_data.get("location", "Virtual Lab")
             }
     except Exception as e:
         logger.error(f"Error normalizing server data for provider {provider}: {e}")
         raise NormalizationError(f"Failed to normalize server response: {e}") from e
 
+
 def normalize_metrics(raw_metrics: dict) -> dict:
     """Unifies metrics keys and guarantees numeric formats."""
+    # Temperature can come from multiple field names depending on source
+    temp = (
+        raw_metrics.get("temperature_celsius")
+        or raw_metrics.get("temperature_c_cpu")
+        or raw_metrics.get("temperature_c_ambient")
+        or 0.0
+    )
     return {
-        "cpu_utilization_percent": float(raw_metrics.get("cpu_utilization_percent", 0.0)),
+        "cpu_utilization_percent":    float(raw_metrics.get("cpu_utilization_percent", 0.0)),
         "memory_utilization_percent": float(raw_metrics.get("memory_utilization_percent", 0.0)),
-        "power_draw_watts": float(raw_metrics.get("power_draw_watts", 0.0)),
-        "temperature_celsius": float(raw_metrics.get("temperature_celsius", 0.0)),
-        "power_state": raw_metrics.get("power_state", "On")
+        "power_draw_watts":           float(raw_metrics.get("power_draw_watts", 0.0)),
+        "temperature_celsius":        float(temp),
+        "power_state":                raw_metrics.get("power_state") or raw_metrics.get("powerState", "On"),
     }
+
+
 
 def normalize_alerts(provider: str, raw_alerts: list) -> list:
     """Normalizes alert lists to standard format."""
