@@ -15,7 +15,7 @@ def should_retry_exception(exception: Exception) -> bool:
     if isinstance(exception, httpx.HTTPStatusError):
         if exception.response.status_code in (401, 404):
             return False
-    # Do NOT retry on unsupported IPMI operations
+    # Do NOT retry on unsupported device or adapter operations
     err_str = str(exception).lower()
     if "not supported" in err_str or "unsupported" in err_str:
         return False
@@ -126,7 +126,23 @@ class ExecutionEngine:
                         request.parameters.get("device_type")
                     )
                 elif request.parameters.get("action_verb") in ("create", "delete", "allocate", "deallocate"):
-                    return adapter.fetch_system_metrics(request.resource_id, request.parameters) if is_mock else {"status": "failed", "error": f"Action {request.parameters.get('action_verb')} not supported on physical BMC."}
+                    if is_mock:
+                        action_verb = request.parameters.get("action_verb")
+                        if action_verb in ("create", "allocate"):
+                            payload = request.parameters.get("payload") or {}
+                            if adapter.__class__.__name__ == "MockAdapter":
+                                return adapter._dynamic_call("POST", "/redfish/v1/systems", request.resource_id, payload, request.parameters.get("base_url", ""))
+                            else:
+                                resp = adapter._request("POST", "/systems", payload)
+                                return resp.json() if resp.is_success else {"status": "failed", "error": resp.text}
+                        else:  # delete, deallocate
+                            if adapter.__class__.__name__ == "MockAdapter":
+                                return adapter._dynamic_call("DELETE", f"/redfish/v1/systems/{request.resource_id}", request.resource_id, {}, request.parameters.get("base_url", ""))
+                            else:
+                                resp = adapter._request("DELETE", f"/systems/{request.resource_id}")
+                                return resp.json() if resp.is_success else {"status": "failed", "error": resp.text}
+                    else:
+                        return {"status": "failed", "error": f"Action {request.parameters.get('action_verb')} not supported on physical BMC."}
                 else:
                     raise ValueError(f"Unknown action_type: {action_type}")
 

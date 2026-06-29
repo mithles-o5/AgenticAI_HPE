@@ -19,7 +19,6 @@ class Action(str, Enum):
 
 class Provider(str, Enum):
     REDFISH = "redfish"
-    IPMI = "ipmi"
     ILO = "ilo"
     DEFAULT = "default"
 
