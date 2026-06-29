@@ -267,11 +267,10 @@ Trace flow for the natural language command: **`"power off server compute-22"`**
 The **Resource Resolver** maps generic text tokens and queries to exact operational targets. It consists of:
 
 ### 1. Intent Parsing & Preprocessing (`QueryAgent`)
-Uses regular expression templates to extract clean search terms. For example, the query `"get health status of dc1-a7"` is mapped by:
-```python
-# Strip actions, returning the remaining clean identifier
-action_patterns = [r"\bget\b", r"\bpower\b", r"\bhealth\b", r"\bstatus\b", r"\bof\b"]
-```
+
+Uses a hybrid parsing layer combining a local LLM (`qwen2.5:7b` via local Ollama API) with a deterministic Regex engine fallback:
+* **LLM Layer**: Invokes local Ollama with a strict 3-second timeout and custom JSON schema output constraints to extract actions, target identifiers, and parameter attributes.
+* **Regex Fallback**: Automatically degrades to a regex pipeline if the local LLM daemon is down, times out, or returns a low-confidence parse (confidence < 0.7).
 
 ### 2. Type Inference Engine
 Infers the input format category to optimize index queries:
@@ -326,7 +325,7 @@ The PostgreSQL inventory store acts as the source of truth for device properties
 
 * **`devices`**: Authoritative record of active devices and their respective management controllers. Unique index on `serial_number`. INET-typed column for `ip_address` ensures quick IP lookup.
 * **`endpoint_registry`**: Catalogs mappings between vendor hosts, device types, action keys, and target REST endpoints. Supports dynamic parameters like `{id}`.
-* **`routing_audit`**: Logs execution metadata (duration, cache hits, request identity) to audit system lookup health and trace latency anomalies.
+* **`routing_audit`**: Logs execution metadata (duration, cache hits, user identity/email, user role, requested by) to audit system lookup health and trace latency anomalies.
 * **`poll_history`**: Tracks sync runs. Stores quantities of added, modified, and removed devices.
 * **`poll_snapshots`**: Reconciles inventory states across background threads using JSONB tracking sets.
 
