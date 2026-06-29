@@ -631,11 +631,15 @@ async def _execute_agent_command(
     api_path = ""
     resolution = None
     try:
-        resolution = _resolver.resolve({
-            "identifier": identifier,
-            "action": action,
-            "category": task.category
-        })
+        resolution = _resolver.resolve(
+            parsed_payload={
+                "identifier": identifier,
+                "action": action,
+                "category": task.category
+            },
+            user_identity=email,
+            user_role=role
+        )
         device = resolution.device
         api_path = resolution.api_endpoint
     except Exception as e:
@@ -647,11 +651,15 @@ async def _execute_agent_command(
         try:
             last_target = recall(SESSION_ID, "last_target_id")
             if last_target:
-                resolution = _resolver.resolve({
-                    "identifier": last_target,
-                    "action": action,
-                    "category": task.category
-                })
+                resolution = _resolver.resolve(
+                    parsed_payload={
+                        "identifier": last_target,
+                        "action": action,
+                        "category": task.category
+                    },
+                    user_identity=email,
+                    user_role=role
+                )
                 device = resolution.device
                 api_path = resolution.api_endpoint
                 if device:
@@ -671,11 +679,15 @@ async def _execute_agent_command(
             print(f"Warning: Failed to invalidate cache on creation: {e}")
         # Re-resolve with empty cache so device is loaded properly from DB if it exists
         try:
-            resolution = _resolver.resolve({
-                "identifier": identifier,
-                "action": action,
-                "category": "Operational"
-            })
+            resolution = _resolver.resolve(
+                parsed_payload={
+                    "identifier": identifier,
+                    "action": action,
+                    "category": "Operational"
+                },
+                user_identity=email,
+                user_role=role
+            )
             device = resolution.device
             api_path = resolution.api_endpoint
         except Exception:
@@ -840,11 +852,15 @@ async def _execute_agent_command(
             
             # Now try to resolve again so device object gets loaded
             try:
-                resolution = _resolver.resolve({
-                    "identifier": identifier,
-                    "action": action,
-                    "category": "Operational"
-                })
+                resolution = _resolver.resolve(
+                    parsed_payload={
+                        "identifier": identifier,
+                        "action": action,
+                        "category": "Operational"
+                    },
+                    user_identity=email,
+                    user_role=role
+                )
                 device = resolution.device
                 api_path = resolution.api_endpoint
             except Exception:
@@ -980,11 +996,15 @@ async def _execute_agent_command(
     api_path_step3 = ""
     resolution = None
     try:
-        resolution = _resolver.resolve({
-            "identifier": identifier,
-            "action": action,
-            "category": task.category
-        })
+        resolution = _resolver.resolve(
+            parsed_payload={
+                "identifier": identifier,
+                "action": action,
+                "category": task.category
+            },
+            user_identity=email,
+            user_role=role
+        )
         device = resolution.device
         api_path_step3 = resolution.api_endpoint
     except Exception:
@@ -995,11 +1015,15 @@ async def _execute_agent_command(
         try:
             last_target = recall(SESSION_ID, "last_target_id")
             if last_target:
-                resolution = _resolver.resolve({
-                    "identifier": last_target,
-                    "action": action,
-                    "category": task.category
-                })
+                resolution = _resolver.resolve(
+                    parsed_payload={
+                        "identifier": last_target,
+                        "action": action,
+                        "category": task.category
+                    },
+                    user_identity=email,
+                    user_role=role
+                )
                 device = resolution.device
                 api_path_step3 = resolution.api_endpoint
                 if device:

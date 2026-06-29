@@ -372,14 +372,16 @@ class RoutingAuditQueries:
         cache_hit: bool,
         resolution_ms: int,
         requested_by: Optional[str],
+        user_identity: Optional[str] = None,
+        user_role: Optional[str] = None,
     ) -> None:
         db_manager.execute_query(
             """
             INSERT INTO routing_audit (
                 identifier, identifier_type, resolved_source, resolved_host,
-                cache_hit, resolution_ms, requested_by, timestamp
+                cache_hit, resolution_ms, requested_by, user_identity, user_role, timestamp
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, NOW())
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
             """,
             (
                 identifier,
@@ -389,6 +391,8 @@ class RoutingAuditQueries:
                 cache_hit,
                 resolution_ms,
                 requested_by,
+                user_identity,
+                user_role,
             ),
             fetch_all=False,
         )

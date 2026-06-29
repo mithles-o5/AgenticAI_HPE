@@ -41,6 +41,8 @@ def resolve_resource(
     query: str,
     identifier_type: str = "",
     requested_by: str = "mcp-orchestrator",
+    user_identity: str = "",
+    user_role: str = "",
 ) -> str:
     """
     Resolve a natural language query for a device IP, serial number, or FQDN 
@@ -57,6 +59,8 @@ def resolve_resource(
             parsed_payload=parsed_payload,
             identifier_type=identifier_type or None,
             requested_by=requested_by,
+            user_identity=user_identity or None,
+            user_role=user_role or None,
         )
         payload = {"status": "resolved", **result.to_dict()}
         return json.dumps(payload, indent=2)
