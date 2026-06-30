@@ -11,6 +11,8 @@ from adapters.plugins.cisco_rest_adapter import CiscoRESTNetworkAdapter
 
 REGISTRY: Dict[str, Type[BaseNetworkAdapter]] = {
     "mock_network": MockNetworkAdapter,
+    "mock":         MockNetworkAdapter,   # alias
+    "network":      MockNetworkAdapter,   # alias
     "snmp":    SNMPNetworkAdapter,
     "netconf": NetconfNetworkAdapter,
     "rest":    CiscoRESTNetworkAdapter,

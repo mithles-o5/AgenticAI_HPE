@@ -1059,7 +1059,28 @@ async def _execute_agent_command(
         elif resolved_provider in {"mock_server", "oneview"}:
             api_path = "/rest/server-hardware/{id}" if not is_creation else "/rest/server-hardware"
         elif resolved_provider == "mock_network":
-            api_path = "/network/v1/devices/{id}" if not is_creation else "/network/v1/devices"
+            # ── Network API path routing (action-aware) ──────────────────────
+            if is_creation:
+                api_path = "/network/v1/devices"
+            elif action in {"ON", "OFF", "RESET", "COLD_BOOT"}:
+                # Power control → /network/v1/devices/{id}/power
+                api_path = "/network/v1/devices/{id}/power"
+            elif action in {"RESCAN"}:
+                # Topology discovery → list all devices
+                api_path = "/network/v1/devices"
+            elif action == "STATUS":
+                # Determine if this is a fleet query or single device
+                _ident_lower = (identifier or "").lower()
+                if _ident_lower in {"switches", "all switches", "switch"}:
+                    api_path = "/monitoring/v1/switches"
+                elif _ident_lower in {"aps", "access points", "access-points"}:
+                    api_path = "/network-monitoring/v1/aps"
+                elif _ident_lower in {"gateways", "routers", "gateway"}:
+                    api_path = "/monitoring/v1/gateways" if False else "/network/v1/devices"
+                else:
+                    api_path = "/network/v1/devices/{id}"
+            else:
+                api_path = "/network/v1/devices/{id}"
         elif resolved_provider == "mock_cloud":
             api_path = "/api/v1/devices/{id}" if not is_creation else "/api/v1/devices"
 
@@ -1068,8 +1089,23 @@ async def _execute_agent_command(
     if action == "STATUS":
         if normalized_category in {"storage-systems", "storage-pools", "storage-volumes", "fc-sans"}:
             agent_task_action = "health_check" if (resource_type or "").lower() == "snapshot" else "fetch_capacity_and_performance"
+        elif resolved_provider == "mock_network":
+            # Network STATUS → fetch_metrics (interface/device telemetry)
+            agent_task_action = "fetch_metrics"
         else:
             agent_task_action = "fetch_metrics"
+
+    # ── Network-specific action verb mapping ─────────────────────────────────
+    if resolved_provider == "mock_network":
+        if action in {"ON", "OFF", "RESET", "COLD_BOOT"}:
+            agent_task_action = "execute_action"
+        elif action == "RESCAN":
+            agent_task_action = "discover_topology"
+            api_path = "/network/v1/devices"  # fleet topology
+        elif action in {"CREATE", "DELETE", "ALLOCATE", "DEALLOCATE"}:
+            agent_task_action = "execute_action"
+        elif action in {"FAILOVER", "RELOAD", "POLICY_SYNC"}:
+            agent_task_action = "execute_action"
 
     # ── UPDATE (PATCH) — handled directly via mock REST API ────────────────
     if action == "UPDATE":
@@ -1155,14 +1191,45 @@ async def _execute_agent_command(
 
     if resolution and hasattr(resolution, "http_method"):
         dispatch_params["http_method"] = resolution.http_method
-    
+
     is_deletion = action in {"DELETE", "DEALLOCATE"}
     if is_deletion:
         dispatch_params["http_method"] = "DELETE"
-        
+
     if payload_to_dispatch:
         dispatch_params["payload"] = payload_to_dispatch
         dispatch_params["http_method"] = "POST"
+
+    # ── Network-specific dispatch enrichment ──────────────────────────────────
+    if resolved_provider == "mock_network":
+        # Always pass action_verb so the adapter knows what to do
+        dispatch_params["action_verb"] = action.lower()
+
+        if action in {"ON", "OFF", "RESET", "COLD_BOOT"}:
+            # Power actions → POST to /power endpoint
+            dispatch_params["http_method"] = "POST"
+            dispatch_params["payload"] = {
+                "action": "ON" if action in {"ON", "COLD_BOOT"} else "OFF"
+            }
+            # Ensure the api_path points to the /power sub-route
+            if "/power" not in (dispatch_params.get("api_path") or ""):
+                dispatch_params["api_path"] = "/network/v1/devices/{id}/power"
+
+        elif action == "RESCAN":
+            # Topology / neighbor discovery → GET all devices
+            dispatch_params["http_method"] = "GET"
+            dispatch_params["api_path"] = "/network/v1/devices"
+
+        elif action == "STATUS":
+            dispatch_params["http_method"] = "GET"
+            # api_path already set correctly above (fleet vs single)
+
+        elif action in {"CREATE"}:
+            dispatch_params["http_method"] = "POST"
+
+        elif action in {"DELETE", "DEALLOCATE"}:
+            dispatch_params["http_method"] = "DELETE"
+            dispatch_params["api_path"] = f"/network/v1/devices/{'{id}'}"
         
     loop = asyncio.get_event_loop()
     result = await loop.run_in_executor(
