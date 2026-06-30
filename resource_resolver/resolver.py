@@ -29,6 +29,8 @@ class ResourceResolver:
         parsed_payload: dict,
         identifier_type: str | IdentifierType | None = None,
         requested_by: Optional[str] = None,
+        user_identity: Optional[str] = None,
+        user_role: Optional[str] = None,
     ) -> RouteResolution:
         start = time.perf_counter()
         identifier = parsed_payload.get("identifier", "").strip()
@@ -71,6 +73,8 @@ class ResourceResolver:
                 cache_hit=cache_hit,
                 resolution_ms=resolution_ms,
                 requested_by=requested_by,
+                user_identity=user_identity,
+                user_role=user_role,
             )
             raise ResourceNotFoundError(
                 f"No device found for {normalized_type.value} '{normalized_identifier}'"
@@ -150,6 +154,8 @@ class ResourceResolver:
             cache_hit=cache_hit,
             resolution_ms=resolution_ms,
             requested_by=requested_by,
+            user_identity=user_identity,
+            user_role=user_role,
         )
         logger.info(
             "[Resolver] %s:%s -> %s/%s cache=%s %sms",

@@ -20,7 +20,6 @@ logger = structlog.get_logger()
 STATIC_SERVERS = [
     {"id": "OV1-RackServer-001", "provider": "redfish", "credentials_ref": "mock"},
     {"id": "CoM-CloudNode-001", "provider": "ilo", "credentials_ref": "mock"},
-    {"id": "MS-123", "provider": "ipmi", "credentials_ref": "mock"},
 ]
 
 class ServerPollHandler:

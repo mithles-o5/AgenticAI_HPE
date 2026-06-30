@@ -2,7 +2,6 @@ import structlog
 from typing import Dict, Any, Type
 from adapters.base import ServerAdapter
 from adapters.plugins.redfish_adapter import RedfishAdapter
-from adapters.plugins.ipmi_adapter import IPMIAdapter
 from adapters.plugins.ilo_adapter import ILOAdapter
 from adapters.plugins.mock_adapter import MockAdapter
 from core.cred_vault_client import CredVaultClient
@@ -11,7 +10,6 @@ logger = structlog.get_logger()
 
 REGISTRY: Dict[str, Type[ServerAdapter]] = {
     "redfish": RedfishAdapter,
-    "ipmi": IPMIAdapter,
     "ilo": ILOAdapter,
     "mock_server": MockAdapter,
     "default": MockAdapter,

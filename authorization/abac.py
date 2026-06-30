@@ -16,11 +16,11 @@ class ABACEngine:
                 return False, f"Production environment modification restricted to 'senior_admin'. Current role: '{role}'."
 
         # 2. Time-based critical action check
-        if action in self.CRITICAL_ACTIONS:
-            # Simple string comparison works for HH:MM format like "22:30" vs "22:00"
-            if context.time > "22:00" or context.time < "06:00":
-                if role != "senior_admin": # Maybe senior_admin can bypass time restrictions
-                    return False, f"Critical actions ({action}) are not allowed between 22:00 and 06:00."
+        # if action in self.CRITICAL_ACTIONS:
+        #     # Simple string comparison works for HH:MM format like "22:30" vs "22:00"
+        #     if context.time > "22:00" or context.time < "06:00":
+        #         if role != "senior_admin": # Maybe senior_admin can bypass time restrictions
+        #             return False, f"Critical actions ({action}) are not allowed between 22:00 and 06:00."
 
         # 3. Vendor awareness rule
         if resource.vendor.upper() == "HPE":
