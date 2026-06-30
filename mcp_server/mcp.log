@@ -14075,3 +14075,835 @@ LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
                                                              ^
  cycle=1df41c3b
 2026-06-30 13:29:01,555 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=1df41c3b total_ms=1485 success=6 failed=0
+2026-06-30 13:32:24,752 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=344f62e3 max_workers=8
+2026-06-30 13:32:24,758 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=344f62e3 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-30 13:32:24,764 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting HTTP collection | host=oneview-01.mgmt.local
+2026-06-30 13:32:24,771 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting HTTP collection | acid=coms-01.cloud.local
+2026-06-30 13:32:24,773 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-30 13:32:24,780 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-30 13:32:24,786 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting HTTP collection | host=mock-network-manager.local
+2026-06-30 13:32:24,790 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting HTTP collection | host=mock-cloud-manager.local
+2026-06-30 13:32:24,804 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=30
+2026-06-30 13:32:24,805 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=344f62e3
+2026-06-30 13:32:25,352 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8003/api/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:32:25,357 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:32:25,373 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] HTTP collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=582
+2026-06-30 13:32:25,373 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8002/network/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:32:25,375 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=344f62e3
+2026-06-30 13:32:25,382 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '61e24c3a-7269-4b8d-8405-0924660ed3e1', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 27.1, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 62.4, 'memory_utilization_percent': 17.2, 'power_draw_watts': 106.6}
+2026-06-30 13:32:25,382 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '2bd5fdaa-3b2b-49f6-8e65-bacc440ba2b5', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 39.8, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 23.6, 'memory_utilization_percent': 69.8, 'power_draw_watts': 122.2}
+2026-06-30 13:32:25,383 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=199 elapsed_ms=601
+2026-06-30 13:32:25,384 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=199 cycle=344f62e3
+2026-06-30 13:32:25,388 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] HTTP collection complete | host=mock-network-manager.local devices=193 elapsed_ms=601
+2026-06-30 13:32:25,389 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=193 cycle=344f62e3
+2026-06-30 13:32:25,413 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/server-hardware "HTTP/1.1 200 OK"
+2026-06-30 13:32:25,490 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8001/compute-ops-mgmt/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:32:25,532 [INFO] resource_resolver.polling_engine: [Polling][COMS] HTTP collection complete | acid=coms-01.cloud.local devices=1006 elapsed_ms=759
+2026-06-30 13:32:25,535 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=1006 cycle=344f62e3
+2026-06-30 13:32:25,797 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/rack-managers "HTTP/1.1 200 OK"
+2026-06-30 13:32:25,798 [INFO] resource_resolver.polling_engine: [Polling][OneView] HTTP collection complete | host=oneview-01.mgmt.local devices=508 elapsed_ms=1032
+2026-06-30 13:32:25,800 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=508 cycle=344f62e3
+2026-06-30 13:32:25,804 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=344f62e3 sources=6 collection_ms=1056
+2026-06-30 13:32:25,853 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=344f62e3
+2026-06-30 13:32:25,898 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=344f62e3
+2026-06-30 13:32:25,939 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=344f62e3
+2026-06-30 13:32:25,991 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=344f62e3
+2026-06-30 13:32:26,205 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=344f62e3
+2026-06-30 13:32:26,312 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=344f62e3
+2026-06-30 13:32:26,312 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=344f62e3 total_ms=1564 success=6 failed=0
+2026-06-30 13:34:33,670 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=37b68d11 max_workers=8
+2026-06-30 13:34:33,672 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=37b68d11 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-30 13:34:33,675 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting HTTP collection | host=oneview-01.mgmt.local
+2026-06-30 13:34:33,678 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting HTTP collection | acid=coms-01.cloud.local
+2026-06-30 13:34:33,679 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-30 13:34:33,681 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-30 13:34:33,682 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting HTTP collection | host=mock-network-manager.local
+2026-06-30 13:34:33,684 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting HTTP collection | host=mock-cloud-manager.local
+2026-06-30 13:34:33,698 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=18
+2026-06-30 13:34:33,698 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=37b68d11
+2026-06-30 13:34:34,286 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8003/api/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:34:34,296 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] HTTP collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=611
+2026-06-30 13:34:34,297 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=37b68d11
+2026-06-30 13:34:34,304 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8002/network/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:34:34,308 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] HTTP collection complete | host=mock-network-manager.local devices=193 elapsed_ms=624
+2026-06-30 13:34:34,309 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=193 cycle=37b68d11
+2026-06-30 13:34:34,314 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:34:34,319 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '61e24c3a-7269-4b8d-8405-0924660ed3e1', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 27.1, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 62.4, 'memory_utilization_percent': 17.2, 'power_draw_watts': 106.6}
+2026-06-30 13:34:34,319 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '2bd5fdaa-3b2b-49f6-8e65-bacc440ba2b5', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 39.8, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 23.6, 'memory_utilization_percent': 69.8, 'power_draw_watts': 122.2}
+2026-06-30 13:34:34,319 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=199 elapsed_ms=637
+2026-06-30 13:34:34,319 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=199 cycle=37b68d11
+2026-06-30 13:34:34,353 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/server-hardware "HTTP/1.1 200 OK"
+2026-06-30 13:34:34,442 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8001/compute-ops-mgmt/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:34:34,521 [INFO] resource_resolver.polling_engine: [Polling][COMS] HTTP collection complete | acid=coms-01.cloud.local devices=1006 elapsed_ms=841
+2026-06-30 13:34:34,523 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=1006 cycle=37b68d11
+2026-06-30 13:34:34,744 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/rack-managers "HTTP/1.1 200 OK"
+2026-06-30 13:34:34,745 [INFO] resource_resolver.polling_engine: [Polling][OneView] HTTP collection complete | host=oneview-01.mgmt.local devices=508 elapsed_ms=1069
+2026-06-30 13:34:34,746 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=508 cycle=37b68d11
+2026-06-30 13:34:34,748 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=37b68d11 sources=6 collection_ms=1078
+2026-06-30 13:34:34,803 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=37b68d11
+2026-06-30 13:34:34,844 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=37b68d11
+2026-06-30 13:34:34,881 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=37b68d11
+2026-06-30 13:34:34,920 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=37b68d11
+2026-06-30 13:34:35,123 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=37b68d11
+2026-06-30 13:34:35,251 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=37b68d11
+2026-06-30 13:34:35,251 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=37b68d11 total_ms=1581 success=6 failed=0
+2026-06-30 13:35:04,962 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=6339cbb4 max_workers=8
+2026-06-30 13:35:04,964 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=6339cbb4 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-30 13:35:04,986 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting HTTP collection | host=oneview-01.mgmt.local
+2026-06-30 13:35:04,989 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting HTTP collection | acid=coms-01.cloud.local
+2026-06-30 13:35:04,991 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-30 13:35:04,993 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-30 13:35:04,996 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting HTTP collection | host=mock-network-manager.local
+2026-06-30 13:35:05,010 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting HTTP collection | host=mock-cloud-manager.local
+2026-06-30 13:35:05,013 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=21
+2026-06-30 13:35:05,014 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=6339cbb4
+2026-06-30 13:35:05,509 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:35:05,524 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '61e24c3a-7269-4b8d-8405-0924660ed3e1', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 27.1, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 62.4, 'memory_utilization_percent': 17.2, 'power_draw_watts': 106.6}
+2026-06-30 13:35:05,525 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '2bd5fdaa-3b2b-49f6-8e65-bacc440ba2b5', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 39.8, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 23.6, 'memory_utilization_percent': 69.8, 'power_draw_watts': 122.2}
+2026-06-30 13:35:05,525 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=199 elapsed_ms=530
+2026-06-30 13:35:05,526 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=199 cycle=6339cbb4
+2026-06-30 13:35:05,542 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8002/network/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:35:05,550 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] HTTP collection complete | host=mock-network-manager.local devices=193 elapsed_ms=553
+2026-06-30 13:35:05,551 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=193 cycle=6339cbb4
+2026-06-30 13:35:05,563 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8003/api/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:35:05,569 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] HTTP collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=555
+2026-06-30 13:35:05,570 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=6339cbb4
+2026-06-30 13:35:05,583 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/server-hardware "HTTP/1.1 200 OK"
+2026-06-30 13:35:05,859 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8001/compute-ops-mgmt/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:35:05,952 [INFO] resource_resolver.polling_engine: [Polling][COMS] HTTP collection complete | acid=coms-01.cloud.local devices=1006 elapsed_ms=960
+2026-06-30 13:35:05,958 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=1006 cycle=6339cbb4
+2026-06-30 13:35:06,059 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/rack-managers "HTTP/1.1 200 OK"
+2026-06-30 13:35:06,065 [INFO] resource_resolver.polling_engine: [Polling][OneView] HTTP collection complete | host=oneview-01.mgmt.local devices=508 elapsed_ms=1077
+2026-06-30 13:35:06,069 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=508 cycle=6339cbb4
+2026-06-30 13:35:06,071 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=6339cbb4 sources=6 collection_ms=1110
+2026-06-30 13:35:06,224 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=6339cbb4
+2026-06-30 13:35:06,328 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=6339cbb4
+2026-06-30 13:35:06,371 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=6339cbb4
+2026-06-30 13:35:06,432 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=6339cbb4
+2026-06-30 13:35:06,679 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=6339cbb4
+2026-06-30 13:35:06,805 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=6339cbb4
+2026-06-30 13:35:06,806 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=6339cbb4 total_ms=1845 success=6 failed=0
+2026-06-30 13:35:41,852 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=7e216cf5 max_workers=8
+2026-06-30 13:35:41,853 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=7e216cf5 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-30 13:35:41,854 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting HTTP collection | host=oneview-01.mgmt.local
+2026-06-30 13:35:41,855 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting HTTP collection | acid=coms-01.cloud.local
+2026-06-30 13:35:41,857 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-30 13:35:41,873 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=15
+2026-06-30 13:35:41,873 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-30 13:35:41,876 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=7e216cf5
+2026-06-30 13:35:41,877 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting HTTP collection | host=mock-network-manager.local
+2026-06-30 13:35:41,885 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting HTTP collection | host=mock-cloud-manager.local
+2026-06-30 13:35:42,426 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8002/network/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:35:42,467 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] HTTP collection complete | host=mock-network-manager.local devices=193 elapsed_ms=590
+2026-06-30 13:35:42,468 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/server-hardware "HTTP/1.1 200 OK"
+2026-06-30 13:35:42,469 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=193 cycle=7e216cf5
+2026-06-30 13:35:42,469 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:35:42,469 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8003/api/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:35:42,474 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '61e24c3a-7269-4b8d-8405-0924660ed3e1', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 27.1, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 62.4, 'memory_utilization_percent': 17.2, 'power_draw_watts': 106.6}
+2026-06-30 13:35:42,474 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '2bd5fdaa-3b2b-49f6-8e65-bacc440ba2b5', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 39.8, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 23.6, 'memory_utilization_percent': 69.8, 'power_draw_watts': 122.2}
+2026-06-30 13:35:42,474 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=199 elapsed_ms=597
+2026-06-30 13:35:42,474 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=199 cycle=7e216cf5
+2026-06-30 13:35:42,479 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] HTTP collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=594
+2026-06-30 13:35:42,480 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=7e216cf5
+2026-06-30 13:35:42,517 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8001/compute-ops-mgmt/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:35:42,542 [INFO] resource_resolver.polling_engine: [Polling][COMS] HTTP collection complete | acid=coms-01.cloud.local devices=1006 elapsed_ms=686
+2026-06-30 13:35:42,546 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=1006 cycle=7e216cf5
+2026-06-30 13:35:42,796 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/rack-managers "HTTP/1.1 200 OK"
+2026-06-30 13:35:42,797 [INFO] resource_resolver.polling_engine: [Polling][OneView] HTTP collection complete | host=oneview-01.mgmt.local devices=508 elapsed_ms=942
+2026-06-30 13:35:42,799 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=508 cycle=7e216cf5
+2026-06-30 13:35:42,800 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=7e216cf5 sources=6 collection_ms=947
+2026-06-30 13:35:42,857 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=7e216cf5
+2026-06-30 13:35:42,905 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=7e216cf5
+2026-06-30 13:35:42,950 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=7e216cf5
+2026-06-30 13:35:42,996 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=7e216cf5
+2026-06-30 13:35:43,233 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=7e216cf5
+2026-06-30 13:35:43,375 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=7e216cf5
+2026-06-30 13:35:43,375 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=7e216cf5 total_ms=1523 success=6 failed=0
+2026-06-30 13:36:22,071 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=35b82a0a max_workers=8
+2026-06-30 13:36:22,075 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=35b82a0a count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-30 13:36:22,081 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting HTTP collection | host=oneview-01.mgmt.local
+2026-06-30 13:36:22,085 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting HTTP collection | acid=coms-01.cloud.local
+2026-06-30 13:36:22,088 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-30 13:36:22,092 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-30 13:36:22,110 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting HTTP collection | host=mock-network-manager.local
+2026-06-30 13:36:22,118 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=29
+2026-06-30 13:36:22,118 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=35b82a0a
+2026-06-30 13:36:22,119 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting HTTP collection | host=mock-cloud-manager.local
+2026-06-30 13:36:22,648 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:36:22,730 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '61e24c3a-7269-4b8d-8405-0924660ed3e1', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 27.1, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 62.4, 'memory_utilization_percent': 17.2, 'power_draw_watts': 106.6}
+2026-06-30 13:36:22,730 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8002/network/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:36:22,730 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '2bd5fdaa-3b2b-49f6-8e65-bacc440ba2b5', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 39.8, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 23.6, 'memory_utilization_percent': 69.8, 'power_draw_watts': 122.2}
+2026-06-30 13:36:22,731 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8003/api/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:36:22,733 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/server-hardware "HTTP/1.1 200 OK"
+2026-06-30 13:36:22,734 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=199 elapsed_ms=640
+2026-06-30 13:36:22,740 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] HTTP collection complete | host=mock-network-manager.local devices=193 elapsed_ms=629
+2026-06-30 13:36:22,741 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=199 cycle=35b82a0a
+2026-06-30 13:36:22,742 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=193 cycle=35b82a0a
+2026-06-30 13:36:22,747 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] HTTP collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=627
+2026-06-30 13:36:22,749 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=35b82a0a
+2026-06-30 13:36:22,750 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8001/compute-ops-mgmt/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:36:22,794 [INFO] resource_resolver.polling_engine: [Polling][COMS] HTTP collection complete | acid=coms-01.cloud.local devices=1006 elapsed_ms=707
+2026-06-30 13:36:22,796 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=1006 cycle=35b82a0a
+2026-06-30 13:36:23,084 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/rack-managers "HTTP/1.1 200 OK"
+2026-06-30 13:36:23,087 [INFO] resource_resolver.polling_engine: [Polling][OneView] HTTP collection complete | host=oneview-01.mgmt.local devices=508 elapsed_ms=1005
+2026-06-30 13:36:23,090 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=508 cycle=35b82a0a
+2026-06-30 13:36:23,092 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=35b82a0a sources=6 collection_ms=1023
+2026-06-30 13:36:23,147 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=35b82a0a
+2026-06-30 13:36:23,198 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=35b82a0a
+2026-06-30 13:36:23,246 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=35b82a0a
+2026-06-30 13:36:23,288 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=35b82a0a
+2026-06-30 13:36:23,511 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=35b82a0a
+2026-06-30 13:36:23,626 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=35b82a0a
+2026-06-30 13:36:23,626 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=35b82a0a total_ms=1557 success=6 failed=0
+2026-06-30 13:38:04,716 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=f29d172c max_workers=8
+2026-06-30 13:38:04,717 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=f29d172c count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-30 13:38:04,738 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting HTTP collection | host=oneview-01.mgmt.local
+2026-06-30 13:38:04,741 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting HTTP collection | acid=coms-01.cloud.local
+2026-06-30 13:38:04,746 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-30 13:38:04,749 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-30 13:38:04,752 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting HTTP collection | host=mock-network-manager.local
+2026-06-30 13:38:04,768 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=21
+2026-06-30 13:38:04,769 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=f29d172c
+2026-06-30 13:38:04,769 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting HTTP collection | host=mock-cloud-manager.local
+2026-06-30 13:38:05,276 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:38:05,288 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '61e24c3a-7269-4b8d-8405-0924660ed3e1', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 27.1, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 62.4, 'memory_utilization_percent': 17.2, 'power_draw_watts': 106.6}
+2026-06-30 13:38:05,288 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '2bd5fdaa-3b2b-49f6-8e65-bacc440ba2b5', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 39.8, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 23.6, 'memory_utilization_percent': 69.8, 'power_draw_watts': 122.2}
+2026-06-30 13:38:05,288 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=199 elapsed_ms=538
+2026-06-30 13:38:05,289 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8003/api/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:38:05,290 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=199 cycle=f29d172c
+2026-06-30 13:38:05,297 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] HTTP collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=527
+2026-06-30 13:38:05,299 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=f29d172c
+2026-06-30 13:38:05,311 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8002/network/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:38:05,317 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] HTTP collection complete | host=mock-network-manager.local devices=193 elapsed_ms=564
+2026-06-30 13:38:05,317 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/server-hardware "HTTP/1.1 200 OK"
+2026-06-30 13:38:05,318 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=193 cycle=f29d172c
+2026-06-30 13:38:05,403 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8001/compute-ops-mgmt/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:38:05,445 [INFO] resource_resolver.polling_engine: [Polling][COMS] HTTP collection complete | acid=coms-01.cloud.local devices=1006 elapsed_ms=699
+2026-06-30 13:38:05,447 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=1006 cycle=f29d172c
+2026-06-30 13:38:05,660 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/rack-managers "HTTP/1.1 200 OK"
+2026-06-30 13:38:05,662 [INFO] resource_resolver.polling_engine: [Polling][OneView] HTTP collection complete | host=oneview-01.mgmt.local devices=508 elapsed_ms=921
+2026-06-30 13:38:05,663 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=508 cycle=f29d172c
+2026-06-30 13:38:05,665 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=f29d172c sources=6 collection_ms=949
+2026-06-30 13:38:05,722 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=f29d172c
+2026-06-30 13:38:05,770 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=f29d172c
+2026-06-30 13:38:05,823 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=f29d172c
+2026-06-30 13:38:05,863 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=f29d172c
+2026-06-30 13:38:06,517 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=f29d172c
+2026-06-30 13:38:06,743 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=f29d172c
+2026-06-30 13:38:06,744 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=f29d172c total_ms=2028 success=6 failed=0
+2026-06-30 13:39:01,561 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=8c5ae8c5 max_workers=8
+2026-06-30 13:39:01,563 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=8c5ae8c5 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-30 13:39:01,565 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting HTTP collection | host=oneview-01.mgmt.local
+2026-06-30 13:39:01,569 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting HTTP collection | acid=coms-01.cloud.local
+2026-06-30 13:39:01,574 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-30 13:39:01,578 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-30 13:39:01,581 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting HTTP collection | host=mock-network-manager.local
+2026-06-30 13:39:01,594 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=17
+2026-06-30 13:39:01,594 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=8c5ae8c5
+2026-06-30 13:39:01,595 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting HTTP collection | host=mock-cloud-manager.local
+2026-06-30 13:39:02,137 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8003/api/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:39:02,144 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] HTTP collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=549
+2026-06-30 13:39:02,145 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=8c5ae8c5
+2026-06-30 13:39:04,140 [ERROR] resource_resolver.polling_engine: [Polling][OneView] HTTP request failed for server-hardware | host=oneview-01.mgmt.local url=http://127.0.0.1:8000/rest/server-hardware error=[WinError 10061] No connection could be made because the target machine actively refused it elapsed_ms=2574
+2026-06-30 13:39:04,143 [ERROR] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP request failed | host=mock-storage-manager.local url=http://127.0.0.1:8004/data-services/v1beta1/devices error=[WinError 10061] No connection could be made because the target machine actively refused it elapsed_ms=2565
+2026-06-30 13:39:04,145 [ERROR] resource_resolver.polling_engine: [Polling][COMS] HTTP request failed | acid=coms-01.cloud.local url=http://127.0.0.1:8001/compute-ops-mgmt/v1/devices error=[WinError 10061] No connection could be made because the target machine actively refused it elapsed_ms=2573
+2026-06-30 13:39:04,147 [ERROR] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection failed | host=mock-storage-manager.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=8c5ae8c5 elapsed_ms=2569
+2026-06-30 13:39:04,148 [ERROR] resource_resolver.polling_engine: [Polling][Mock Network] HTTP request failed | host=mock-network-manager.local url=http://127.0.0.1:8002/network/v1/devices error=[WinError 10061] No connection could be made because the target machine actively refused it elapsed_ms=2567
+2026-06-30 13:39:04,149 [ERROR] resource_resolver.polling_engine: [Polling][COMS] Collection failed | host=coms-01.cloud.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=8c5ae8c5 elapsed_ms=2580
+2026-06-30 13:39:04,151 [ERROR] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection failed | host=mock-network-manager.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=8c5ae8c5 elapsed_ms=2570
+2026-06-30 13:39:06,490 [WARNING] resource_resolver.polling_engine: [Polling][OneView] HTTP request failed for rack-managers | host=oneview-01.mgmt.local error=[WinError 10061] No connection could be made because the target machine actively refused it
+2026-06-30 13:39:06,492 [INFO] resource_resolver.polling_engine: [Polling][OneView] HTTP collection complete | host=oneview-01.mgmt.local devices=0 elapsed_ms=4926
+2026-06-30 13:39:06,492 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=0 cycle=8c5ae8c5
+2026-06-30 13:39:06,494 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=8c5ae8c5 sources=6 collection_ms=4933
+2026-06-30 13:39:06,549 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=8c5ae8c5
+2026-06-30 13:39:06,617 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=8c5ae8c5
+2026-06-30 13:39:06,623 [WARNING] resource_resolver.polling_engine: [Polling][Sync] Source failed | source=mock_storage host=mock-storage-manager.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=8c5ae8c5
+2026-06-30 13:39:06,626 [WARNING] resource_resolver.polling_engine: [Polling][Sync] Source failed | source=coms host=coms-01.cloud.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=8c5ae8c5
+2026-06-30 13:39:06,627 [WARNING] resource_resolver.polling_engine: [Polling][Sync] Source failed | source=mock_network host=mock-network-manager.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=8c5ae8c5
+2026-06-30 13:39:06,629 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=column "poll_failures" does not exist
+LINE 5: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=8c5ae8c5
+2026-06-30 13:39:06,629 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=8c5ae8c5 total_ms=5069 success=3 failed=3
+2026-06-30 13:40:03,463 [INFO] db: [DB] Connection pool created: 2-10 connections to postgres@localhost:5432/hpe_agentic_ai
+2026-06-30 13:40:03,486 [INFO] db: [DB] Connection test successful
+2026-06-30 13:40:03,486 [INFO] resource_resolver.db_loader: [DB Loader] PostgreSQL registry verified and connected
+2026-06-30 13:40:05,529 [INFO] resource_resolver.cache: [Cache] Memurai connected at localhost:6379/db=0 ttl=900s
+2026-06-30 13:40:05,532 [INFO] resource_resolver.polling_engine: [Polling] Starting background polling thread (interval=600s)
+2026-06-30 13:42:26,314 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=c78a10eb max_workers=8
+2026-06-30 13:42:26,314 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=c78a10eb count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-30 13:42:26,315 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting HTTP collection | host=oneview-01.mgmt.local
+2026-06-30 13:42:26,334 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting HTTP collection | acid=coms-01.cloud.local
+2026-06-30 13:42:26,335 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-30 13:42:26,342 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-30 13:42:26,343 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting HTTP collection | host=mock-network-manager.local
+2026-06-30 13:42:26,344 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting HTTP collection | host=mock-cloud-manager.local
+2026-06-30 13:42:26,358 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=22
+2026-06-30 13:42:26,359 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=c78a10eb
+2026-06-30 13:42:26,870 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8003/api/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:42:26,900 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] HTTP collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=555
+2026-06-30 13:42:26,900 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=c78a10eb
+2026-06-30 13:42:28,889 [ERROR] resource_resolver.polling_engine: [Polling][OneView] HTTP request failed for server-hardware | host=oneview-01.mgmt.local url=http://127.0.0.1:8000/rest/server-hardware error=[WinError 10061] No connection could be made because the target machine actively refused it elapsed_ms=2573
+2026-06-30 13:42:28,890 [ERROR] resource_resolver.polling_engine: [Polling][COMS] HTTP request failed | acid=coms-01.cloud.local url=http://127.0.0.1:8001/compute-ops-mgmt/v1/devices error=[WinError 10061] No connection could be made because the target machine actively refused it elapsed_ms=2555
+2026-06-30 13:42:28,895 [ERROR] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP request failed | host=mock-storage-manager.local url=http://127.0.0.1:8004/data-services/v1beta1/devices error=[WinError 10061] No connection could be made because the target machine actively refused it elapsed_ms=2552
+2026-06-30 13:42:28,895 [ERROR] resource_resolver.polling_engine: [Polling][Mock Network] HTTP request failed | host=mock-network-manager.local url=http://127.0.0.1:8002/network/v1/devices error=[WinError 10061] No connection could be made because the target machine actively refused it elapsed_ms=2552
+2026-06-30 13:42:28,896 [ERROR] resource_resolver.polling_engine: [Polling][COMS] Collection failed | host=coms-01.cloud.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=c78a10eb elapsed_ms=2580
+2026-06-30 13:42:28,896 [ERROR] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection failed | host=mock-storage-manager.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=c78a10eb elapsed_ms=2555
+2026-06-30 13:42:28,896 [ERROR] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection failed | host=mock-network-manager.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=c78a10eb elapsed_ms=2553
+2026-06-30 13:42:31,664 [WARNING] resource_resolver.polling_engine: [Polling][OneView] HTTP request failed for rack-managers | host=oneview-01.mgmt.local error=[WinError 10061] No connection could be made because the target machine actively refused it
+2026-06-30 13:42:31,667 [INFO] resource_resolver.polling_engine: [Polling][OneView] HTTP collection complete | host=oneview-01.mgmt.local devices=0 elapsed_ms=5352
+2026-06-30 13:42:31,667 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=0 cycle=c78a10eb
+2026-06-30 13:42:31,669 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=c78a10eb sources=6 collection_ms=5355
+2026-06-30 13:42:31,840 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=c78a10eb
+2026-06-30 13:42:31,992 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=c78a10eb
+2026-06-30 13:42:31,997 [WARNING] resource_resolver.polling_engine: [Polling][Sync] Source failed | source=coms host=coms-01.cloud.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=c78a10eb
+2026-06-30 13:42:32,000 [WARNING] resource_resolver.polling_engine: [Polling][Sync] Source failed | source=mock_storage host=mock-storage-manager.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=c78a10eb
+2026-06-30 13:42:32,002 [WARNING] resource_resolver.polling_engine: [Polling][Sync] Source failed | source=mock_network host=mock-network-manager.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=c78a10eb
+2026-06-30 13:42:32,004 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=column "poll_failures" does not exist
+LINE 5: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=c78a10eb
+2026-06-30 13:42:32,005 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=c78a10eb total_ms=5691 success=3 failed=3
+2026-06-30 13:45:43,381 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=f270e179 max_workers=8
+2026-06-30 13:45:43,384 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=f270e179 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-30 13:45:43,386 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting HTTP collection | host=oneview-01.mgmt.local
+2026-06-30 13:45:43,390 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting HTTP collection | acid=coms-01.cloud.local
+2026-06-30 13:45:43,391 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-30 13:45:43,397 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-30 13:45:43,399 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting HTTP collection | host=mock-network-manager.local
+2026-06-30 13:45:43,400 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting HTTP collection | host=mock-cloud-manager.local
+2026-06-30 13:45:43,417 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=25
+2026-06-30 13:45:43,417 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=f270e179
+2026-06-30 13:45:43,923 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8003/api/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 13:45:43,928 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] HTTP collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=527
+2026-06-30 13:45:43,928 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=f270e179
+2026-06-30 13:45:45,930 [ERROR] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP request failed | host=mock-storage-manager.local url=http://127.0.0.1:8004/data-services/v1beta1/devices error=[WinError 10061] No connection could be made because the target machine actively refused it elapsed_ms=2530
+2026-06-30 13:45:45,930 [ERROR] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection failed | host=mock-storage-manager.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=f270e179 elapsed_ms=2533
+2026-06-30 13:45:45,932 [ERROR] resource_resolver.polling_engine: [Polling][COMS] HTTP request failed | acid=coms-01.cloud.local url=http://127.0.0.1:8001/compute-ops-mgmt/v1/devices error=[WinError 10061] No connection could be made because the target machine actively refused it elapsed_ms=2540
+2026-06-30 13:45:45,932 [ERROR] resource_resolver.polling_engine: [Polling][COMS] Collection failed | host=coms-01.cloud.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=f270e179 elapsed_ms=2542
+2026-06-30 13:45:45,933 [ERROR] resource_resolver.polling_engine: [Polling][Mock Network] HTTP request failed | host=mock-network-manager.local url=http://127.0.0.1:8002/network/v1/devices error=[WinError 10061] No connection could be made because the target machine actively refused it elapsed_ms=2533
+2026-06-30 13:45:45,934 [ERROR] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection failed | host=mock-network-manager.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=f270e179 elapsed_ms=2534
+2026-06-30 13:45:45,936 [ERROR] resource_resolver.polling_engine: [Polling][OneView] HTTP request failed for server-hardware | host=oneview-01.mgmt.local url=http://127.0.0.1:8000/rest/server-hardware error=[WinError 10061] No connection could be made because the target machine actively refused it elapsed_ms=2548
+2026-06-30 13:45:48,316 [WARNING] resource_resolver.polling_engine: [Polling][OneView] HTTP request failed for rack-managers | host=oneview-01.mgmt.local error=[WinError 10061] No connection could be made because the target machine actively refused it
+2026-06-30 13:45:48,318 [INFO] resource_resolver.polling_engine: [Polling][OneView] HTTP collection complete | host=oneview-01.mgmt.local devices=0 elapsed_ms=4930
+2026-06-30 13:45:48,318 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=0 cycle=f270e179
+2026-06-30 13:45:48,319 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=f270e179 sources=6 collection_ms=4938
+2026-06-30 13:45:48,403 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=f270e179
+2026-06-30 15:31:53,582 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=f270e179
+2026-06-30 15:31:53,607 [WARNING] resource_resolver.polling_engine: [Polling][Sync] Source failed | source=mock_storage host=mock-storage-manager.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=f270e179
+2026-06-30 15:31:53,611 [WARNING] resource_resolver.polling_engine: [Polling][Sync] Source failed | source=coms host=coms-01.cloud.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=f270e179
+2026-06-30 15:31:53,615 [WARNING] resource_resolver.polling_engine: [Polling][Sync] Source failed | source=mock_network host=mock-network-manager.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=f270e179
+2026-06-30 15:31:53,621 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=column "poll_failures" does not exist
+LINE 5: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=f270e179
+2026-06-30 15:31:53,621 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=f270e179 total_ms=6370240 success=3 failed=3
+2026-06-30 16:14:04,283 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=518f38a5 max_workers=8
+2026-06-30 16:14:04,284 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=518f38a5 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-30 16:14:04,289 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting HTTP collection | host=oneview-01.mgmt.local
+2026-06-30 16:14:04,294 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting HTTP collection | acid=coms-01.cloud.local
+2026-06-30 16:14:04,296 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-30 16:14:04,297 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-30 16:14:04,300 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting HTTP collection | host=mock-network-manager.local
+2026-06-30 16:14:04,309 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting HTTP collection | host=mock-cloud-manager.local
+2026-06-30 16:14:04,313 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=16
+2026-06-30 16:14:04,314 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=518f38a5
+2026-06-30 16:14:04,794 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8003/api/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 16:14:04,800 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] HTTP collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=490
+2026-06-30 16:14:04,801 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=518f38a5
+2026-06-30 16:14:06,759 [ERROR] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP request failed | host=mock-storage-manager.local url=http://127.0.0.1:8004/data-services/v1beta1/devices error=[WinError 10061] No connection could be made because the target machine actively refused it elapsed_ms=2461
+2026-06-30 16:14:06,760 [ERROR] resource_resolver.polling_engine: [Polling][OneView] HTTP request failed for server-hardware | host=oneview-01.mgmt.local url=http://127.0.0.1:8000/rest/server-hardware error=[WinError 10061] No connection could be made because the target machine actively refused it elapsed_ms=2468
+2026-06-30 16:14:06,760 [ERROR] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection failed | host=mock-storage-manager.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=518f38a5 elapsed_ms=2463
+2026-06-30 16:14:06,784 [ERROR] resource_resolver.polling_engine: [Polling][Mock Network] HTTP request failed | host=mock-network-manager.local url=http://127.0.0.1:8002/network/v1/devices error=[WinError 10061] No connection could be made because the target machine actively refused it elapsed_ms=2483
+2026-06-30 16:14:06,784 [ERROR] resource_resolver.polling_engine: [Polling][COMS] HTTP request failed | acid=coms-01.cloud.local url=http://127.0.0.1:8001/compute-ops-mgmt/v1/devices error=[WinError 10061] No connection could be made because the target machine actively refused it elapsed_ms=2489
+2026-06-30 16:14:06,784 [ERROR] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection failed | host=mock-network-manager.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=518f38a5 elapsed_ms=2484
+2026-06-30 16:14:06,785 [ERROR] resource_resolver.polling_engine: [Polling][COMS] Collection failed | host=coms-01.cloud.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=518f38a5 elapsed_ms=2491
+2026-06-30 16:14:09,128 [WARNING] resource_resolver.polling_engine: [Polling][OneView] HTTP request failed for rack-managers | host=oneview-01.mgmt.local error=[WinError 10061] No connection could be made because the target machine actively refused it
+2026-06-30 16:14:09,130 [INFO] resource_resolver.polling_engine: [Polling][OneView] HTTP collection complete | host=oneview-01.mgmt.local devices=0 elapsed_ms=4838
+2026-06-30 16:14:09,130 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=0 cycle=518f38a5
+2026-06-30 16:14:09,131 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=518f38a5 sources=6 collection_ms=4848
+2026-06-30 16:14:09,199 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=518f38a5
+2026-06-30 16:14:09,244 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=518f38a5
+2026-06-30 16:14:09,246 [WARNING] resource_resolver.polling_engine: [Polling][Sync] Source failed | source=mock_storage host=mock-storage-manager.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=518f38a5
+2026-06-30 16:14:09,247 [WARNING] resource_resolver.polling_engine: [Polling][Sync] Source failed | source=mock_network host=mock-network-manager.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=518f38a5
+2026-06-30 16:14:09,249 [WARNING] resource_resolver.polling_engine: [Polling][Sync] Source failed | source=coms host=coms-01.cloud.local error=[WinError 10061] No connection could be made because the target machine actively refused it cycle=518f38a5
+2026-06-30 16:14:09,251 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=column "poll_failures" does not exist
+LINE 5: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=518f38a5
+2026-06-30 16:14:09,252 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=518f38a5 total_ms=4968 success=3 failed=3
+2026-06-30 18:21:31,182 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=1cd6adfa max_workers=8
+2026-06-30 18:21:31,182 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=1cd6adfa count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-30 18:21:31,184 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting HTTP collection | host=oneview-01.mgmt.local
+2026-06-30 18:21:31,185 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting HTTP collection | acid=coms-01.cloud.local
+2026-06-30 18:21:31,204 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-30 18:21:31,209 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-30 18:21:31,211 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting HTTP collection | host=mock-network-manager.local
+2026-06-30 18:21:31,219 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting HTTP collection | host=mock-cloud-manager.local
+2026-06-30 18:21:31,223 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=18
+2026-06-30 18:21:31,226 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=1cd6adfa
+2026-06-30 18:21:31,740 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8002/network/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:21:31,747 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] HTTP collection complete | host=mock-network-manager.local devices=193 elapsed_ms=534
+2026-06-30 18:21:31,748 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=193 cycle=1cd6adfa
+2026-06-30 18:21:31,775 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8003/api/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:21:31,777 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:21:31,782 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] HTTP collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=563
+2026-06-30 18:21:31,783 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=1cd6adfa
+2026-06-30 18:21:31,788 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '61e24c3a-7269-4b8d-8405-0924660ed3e1', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 27.1, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 62.4, 'memory_utilization_percent': 17.2, 'power_draw_watts': 106.6}
+2026-06-30 18:21:31,789 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '2bd5fdaa-3b2b-49f6-8e65-bacc440ba2b5', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 39.8, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 23.6, 'memory_utilization_percent': 69.8, 'power_draw_watts': 122.2}
+2026-06-30 18:21:31,789 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=199 elapsed_ms=578
+2026-06-30 18:21:31,789 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=199 cycle=1cd6adfa
+2026-06-30 18:21:31,806 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/server-hardware "HTTP/1.1 200 OK"
+2026-06-30 18:21:31,894 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8001/compute-ops-mgmt/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:21:31,929 [INFO] resource_resolver.polling_engine: [Polling][COMS] HTTP collection complete | acid=coms-01.cloud.local devices=1006 elapsed_ms=743
+2026-06-30 18:21:31,931 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=1006 cycle=1cd6adfa
+2026-06-30 18:21:32,130 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/rack-managers "HTTP/1.1 200 OK"
+2026-06-30 18:21:32,134 [INFO] resource_resolver.polling_engine: [Polling][OneView] HTTP collection complete | host=oneview-01.mgmt.local devices=508 elapsed_ms=949
+2026-06-30 18:21:32,136 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=508 cycle=1cd6adfa
+2026-06-30 18:21:32,137 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=1cd6adfa sources=6 collection_ms=955
+2026-06-30 18:21:32,197 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=1cd6adfa
+2026-06-30 18:21:32,246 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=1cd6adfa
+2026-06-30 18:21:32,299 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=1cd6adfa
+2026-06-30 18:21:32,342 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=1cd6adfa
+2026-06-30 18:21:32,609 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=1cd6adfa
+2026-06-30 18:21:32,745 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=1cd6adfa
+2026-06-30 18:21:32,745 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=1cd6adfa total_ms=1564 success=6 failed=0
+2026-06-30 18:23:20,039 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:23:23,001 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:23:26,005 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:23:29,007 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:23:31,997 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:23:35,983 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:23:35,986 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=edge-r03-10012
+2026-06-30 18:23:35,992 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=edge-r03-10012
+2026-06-30 18:23:36,000 [INFO] resource_resolver.resolver: [Resolver] sn:edge-r03-10012 -> coms/coms-01.cloud.local cache=miss 7ms
+2026-06-30 18:23:36,349 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=router&provider=coms "HTTP/1.1 200 OK"
+2026-06-30 18:23:36,528 [INFO] resource_resolver.resolver: [Resolver] sn:edge-r03-10012 -> coms/coms-01.cloud.local cache=hit 170ms
+2026-06-30 18:23:36,869 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=router&provider=coms "HTTP/1.1 200 OK"
+2026-06-30 18:23:36,871 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> cloud-agent | url=http://127.0.0.1:8005/cloud-agent/execute-task
+2026-06-30 18:23:39,766 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8005/cloud-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-30 18:23:39,772 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-30 18:23:42,001 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:23:42,004 [INFO] resource_resolver.resolver: [Resolver] Warming Memurai cache | sn=gl-vm-009
+2026-06-30 18:23:42,006 [INFO] resource_resolver.resolver: [Resolver] Memurai cache warm complete | sn=gl-vm-009
+2026-06-30 18:23:42,009 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_cloud' device_type='virtual_machine' action_key='STATUS'
+2026-06-30 18:23:42,010 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_cloud' device_type='virtual_machine' action_key='STATUS' — using fallback path /api/v1/devices/b1ab0c40-ae33-5e1b-b935-17e42afdee82
+2026-06-30 18:23:42,030 [INFO] resource_resolver.resolver: [Resolver] sn:gl-vm-009 -> mock_cloud/mock-cloud-manager.local cache=miss 4ms
+2026-06-30 18:23:42,321 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=virtual_machine&provider=mock_cloud "HTTP/1.1 200 OK"
+2026-06-30 18:23:42,325 [WARNING] db_queries: [EndpointRegistry] No endpoint found | vendor='mock_cloud' device_type='virtual_machine' action_key='STATUS'
+2026-06-30 18:23:42,325 [WARNING] power_ops: [EndpointRegistry] No registry row for vendor='mock_cloud' device_type='virtual_machine' action_key='STATUS' — using fallback path /api/v1/devices/b1ab0c40-ae33-5e1b-b935-17e42afdee82
+2026-06-30 18:23:42,345 [INFO] resource_resolver.resolver: [Resolver] sn:gl-vm-009 -> mock_cloud/mock-cloud-manager.local cache=hit 0ms
+2026-06-30 18:23:42,654 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8020/agents/lookup?resource_type=virtual_machine&provider=mock_cloud "HTTP/1.1 200 OK"
+2026-06-30 18:23:42,655 [INFO] execution_engine: [AgentDispatcher] Resolved via OASF Capability Registry -> cloud-agent | url=http://127.0.0.1:8005/cloud-agent/execute-task
+2026-06-30 18:23:43,274 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8005/cloud-agent/execute-task "HTTP/1.1 200 OK"
+2026-06-30 18:23:43,278 [INFO] mcp.server.lowlevel.server: Warning: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2026-06-30 18:25:40,502 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:25:42,650 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:25:47,004 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:25:49,758 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:25:51,848 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:25:57,077 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:26:53,042 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:26:54,904 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:26:56,630 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:26:59,137 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:27:01,001 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:27:05,490 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:27:07,325 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:27:09,362 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:27:13,621 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:27:16,642 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:27:19,349 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:27:22,854 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:27:26,085 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:27:32,814 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:27:34,515 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:27:36,215 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:27:47,419 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:31:32,748 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=77dbf4f8 max_workers=8
+2026-06-30 18:31:32,748 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=77dbf4f8 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-30 18:31:32,749 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting HTTP collection | host=oneview-01.mgmt.local
+2026-06-30 18:31:32,750 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting HTTP collection | acid=coms-01.cloud.local
+2026-06-30 18:31:32,751 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-30 18:31:32,751 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-30 18:31:32,754 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting HTTP collection | host=mock-network-manager.local
+2026-06-30 18:31:32,780 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting HTTP collection | host=mock-cloud-manager.local
+2026-06-30 18:31:32,801 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=50
+2026-06-30 18:31:32,802 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=77dbf4f8
+2026-06-30 18:31:33,202 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:31:33,210 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '61e24c3a-7269-4b8d-8405-0924660ed3e1', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 27.1, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 62.4, 'memory_utilization_percent': 17.2, 'power_draw_watts': 106.6}
+2026-06-30 18:31:33,210 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '2bd5fdaa-3b2b-49f6-8e65-bacc440ba2b5', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 39.8, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 23.6, 'memory_utilization_percent': 69.8, 'power_draw_watts': 122.2}
+2026-06-30 18:31:33,210 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=199 elapsed_ms=458
+2026-06-30 18:31:33,211 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=199 cycle=77dbf4f8
+2026-06-30 18:31:33,216 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8002/network/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:31:33,221 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] HTTP collection complete | host=mock-network-manager.local devices=193 elapsed_ms=466
+2026-06-30 18:31:33,222 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=193 cycle=77dbf4f8
+2026-06-30 18:31:33,280 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8003/api/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:31:33,284 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] HTTP collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=486
+2026-06-30 18:31:33,285 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=77dbf4f8
+2026-06-30 18:31:33,309 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/server-hardware "HTTP/1.1 200 OK"
+2026-06-30 18:31:33,396 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8001/compute-ops-mgmt/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:31:33,467 [INFO] resource_resolver.polling_engine: [Polling][COMS] HTTP collection complete | acid=coms-01.cloud.local devices=1006 elapsed_ms=715
+2026-06-30 18:31:33,469 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=1006 cycle=77dbf4f8
+2026-06-30 18:31:33,662 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/rack-managers "HTTP/1.1 200 OK"
+2026-06-30 18:31:33,683 [INFO] resource_resolver.polling_engine: [Polling][OneView] HTTP collection complete | host=oneview-01.mgmt.local devices=508 elapsed_ms=933
+2026-06-30 18:31:33,685 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=508 cycle=77dbf4f8
+2026-06-30 18:31:33,686 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=77dbf4f8 sources=6 collection_ms=938
+2026-06-30 18:31:33,741 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=77dbf4f8
+2026-06-30 18:31:33,797 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=77dbf4f8
+2026-06-30 18:31:33,845 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=77dbf4f8
+2026-06-30 18:31:33,889 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=77dbf4f8
+2026-06-30 18:31:34,133 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=77dbf4f8
+2026-06-30 18:31:34,259 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=77dbf4f8
+2026-06-30 18:31:34,259 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=77dbf4f8 total_ms=1511 success=6 failed=0
+2026-06-30 18:35:15,717 [INFO] db: [DB] Connection pool created: 2-10 connections to postgres@localhost:5432/hpe_agentic_ai
+2026-06-30 18:35:15,732 [INFO] db: [DB] Connection test successful
+2026-06-30 18:35:15,732 [INFO] resource_resolver.db_loader: [DB Loader] PostgreSQL registry verified and connected
+2026-06-30 18:35:17,801 [INFO] resource_resolver.cache: [Cache] Memurai connected at localhost:6379/db=0 ttl=900s
+2026-06-30 18:35:17,804 [INFO] resource_resolver.polling_engine: [Polling] Starting background polling thread (interval=600s)
+2026-06-30 18:35:17,857 [INFO] mcp.server.lowlevel.server: Processing request of type ListToolsRequest
+2026-06-30 18:35:17,860 [INFO] mcp.server.lowlevel.server: Processing request of type ListPromptsRequest
+2026-06-30 18:35:17,862 [INFO] mcp.server.lowlevel.server: Processing request of type ListResourcesRequest
+2026-06-30 18:35:22,806 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=8b56fd73 max_workers=8
+2026-06-30 18:35:22,806 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=8b56fd73 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-30 18:35:22,807 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting HTTP collection | host=oneview-01.mgmt.local
+2026-06-30 18:35:22,809 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting HTTP collection | acid=coms-01.cloud.local
+2026-06-30 18:35:22,810 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-30 18:35:22,812 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-30 18:35:22,813 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting HTTP collection | host=mock-network-manager.local
+2026-06-30 18:35:22,814 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting HTTP collection | host=mock-cloud-manager.local
+2026-06-30 18:35:22,861 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=49
+2026-06-30 18:35:22,861 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=8b56fd73
+2026-06-30 18:35:23,422 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8003/api/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:35:23,423 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:35:23,432 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '61e24c3a-7269-4b8d-8405-0924660ed3e1', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 27.1, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 62.4, 'memory_utilization_percent': 17.2, 'power_draw_watts': 106.6}
+2026-06-30 18:35:23,433 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] HTTP collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=618
+2026-06-30 18:35:23,434 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '2bd5fdaa-3b2b-49f6-8e65-bacc440ba2b5', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 39.8, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 23.6, 'memory_utilization_percent': 69.8, 'power_draw_watts': 122.2}
+2026-06-30 18:35:23,434 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8002/network/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:35:23,435 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=8b56fd73
+2026-06-30 18:35:23,436 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=199 elapsed_ms=623
+2026-06-30 18:35:23,437 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=199 cycle=8b56fd73
+2026-06-30 18:35:23,441 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] HTTP collection complete | host=mock-network-manager.local devices=193 elapsed_ms=627
+2026-06-30 18:35:23,441 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=193 cycle=8b56fd73
+2026-06-30 18:35:23,482 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/server-hardware "HTTP/1.1 200 OK"
+2026-06-30 18:35:23,552 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8001/compute-ops-mgmt/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:35:23,579 [INFO] resource_resolver.polling_engine: [Polling][COMS] HTTP collection complete | acid=coms-01.cloud.local devices=1006 elapsed_ms=769
+2026-06-30 18:35:23,583 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=1006 cycle=8b56fd73
+2026-06-30 18:35:23,880 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/rack-managers "HTTP/1.1 200 OK"
+2026-06-30 18:35:23,883 [INFO] resource_resolver.polling_engine: [Polling][OneView] HTTP collection complete | host=oneview-01.mgmt.local devices=508 elapsed_ms=1074
+2026-06-30 18:35:23,884 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=508 cycle=8b56fd73
+2026-06-30 18:35:23,886 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=8b56fd73 sources=6 collection_ms=1080
+2026-06-30 18:35:23,958 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=8b56fd73
+2026-06-30 18:35:24,015 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=8b56fd73
+2026-06-30 18:35:24,071 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=8b56fd73
+2026-06-30 18:35:24,124 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=8b56fd73
+2026-06-30 18:35:24,441 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=8b56fd73
+2026-06-30 18:35:24,579 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=8b56fd73
+2026-06-30 18:35:24,580 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=8b56fd73 total_ms=1774 success=6 failed=0
+2026-06-30 18:35:47,928 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:36:18,041 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:37:10,595 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:39:11,156 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:45:26,452 [INFO] db: [DB] Connection pool created: 2-10 connections to postgres@localhost:5432/hpe_agentic_ai
+2026-06-30 18:45:26,468 [INFO] db: [DB] Connection test successful
+2026-06-30 18:45:26,468 [INFO] resource_resolver.db_loader: [DB Loader] PostgreSQL registry verified and connected
+2026-06-30 18:45:28,532 [INFO] resource_resolver.cache: [Cache] Memurai connected at localhost:6379/db=0 ttl=900s
+2026-06-30 18:45:28,535 [INFO] resource_resolver.polling_engine: [Polling] Starting background polling thread (interval=600s)
+2026-06-30 18:45:28,584 [INFO] mcp.server.lowlevel.server: Processing request of type ListToolsRequest
+2026-06-30 18:45:28,586 [INFO] mcp.server.lowlevel.server: Processing request of type ListPromptsRequest
+2026-06-30 18:45:28,588 [INFO] mcp.server.lowlevel.server: Processing request of type ListResourcesRequest
+2026-06-30 18:45:33,537 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=5c5835d0 max_workers=8
+2026-06-30 18:45:33,538 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=5c5835d0 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-30 18:45:33,539 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting HTTP collection | host=oneview-01.mgmt.local
+2026-06-30 18:45:33,540 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting HTTP collection | acid=coms-01.cloud.local
+2026-06-30 18:45:33,541 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-30 18:45:33,542 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-30 18:45:33,544 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting HTTP collection | host=mock-network-manager.local
+2026-06-30 18:45:33,546 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting HTTP collection | host=mock-cloud-manager.local
+2026-06-30 18:45:33,553 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=11
+2026-06-30 18:45:33,554 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=5c5835d0
+2026-06-30 18:45:34,193 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:45:34,200 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '61e24c3a-7269-4b8d-8405-0924660ed3e1', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 27.1, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 62.4, 'memory_utilization_percent': 17.2, 'power_draw_watts': 106.6}
+2026-06-30 18:45:34,200 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '2bd5fdaa-3b2b-49f6-8e65-bacc440ba2b5', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 39.8, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 23.6, 'memory_utilization_percent': 69.8, 'power_draw_watts': 122.2}
+2026-06-30 18:45:34,200 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=199 elapsed_ms=656
+2026-06-30 18:45:34,201 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=199 cycle=5c5835d0
+2026-06-30 18:45:34,225 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8003/api/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:45:34,225 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8002/network/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:45:34,230 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] HTTP collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=684
+2026-06-30 18:45:34,231 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=5c5835d0
+2026-06-30 18:45:34,234 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] HTTP collection complete | host=mock-network-manager.local devices=193 elapsed_ms=689
+2026-06-30 18:45:34,235 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=193 cycle=5c5835d0
+2026-06-30 18:45:34,251 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/server-hardware "HTTP/1.1 200 OK"
+2026-06-30 18:45:34,354 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8001/compute-ops-mgmt/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:45:34,382 [INFO] resource_resolver.polling_engine: [Polling][COMS] HTTP collection complete | acid=coms-01.cloud.local devices=1006 elapsed_ms=841
+2026-06-30 18:45:34,385 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=1006 cycle=5c5835d0
+2026-06-30 18:45:34,620 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/rack-managers "HTTP/1.1 200 OK"
+2026-06-30 18:45:34,622 [INFO] resource_resolver.polling_engine: [Polling][OneView] HTTP collection complete | host=oneview-01.mgmt.local devices=508 elapsed_ms=1083
+2026-06-30 18:45:34,625 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=508 cycle=5c5835d0
+2026-06-30 18:45:34,627 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=5c5835d0 sources=6 collection_ms=1089
+2026-06-30 18:45:34,719 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=5c5835d0
+2026-06-30 18:45:34,796 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=5c5835d0
+2026-06-30 18:45:34,875 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=5c5835d0
+2026-06-30 18:45:34,972 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=5c5835d0
+2026-06-30 18:45:35,257 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=5c5835d0
+2026-06-30 18:45:35,452 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=5c5835d0
+2026-06-30 18:45:35,452 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=5c5835d0 total_ms=1915 success=6 failed=0
+2026-06-30 18:45:56,584 [INFO] mcp.server.lowlevel.server: Processing request of type CallToolRequest
+2026-06-30 18:55:35,455 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle started | cycle=c4bac4b7 max_workers=8
+2026-06-30 18:55:35,455 [INFO] resource_resolver.polling_engine: [Polling] Sources scheduled | cycle=c4bac4b7 count=6 sources=['oneview:oneview-01.mgmt.local', 'coms:coms-01.cloud.local', 'mock_server:mock-server-manager.local', 'mock_storage:mock-storage-manager.local', 'mock_network:mock-network-manager.local', 'mock_cloud:mock-cloud-manager.local']
+2026-06-30 18:55:35,456 [INFO] resource_resolver.polling_engine: [Polling][OneView] Starting HTTP collection | host=oneview-01.mgmt.local
+2026-06-30 18:55:35,457 [INFO] resource_resolver.polling_engine: [Polling][COMS] Starting HTTP collection | acid=coms-01.cloud.local
+2026-06-30 18:55:35,458 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Starting collection | host=mock-server-manager.local
+2026-06-30 18:55:35,459 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] Starting HTTP collection | host=mock-storage-manager.local
+2026-06-30 18:55:35,467 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] Starting HTTP collection | host=mock-network-manager.local
+2026-06-30 18:55:35,480 [INFO] resource_resolver.polling_engine: [Polling][Mock Server] Collection complete | host=mock-server-manager.local devices=200 elapsed_ms=20
+2026-06-30 18:55:35,480 [INFO] resource_resolver.polling_engine: [Polling][MOCK_SERVER] Collection succeeded | host=mock-server-manager.local devices=200 cycle=c4bac4b7
+2026-06-30 18:55:35,480 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] Starting HTTP collection | host=mock-cloud-manager.local
+2026-06-30 18:55:35,993 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8004/data-services/v1beta1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:55:36,004 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '61e24c3a-7269-4b8d-8405-0924660ed3e1', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 27.1, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 62.4, 'memory_utilization_percent': 17.2, 'power_draw_watts': 106.6}
+2026-06-30 18:55:36,004 [WARNING] resource_resolver.polling_engine: [Polling][Mock Storage] Skipping item with no serial_number | item={'id': '2bd5fdaa-3b2b-49f6-8e65-bacc440ba2b5', 'serial_number': None, 'ip_address': None, 'fqdn': None, 'management_source': None, 'source_host': None, 'source_device_id': None, 'device_type': None, 'last_seen': None, 'created_at': None, 'updated_at': None, 'name': None, 'firmware_version': None, 'total_capacity_gb': None, 'free_capacity_gb': None, 'temperature_celsius': 39.8, 'storage_capacity_gb': None, 'free_storage_gb': None, 'memory_gb': None, 'cpu_cores': None, 'health_status': None, 'power_state': None, 'active_vms': None, 'allocated_vcpu': None, 'allocated_ram_gb': None, 'ports': None, 'configured_vlans': None, 'cpu_utilization_percent': 23.6, 'memory_utilization_percent': 69.8, 'power_draw_watts': 122.2}
+2026-06-30 18:55:36,005 [INFO] resource_resolver.polling_engine: [Polling][Mock Storage] HTTP collection complete | host=mock-storage-manager.local devices=199 elapsed_ms=544
+2026-06-30 18:55:36,006 [INFO] resource_resolver.polling_engine: [Polling][MOCK_STORAGE] Collection succeeded | host=mock-storage-manager.local devices=199 cycle=c4bac4b7
+2026-06-30 18:55:36,022 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8002/network/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:55:36,026 [INFO] resource_resolver.polling_engine: [Polling][Mock Network] HTTP collection complete | host=mock-network-manager.local devices=193 elapsed_ms=558
+2026-06-30 18:55:36,026 [INFO] resource_resolver.polling_engine: [Polling][MOCK_NETWORK] Collection succeeded | host=mock-network-manager.local devices=193 cycle=c4bac4b7
+2026-06-30 18:55:36,043 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8003/api/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:55:36,047 [INFO] resource_resolver.polling_engine: [Polling][Mock Cloud] HTTP collection complete | host=mock-cloud-manager.local devices=200 elapsed_ms=566
+2026-06-30 18:55:36,047 [INFO] resource_resolver.polling_engine: [Polling][MOCK_CLOUD] Collection succeeded | host=mock-cloud-manager.local devices=200 cycle=c4bac4b7
+2026-06-30 18:55:36,082 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/server-hardware "HTTP/1.1 200 OK"
+2026-06-30 18:55:36,129 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8001/compute-ops-mgmt/v1/devices "HTTP/1.1 200 OK"
+2026-06-30 18:55:36,149 [INFO] resource_resolver.polling_engine: [Polling][COMS] HTTP collection complete | acid=coms-01.cloud.local devices=1006 elapsed_ms=690
+2026-06-30 18:55:36,151 [INFO] resource_resolver.polling_engine: [Polling][COMS] Collection succeeded | host=coms-01.cloud.local devices=1006 cycle=c4bac4b7
+2026-06-30 18:55:36,403 [INFO] httpx: HTTP Request: GET http://127.0.0.1:8000/rest/rack-managers "HTTP/1.1 200 OK"
+2026-06-30 18:55:36,405 [INFO] resource_resolver.polling_engine: [Polling][OneView] HTTP collection complete | host=oneview-01.mgmt.local devices=508 elapsed_ms=948
+2026-06-30 18:55:36,407 [INFO] resource_resolver.polling_engine: [Polling][ONEVIEW] Collection succeeded | host=oneview-01.mgmt.local devices=508 cycle=c4bac4b7
+2026-06-30 18:55:36,408 [INFO] resource_resolver.polling_engine: [Polling] Concurrent collection complete | cycle=c4bac4b7 sources=6 collection_ms=953
+2026-06-30 18:55:36,460 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_server host=mock-server-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=c4bac4b7
+2026-06-30 18:55:36,518 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_storage host=mock-storage-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=c4bac4b7
+2026-06-30 18:55:36,570 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_network host=mock-network-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=c4bac4b7
+2026-06-30 18:55:36,619 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=mock_cloud host=mock-cloud-manager.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=c4bac4b7
+2026-06-30 18:55:36,880 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=coms host=coms-01.cloud.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=c4bac4b7
+2026-06-30 18:55:37,007 [ERROR] resource_resolver.polling_engine: [Polling] Sync/warm failed | source=oneview host=oneview-01.mgmt.local error=column "poll_failures" does not exist
+LINE 6: ...e_host, source_device_id, device_type, last_seen, poll_failu...
+                                                             ^
+ cycle=c4bac4b7
+2026-06-30 18:55:37,007 [INFO] resource_resolver.polling_engine: [Polling] Poll cycle complete | cycle=c4bac4b7 total_ms=1552 success=6 failed=0

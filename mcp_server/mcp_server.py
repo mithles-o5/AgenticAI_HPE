@@ -84,6 +84,15 @@ sys.path.insert(0, ENGINE_DIR)
 
 # Mock database disabled by user request
 
+from dotenv import load_dotenv
+load_dotenv(os.path.join(RESOLVER_DIR, ".env"))
+
+PG_HOST = os.environ.get("DB_HOST", "localhost")
+PG_PORT = os.environ.get("DB_PORT", "5432")
+PG_NAME = os.environ.get("DB_NAME", "hpe_agentic_ai")
+PG_USER = os.environ.get("DB_USER", "postgres")
+PG_PASSWORD = os.environ.get("DB_PASSWORD", "Mithles")
+
 import psycopg2
 
 
@@ -618,6 +627,10 @@ async def _execute_agent_command(
             normalized_category = "aps"
             resource_type = "access_point"
             provider_or_protocol = "mock_network"
+        elif "vm" in ident_lower or "virtual" in ident_lower or "cloud" in ident_lower or "instance" in ident_lower or "compute" in ident_lower:
+            normalized_category = "virtual-machines"
+            resource_type = "virtual_machine"
+            provider_or_protocol = "mock_cloud"
         else:
             normalized_category = "unknown"
             resource_type = "unknown"
@@ -637,7 +650,7 @@ async def _execute_agent_command(
         # If authorized, query Postgres CMDB
         try:
             import psycopg2
-            conn = psycopg2.connect(dbname="hpe_agentic_ai", user="postgres", password="mithles", host="localhost")
+            conn = psycopg2.connect(dbname=PG_NAME, user=PG_USER, password=PG_PASSWORD, host=PG_HOST, port=PG_PORT)
             with conn.cursor() as cur:
                 cur.execute(
                     "SELECT serial_number, ip_address, device_type, management_source FROM devices WHERE device_type = %s",
@@ -850,7 +863,7 @@ async def _execute_agent_command(
         # Insert into Postgres CMDB
         try:
             import psycopg2
-            conn = psycopg2.connect(dbname="hpe_agentic_ai", user="postgres", password="mithles", host="localhost")
+            conn = psycopg2.connect(dbname=PG_NAME, user=PG_USER, password=PG_PASSWORD, host=PG_HOST, port=PG_PORT)
             with conn.cursor() as cur:
                 cur.execute(
                     """
@@ -1371,7 +1384,7 @@ async def _execute_agent_command(
         # Delete from PostgreSQL CMDB
         try:
             import psycopg2
-            conn = psycopg2.connect(dbname="hpe_agentic_ai", user="postgres", password="mithles", host="localhost")
+            conn = psycopg2.connect(dbname=PG_NAME, user=PG_USER, password=PG_PASSWORD, host=PG_HOST, port=PG_PORT)
             with conn.cursor() as cur:
                 cur.execute("DELETE FROM devices WHERE serial_number = %s", (identifier,))
             conn.commit()
