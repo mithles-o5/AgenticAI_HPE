@@ -17,12 +17,19 @@ class MockAdapter(BaseAdapter):
             url = f"{base_url}{api_path}".format(id=resource_id, systemId=resource_id, hostId=resource_id)
             async with httpx.AsyncClient() as client:
                 response = await client.request(method, url, json=payload, timeout=10.0)
+                response.raise_for_status()
                 try:
                     return response.json()
                 except:
                     return {"status": "success", "status_code": response.status_code, "text": response.text}
+        except httpx.HTTPStatusError as e:
+            try:
+                err_data = e.response.json()
+            except:
+                err_data = e.response.text
+            raise Exception(f"HTTP Error {e.response.status_code}: {err_data}")
         except Exception as e:
-            return {"result": "failed", "detail": f"Dynamic mock API call failed: {e}"}
+            raise Exception(f"Dynamic mock API call failed: {e}")
 
     async def health_check(self, resource_type: str, resource_id: str, credentials: dict, parameters: dict) -> dict:
         api_path = parameters.get("api_path")

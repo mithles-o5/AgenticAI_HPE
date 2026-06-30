@@ -542,6 +542,9 @@ async def _execute_agent_command(
         return str(e)
 
     import json
+    import os
+    with open(r"c:\AgenticAI_HPE\scratch_query_log.txt", "a", encoding="utf-8") as f:
+        f.write("RAW QUERY RECEIVED:\n" + repr(query) + "\n\n")
 
     # ── Canonical action normalizer — maps any LLM/user alias to the canonical action verb
     _CANONICAL_ACTIONS: dict = {
@@ -564,13 +567,41 @@ async def _execute_agent_command(
     try:
         # If the LLM passes a raw JSON string like '{"identifier": "gl-ns-008", ...}'
         parsed = json.loads(query)
-        if isinstance(parsed, dict) and "identifier" in parsed:
+        if isinstance(parsed, dict):
+            # Extract parameters (either from 'attributes' dict or all other flat keys)
+            params = parsed.get("attributes", {})
+            if not params:
+                params = {k: v for k, v in parsed.items() if k not in ["action", "category", "identifier", "name", "id", "serial_number", "resource_type"]}
+            
+            # Find a valid identifier
+            ident = None
+            for key in ["identifier", "name", "id", "serial_number"]:
+                val = parsed.get(key)
+                if isinstance(val, str):
+                    if val.strip().startswith("{"):
+                        try:
+                            inner = json.loads(val)
+                            if isinstance(inner, dict):
+                                val = inner.get("identifier") or inner.get("name") or inner.get("id")
+                                if "attributes" in inner:
+                                    params.update(inner["attributes"])
+                        except json.JSONDecodeError:
+                            val = None # Skip truncated JSON strings
+                    if val and "{" not in val and '"' not in val:
+                        ident = val
+                        break
+            
+            if not ident:
+                ident = "unknown_device"
+            
             raw_action = parsed.get("action", "STATUS").upper().strip()
             canonical_action = _CANONICAL_ACTIONS.get(raw_action, raw_action)
+            
             tasks = [Task(
                 action=canonical_action,
                 category=parsed.get("category", "Operational"),
-                identifier=parsed.get("identifier")
+                identifier=ident,
+                params=params
             )]
     except json.JSONDecodeError:
         pass

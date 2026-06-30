@@ -7309,8 +7309,27 @@ def post_redfish_v1_systems(payload: dict = None):
     merged["updated_at"]       = now
 
     db.upsert_item(collection_path, item_id, merged)
+    
+    # Auto-create linked manager and chassis for Redfish compliance
+    db.upsert_item("/redfish/v1/managers", item_id, {
+        "id": item_id,
+        "UUID": item_id,
+        "name": f"{hostname}-ilo",
+        "source_device_id": pg_source_device_id or item_id,
+        "@odata.id": f"/redfish/v1/Managers/{item_id}",
+        "Links": {"ManagerForServers": [{"@odata.id": f"/redfish/v1/systems/{item_id}"}]}
+    })
+    db.upsert_item("/redfish/v1/chassis", item_id, {
+        "id": item_id,
+        "UUID": item_id,
+        "name": f"{hostname}-chassis",
+        "SerialNumber": name or item_id,
+        "source_device_id": pg_source_device_id or item_id,
+        "@odata.id": f"/redfish/v1/Chassis/{item_id}",
+        "Links": {"ComputerSystems": [{"@odata.id": f"/redfish/v1/systems/{item_id}"}]}
+    })
+    
     return merged
-
 
 @app.api_route("/redfish/v1/systems/{system_id}", methods=["GET"])
 def get_redfish_v1_systems_system_id(system_id: str):
@@ -7359,6 +7378,9 @@ def delete_redfish_v1_systems_system_id(system_id: str):
     collection_path = f"/redfish/v1/systems"
     deleted = db.delete_item(collection_path, system_id)
     if deleted:
+        # Auto-delete linked manager and chassis
+        db.delete_item("/redfish/v1/managers", system_id)
+        db.delete_item("/redfish/v1/chassis", system_id)
         return {"message": "Deleted successfully", "id": system_id, "item": deleted}
     # If not in dynamic store, try static check (simulated deletion)
     static_val = db.get_static("delete_redfish_v1_systems_sysget_redfish_v1_systems_system_id")

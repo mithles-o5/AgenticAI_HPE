@@ -222,7 +222,10 @@ class AgentDispatcher:
         agent_key = agent_name.replace("-agent", "").lower().strip()
 
         # Resolve the correct agent action for this domain
-        agent_action = self._resolve_action(agent_key, query_action)
+        if agent_key == "server":
+            agent_action = query_action
+        else:
+            agent_action = self._resolve_action(agent_key, query_action)
 
         # Build payload key name — cloud/storage/onprem use "provider"; network uses "protocol"
         if agent_key == "network":

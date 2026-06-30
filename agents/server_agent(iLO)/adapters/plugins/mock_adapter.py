@@ -14,12 +14,19 @@ class MockAdapter(ServerAdapter):
 
             url = f"{base_url}{api_path}".format(id=resource_id, systemId=resource_id, hostId=resource_id)
             response = httpx.request(method, url, json=payload, timeout=10.0)
+            response.raise_for_status()
             try:
                 return response.json()
             except:
                 return {"status": "success", "status_code": response.status_code, "text": response.text}
+        except httpx.HTTPStatusError as e:
+            try:
+                err_data = e.response.json()
+            except:
+                err_data = e.response.text
+            raise Exception(f"HTTP Error {e.response.status_code}: {err_data}")
         except Exception as e:
-            return None
+            raise Exception(f"Dynamic mock API call failed: {e}")
 
     def fetch_system_metrics(self, resource_id: str, parameters: Dict[str, Any] = None) -> Dict[str, Any]:
         parameters = parameters or {}
