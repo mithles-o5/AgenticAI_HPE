@@ -60,7 +60,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="Server Agent",
-    description="Physical/bare-metal server management microservice via Redfish, IPMI, and iLO",
+    description="Physical/bare-metal server management microservice via Redfish and iLO",
     version="1.0.0",
     lifespan=lifespan
 )

@@ -38,7 +38,7 @@ class TaskPlanner:
         if resolver_dir not in sys.path:
             sys.path.insert(0, resolver_dir)
             
-        from query_agent import QueryAgent
+        from query_agent import QueryAgent, parse_query_hybrid
 
         conjunctions = [r"\band then\b", r"\bthen\b", r"\band\b", r","]
         
@@ -53,7 +53,7 @@ class TaskPlanner:
         tasks = []
         previous_task_id = None
         for clause in clauses:
-            parsed = QueryAgent.parse_query(clause)
+            parsed = parse_query_hybrid(clause)
             if not parsed.get("identifier"):
                 continue
                 

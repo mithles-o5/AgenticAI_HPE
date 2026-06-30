@@ -25,7 +25,7 @@ from db_loader import load_registry_from_db
 from db_queries import DeviceQueries, get_statistics
 from errors import ResolverError, UnsupportedManagementSourceError, InvalidCMDBRecordError
 from resolver import ResourceResolver
-from query_agent import QueryAgent
+from query_agent import QueryAgent, parse_query_hybrid
 
 
 logger.info("Starting resource resolver with PostgreSQL registry and Memurai cache")
@@ -41,6 +41,8 @@ def resolve_resource(
     query: str,
     identifier_type: str = "",
     requested_by: str = "mcp-orchestrator",
+    user_identity: str = "",
+    user_role: str = "",
 ) -> str:
     """
     Resolve a natural language query for a device IP, serial number, or FQDN 
@@ -49,7 +51,7 @@ def resolve_resource(
     identifier = query
     try:
         # 1. NLP preprocessing and classification belongs ONLY to QueryAgent
-        parsed_payload = QueryAgent.parse_query(query)
+        parsed_payload = parse_query_hybrid(query)
         identifier = parsed_payload.get("identifier", query)
 
         # 2. Resource Resolver handles deterministic routing resolution
@@ -57,6 +59,8 @@ def resolve_resource(
             parsed_payload=parsed_payload,
             identifier_type=identifier_type or None,
             requested_by=requested_by,
+            user_identity=user_identity or None,
+            user_role=user_role or None,
         )
         payload = {"status": "resolved", **result.to_dict()}
         return json.dumps(payload, indent=2)

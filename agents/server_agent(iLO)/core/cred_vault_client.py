@@ -27,9 +27,10 @@ class CredVaultClient:
             logger.error(f"Failed to fetch secret '{ref}' from Cred Vault: {e}")
             # Return realistic mock credentials if failed during local testing / demo
             return {
-                "host": "127.0.0.1",
+                "host": "127.0.0.1:8010",
                 "username": "admin",
                 "password": "password",
                 "verify_ssl": False,
                 "interface": "lanplus"
             }
+

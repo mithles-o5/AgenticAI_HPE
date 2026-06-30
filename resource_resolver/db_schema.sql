@@ -29,6 +29,8 @@ CREATE TABLE IF NOT EXISTS routing_audit (
 	cache_hit BOOLEAN NOT NULL,
 	resolution_ms INTEGER,
 	requested_by VARCHAR(128),
+	user_identity VARCHAR(255),
+	user_role VARCHAR(128),
 	timestamp TIMESTAMPTZ DEFAULT NOW()
 );
 

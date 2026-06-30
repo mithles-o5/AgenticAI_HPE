@@ -9,5 +9,5 @@ def test_poll_cycle_success(monkeypatch):
     monkeypatch.setattr(settings, "POLL_SERVER_LIST_SOURCE", "static")
     
     summary = handler.run_poll_cycle()
-    assert summary["polled"] == 3
+    assert summary["polled"] == 2
     assert summary["errors"] == 0

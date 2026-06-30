@@ -10,16 +10,27 @@ class ResourceType(str, Enum):
     EVENT_LOG = "event_log"
 
 class Action(str, Enum):
+    # Backward compatibility
     FETCH_METRICS = "fetch_metrics"
     EXECUTE_ACTION = "execute_action"
     HEALTH_CHECK = "health_check"
     DISCOVER_INVENTORY = "discover_inventory"
     FETCH_EVENT_LOG = "fetch_event_log"
     SYNC_CMDB = "sync_cmdb"
+    
+    # Dynamic actions
+    STATUS = "STATUS"
+    FETCH_SENSORS = "FETCH_SENSORS"
+    CLEAR_EVENT_LOG = "CLEAR_EVENT_LOG"
+    MOUNT_VIRTUAL_MEDIA = "MOUNT_VIRTUAL_MEDIA"
+    ON = "ON"
+    OFF = "OFF"
+    RESET = "RESET"
+    COLD_BOOT = "COLD_BOOT"
+    UPDATE = "UPDATE"
 
 class Provider(str, Enum):
     REDFISH = "redfish"
-    IPMI = "ipmi"
     ILO = "ilo"
     DEFAULT = "default"
 
@@ -31,6 +42,7 @@ class TaskRequest(BaseModel):
     resource_id: str
     region: Optional[str] = None
     provider: str = "default"
-    action: Action
+    action: Action | str
     parameters: dict = Field(default_factory=dict)
     credentials_ref: Optional[str] = "mock"
+

@@ -33,6 +33,7 @@ import logging
 import httpx
 import time
 import uuid
+import re
 from mcp.server.fastmcp import FastMCP
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -106,10 +107,11 @@ from authorization.models import TokenPayload, Resource, Context  # noqa: E402
 from resource_resolver.resolver    import ResourceResolver   # noqa: E402
 from resource_resolver.cache       import ResourceCache     # noqa: E402
 from resource_resolver.db_loader   import load_registry_from_db  # noqa: E402
-from resource_resolver.query_agent import QueryAgent        # noqa: E402
+from resource_resolver.query_agent import QueryAgent, parse_query_hybrid        # noqa: E402
 from task_planner.planner     import TaskPlanner, Task  # noqa: E402
 from resource_resolver.errors      import ResolverError     # noqa: E402
 from enum        import Enum              # noqa: E402
+
 
 # Execution engine / Agent dispatcher
 from execution_engine import AgentDispatcher  # noqa: E402
@@ -496,6 +498,11 @@ def logout() -> str:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Dynamic Action Handling System Removed (Decoupled to Server Agent)
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Tools 5-7 — OASF Agent Microservices
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -541,7 +548,8 @@ async def _execute_agent_command(
             tasks = [Task(
                 action=parsed.get("action", "STATUS"),
                 category=parsed.get("category", "Operational"),
-                identifier=parsed.get("identifier")
+                identifier=parsed.get("identifier"),
+                params=parsed.get("attributes", {})
             )]
     except json.JSONDecodeError:
         pass
@@ -549,11 +557,12 @@ async def _execute_agent_command(
     if not tasks:
         tasks = TaskPlanner.decompose_instruction(query)
         if not tasks:
-            parsed = QueryAgent.parse_query(query)
+            parsed = parse_query_hybrid(query)
             tasks = [Task(
                 action=parsed.get("action", "STATUS"),
                 category=parsed.get("category", "Operational"),
-                identifier=parsed.get("identifier") or query.strip()
+                identifier=parsed.get("identifier") or query.strip(),
+                params=parsed.get("attributes", {})
             )]
 
     task = tasks[0]
@@ -615,7 +624,7 @@ async def _execute_agent_command(
         # If authorized, query Postgres CMDB
         try:
             import psycopg2
-            conn = psycopg2.connect(dbname="hpe_agentic_ai", user="postgres", password="Mithles", host="localhost")
+            conn = psycopg2.connect(dbname="hpe_agentic_ai", user="postgres", password="mithles", host="localhost")
             with conn.cursor() as cur:
                 cur.execute(
                     "SELECT serial_number, ip_address, device_type, management_source FROM devices WHERE device_type = %s",
@@ -643,11 +652,15 @@ async def _execute_agent_command(
     api_path = ""
     resolution = None
     try:
-        resolution = _resolver.resolve({
-            "identifier": identifier,
-            "action": action,
-            "category": task.category
-        })
+        resolution = _resolver.resolve(
+            parsed_payload={
+                "identifier": identifier,
+                "action": action,
+                "category": task.category
+            },
+            user_identity=email,
+            user_role=role
+        )
         device = resolution.device
         api_path = resolution.api_endpoint
     except Exception as e:
@@ -659,11 +672,15 @@ async def _execute_agent_command(
         try:
             last_target = recall(SESSION_ID, "last_target_id")
             if last_target:
-                resolution = _resolver.resolve({
-                    "identifier": last_target,
-                    "action": action,
-                    "category": task.category
-                })
+                resolution = _resolver.resolve(
+                    parsed_payload={
+                        "identifier": last_target,
+                        "action": action,
+                        "category": task.category
+                    },
+                    user_identity=email,
+                    user_role=role
+                )
                 device = resolution.device
                 api_path = resolution.api_endpoint
                 if device:
@@ -683,11 +700,15 @@ async def _execute_agent_command(
             print(f"Warning: Failed to invalidate cache on creation: {e}")
         # Re-resolve with empty cache so device is loaded properly from DB if it exists
         try:
-            resolution = _resolver.resolve({
-                "identifier": identifier,
-                "action": action,
-                "category": "Operational"
-            })
+            resolution = _resolver.resolve(
+                parsed_payload={
+                    "identifier": identifier,
+                    "action": action,
+                    "category": "Operational"
+                },
+                user_identity=email,
+                user_role=role
+            )
             device = resolution.device
             api_path = resolution.api_endpoint
         except Exception:
@@ -752,7 +773,13 @@ async def _execute_agent_command(
         else:
             source_device_id_uuid = str(uuid.uuid4())
             query_lower = query.lower()
-            if "storage" in query_lower or "volume" in query_lower or "pool" in query_lower or "array" in query_lower:
+            ident_lower = identifier.lower()
+            if "server" in query_lower or "compute" in query_lower or "hardware" in query_lower or "node" in ident_lower:
+                agent_type = "server"
+                provider_or_protocol = "mock_server"
+                api_path = "/redfish/v1/systems"
+                resource_type = "server"
+            elif "storage" in query_lower or "volume" in query_lower or "pool" in query_lower or "array" in query_lower:
                 agent_type = "storage"
                 provider_or_protocol = "mock_storage"
                 api_path = "/data-services/v1beta1/devices"
@@ -762,11 +789,6 @@ async def _execute_agent_command(
                     resource_type = "storage_pool"
                 else:
                     resource_type = "storage_system"
-            elif "server" in query_lower or "compute" in query_lower or "hardware" in query_lower:
-                agent_type = "server"
-                provider_or_protocol = "mock_server"
-                api_path = "/rest/server-hardware"
-                resource_type = "server"
             elif "network" in query_lower or "switch" in query_lower or "vlan" in query_lower or "port" in query_lower:
                 agent_type = "network"
                 provider_or_protocol = "mock_network"
@@ -780,7 +802,7 @@ async def _execute_agent_command(
             else:
                 agent_type = "server"
                 provider_or_protocol = "mock_server"
-                api_path = "/rest/server-hardware"
+                api_path = "/redfish/v1/systems"
                 resource_type = "server"
 
         now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
@@ -811,12 +833,20 @@ async def _execute_agent_command(
         elif provider_or_protocol == "mock_cloud":
             creation_payload["ip_address"] = "10.14.99.5"
 
-        payload_to_dispatch = creation_payload
+        # Merge dynamically parsed attributes from the user's request
+        if task.params:
+            if isinstance(task.params, list):
+                for item in task.params:
+                    if isinstance(item, dict) and "key" in item and "value" in item:
+                        creation_payload[item["key"]] = item["value"]
+            elif isinstance(task.params, dict):
+                creation_payload.update(task.params)
 
+        payload_to_dispatch = creation_payload
         # Insert into Postgres CMDB
         try:
             import psycopg2
-            conn = psycopg2.connect(dbname="hpe_agentic_ai", user="postgres", password="Mithles", host="localhost")
+            conn = psycopg2.connect(dbname="hpe_agentic_ai", user="postgres", password="mithles", host="localhost")
             with conn.cursor() as cur:
                 cur.execute(
                     """
@@ -852,11 +882,15 @@ async def _execute_agent_command(
             
             # Now try to resolve again so device object gets loaded
             try:
-                resolution = _resolver.resolve({
-                    "identifier": identifier,
-                    "action": action,
-                    "category": "Operational"
-                })
+                resolution = _resolver.resolve(
+                    parsed_payload={
+                        "identifier": identifier,
+                        "action": action,
+                        "category": "Operational"
+                    },
+                    user_identity=email,
+                    user_role=role
+                )
                 device = resolution.device
                 api_path = resolution.api_endpoint
             except Exception:
@@ -890,7 +924,7 @@ async def _execute_agent_command(
 
     # Use resolver-derived routing metadata, management source, and credentials ref.
     resolved_provider = provider_or_protocol
-    resolved_credentials_ref = resolution.credential_ref
+    resolved_credentials_ref = resolution.credential_ref if resolution else "mock"
 
 
     if device:
@@ -992,11 +1026,15 @@ async def _execute_agent_command(
     api_path_step3 = ""
     resolution = None
     try:
-        resolution = _resolver.resolve({
-            "identifier": identifier,
-            "action": action,
-            "category": task.category
-        })
+        resolution = _resolver.resolve(
+            parsed_payload={
+                "identifier": identifier,
+                "action": action,
+                "category": task.category
+            },
+            user_identity=email,
+            user_role=role
+        )
         device = resolution.device
         api_path_step3 = resolution.api_endpoint
     except Exception:
@@ -1007,11 +1045,15 @@ async def _execute_agent_command(
         try:
             last_target = recall(SESSION_ID, "last_target_id")
             if last_target:
-                resolution = _resolver.resolve({
-                    "identifier": last_target,
-                    "action": action,
-                    "category": task.category
-                })
+                resolution = _resolver.resolve(
+                    parsed_payload={
+                        "identifier": last_target,
+                        "action": action,
+                        "category": task.category
+                    },
+                    user_identity=email,
+                    user_role=role
+                )
                 device = resolution.device
                 api_path_step3 = resolution.api_endpoint
                 if device:
@@ -1025,7 +1067,7 @@ async def _execute_agent_command(
     # Use resolver-derived routing metadata, management source, and credentials ref.
     if device:
         resolved_provider = device.management_source
-        resolved_credentials_ref = resolution.credential_ref
+        resolved_credentials_ref = resolution.credential_ref if resolution else "mock"
         if api_path_step3:
             api_path = api_path_step3
     else:
@@ -1035,77 +1077,87 @@ async def _execute_agent_command(
     if is_creation or resolved_provider in {"mock_storage", "mock_network", "mock_server", "mock_cloud", "oneview"}:
         if resolved_provider == "mock_storage":
             api_path = "/data-services/v1beta1/devices/{id}" if not is_creation else "/data-services/v1beta1/devices"
-        elif resolved_provider in {"mock_server", "oneview"}:
+        elif resolved_provider == "oneview":
             api_path = "/rest/server-hardware/{id}" if not is_creation else "/rest/server-hardware"
+        elif resolved_provider == "mock_server":
+            api_path = "/redfish/v1/systems/{id}" if not is_creation else "/redfish/v1/systems"
         elif resolved_provider == "mock_network":
             api_path = "/network/v1/devices/{id}" if not is_creation else "/network/v1/devices"
         elif resolved_provider == "mock_cloud":
             api_path = "/api/v1/devices/{id}" if not is_creation else "/api/v1/devices"
 
-    # Agent task payload mapping
-    agent_task_action = action
-    if action == "STATUS":
-        if normalized_category in {"storage-systems", "storage-pools", "storage-volumes", "fc-sans"}:
-            agent_task_action = "health_check" if (resource_type or "").lower() == "snapshot" else "fetch_capacity_and_performance"
-        else:
-            agent_task_action = "fetch_metrics"
+    # ── Dynamic Intent Router ─────────────────────────────────────────────────
+    # Determines agent action, api_path, resource_type, and extra parameters
+    # dynamically based on the semantic action parsed from the query.
+    # MockAdapter is strictly dynamic — it needs api_path + action_type in params.
 
-    # ── UPDATE (PATCH) — handled directly via mock REST API ────────────────
+    _MOCK_BASE_URLS = {
+        "mock_storage": os.getenv("MOCK_STORAGE_URL", "http://127.0.0.1:8004"),
+        "mock_server":  os.getenv("MOCK_SERVER_URL",  "http://127.0.0.1:8010"),
+        "mock_network": os.getenv("MOCK_NETWORK_URL", "http://127.0.0.1:8002"),
+        "mock_cloud":   os.getenv("MOCK_CLOUD_URL",   "http://127.0.0.1:8003"),
+        "oneview":      os.getenv("HPE_OV_URL",       "http://127.0.0.1:8000"),
+    }
+
+    src = resolved_provider or ""
+    dev_id = (device.source_device_id if device else None) or identifier
+
+    def _server_api(path_template: str) -> str:
+        """Build full mock server URL from a Redfish path template."""
+        base = _MOCK_BASE_URLS.get(src, "http://127.0.0.1:8010")
+        return f"{base}{path_template.format(id=dev_id)}"
+
+    # ── UPDATE (PATCH) — direct HTTP PATCH to mock server ────────────────────
     if action == "UPDATE":
-        from query_agent import QueryAgent as _QA  # RESOLVER_DIR already in sys.path
+        from query_agent import QueryAgent as _QA
         update_payload = _QA.parse_update_payload(query)
         if not update_payload:
             return (
                 f"Could not extract attribute/value from query.\n"
                 f"Try: \"change the temperature of <device> to <value>\"\n"
-                f"  or: \"set health_status of <device> to DEGRADED\""
+                f"  or: \"set health_status of <device> to DEGRADED\"\n"
+                f"  or: \"configure <device> to boot from PXE\""
             )
-
         attribute = update_payload["attribute"]
         value     = update_payload["value"]
-
-        # Route to the correct mock server based on device source
-        _MOCK_URLS = {
-            "mock_storage": os.getenv("MOCK_STORAGE_URL", "http://127.0.0.1:8004"),
-            "mock_server":  os.getenv("MOCK_SERVER_URL",  "http://127.0.0.1:8000"),
-            "mock_network": os.getenv("MOCK_NETWORK_URL", "http://127.0.0.1:8002"),
-            "mock_cloud":   os.getenv("MOCK_CLOUD_URL",   "http://127.0.0.1:8003"),
-            "oneview":      os.getenv("HPE_OV_URL",       "http://127.0.0.1:8000"),
-        }
-
-        if device and device.management_source in _MOCK_URLS:
-            base_url = _MOCK_URLS[device.management_source]
-            # Determine per-source PATCH path
-            src = device.management_source
+        if device and src in _MOCK_BASE_URLS:
+            base_url = _MOCK_BASE_URLS[src]
             if src == "mock_storage":
-                patch_url = f"{base_url}/data-services/v1beta1/devices/{device.source_device_id or identifier}"
-            elif src in {"mock_server", "oneview"}:
-                patch_url = f"{base_url}/rest/server-hardware/{device.source_device_id or identifier}"
+                patch_url = f"{base_url}/data-services/v1beta1/devices/{dev_id}"
+            elif src == "oneview":
+                patch_url = f"{base_url}/rest/server-hardware/{dev_id}"
+            elif src == "mock_server":
+                patch_url = f"{base_url}/redfish/v1/systems/{dev_id}"
             elif src == "mock_network":
-                patch_url = f"{base_url}/network/v1/devices/{device.source_device_id or identifier}"
+                patch_url = f"{base_url}/network/v1/devices/{dev_id}"
             elif src == "mock_cloud":
-                patch_url = f"{base_url}/api/v1/devices/{device.source_device_id or identifier}"
+                patch_url = f"{base_url}/api/v1/devices/{dev_id}"
             else:
                 patch_url = ""
-
             if patch_url:
                 try:
                     async with httpx.AsyncClient() as _client:
-                        patch_resp = await _client.patch(
-                            patch_url,
-                            json={attribute: value},
-                            timeout=10.0,
-                        )
+                        patch_resp = await _client.patch(patch_url, json={attribute: value}, timeout=10.0)
                     if patch_resp.is_success:
                         updated = patch_resp.json()
+                        if isinstance(value, dict):
+                            value_display = ", ".join(f"{k}={v}" for k, v in value.items())
+                            confirmed_raw = updated.get(attribute, value)
+                            confirmed_display = ", ".join(f"{k}={v}" for k, v in confirmed_raw.items()) if isinstance(confirmed_raw, dict) else str(confirmed_raw)
+                        else:
+                            value_display = str(value)
+                            confirmed_display = str(updated.get(attribute, value))
                         return (
-                            f"Update successful\n"
+                            f"✅ Update successful\n"
                             f"User       : {email} (Role: {role})\n"
                             f"Device     : {identifier}\n"
-                            f"Provider   : {device.management_source}\n"
+                            f"Provider   : {src}\n"
+                            f"IP Address : {getattr(device, 'ip_address', 'N/A')}\n"
+                            f"Source Host: {getattr(device, 'source_host', 'N/A')}\n"
                             f"Attribute  : {attribute}\n"
-                            f"New Value  : {value}\n"
-                            f"Confirmed  : {updated.get(attribute, value)}\n"
+                            f"New Value  : {value_display}\n"
+                            f"PATCH URL  : {patch_url}\n"
+                            f"Confirmed  : {confirmed_display}\n"
                         )
                     else:
                         return (
@@ -1116,35 +1168,41 @@ async def _execute_agent_command(
                 except Exception as patch_err:
                     return f"Update request failed: {patch_err}"
             else:
-                return f"No PATCH URL configured for provider '{device.management_source}'."
+                return f"No PATCH URL configured for provider '{src}'."
         else:
             return (
                 f"Device '{identifier}' not found in CMDB or provider not supported for updates.\n"
-                f"Supported providers: {list(_MOCK_URLS.keys())}"
+                f"Supported providers: {list(_MOCK_BASE_URLS.keys())}"
             )
     
+    # ── Build dispatch_params ────────────────────────────────────────────────
     dispatch_params = {
-        "api_path": api_path,
-        "user_email": email
-    } if api_path else {"user_email": email}
-
-    if device:
-        dispatch_params["serial_number"] = device.serial_number
-        dispatch_params["management_source"] = device.management_source
-
-    if resolution and hasattr(resolution, "http_method"):
+        "user_email": email,
+        "query": query
+    }
+    if api_path:
+        dispatch_params["api_path"] = api_path
+        
+    if resolution and hasattr(resolution, "http_method") and resolution.http_method:
         dispatch_params["http_method"] = resolution.http_method
-    
+
+    # Override api_path with resolver-derived endpoint if better
+    if api_path_step3:
+        dispatch_params["api_path"] = api_path_step3
+
+    agent_task_action = action
+
     is_deletion = action in {"DELETE", "DEALLOCATE"}
     if is_deletion:
         dispatch_params["http_method"] = "DELETE"
-        
+
     if payload_to_dispatch:
         dispatch_params["payload"] = payload_to_dispatch
         dispatch_params["http_method"] = "POST"
-        
+
     loop = asyncio.get_event_loop()
     result = await loop.run_in_executor(
+
         None,
         lambda: _dispatcher.dispatch(
             agent_type=agent_type,
@@ -1162,14 +1220,14 @@ async def _execute_agent_command(
     status_level = result.get("status_level", "")
     errors       = result.get("errors", [])
     insights     = result.get("insights", [])
-    metrics      = result.get("metrics", {})
+    metrics      = dict(result.get("metrics", {}))
     actions_taken = result.get("actions_taken", [])
 
     if status == "success" and not errors and is_deletion:
         # Delete from PostgreSQL CMDB
         try:
             import psycopg2
-            conn = psycopg2.connect(dbname="postgres", user="postgres", password="mithles", host="localhost")
+            conn = psycopg2.connect(dbname="hpe_agentic_ai", user="postgres", password="mithles", host="localhost")
             with conn.cursor() as cur:
                 cur.execute("DELETE FROM devices WHERE serial_number = %s", (identifier,))
             conn.commit()
@@ -1217,6 +1275,24 @@ async def _execute_agent_command(
         f"Action       : {action}",
         f"Status       : {status}",
     ]
+    if device:
+        # Construct Action API Endpoint
+        if action in {"START", "STOP", "RESTART"} and resolved_provider == "mock_server":
+            action_api_endpoint = f"/redfish/v1/systems/{device.source_device_id or identifier}/Actions/ComputerSystem.Reset"
+        elif api_path:
+            action_api_endpoint = api_path.format(id=device.source_device_id or identifier)
+        else:
+            action_api_endpoint = "N/A"
+
+        lines.append(f"IP Address   : {getattr(device, 'ip_address', 'N/A')}")
+        lines.append(f"Source Host  : {getattr(device, 'source_host', 'N/A')}")
+        lines.append(f"Action API Endpoint: {action_api_endpoint}")
+
+        # Inject into metrics so they render in the status summary table in the UI
+        metrics["IP Address"] = getattr(device, 'ip_address', 'N/A')
+        metrics["Source Host"] = getattr(device, 'source_host', 'N/A')
+        metrics["Action API Endpoint"] = action_api_endpoint
+
     if insights:
         lines.append("Insights:")
         lines.extend(f"  • {i}" for i in insights)

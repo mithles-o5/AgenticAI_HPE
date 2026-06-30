@@ -27,35 +27,51 @@ def _compile(pattern: str) -> re.Pattern:
 #   1. Multi-word phrases BEFORE their single-word subsets.
 #   2. Within each alternation group, longer phrase left of shorter.
 _ACTION_MAPPINGS: tuple[_Mapping, ...] = (
-    # Power
-    _Mapping(_compile(r"\b(turn on|power on|start)\b"),              "ON",          "Operational"),
-    _Mapping(_compile(r"\b(turn off|power off|shutdown)\b"),          "OFF",         "Operational"),
-    _Mapping(_compile(r"\b(cold boot)\b"),                            "COLD_BOOT",   "Operational"),
+    # Power — longest phrase first
+    _Mapping(_compile(r"\b(turn on|power on|start)\b"),              "ON",            "Operational"),
+    _Mapping(_compile(r"\b(turn off|power off|shutdown)\b"),          "OFF",           "Operational"),
+    _Mapping(_compile(r"\b(cold boot)\b"),                            "COLD_BOOT",     "Operational"),
+
+    # ── Semantic intents — checked FIRST so they win over generic verbs ──────
+    # Event log / system event log (before "get"/"show" which would match STATUS)
+    _Mapping(_compile(r"\b(event log|event logs|system log|system logs|sel|log entries|iml|integrated management log)\b"),
+                                                                      "FETCH_EVENT_LOG", "Operational"),
+    # Clear / reset log
+    _Mapping(_compile(r"\b(clear.*log|reset.*log|wipe.*log|erase.*log)\b"),
+                                                                      "CLEAR_EVENT_LOG", "Operational"),
+    # Hardware inventory
+    _Mapping(_compile(r"\b(hardware inventory|inventory|discover.*hardware|hw inventory|discover.*inventory)\b"),
+                                                                      "DISCOVER_INVENTORY", "Operational"),
+    # Virtual media / ISO / image mount
+    _Mapping(_compile(r"\b(mount|virtual media|insert.*media|attach.*iso|mount.*iso|mount.*image|attach.*image)\b"),
+                                                                      "MOUNT_VIRTUAL_MEDIA", "Operational"),
+    # Sensor / environmental audit
+    _Mapping(_compile(r"\b(sensor|thermal|fan|psu|power supply|environmental|inlet temperature|fan speed)\b"),
+                                                                      "FETCH_SENSORS",  "Operational"),
+    # CMDB sync / poll cycle trigger
+    _Mapping(_compile(r"\b(cmdb sync|sync cmdb|poll cycle|trigger.*poll|manual poll|sync.*metrics|poll.*trigger)\b"),
+                                                                      "SYNC_CMDB",      "Operational"),
+
+    # Update / modify — BEFORE reset so "configure" wins
+    _Mapping(_compile(r"\b(change|update|set|modify|configure|patch)\b"), "UPDATE",    "Operational"),
     # Reset / reload
-    _Mapping(_compile(r"\b(reboot|restart|reset)\b"),                 "RESET",       "Operational"),
-    _Mapping(_compile(r"\b(reload)\b"),                               "RELOAD",      "Operational"),
+    _Mapping(_compile(r"\b(reboot|restart|reset)\b"),                 "RESET",         "Operational"),
+    _Mapping(_compile(r"\b(reload)\b"),                               "RELOAD",        "Operational"),
     # HA / network ops — policy sync BEFORE plain sync
-    _Mapping(_compile(r"\b(policy sync|sync)\b"),                     "POLICY_SYNC", "Operational"),
-    _Mapping(_compile(r"\b(failover)\b"),                             "FAILOVER",    "Operational"),
-    _Mapping(_compile(r"\b(failback)\b"),                             "FAILBACK",    "Operational"),
+    _Mapping(_compile(r"\b(policy sync|sync)\b"),                     "POLICY_SYNC",   "Operational"),
+    _Mapping(_compile(r"\b(failover)\b"),                             "FAILOVER",      "Operational"),
+    _Mapping(_compile(r"\b(failback)\b"),                             "FAILBACK",      "Operational"),
     # Storage / discovery
-    _Mapping(_compile(r"\b(rescan)\b"),                               "RESCAN",      "Operational"),
-    # Read / query
-    _Mapping(_compile(r"\b(list)\b"),                                 "LIST",        "Operational"),
-    _Mapping(_compile(r"\b(status|check|state|lookup|show|find|get)\b"), "STATUS",   "Operational"),
-    # Update / modify — must be BEFORE provisioning words so "update" is not swallowed
-    _Mapping(_compile(r"\b(change|update|set|modify|configure|patch)\b"), "UPDATE",  "Operational"),
+    _Mapping(_compile(r"\b(rescan)\b"),                               "RESCAN",        "Operational"),
+    # Read / query — STATUS is the last fallback for generic verbs
+    _Mapping(_compile(r"\b(list)\b"),                                 "LIST",          "Operational"),
+    _Mapping(_compile(r"\b(status|check|state|lookup|show|find|get|retrieve|fetch|read|display)\b"),
+                                                                      "STATUS",        "Operational"),
     # Provisioning
-    _Mapping(_compile(r"\b(provision|create)\b"),                     "CREATE",      "Provisioning"),
-    _Mapping(_compile(r"\b(allocate|deploy)\b"),                      "ALLOCATE",    "Provisioning"),
-    _Mapping(_compile(r"\b(deallocate|release)\b"),                   "DEALLOCATE",  "Provisioning"),
-    _Mapping(_compile(r"\b(deprovision|destroy|delete)\b"),           "DELETE",      "Provisioning"),
-    # Future extensibility — add new rows here, no flow logic changes needed:
-    # _Mapping(_compile(r"\b(migrate)\b"),                            "MIGRATE",     "Provisioning"),
-    # _Mapping(_compile(r"\b(quarantine)\b"),                         "QUARANTINE",  "Operational"),
-    # _Mapping(_compile(r"\b(snapshot)\b"),                           "SNAPSHOT",    "Operational"),
-    _Mapping(_compile(r"\b(update)\b"),                               "UPDATE",      "Operational"),
-    _Mapping(_compile(r"\b(patch)\b"),                                "PATCH",       "Operational"),
+    _Mapping(_compile(r"\b(provision|create)\b"),                     "CREATE",        "Provisioning"),
+    _Mapping(_compile(r"\b(allocate|deploy)\b"),                      "ALLOCATE",      "Provisioning"),
+    _Mapping(_compile(r"\b(deallocate|release)\b"),                   "DEALLOCATE",    "Provisioning"),
+    _Mapping(_compile(r"\b(deprovision|destroy|delete)\b"),           "DELETE",        "Provisioning"),
 )
 
 # Noise words stripped from the leading edge of the extracted identifier
@@ -157,6 +173,20 @@ class QueryAgent:
             if details and details.get("device"):
                 identifier = details["device"]
 
+        # For all semantic intent actions, apply dedicated device extraction
+        # because the matched phrase removal leaves garbled text (URLs, prepositions, etc.)
+        elif matched_action in {
+            "MOUNT_VIRTUAL_MEDIA", "FETCH_EVENT_LOG", "CLEAR_EVENT_LOG",
+            "DISCOVER_INVENTORY", "FETCH_SENSORS", "SYNC_CMDB",
+            "CREATE", "DELETE", "ALLOCATE", "DEALLOCATE"
+        }:
+            extracted = QueryAgent._extract_device_identifier(query_clean, matched_action)
+            if extracted:
+                identifier = extracted
+            # For SYNC_CMDB with no device context, use empty identifier (global sync)
+            elif matched_action == "SYNC_CMDB":
+                identifier = ""
+
         # --- 2. Collapse internal whitespace (multi-space → single space) ---
         identifier = re.sub(r"\s{2,}", " ", identifier)
 
@@ -190,6 +220,50 @@ class QueryAgent:
         }
 
     @staticmethod
+    def _extract_device_identifier(query: str, action: str) -> str:
+        """
+        Extract the actual device/server identifier from a semantic action query.
+
+        For queries like:
+          "Mount ISO http://... to server dl360-prod-091"
+          "Retrieve event logs for server apollo-node-104"
+          "Run sensor audit on synergy-comp-143"
+
+        Returns just the server serial/name (e.g. "dl360-prod-091").
+        Falls back to empty string if no match.
+        """
+        # Pattern: look for "server <id>", "node <id>", "host <id>", "device <id>"
+        server_keyword = re.search(
+            r"\b(?:server|node|host|device|system|bmc|of|on|for)\s+([\w][\w\-\.]{2,})\b",
+            query,
+            re.IGNORECASE,
+        )
+        if server_keyword:
+            candidate = server_keyword.group(1).strip()
+            # Exclude obvious non-device words
+            if candidate.lower() not in {
+                "all", "the", "a", "my", "its", "this", "that", "every",
+                "mock", "server", "servers", "devices", "metrics", "sync", "logs"
+            }:
+                return candidate
+
+        # Pattern: device-like token = word with hyphen/digits (e.g. dl360-prod-091, apollo-node-104)
+        # Looks for tokens like "word-word-digits" anywhere in the query
+        device_token = re.search(
+            r"\b([a-zA-Z][a-zA-Z0-9]*(?:[-_][a-zA-Z0-9]+){1,})\b",
+            query,
+        )
+        if device_token:
+            candidate = device_token.group(1)
+            # Skip if it looks like a URL fragment or very common word
+            if not candidate.startswith("http") and len(candidate) >= 5:
+                return candidate
+
+        return ""
+
+
+
+    @staticmethod
     def _coerce_value(raw_value: str) -> object:
         """Coerce raw string value into boolean, int, float, or string."""
         val_lower = raw_value.strip().lower()
@@ -212,6 +286,45 @@ class QueryAgent:
         Consolidated helper to parse UPDATE/PATCH queries.
         Returns a dict with 'device', 'attribute', and 'value' keys, or an empty dict.
         """
+        # Custom boot configuration pattern matching
+        # e.g., "Configure dl360-prod-091 to boot from PXE network on next restart"
+        # or "Set boot order of dl360-prod-091 to CD-ROM"
+        boot_match = re.search(
+            r"\b(?:change|set|update|modify|configure|patch|boot)\b"
+            r"\s+(?:the\s+)?(?:boot\s+order\s+of|boot\s+target\s+of|boot\s+of)?\s*"
+            r"(?P<device>[\w\-\.]+)"
+            r"\s+(?:to\s+boot\s+from|to\s+boot\s+order|to|boot\s+target)\s+"
+            r"(?P<target>pxe|cd|hdd|bios|uefi|dvd|usb|network)"
+            r"(?:\s+network|\s+rom|\s+setup)?",
+            query,
+            re.IGNORECASE
+        )
+        if boot_match:
+            raw_device = boot_match.group("device").strip()
+            raw_target = boot_match.group("target").strip().lower()
+            
+            # Map friendly names to standard Redfish BootSourceOverrideTarget values
+            target_map = {
+                "pxe": "Pxe",
+                "network": "Pxe",
+                "cd": "Cd",
+                "dvd": "Cd",
+                "usb": "Usb",
+                "hdd": "Hdd",
+                "bios": "BiosSetup",
+                "uefi": "UefiTarget"
+            }
+            target_value = target_map.get(raw_target, "Pxe")
+            
+            return {
+                "device": raw_device,
+                "attribute": "Boot",
+                "value": {
+                    "BootSourceOverrideTarget": target_value,
+                    "BootSourceOverrideEnabled": "Once"
+                }
+            }
+
         # Map natural language phrases to canonical field names
         _FIELD_ALIASES: dict[str, str] = {
             "temperature":           "temperature_celsius",
@@ -313,3 +426,192 @@ class QueryAgent:
             "attribute": details["attribute"],
             "value": details["value"]
         }
+
+
+# ---------------------------------------------------------------------------
+# Hybrid LLM + Regex Parsing Layer (Added)
+# ---------------------------------------------------------------------------
+
+import json
+import urllib.request
+import urllib.error
+import ipaddress
+from typing import List, Literal, Union, Dict, Any, Optional
+from pydantic import BaseModel, Field
+
+# Module-level constants for Ollama tuning
+OLLAMA_MODEL: str = "qwen2.5:7b"
+OLLAMA_TIMEOUT: float = 3.0
+
+# Duplicate of internal field aliases to allow clean lookups in module functions
+_FIELD_ALIASES: Dict[str, str] = {
+    "temperature":           "temperature_celsius",
+    "temp":                  "temperature_celsius",
+    "health":                "health_status",
+    "health status":         "health_status",
+    "status":                "health_status",
+    "free capacity":         "free_capacity_gb",
+    "free_capacity":         "free_capacity_gb",
+    "free storage":          "free_storage_gb",
+    "total capacity":        "total_capacity_gb",
+    "total_capacity":        "total_capacity_gb",
+    "firmware":              "firmware_version",
+    "firmware version":      "firmware_version",
+    "power":                 "power_state",
+    "power state":           "power_state",
+    "memory":                "memory_gb",
+    "cpu":                   "cpu_cores",
+    "cpu cores":             "cpu_cores",
+}
+
+class AttributeItem(BaseModel):
+    key: str
+    value: Union[str, int, float, bool]
+
+class LLMQuerySchema(BaseModel):
+    identifier: str
+    action: Literal[
+        "ON", "OFF", "RESET", "RELOAD", "COLD_BOOT", "STATUS", "LIST",
+        "CREATE", "DELETE", "ALLOCATE", "DEALLOCATE", "UPDATE",
+        "FETCH_EVENT_LOG", "CLEAR_EVENT_LOG", "DISCOVER_INVENTORY",
+        "MOUNT_VIRTUAL_MEDIA", "FETCH_SENSORS", "SYNC_CMDB",
+        "POLICY_SYNC", "FAILOVER", "FAILBACK", "RESCAN"
+    ]
+    category: Literal["Operational", "Provisioning"]
+    attributes: List[AttributeItem] = Field(default_factory=list)
+    multi_intent: bool
+    unhandled: str
+    confidence: float
+
+def _validate_identifier(identifier: str) -> bool:
+    """Validate identifier against IP, FQDN, or Serial-number patterns."""
+    if not identifier:
+        return False
+    
+    # 1. IP check
+    try:
+        ipaddress.ip_address(identifier)
+        return True
+    except ValueError:
+        pass
+        
+    # 2. FQDN check (at least one dot and only valid hostname chars)
+    if "." in identifier:
+        if re.match(r"^[a-zA-Z0-9\-\.]+$", identifier):
+            return True
+            
+    # 3. Serial-number / Device Token check (min length 3, letters, digits, dashes, underscores, dots)
+    if re.match(r"^[a-zA-Z0-9\-\_\.]+$", identifier) and len(identifier) >= 3:
+        return True
+        
+    return False
+
+def llm_extract(query: str) -> dict | None:
+    """Call local Ollama using JSON schema formatting for structured query parsing."""
+    url = "http://localhost:11434/api/generate"
+    schema = LLMQuerySchema.model_json_schema()
+    prompt = (
+        "You are a deterministic natural language infrastructure command parser.\n"
+        "Extract details from this query and output ONLY a JSON object matching the JSON schema below.\n"
+        "Rules:\n"
+        "1. For boot order or target changes (e.g. CD, USB, PXE, BIOS Setup), set action=UPDATE and attributes=[{\"key\": \"Boot\", \"value\": \"<NormalizedTarget>\"}] using Pxe/Cd/Usb/Hdd/BiosSetup/UefiTarget.\n"
+        "2. If multiple actions are present (e.g. A and then B), parse only the first action/identifier, set multi_intent=true, and put the rest in unhandled.\n"
+        f"User query: {query}\n"
+        f"JSON Schema: {json.dumps(schema)}"
+    )
+    
+    payload = {
+        "model": OLLAMA_MODEL,
+        "prompt": prompt,
+        "format": schema,
+        "stream": False
+    }
+    
+    try:
+        data = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(
+            url,
+            data=data,
+            headers={"Content-Type": "application/json"}
+        )
+        with urllib.request.urlopen(req, timeout=OLLAMA_TIMEOUT) as response:
+            res_data = response.read().decode("utf-8")
+            
+            try:
+                res_json = json.loads(res_data)
+            except Exception as e:
+                return {"_error": f"JSONDecodeError: {type(e).__name__}: {e}"}
+                
+            response_text = res_json.get("response", "").strip()
+            
+            try:
+                # Pydantic v2
+                validated = LLMQuerySchema.model_validate_json(response_text)
+                return validated.model_dump()
+            except AttributeError:
+                try:
+                    # Pydantic v1 fallback
+                    validated = LLMQuerySchema.parse_raw(response_text)
+                    return validated.dict()
+                except Exception as e:
+                    return {"_error": f"PydanticValidationError: {type(e).__name__}: {e}"}
+            except Exception as e:
+                return {"_error": f"PydanticValidationError: {type(e).__name__}: {e}"}
+    except Exception as e:
+        return {"_error": f"{type(e).__name__}: {e}"}
+
+def parse_query_hybrid(query: str) -> dict:
+    """
+    Hybrid query parsing layer.
+    First attempts to resolve query using LLM extraction; falls back to deterministic regex parser on failure.
+    """
+    reason = ""
+    try:
+        llm_res = llm_extract(query)
+        if llm_res is None:
+            reason = "LLM extraction returned None (unexpected null response)"
+        elif "_error" in llm_res:
+            reason = llm_res["_error"]
+        else:
+            confidence = llm_res.get("confidence", 0.0)
+            identifier = llm_res.get("identifier", "").strip()
+            
+            if confidence >= 0.7 and identifier:
+                if _validate_identifier(identifier):
+                    action = llm_res.get("action", "STATUS")
+                    category = llm_res.get("category", "Operational")
+                    
+                    res = {
+                        "identifier": identifier,
+                        "action": action,
+                        "category": category
+                    }
+                    
+                    # For action=UPDATE, run attributes through existing _FIELD_ALIASES mapping before returning
+                    raw_attrs = llm_res.get("attributes") or []
+                    mapped_attrs = []
+                    for attr in raw_attrs:
+                        k = attr.get("key", "")
+                        v = attr.get("value")
+                        mapped_k = _FIELD_ALIASES.get(k.lower(), k.replace(" ", "_"))
+                        mapped_attrs.append({"key": mapped_k, "value": v})
+                        
+                    res["attributes"] = mapped_attrs
+                    
+                    logger.info(
+                        "[QueryAgent] Hybrid parse successful using LLM | query=%r action=%s category=%s identifier=%r",
+                        query, action, category, identifier
+                    )
+                    return res
+                else:
+                    reason = f"Identifier '{identifier}' validation failed against CMDB-style patterns"
+            else:
+                reason = f"LLM returned low confidence ({confidence}) or empty identifier ('{identifier}')"
+    except Exception as e:
+        reason = f"Exception in hybrid parse wrapper: {type(e).__name__}: {e}"
+        
+    logger.warning(
+        "[QueryAgent] Hybrid parse falling back to regex | query=%r reason=%r",
+        query, reason
+    )
+    return QueryAgent.parse_query(query)
