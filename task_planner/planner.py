@@ -40,7 +40,7 @@ class TaskPlanner:
             
         from query_agent import QueryAgent, parse_query_hybrid
 
-        conjunctions = [r"\band then\b", r"\bthen\b", r"\band\b", r","]
+        conjunctions = [r"\band then\b", r"\bthen\b"]
         
         clauses = [instruction]
         for conj in conjunctions:
