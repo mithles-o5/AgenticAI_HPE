@@ -27,6 +27,7 @@ class MockNetworkAdapter(BaseNetworkAdapter):
 
             url = f"{base_url}{api_path}".format(id=resource_id, systemId=resource_id, hostId=resource_id)
             response = httpx.request(method, url, json=payload, timeout=10.0)
+            response.raise_for_status()
             try:
                 data = response.json()
                 if response.status_code == 404 and ("interfaces" in api_path or "metrics" in api_path):
@@ -52,8 +53,14 @@ class MockNetworkAdapter(BaseNetworkAdapter):
                 return data
             except:
                 return {"status": "success", "status_code": response.status_code, "text": response.text}
+        except httpx.HTTPStatusError as e:
+            try:
+                err_data = e.response.json()
+            except:
+                err_data = e.response.text
+            raise Exception(f"HTTP Error {e.response.status_code}: {err_data}")
         except Exception as e:
-            return {"result": "failed", "detail": f"Dynamic mock API call failed: {e}"}
+            raise Exception(f"Dynamic mock API call failed: {e}")
 
     def fetch_interface_metrics(self, device_id, credentials, parameters) -> List[Dict[str, Any]]:
         api_path = parameters.get("api_path")

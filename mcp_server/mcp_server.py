@@ -539,17 +539,46 @@ async def _execute_agent_command(
         return str(e)
 
     import json
-    
+    import os
+    with open(r"c:\AgenticAI_HPE\scratch_query_log.txt", "a", encoding="utf-8") as f:
+        f.write("RAW QUERY RECEIVED:\n" + repr(query) + "\n\n")
+        
     tasks = None
     try:
-        # If the LLM passes a raw JSON string like '{"identifier": "gl-ns-008", ...}'
+        # If the LLM passes a raw JSON string
         parsed = json.loads(query)
-        if isinstance(parsed, dict) and "identifier" in parsed:
+        if isinstance(parsed, dict):
+            # Extract parameters (either from 'attributes' dict or all other flat keys)
+            params = parsed.get("attributes", {})
+            if not params:
+                params = {k: v for k, v in parsed.items() if k not in ["action", "category", "identifier", "name", "id", "serial_number", "resource_type"]}
+            
+            # Find a valid identifier
+            ident = None
+            for key in ["identifier", "name", "id", "serial_number"]:
+                val = parsed.get(key)
+                if isinstance(val, str):
+                    if val.strip().startswith("{"):
+                        try:
+                            inner = json.loads(val)
+                            if isinstance(inner, dict):
+                                val = inner.get("identifier") or inner.get("name") or inner.get("id")
+                                if "attributes" in inner:
+                                    params.update(inner["attributes"])
+                        except json.JSONDecodeError:
+                            val = None # Skip truncated JSON strings
+                    if val and "{" not in val and '"' not in val:
+                        ident = val
+                        break
+            
+            if not ident:
+                ident = "unknown_device"
+
             tasks = [Task(
                 action=parsed.get("action", "STATUS"),
                 category=parsed.get("category", "Operational"),
-                identifier=parsed.get("identifier"),
-                params=parsed.get("attributes", {})
+                identifier=ident,
+                params=params
             )]
     except json.JSONDecodeError:
         pass
@@ -558,10 +587,20 @@ async def _execute_agent_command(
         tasks = TaskPlanner.decompose_instruction(query)
         if not tasks:
             parsed = parse_query_hybrid(query)
+            # Never use the raw query as the identifier to prevent creating devices with full JSON bodies as names
+            ident = parsed.get("identifier")
+            
+            # Aggressively reject any identifier that contains JSON characters
+            if ident and ("{" in ident or "}" in ident or '"' in ident):
+                ident = None
+                
+            if not ident:
+                raise ValueError("Could not extract a valid device identifier from the query.")
+                
             tasks = [Task(
                 action=parsed.get("action", "STATUS"),
                 category=parsed.get("category", "Operational"),
-                identifier=parsed.get("identifier") or query.strip(),
+                identifier=ident,
                 params=parsed.get("attributes", {})
             )]
 
@@ -1187,7 +1226,7 @@ async def _execute_agent_command(
         dispatch_params["http_method"] = resolution.http_method
 
     # Override api_path with resolver-derived endpoint if better
-    if api_path_step3:
+    if api_path_step3 and not is_creation:
         dispatch_params["api_path"] = api_path_step3
 
     agent_task_action = action
