@@ -120,6 +120,9 @@ class Database:
                 if "name" in cols:
                     where_clause.append("name = ?")
                     params.append(item_id)
+                if "serial_number" in cols:
+                    where_clause.append("serial_number = ?")
+                    params.append(item_id)
                 if "source_device_id" in cols:
                     where_clause.append("source_device_id = ?")
                     params.append(item_id)
@@ -150,7 +153,7 @@ class Database:
             payload_dict["id"] = existing_item["id"]
         elif "id" not in payload_dict:
             payload_dict["id"] = item_id
-            
+
         with self._lock:
             conn = sqlite3.connect(self.db_path, check_same_thread=False)
             try:
@@ -159,23 +162,45 @@ class Database:
                     "INSERT OR IGNORE INTO collection_metadata (table_name, collection_path) VALUES (?, ?)",
                     (table_name, collection_path)
                 )
-                
+
                 self._ensure_table(conn, table_name, payload_dict)
-                
-                columns = list(payload_dict.keys())
-                placeholders = ", ".join(["?"] * len(columns))
-                cols_str = ", ".join([f'"{c}"' for c in columns])
-                
-                values = []
-                for c in columns:
-                    val = payload_dict[c]
+
+                # Serialize values
+                def _serialize(val):
                     if isinstance(val, (dict, list)):
-                        val = json.dumps(val)
+                        return json.dumps(val)
                     elif isinstance(val, bool):
-                        val = 1 if val else 0
-                    values.append(val)
-                
-                conn.execute(f"INSERT OR REPLACE INTO {table_name} ({cols_str}) VALUES ({placeholders})", values)
+                        return 1 if val else 0
+                    return val
+
+                true_id = payload_dict["id"]
+
+                # Check whether row already exists (by true id)
+                cursor = conn.execute(f'SELECT COUNT(*) FROM {table_name} WHERE "id" = ?', (true_id,))
+                exists = cursor.fetchone()[0] > 0
+
+                if exists:
+                    # UPDATE only the provided columns — never wipe existing data
+                    update_cols = [c for c in payload_dict.keys() if c != "id"]
+                    if update_cols:
+                        set_clause = ", ".join([f'"{c}" = ?' for c in update_cols])
+                        values = [_serialize(payload_dict[c]) for c in update_cols]
+                        values.append(true_id)
+                        conn.execute(
+                            f'UPDATE {table_name} SET {set_clause} WHERE "id" = ?',
+                            values
+                        )
+                else:
+                    # INSERT brand-new row with all provided columns
+                    columns = list(payload_dict.keys())
+                    cols_str = ", ".join([f'"{c}"' for c in columns])
+                    placeholders = ", ".join(["?"] * len(columns))
+                    values = [_serialize(payload_dict[c]) for c in columns]
+                    conn.execute(
+                        f'INSERT INTO {table_name} ({cols_str}) VALUES ({placeholders})',
+                        values
+                    )
+
                 conn.commit()
             finally:
                 conn.close()
