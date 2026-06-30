@@ -39,7 +39,7 @@ _ACTION_MAPPINGS: tuple[_Mapping, ...] = (
     _Mapping(_compile(r"\b(failover)\b"),                             "FAILOVER",    "Operational"),
     _Mapping(_compile(r"\b(failback)\b"),                             "FAILBACK",    "Operational"),
     # Storage / discovery
-    _Mapping(_compile(r"\b(discover topology|topology|discover|rescan)\b"), "RESCAN",      "Operational"),
+    _Mapping(_compile(r"\b(rescan)\b"),                               "RESCAN",      "Operational"),
     # Read / query
     _Mapping(_compile(r"\b(list)\b"),                                 "LIST",        "Operational"),
     _Mapping(_compile(r"\b(status|check|state|lookup|show|find|get)\b"), "STATUS",   "Operational"),
@@ -64,7 +64,7 @@ _PREFIX_NOISE: frozenset[str] = frozenset({
     "device", "resource", "system", "systems", "storage-system", "storage_system", "storage-systems", "storage_systems",
     "storage-pool", "storage_pool", "storage-pools", "storage_pools", "storage-volume", "storage_volume", "storage-volumes", "storage_volumes",
     "server", "switch", "router", "firewall", "storage", "named", "called", "name", "with", "by", "having",
-    "change", "update", "set", "modify", "configure", "patch", "status", "check", "state", "lookup", "show", "find", "get", "query", "discover", "topology"
+    "change", "update", "set", "modify", "configure", "patch", "status", "check", "state", "lookup", "show", "find", "get", "query"
 })
 
 # Noise words stripped from the trailing edge of the extracted identifier
@@ -73,7 +73,7 @@ _SUFFIX_NOISE: frozenset[str] = frozenset({
     "device", "resource", "system", "systems", "storage-system", "storage_system", "storage-systems", "storage_systems",
     "storage-pool", "storage_pool", "storage-pools", "storage_pools", "storage-volume", "storage_volume", "storage-volumes", "storage_volumes",
     "server", "switch", "router", "firewall", "storage", "named", "called", "name", "with", "by", "having",
-    "change", "update", "set", "modify", "configure", "patch", "status", "check", "state", "lookup", "show", "find", "get", "query", "discover", "topology"
+    "change", "update", "set", "modify", "configure", "patch", "status", "check", "state", "lookup", "show", "find", "get", "query"
 })
 
 # Characters considered "boundary punctuation" — stripped only when they

@@ -35,46 +35,11 @@ def get_network_device_by_id(id: str):
 
 @app.post("/network/v1/devices")
 def create_network_device(payload: DeviceSchema):
-    import random
-    import datetime
     collection_path = "/network/v1/devices"
     
     payload_dict = payload.dict()
     item_id = payload_dict.get("id") or payload_dict.get("serial_number") or str(uuid.uuid4())
     payload_dict["id"] = item_id
-
-    # Add default mock data so metrics aren't null
-    if payload_dict.get("power_state") is None:
-        payload_dict["power_state"] = "ON"
-    if payload_dict.get("health_status") is None:
-        payload_dict["health_status"] = "OK"
-
-    # Only populate metrics if the device is ON
-    if payload_dict.get("power_state", "ON").upper() in ["ON", "POWERON"]:
-        if payload_dict.get("cpu_utilization_percent") is None:
-            payload_dict["cpu_utilization_percent"] = round(random.uniform(10.0, 90.0), 1)
-        if payload_dict.get("memory_utilization_percent") is None:
-            payload_dict["memory_utilization_percent"] = round(random.uniform(10.0, 90.0), 1)
-        if payload_dict.get("power_draw_watts") is None:
-            payload_dict["power_draw_watts"] = round(random.uniform(150.0, 400.0), 1)
-        if payload_dict.get("temperature_celsius") is None:
-            payload_dict["temperature_celsius"] = round(random.uniform(25.0, 45.0), 1)
-
-    if not payload_dict.get("ports"):
-        # Generate some default mock ports
-        payload_dict["ports"] = {
-            f"GigabitEthernet1/0/{i}": ("UP" if random.random() > 0.3 else "DOWN")
-            for i in range(1, 25)
-        }
-
-    if not payload_dict.get("configured_vlans"):
-        payload_dict["configured_vlans"] = [
-            {"vlan_id": 1, "name": "Management"}
-        ]
-    
-    payload_dict["created_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
-    payload_dict["updated_at"] = payload_dict["created_at"]
-
     db.upsert_item(collection_path, item_id, payload_dict)
     return payload_dict
 
@@ -140,21 +105,8 @@ def patch_network_device(id: str, payload: dict):
         raise HTTPException(status_code=404, detail="Device not found")
     
     device = dict(item)
-    if "ports" not in device:
-        device["ports"] = {}
-        
     payload_dict = {k: v for k, v in payload.items() if v is not None}
-    
-    for k, v in payload_dict.items():
-        # Handle port updates from natural language mapping (e.g. "port eth0", "ports/eth0/status")
-        k_lower = k.lower()
-        if k_lower.startswith("port ") or k_lower.startswith("ports/"):
-            # Extract port name: "port eth0" -> "eth0", "ports/eth0/status" -> "eth0"
-            port_name = k.split(" ", 1)[1] if " " in k else k.split("/")[1]
-            device["ports"][port_name] = v
-        else:
-            device[k] = v
-            
+    device.update(payload_dict)
     device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
     db.upsert_item(collection_path, device["id"], device)
     return device
@@ -200,15 +152,13 @@ def post_network_device_power(id: str, payload: NetworkPowerRequest):
 def post_network_device_vlans(id: str, payload: NetworkVlanRequest):
     """
     Action Route: POST /network/v1/devices/{id}/vlans
-    Adds a VLAN to the device. Idempotent: if the vlan_id already exists,
-    updates its name rather than creating a duplicate entry.
     """
     import datetime
     collection_path = "/network/v1/devices"
     item = db.get_item(collection_path, id)
     if not item:
         raise HTTPException(status_code=404, detail="Device not found")
-
+    
     device = dict(item)
     configured_vlans = device.get("configured_vlans") or []
     if isinstance(configured_vlans, str):
@@ -218,75 +168,24 @@ def post_network_device_vlans(id: str, payload: NetworkVlanRequest):
             configured_vlans = []
     elif not isinstance(configured_vlans, list):
         configured_vlans = []
-
-    new_vlan = payload.dict()
-    new_vlan_id = int(new_vlan["vlan_id"])
-    
-    # Deduplicate: rebuild list to filter out duplicates and enforce type safety
-    filtered_vlans = []
-    replaced = False
-    for v in configured_vlans:
-        if isinstance(v, dict):
-            try:
-                vid = int(v.get("vlan_id"))
-                if vid == new_vlan_id:
-                    if not replaced:
-                        filtered_vlans.append(new_vlan)
-                        replaced = True
-                    # else skip to remove duplicates
-                else:
-                    filtered_vlans.append(v)
-            except (ValueError, TypeError):
-                filtered_vlans.append(v)
-        else:
-            filtered_vlans.append(v)
-            
-    if not replaced:
-        filtered_vlans.append(new_vlan)
         
-    configured_vlans = filtered_vlans
-
+    configured_vlans.append(payload.dict())
     device["configured_vlans"] = configured_vlans
     device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
     db.upsert_item(collection_path, device["id"], device)
     return device
 
-def _resolve_port_key(ports: dict, requested_name: str) -> str:
-    """
-    Find the correct stored key for a port name that may have been URL-decoded,
-    abbreviated, or slightly different from the stored form.
-    Priority: exact match > case-insensitive match > fuzzy numeric suffix match.
-    """
-    if requested_name in ports:
-        return requested_name
-    lower = requested_name.lower()
-    for key in ports:
-        if key.lower() == lower:
-            return key
-    # Strip common prefixes and match by trailing number e.g. "3" from "GigabitEthernet1/0/3"
-    import re
-    req_num = re.search(r'(\d+)$', requested_name)
-    if req_num:
-        suffix = req_num.group(1)
-        for key in ports:
-            if re.search(r'(\d+)$', key) and re.search(r'(\d+)$', key).group(1) == suffix:
-                return key
-    # Fallback: use the requested name as-is (will create new entry)
-    return requested_name
-
-
-@app.post("/network/v1/devices/{id}/ports/{port_name:path}/status")
+@app.post("/network/v1/devices/{id}/ports/{port_name}/status")
 def post_network_device_port_status(id: str, port_name: str, payload: NetworkPortStatusRequest):
     """
     Action Route: POST /network/v1/devices/{id}/ports/{port_name}/status
-    Supports slash-containing port names like GigabitEthernet1/0/3.
     """
     import datetime
     collection_path = "/network/v1/devices"
     item = db.get_item(collection_path, id)
     if not item:
         raise HTTPException(status_code=404, detail="Device not found")
-
+    
     device = dict(item)
     ports = device.get("ports") or {}
     if isinstance(ports, str):
@@ -296,36 +195,12 @@ def post_network_device_port_status(id: str, port_name: str, payload: NetworkPor
             ports = {}
     elif not isinstance(ports, dict):
         ports = {}
-
-    # Strip trailing "/status" if the :path consumed it
-    if port_name.endswith("/status"):
-        port_name = port_name[:-len("/status")]
-
-    resolved_key = _resolve_port_key(ports, port_name)
-    new_status = payload.status.upper()
-    ports[resolved_key] = new_status
+        
+    ports[port_name] = payload.status
     device["ports"] = ports
     device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
     db.upsert_item(collection_path, device["id"], device)
     return device
-
-
-@app.get("/network/v1/devices/{id}/vlans")
-def get_network_device_vlans(id: str):
-    """
-    GET the configured VLANs for a device.
-    """
-    collection_path = "/network/v1/devices"
-    item = db.get_item(collection_path, id)
-    if not item:
-        raise HTTPException(status_code=404, detail="Device not found")
-    vlans = item.get("configured_vlans") or []
-    if isinstance(vlans, str):
-        try:
-            vlans = json.loads(vlans)
-        except Exception:
-            vlans = []
-    return {"device_id": id, "configured_vlans": vlans, "count": len(vlans)}
 
 
 @app.get("/monitoring/v1/switches")
@@ -414,14 +289,13 @@ def get_aruba_switch_vlans(serial: str):
 def post_aruba_switch_vlan(serial: str, payload: ArubaVlanRequest):
     """
     Aruba Central Endpoint: POST /monitoring/v1/switches/{serial}/vlan
-    Adds a VLAN to the switch. Idempotent: same vlan_id updates the existing entry.
     """
     import datetime
     collection_path = "/network/v1/devices"
     item = db.get_item(collection_path, serial)
     if not item:
         raise HTTPException(status_code=404, detail="Switch not found")
-
+    
     device = dict(item)
     configured_vlans = device.get("configured_vlans") or []
     if isinstance(configured_vlans, str):
@@ -431,35 +305,25 @@ def post_aruba_switch_vlan(serial: str, payload: ArubaVlanRequest):
             configured_vlans = []
     elif not isinstance(configured_vlans, list):
         configured_vlans = []
-
-    new_vlan = payload.dict()
-    existing_ids = [v.get("vlan_id") if isinstance(v, dict) else v for v in configured_vlans]
-    if new_vlan["vlan_id"] in existing_ids:
-        for i, v in enumerate(configured_vlans):
-            if isinstance(v, dict) and v.get("vlan_id") == new_vlan["vlan_id"]:
-                configured_vlans[i] = new_vlan
-                break
-    else:
-        configured_vlans.append(new_vlan)
-
+        
+    configured_vlans.append(payload.dict())
     device["configured_vlans"] = configured_vlans
     device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
     db.upsert_item(collection_path, device["id"], device)
     return {"serial": serial, "vlans": configured_vlans}
 
 
-@app.post("/monitoring/v1/switches/{serial}/ports/{port_name:path}/status")
+@app.post("/monitoring/v1/switches/{serial}/ports/{port_name}/status")
 def post_aruba_switch_port_status(serial: str, port_name: str, payload: ArubaPortStatusRequest):
     """
     Aruba Central Endpoint: POST /monitoring/v1/switches/{serial}/ports/{port_name}/status
-    Supports slash-containing port names like GigabitEthernet1/0/3.
     """
     import datetime
     collection_path = "/network/v1/devices"
     item = db.get_item(collection_path, serial)
     if not item:
         raise HTTPException(status_code=404, detail="Switch not found")
-
+    
     device = dict(item)
     ports = device.get("ports") or {}
     if isinstance(ports, str):
@@ -469,36 +333,12 @@ def post_aruba_switch_port_status(serial: str, port_name: str, payload: ArubaPor
             ports = {}
     elif not isinstance(ports, dict):
         ports = {}
-
-    # Strip trailing "/status" if the :path consumed it
-    if port_name.endswith("/status"):
-        port_name = port_name[:-len("/status")]
-
-    resolved_key = _resolve_port_key(ports, port_name)
-    new_status = payload.status.upper()
-    ports[resolved_key] = new_status
+        
+    ports[port_name] = payload.status
     device["ports"] = ports
     device["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S+05:30")
     db.upsert_item(collection_path, device["id"], device)
     return {"serial": serial, "ports": ports}
-
-
-@app.get("/monitoring/v1/switches/{serial}/vlans")
-def get_aruba_switch_vlans(serial: str):
-    """
-    Aruba Central Endpoint: GET /monitoring/v1/switches/{serial}/vlans
-    """
-    collection_path = "/network/v1/devices"
-    item = db.get_item(collection_path, serial)
-    if not item:
-        raise HTTPException(status_code=404, detail="Switch not found")
-    vlans = item.get("configured_vlans") or []
-    if isinstance(vlans, str):
-        try:
-            vlans = json.loads(vlans)
-        except Exception:
-            vlans = []
-    return {"serial": serial, "vlans": vlans, "count": len(vlans)}
 
 # --- AUTO-GENERATED MODELS IMPORT ---
 from models import Aruba_initiatecxpoebouncev1_Request, Aruba_downloadreportlink_Request, Aruba_createzonesv1_Request, Aruba_initiatecxtraceroutev1_Request, Aruba_initiategwiperfv1_Request, Aruba_initiateaptcpv1_Request, Aruba_initiatecxpingv1_Request, Aruba_disconnectuserbymacapv1_Request, Aruba_deletewalltypesv1_Request, Aruba_importfloorsv1_Request, Aruba_initiateappingv1_Request, Aruba_initiatecxcabletestv1_Request, Aruba_removedevicesonfloorv1_Request, Aruba_placeplanneddevicesonfloorv1_Request, Aruba_initiatepvospoebouncev1_Request, Aruba_runaossshowcommandsv1_Request, Aruba_updateuserreport_Request, Aruba_updatewebhookv1_Request, Aruba_deletewallsv1_Request, Aruba_initiategwhttpv1_Request, Aruba_replaceimagev1_Request, Aruba_disconnectuserbynetworkapv1_Request, Aruba_runcxshowcommandsv1_Request, Aruba_changedeviceassignmentv1_Request, Aruba_initiatecxhttpv1_Request, Aruba_updatezonesv1_Request, Aruba_updateassettagdatabyassettagidv1_Request, Aruba_runapshowcommandsv1_Request, Aruba_initiateapspeedtestv1_Request, Aruba_rungwshowcommandsv1_Request, Aruba_disconnectclientbymacgwv1_Request, Aruba_initiatecxaaav1_Request, Aruba_clearalerts_Request, Aruba_initiategwportbouncev1_Request, Aruba_startaprangingscanv1_Request, Aruba_initiateapnslookupv1_Request, Aruba_deletezonesv1_Request, Aruba_createwebhookv1_Request, Aruba_initiateaphttpv1_Request, Aruba_deferalerts_Request, Aruba_putdeviceadminlocationv1_Request, Aruba_initiatepvosportbouncev1_Request, Aruba_setpriorityalerts_Request, Aruba_updatewalltypesv1_Request, Aruba_scalefloormapv1_Request, Aruba_generateaccesstoken_Request, Aruba_patchwebhookv1_Request, Aruba_initiatepvostraceroutev1_Request, Aruba_initiateaphttpsv1_Request, Aruba_initiateapaaav1_Request, Aruba_initiategwtraceroutev1_Request, Aruba_updatewallsv1_Request, Aruba_initiategwhttpsv1_Request, Aruba_updatefloormapv1_Request, Aruba_initiatecxportbouncev1_Request, Aruba_updatebuildingv1_Request, Aruba_rungatewaypingsweepv1_Request, Aruba_initiategwpingv1_Request, Aruba_initiategwpoebouncev1_Request, Aruba_initiateaptraceroutev1_Request, Aruba_createfloorv1_Request, Aruba_initiatepvospingv1_Request, Aruba_createwallsv1_Request, Aruba_placedevicesonfloorv1_Request, Aruba_removeplanneddevicesonfloorv1_Request, Aruba_createassettagdatabyassettagidv1_Request, Aruba_setactivealerts_Request, Aruba_createwalltypesv1_Request, Aruba_initiatepvoscabletestv1_Request
@@ -5883,24 +5723,6 @@ def get_network_monitoring_v1_neighbours_serial_number(serial_number: str):
     """
     Aruba Central Endpoint: GET /network-monitoring/v1/neighbours/{serial-number}
     """
-    if serial_number == "aruba-cx-017":
-        return {
-            "neighbors": [
-                {
-                    "local_port": "GigabitEthernet1/0/1",
-                    "remote_chassis_id": "core-sw-018",
-                    "remote_port": "GigabitEthernet1/0/24",
-                    "remote_system_name": "core-sw-018"
-                },
-                {
-                    "local_port": "GigabitEthernet1/0/12",
-                    "remote_chassis_id": "edge-router-019",
-                    "remote_port": "GigabitEthernet1/0/1",
-                    "remote_system_name": "edge-router-019"
-                }
-            ]
-        }
-        
     collection_path = f"/network-monitoring/v1/neighbours"
     item = db.get_item(collection_path, serial_number)
     if item:

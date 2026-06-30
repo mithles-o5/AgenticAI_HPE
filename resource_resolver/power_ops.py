@@ -26,12 +26,10 @@ logger = logging.getLogger(__name__)
 # These are last-resort safe paths — only {resource} and {id} are substituted.
 # ---------------------------------------------------------------------------
 _FALLBACK_PATHS: dict[str, str] = {
-    "oneview":      "/rest/{resource}/{id}",
-    "coms":         "/compute-ops-mgmt/v1/{resource}/{id}",
+    "oneview": "/rest/{resource}/{id}",
+    "coms":    "/compute-ops-mgmt/v1/{resource}/{id}",
     "mock_storage": "/data-services/v1beta1/devices/{id}",
-    "mock_cloud":   "/api/v1/devices/{id}",
-    "mock_network": "/network/v1/devices/{id}",
-    "mock_server":  "/rest/server-hardware/{id}",
+    "mock_cloud": "/api/v1/devices/{id}",
 }
 _FALLBACK_METHOD = "GET"
 
