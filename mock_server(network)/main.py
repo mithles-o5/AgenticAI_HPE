@@ -18,12 +18,22 @@ app.add_middleware(
 )
 
 @app.get("/network/v1/devices")
-def get_network_devices():
+def get_network_devices(device_type: str = Query(None), skip: int = Query(0), limit: int = Query(10)):
     """
     Retrieves a comprehensive list of all network devices.
     """
     collection_path = "/network/v1/devices"
-    return db.get_all(collection_path)
+    all_devices = db.get_all(collection_path, 0, 999999)
+    if device_type:
+        dt_lower = device_type.lower()
+        if dt_lower.endswith('s'):
+            dt_lower = dt_lower[:-1]
+        all_devices = [d for d in all_devices if d.get("device_type", "").lower().rstrip('s') == dt_lower]
+    total_count = len(all_devices)
+    paginated_devices = all_devices[skip : skip + limit]
+    # For network devices, usually it returns the list directly, but we might want to return an object if we want total count.
+    # We will return a dict containing total and the list.
+    return {"total": total_count, "devices": paginated_devices}
 
 @app.get("/network/v1/devices/{id}")
 def get_network_device_by_id(id: str):

@@ -14,7 +14,7 @@ class TaskRequest(BaseModel):
     resource_type: str = Field(..., description="Logical resource type: 'vm' | 'container' | 'function' | 'cluster_node' | etc.")
     resource_id: str = Field(..., description="Provider-agnostic resource identifier.")
     region: Optional[str] = Field(default=None, description="Cloud region or availability zone. Optional for on-prem.")
-    provider: str = Field(..., description="Cloud provider identifier: 'aws' | 'azure' | 'gcp' | 'mock' | any custom label.")
+    provider: str = Field(..., description="Cloud provider identifier: 'aws' | 'gcp' | 'mock' | any custom label.")
     action: str = Field(
         ...,
         description=(

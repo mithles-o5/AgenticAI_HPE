@@ -1,0 +1,129 @@
+RAW QUERY RECEIVED:
+'{"action": "CREATE", "identifier": "storage_array", "name": "alletra-array-889", "total_capacity_gb": 50000, "free_capacity_gb": 50000}'
+
+RAW QUERY RECEIVED:
+'Create a storage array named alletra-array-889 with total_capacity_gb of 50000 and free_capacity_gb of 50000'
+
+RAW QUERY RECEIVED:
+'Create a storage array named alletra-array-889 with total_capacity_gb of 50000 and free_capacity_gb of 50000'
+
+RAW QUERY RECEIVED:
+'Create a storage system named nimble-store-04 with total_capacity_gb of 100000'
+
+RAW QUERY RECEIVED:
+'Delete/deallocate storage system nimble-store-04'
+
+RAW QUERY RECEIVED:
+'Delete storage system nimble-store-04'
+
+RAW QUERY RECEIVED:
+'Create a node named apollo-node-899'
+
+RAW QUERY RECEIVED:
+'Power off apollo-node-899'
+
+RAW QUERY RECEIVED:
+'Power off node named apollo-node-899'
+
+RAW QUERY RECEIVED:
+'Check status of node named apollo-node-899'
+
+RAW QUERY RECEIVED:
+'Check status of apollo-node-899'
+
+RAW QUERY RECEIVED:
+'Check status of server named apollo-node-899'
+
+RAW QUERY RECEIVED:
+'Check status of node named apollo-node-899'
+
+RAW QUERY RECEIVED:
+'Check status of apollo-node-899'
+
+RAW QUERY RECEIVED:
+'Create a server named apollo-node-899'
+
+RAW QUERY RECEIVED:
+'Power off server apollo-node-899'
+
+RAW QUERY RECEIVED:
+'Check status of apollo-node-899'
+
+RAW QUERY RECEIVED:
+'Power off server apollo-node-899'
+
+RAW QUERY RECEIVED:
+'Turn off apollo-node-104'
+
+RAW QUERY RECEIVED:
+'Check status of apollo-node-104'
+
+RAW QUERY RECEIVED:
+'Power on apollo-node-104'
+
+RAW QUERY RECEIVED:
+'Power off apollo-node-104'
+
+RAW QUERY RECEIVED:
+'Power on apollo-node-104'
+
+RAW QUERY RECEIVED:
+'Power off apollo-node-104'
+
+RAW QUERY RECEIVED:
+'Power off apollo-node-104'
+
+RAW QUERY RECEIVED:
+'Check status of apollo-node-104'
+
+RAW QUERY RECEIVED:
+'Power on apollo-node-104'
+
+RAW QUERY RECEIVED:
+'Check status of apollo-node-104'
+
+RAW QUERY RECEIVED:
+'Power off apollo-node-104'
+
+RAW QUERY RECEIVED:
+'List all switches from coms'
+
+RAW QUERY RECEIVED:
+'List all servers'
+
+RAW QUERY RECEIVED:
+'Show status of all servers in the CMDB'
+
+RAW QUERY RECEIVED:
+'List all servers'
+
+RAW QUERY RECEIVED:
+'Show status of all servers'
+
+RAW QUERY RECEIVED:
+'List all servers'
+
+RAW QUERY RECEIVED:
+'List all servers'
+
+RAW QUERY RECEIVED:
+'Show status of all servers'
+
+RAW QUERY RECEIVED:
+'List all virtual machines'
+
+RAW QUERY RECEIVED:
+'Show status of all virtual machines'
+
+RAW QUERY RECEIVED:
+'List all servers'
+
+RAW QUERY RECEIVED:
+'List all virtual machines'
+
+RAW QUERY RECEIVED:
+'Show status of all servers'
+
+RAW QUERY RECEIVED:
+'List all VMs'
+

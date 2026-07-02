@@ -68,7 +68,7 @@ _PREFIX_NOISE: frozenset[str] = frozenset({
     "the", "a", "an", "of", "for", "on", "at", "to", "my", "our", "their", "is", "was", "be", "about",
     "device", "resource", "system", "systems", "storage-system", "storage_system", "storage-systems", "storage_systems",
     "storage-pool", "storage_pool", "storage-pools", "storage_pools", "storage-volume", "storage_volume", "storage-volumes", "storage_volumes",
-    "server", "switch", "router", "firewall", "storage", "named", "called", "name", "with", "by", "having",
+    "server", "switch", "router", "firewall", "storage", "node", "nodes", "named", "called", "name", "with", "by", "having",
     "change", "update", "set", "modify", "configure", "patch", "status", "check", "state", "lookup", "show", "find", "get", "query"
 })
 
@@ -76,7 +76,7 @@ _SUFFIX_NOISE: frozenset[str] = frozenset({
     "the", "of", "for", "on", "at", "to", "my", "our", "their", "is", "was", "be", "about",
     "device", "resource", "system", "systems", "storage-system", "storage_system", "storage-systems", "storage_systems",
     "storage-pool", "storage_pool", "storage-pools", "storage_pools", "storage-volume", "storage_volume", "storage-volumes", "storage_volumes",
-    "server", "switch", "router", "firewall", "storage", "named", "called", "name", "with", "by", "having",
+    "server", "switch", "router", "firewall", "storage", "node", "nodes", "named", "called", "name", "with", "by", "having",
     "change", "update", "set", "modify", "configure", "patch", "status", "check", "state", "lookup", "show", "find", "get", "query"
 })
 
@@ -482,16 +482,34 @@ def parse_query_hybrid(query: str) -> dict:
             _validate_category(regex_res.get("category", ""))
         )
 
+        def _extract_pagination(query_text: str, payload: dict):
+            if payload.get("action") == "LIST":
+                params = payload.get("params", {})
+                skip_match = re.search(r"\b(?:skip|offset)\s+(\d+)", query_text, re.IGNORECASE)
+                if skip_match:
+                    params["skip"] = int(skip_match.group(1))
+                limit_match = re.search(r"\b(?:limit|first|take|show|size)\s+(\d+)", query_text, re.IGNORECASE)
+                if limit_match:
+                    params["limit"] = int(limit_match.group(1))
+                page_match = re.search(r"\b(?:page)\s+(\d+)", query_text, re.IGNORECASE)
+                if page_match and "skip" not in params:
+                    page = int(page_match.group(1))
+                    limit = params.get("limit", 10)
+                    params["skip"] = max(0, (page - 1) * limit)
+                if params:
+                    payload["params"] = params
+            return payload
+
         if confidence >= QUERY_AGENT_CONFIDENCE_THRESHOLD and is_regex_valid:
             logger.info("[QueryAgent] Regex parse success | confidence=%.2f action=%s identifier=%s query=%r", 
                         confidence, regex_res.get("action"), regex_res.get("identifier"), query)
-            return regex_res
+            return _extract_pagination(query, regex_res)
 
         logger.info("[QueryAgent] Regex parse low confidence | confidence=%.2f. Escalating to LLM | query=%r", confidence, query)
         
         llm_res = _llm_extract(query)
         if llm_res is not None:
-            return llm_res
+            return _extract_pagination(query, llm_res)
             
         logger.warning("[QueryAgent] Returning fallback result | reason='All LLM providers failed and Regex confidence was low. Failing closed.'")
         return dict(_FAIL_CLOSED_PAYLOAD)

@@ -18,6 +18,9 @@
     },
     {
       "name": "storage.diagnose.fault"
+    },
+    {
+      "name": "storage.list.resources"
     }
   ],
   "domains": [

@@ -94,6 +94,16 @@ class StorageExecutionEngine:
                 insights = [] if result.get("healthy") else [result.get("detail", "Health check failed.")]
                 actions.append("Health check completed.")
 
+            elif action in ("list", "list_resources"):
+                result = self._list_resources(adapter, request, credentials)
+                if isinstance(result, dict) and "devices" in result:
+                    inventory = result.get("devices", [])
+                    metrics = {"inventory": inventory}
+                    actions.append(f"Listed {len(inventory)} resources.")
+                    status_level = "healthy"
+                else:
+                    errors.append(f"Failed to list resources: {result}")
+
             else:
                 errors.append(f"Unknown action '{request.action}'.")
 
@@ -133,4 +143,13 @@ class StorageExecutionEngine:
     def _health(self, adapter, req, creds):
         @_retry()
         def _c(): return adapter.health_check(req.resource_id, req.resource_type, creds, req.parameters)
+        return _c()
+
+    def _list_resources(self, adapter, req, creds):
+        @_retry()
+        def _c():
+            req.parameters["resource_type"] = req.resource_type
+            skip = req.parameters.get("skip", 0)
+            limit = req.parameters.get("limit", 10)
+            return adapter.list_resources(creds, req.parameters, skip=skip, limit=limit)
         return _c()

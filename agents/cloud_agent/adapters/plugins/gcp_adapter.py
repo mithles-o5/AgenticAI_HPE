@@ -24,3 +24,6 @@ class GCPCloudAdapter(BaseCloudAdapter):
 
     def health_check(self, resource_id, resource_type, region, credentials, parameters) -> Dict[str, Any]:
         return {"healthy": True, "detail": f"[GCP STUB] health-check for {resource_id}."}
+
+    def list_resources(self, region: Optional[str], credentials: Dict[str, Any], parameters: Dict[str, Any], skip: int = 0, limit: int = 10) -> Dict[str, Any]:
+        return {"total": 0, "devices": [{"note": f"[GCP STUB] list resources"}]}

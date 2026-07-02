@@ -112,7 +112,7 @@ def save_token(token: str, provider: str) -> None:
 
     Args:
         token    : The access token string returned by the SSO provider.
-        provider : The provider key used for login (e.g. 'okta', 'auth0', 'azure').
+        provider : The provider key used for login (e.g. 'okta', 'auth0').
     """
     token    = token.strip()
     provider = provider.strip().lower()
@@ -154,7 +154,7 @@ def load_token() -> str:
 
     raise ValueError(
         "No active session found. Login required.\n"
-        "Please choose a provider: auth0, okta, or azure."
+        "Please choose a provider: auth0, okta, or local."
     )
 
 
@@ -162,7 +162,7 @@ def load_provider() -> str | None:
     """
     Return the SSO provider that issued the current active token.
 
-    Returns the provider key (e.g. 'okta', 'auth0', 'azure') or None
+    Returns the provider key (e.g. 'okta', 'auth0') or None
     if no session exists yet.
 
     This is used by mcp_server.py to verify a token with the SAME provider

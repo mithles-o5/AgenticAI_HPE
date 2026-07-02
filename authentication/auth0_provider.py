@@ -26,7 +26,7 @@ import urllib.parse
 import webbrowser
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
-from base_provider import SSOProvider
+from authentication.base_provider import SSOProvider
 
 
 # ─────────────────────────────────────────────────────────────────────────────

@@ -7175,29 +7175,40 @@ def delete_redfish_v1_sessionservice_sessions_session_id(session_id: str):
     raise HTTPException(status_code=404, detail="Resource not found")
 
 @app.api_route("/redfish/v1/systems", methods=["GET"])
-def get_redfish_v1_systems():
+def get_redfish_v1_systems(skip: int = Query(0, description="Items to skip"), limit: int = Query(10, description="Max items to return")):
     """
     iLO Redfish Endpoint: GET /redfish/v1/systems
     Type: Collection ofComputerSystem
     """
     collection_path = "/redfish/v1/systems"
-    dynamic_items = db.get_all(collection_path)
+    all_dynamic_items = db.get_all(collection_path, 0, 999999) # get all to build full response
     static_val = db.get_static("get_redfish_v1_systems", dict())
-    if not dynamic_items:
+    
+    if not all_dynamic_items:
+        if isinstance(static_val, dict):
+            res = dict(static_val)
+            res["Members@odata.count"] = len(res.get("Members", []))
+            res["Members"] = res.get("Members", [])[skip : skip + limit]
+            return res
         return static_val
+        
     if isinstance(static_val, dict):
         res = dict(static_val)
         if "Members" not in res:
             res["Members"] = []
         res["Members"] = list(res["Members"])
         existing = {m.get("@odata.id") for m in res["Members"] if isinstance(m, dict)}
-        for item in dynamic_items:
+        for item in all_dynamic_items:
             item_id = item.get("id") or item.get("Id")
             item_url = item.get("@odata.id") or f"/redfish/v1/systems/{item_id}"
             if item_url not in existing:
                 res["Members"].append({"@odata.id": item_url})
+        
+        # Paginate
         res["Members@odata.count"] = len(res["Members"])
+        res["Members"] = res["Members"][skip : skip + limit]
         return res
+        
     return static_val
 
 @app.api_route("/redfish/v1/systems", methods=["POST"])
@@ -7340,6 +7351,31 @@ def get_redfish_v1_systems_system_id(system_id: str):
     collection_path = f"/redfish/v1/systems"
     item = db.get_item(collection_path, system_id)
     if item:
+        import random
+        # Determine if power is OFF
+        is_off = item.get("PowerState", "On").lower() == "off"
+        
+        # Inject dynamic metrics
+        if is_off:
+            item["cpu_utilization"] = 0.0
+            item["memory_utilization"] = 0.0
+            item["power_draw"] = 0.0
+            item["power_consumed_watts"] = 0.0
+            item["temperature"] = 20.0
+            item["temperature_celsius"] = 20.0
+            item["inlet_temperature_celsius"] = 20.0
+            item["cpu_temperature_celsius"] = 20.0
+        else:
+            item["cpu_utilization"] = round(random.uniform(10.0, 85.0), 1)
+            item["memory_utilization"] = round(random.uniform(20.0, 80.0), 1)
+            item["power_draw"] = round(random.uniform(200.0, 600.0), 1)
+            item["power_consumed_watts"] = item["power_draw"]
+            item["temperature"] = round(random.uniform(40.0, 65.0), 1)
+            item["temperature_celsius"] = item["temperature"]
+            item["inlet_temperature_celsius"] = round(random.uniform(20.0, 26.0), 1)
+            item["cpu_temperature_celsius"] = item["temperature"]
+            
+        db.upsert_item(collection_path, system_id, item)
         return item
     static_val = db.get_static("get_redfish_v1_systems_system_id")
     if static_val:
@@ -13910,6 +13946,7 @@ def system_reset_action(system_id: str, payload: dict = None):
         "GracefulRestart": "On", "ForceRestart": "On", "PowerCycle": "On"
     }.get(reset_type, "On")
     item.update({"PowerState": new_state, "Id": system_id})
+    item["power_state"] = new_state.upper()
     db.upsert_item(collection_path, system_id, item)
     return {
         "message": f"Reset action '{reset_type}' accepted for system {system_id}",
@@ -15372,7 +15409,7 @@ def post_redfish_v1_systems_system_id(system_id: str, payload: dict = None):
             existing["@odata.id"] = f"/redfish/v1/systems/{system_id}"
 
     existing["PowerState"] = new_power_state   # Redfish standard field — single source of truth
-    existing.pop("power_state", None)           # Remove stale duplicate if present
+    existing["power_state"] = new_power_state.upper() # Keep duplicate synced for SQLite upsert
     db.upsert_item(collection_path, system_id, existing)
     return {"status": "success", "ResetType": reset_type, "PowerState": new_power_state}
 

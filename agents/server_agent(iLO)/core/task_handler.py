@@ -103,6 +103,20 @@ class TaskHandler:
                     request.parameters["api_path"] = f"/redfish/v1/systems/{request.resource_id}"
                     request.parameters["http_method"] = "GET"
                 raw_result = await self.engine.sync_cmdb(request)
+            elif action_val in ("LIST", "LIST_RESOURCES"):
+                raw_result = self.engine.list_resources(request)
+                if isinstance(raw_result, dict) and "devices" in raw_result:
+                    inventory_data = raw_result.get("devices", [])
+                    return TaskResponse(
+                        task_id=task_id,
+                        status="success",
+                        resource_type=request.resource_type.value,
+                        resource_id="list",
+                        region=request.region,
+                        status_level=StatusLevel.HEALTHY,
+                        inventory=inventory_data,
+                        insights=[f"Total matched: {raw_result.get('total', len(inventory_data))}"]
+                    )
             else:
                 errors.append(f"Unsupported action: {request.action}")
 

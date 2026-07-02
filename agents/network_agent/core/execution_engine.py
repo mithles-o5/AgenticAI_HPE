@@ -43,6 +43,8 @@ _MOCK_DEFAULT_PATHS: Dict[str, str] = {
     "discover_topology":    "/network/v1/devices",
     "health_check":         "/network/v1/devices/{id}",
     "detect_fault":         "/network/v1/devices/{id}",
+    "list_resources":       "/network/v1/devices",
+    "list":                 "/network/v1/devices",
 }
 
 
@@ -174,6 +176,16 @@ class NetworkExecutionEngine:
                     f"{len(anomaly_report.insights)} issue(s) found."
                 )
 
+            elif action in ("list", "list_resources"):
+                result = self._list_resources(adapter, request, credentials, parameters)
+                if isinstance(result, dict) and "devices" in result:
+                    inventory = result.get("devices", [])
+                    metrics = {"inventory": inventory}
+                    actions.append(f"Listed {len(inventory)} resources.")
+                    status_level = "healthy"
+                else:
+                    errors.append(f"Failed to list resources: {result}")
+
             else:
                 errors.append(f"Unknown action '{request.action}'.")
 
@@ -237,3 +249,12 @@ class NetworkExecutionEngine:
         def _c():
             return adapter.health_check(req.resource_id, creds, params)
         return _c()
+
+    def _list_resources(self, adapter, req, creds, params):
+        @_retry()
+        def _call():
+            params["resource_type"] = req.resource_type
+            skip = params.get("skip", 0)
+            limit = params.get("limit", 10)
+            return adapter.list_resources(creds, params, skip=skip, limit=limit)
+        return _call()

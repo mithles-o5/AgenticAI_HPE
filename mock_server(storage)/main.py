@@ -619,12 +619,13 @@ def get_data_services_v1beta1_tags():
 # --- CRUD Endpoints for Storage Devices ---
 
 @app.get("/data-services/v1beta1/devices")
-def get_storage_devices():
+def get_storage_devices(skip: int = Query(0), limit: int = Query(10)):
     """
     CRUD Route: GET /data-services/v1beta1/devices
     """
     collection_path = "/data-services/v1beta1/devices"
-    return db.get_all(collection_path)
+    all_devices = db.get_all(collection_path, 0, 999999)
+    return {"total": len(all_devices), "devices": all_devices[skip : skip + limit]}
 
 @app.get("/data-services/v1beta1/devices/{id}")
 def get_storage_device_by_id(id: str):

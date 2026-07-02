@@ -2,7 +2,7 @@
 base_provider.py
 ================
 Abstract base class for all SSO providers.
-Every new SSO provider (Auth0, Okta, Azure AD, etc.) must inherit
+Every new SSO provider (Auth0, Okta, etc.) must inherit
 from SSOProvider and implement the two abstract methods below.
 """
 

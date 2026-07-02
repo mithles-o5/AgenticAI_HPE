@@ -59,7 +59,7 @@ class MockAdapter(BaseAdapter):
     async def discover_inventory(self, resource_type: str, credentials: dict, parameters: dict) -> list:
         api_path = parameters.get("api_path")
         if not api_path:
-            return [{"result": "failed", "detail": "Dynamic routing failed: No api_path provided by orchestrator. The agent is strictly dynamic."}]
+            api_path = "/rest/server-hardware"
             
         res = await self._dynamic_call(parameters.get("http_method", "GET"), api_path, "", parameters.get("payload", {}), parameters.get("base_url", ""))
         if isinstance(res, list):
@@ -69,6 +69,78 @@ class MockAdapter(BaseAdapter):
         elif isinstance(res, dict) and "items" in res:
             return res["items"]
         return [res]
+
+    async def list_resources(
+        self,
+        resource_type: str,
+        credentials: dict,
+        parameters: dict,
+        skip: int = 0,
+        limit: int = 100,
+    ) -> dict:
+        """
+        List resources from OneView or ComOps mock server.
+        Routing is driven by the api_path parameter passed from mcp_server.
+          - /rest/*               -> OneView mock (port 8002)
+          - /compute-ops-mgmt/*  -> ComOps mock  (port 8001)
+        """
+        api_path = parameters.get("api_path", "")
+        provider_label = parameters.get("provider_label", "mock_server(onprem)")
+
+        if not api_path:
+            if "ComOps" in provider_label:
+                api_path = f"/compute-ops-mgmt/v1/devices?device_type={resource_type}"
+            else:
+                if resource_type == "server":
+                    api_path = "/rest/custom-servers"
+                elif resource_type == "switch":
+                    api_path = "/rest/custom-switches"
+                else:
+                    api_path = "/rest/server-hardware"
+
+        # Choose base URL based on path prefix
+        if "compute-ops-mgmt" in api_path:
+            base = "http://127.0.0.1:8001"
+        else:
+            base = "http://127.0.0.1:8002"
+
+        import httpx
+        url = f"{base}{api_path}"
+        try:
+            async with httpx.AsyncClient(timeout=6.0) as client:
+                resp = await client.get(url)
+                if resp.status_code != 200:
+                    return {"devices": [], "total": 0,
+                            "error": f"{provider_label} HTTP {resp.status_code}"}
+                data = resp.json()
+        except httpx.ConnectError:
+            return {"devices": [], "total": 0,
+                    "error": f"{provider_label} is offline (connection refused)"}
+        except Exception as exc:
+            return {"devices": [], "total": 0, "error": str(exc)}
+
+        # Normalise to list
+        if isinstance(data, list):
+            items = data
+        elif isinstance(data, dict):
+            items = (
+                data.get("members")
+                or data.get("items")
+                or data.get("devices")
+                or data.get("Members")
+                or data.get("resources")
+                or []
+            )
+        else:
+            items = []
+
+        # Tag each device with provider label
+        for item in items:
+            if isinstance(item, dict) and not item.get("management_source"):
+                item["management_source"] = provider_label
+
+        paginated = items[skip: skip + limit] if limit else items
+        return {"devices": paginated, "total": len(items)}
 
     async def sync_cmdb(self, credentials: dict, parameters: dict) -> dict:
         return {

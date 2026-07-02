@@ -14,7 +14,7 @@ WARNING: Do not use in production. Replace with a real provider.
 import jwt
 import datetime
 
-from base_provider import SSOProvider
+from authentication.base_provider import SSOProvider
 
 
 # ─────────────────────────────────────────────────────────────────────────────

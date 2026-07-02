@@ -1,6 +1,6 @@
 """Abstract base class for all cloud provider adapters.
 
-Every adapter plugin (AWS, Azure, GCP, mock, …) must subclass BaseCloudAdapter
+Every adapter plugin (AWS, GCP, mock, …) must subclass BaseCloudAdapter
 and implement the four abstract methods. The Cloud Agent core never calls
 provider-specific APIs directly — it always goes through this interface.
 """
@@ -82,3 +82,14 @@ class BaseCloudAdapter(ABC):
 
         Returns a dict with at least: {"healthy": bool, "detail": str}.
         """
+
+    @abstractmethod
+    def list_resources(
+        self,
+        region: Optional[str],
+        credentials: Dict[str, Any],
+        parameters: Dict[str, Any],
+        skip: int = 0,
+        limit: int = 10,
+    ) -> Dict[str, Any]:
+        """List managed systems/resources with pagination."""

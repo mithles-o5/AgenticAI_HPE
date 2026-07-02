@@ -91,11 +91,12 @@ class Database:
             
         return None
 
-    def get_all(self, collection_path):
+    def get_all(self, collection_path, skip: int = 0, limit: int = 100):
         intercepted = self._intercept_devices(collection_path)
         if intercepted is not None:
-            return intercepted
-        return list(self.get_collection(collection_path).values())
+            return intercepted[skip : skip + limit]
+        items = list(self.get_collection(collection_path).values())
+        return items[skip : skip + limit]
 
     def get_item(self, collection_path, item_id):
         intercepted = self._intercept_devices(collection_path)

@@ -7,14 +7,14 @@ from adapters.base import BaseCloudAdapter
 
 
 class AzureCloudAdapter(BaseCloudAdapter):
-    """Azure Monitor + ARM REST adapter (stub — swap with azure-mgmt-* in prod)."""
+    """Azure Resource Manager REST adapter (stub)."""
 
     @property
     def provider_name(self) -> str:
         return "azure"
 
     def fetch_metrics(self, resource_id, resource_type, region, credentials, parameters) -> Dict[str, Any]:
-        return {"source": "azure", "resource_id": resource_id, "note": "Stub — integrate Azure Monitor SDK for live data."}
+        return {"source": "azure", "resource_id": resource_id, "note": "Stub"}
 
     def execute_action(self, resource_id, resource_type, region, action, credentials, parameters) -> Dict[str, Any]:
         return {"result": "stub", "detail": f"[AZURE STUB] action='{action}' on {resource_id}."}
@@ -24,3 +24,6 @@ class AzureCloudAdapter(BaseCloudAdapter):
 
     def health_check(self, resource_id, resource_type, region, credentials, parameters) -> Dict[str, Any]:
         return {"healthy": True, "detail": f"[AZURE STUB] health-check for {resource_id}."}
+
+    def list_resources(self, region: Optional[str], credentials: Dict[str, Any], parameters: Dict[str, Any], skip: int = 0, limit: int = 10) -> Dict[str, Any]:
+        return {"total": 0, "devices": [{"note": f"[AZURE STUB] list resources"}]}

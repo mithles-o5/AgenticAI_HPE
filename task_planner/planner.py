@@ -62,6 +62,7 @@ class TaskPlanner:
                 action=parsed.get("action", "STATUS"),
                 category=parsed.get("category", "Operational"),
                 identifier=parsed.get("identifier"),
+                params=parsed.get("params", {}),
                 dependencies=dependencies
             )
             tasks.append(task)

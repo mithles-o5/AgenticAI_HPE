@@ -318,6 +318,29 @@ class SyncCmdbSkill(BaseSkill):
             "normalized_data": cmdb_payload
         }
 
+class ListResourcesSkill(BaseSkill):
+    async def execute(self, adapter, request, credentials: dict) -> dict:
+        """List resources for the given provider/api_path, return paginated inventory."""
+        params = request.parameters or {}
+        skip = params.get("skip", 0)
+        limit = params.get("limit", 100)
+        result = await adapter.list_resources(
+            resource_type=request.resource_type,
+            credentials=credentials,
+            parameters=params,
+            skip=skip,
+            limit=limit,
+        )
+        devices = result.get("devices", []) if isinstance(result, dict) else result
+        return {
+            "status": "success",
+            "metrics": {"total": len(devices), "inventory": devices},
+            "actions_taken": ["list_resources"],
+            "status_level": "healthy",
+            "insights": [{"type": "list", "message": f"Found {len(devices)} resources"}],
+        }
+
+
 # Global registry mapping skills
 SKILLS: Dict[str, BaseSkill] = {
     "onprem.monitoring.health": HealthSkill(),
@@ -328,6 +351,7 @@ SKILLS: Dict[str, BaseSkill] = {
     "onprem.execute.firmware_update": FirmwareUpdateSkill(),
     "onprem.execute.generic_action": GenericActionSkill(),
     "onprem.discover.inventory": InventorySkill(),
+    "onprem.list.resources": ListResourcesSkill(),
     "onprem.diagnose.anomaly": AnomalySkill(),
     "onprem.sync.cmdb": SyncCmdbSkill()
 }
@@ -343,6 +367,8 @@ def resolve_skill_name(action: str, parameters: dict = None) -> str:
         return "onprem.monitoring.alerts"
     elif act == "discover_inventory":
         return "onprem.discover.inventory"
+    elif act in ("list", "list_resources"):
+        return "onprem.list.resources"
     elif act == "diagnose_anomaly":
         return "onprem.diagnose.anomaly"
     elif act == "sync_cmdb":

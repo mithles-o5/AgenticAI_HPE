@@ -79,6 +79,7 @@ class MockNetworkAdapter(BaseNetworkAdapter):
             resp = httpx.request(
                 method.upper(), full_url, json=payload if payload else None, timeout=10.0
             )
+            logger.info(f"[MockNetworkAdapter] Response status: {resp.status_code}")
             try:
                 return resp.json()
             except Exception:
@@ -379,3 +380,44 @@ class MockNetworkAdapter(BaseNetworkAdapter):
             }
 
         return {"healthy": False, "detail": str(raw)}
+
+    def list_resources(
+        self,
+        credentials: dict,
+        parameters: dict,
+        skip: int = 0,
+        limit: int = 10,
+    ) -> Dict[str, Any]:
+        """Fetch a paginated list of network resources using api_path from parameters."""
+        parameters = parameters or {}
+        resource_type = parameters.get("resource_type", "switch")
+        api_path = parameters.get("api_path")
+        if not api_path:
+            api_path = f"/network/v1/devices?device_type={resource_type}"
+        provider_label = parameters.get("provider_label", "mock_server(network)")
+        base_url = _MOCK_NETWORK_BASE
+
+        raw = self._call(
+            parameters.get("http_method", "GET"),
+            api_path,
+            "",
+            {},
+            base_url,
+        )
+
+        devices = []
+        if isinstance(raw, list):
+            devices = raw
+        elif isinstance(raw, dict):
+            for key in ["devices", "items", "members", "switches", "aps", "resources"]:
+                if key in raw and isinstance(raw[key], list):
+                    devices = raw[key]
+                    break
+
+        # Tag provider label
+        for d in devices:
+            if isinstance(d, dict) and not d.get("management_source"):
+                d["management_source"] = provider_label
+
+        paginated = devices[skip: skip + limit] if limit else devices
+        return {"total": len(devices), "devices": paginated}

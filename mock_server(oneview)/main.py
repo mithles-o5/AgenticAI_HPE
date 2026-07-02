@@ -1131,14 +1131,24 @@ def get_rest_rack_managers_id_remotesupportsettings(id: str):
     return static_data
 
 @app.get("/rest/server-hardware")
-def get_rest_server_hardware():
+def get_rest_server_hardware(skip: int = 0, limit: int = 100):
     """
     Dynamic CRUD Route: GET /rest/server-hardware
     """
     collection_path = f"/rest/server-hardware"
     static_data = db.get_static("get_rest_server_hardware", dict())
-    dynamic_items = db.get_all(collection_path)
+    dynamic_items = db.get_all(collection_path, 0, 999999)
     if not dynamic_items:
+        if isinstance(static_data, list):
+            return static_data[skip : skip + limit]
+        elif isinstance(static_data, dict):
+            res = dict(static_data)
+            for key in ["items", "members", "devices"]:
+                if key in res and isinstance(res[key], list):
+                    res["total"] = len(res[key])
+                    res[key] = res[key][skip : skip + limit]
+                    break
+            return res
         return static_data
     if isinstance(static_data, list):
         res = list(static_data)
@@ -1147,10 +1157,10 @@ def get_rest_server_hardware():
             iid = item.get("id") or item.get("uuid") or item.get("name")
             if iid not in existing:
                 res.append(item)
-        return res
+        return res[skip : skip + limit]
     elif isinstance(static_data, dict):
         res = dict(static_data)
-        for key in ["items", "members"]:
+        for key in ["items", "members", "devices"]:
             if key in res and isinstance(res[key], list):
                 res[key] = list(res[key])
                 existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
@@ -1158,6 +1168,9 @@ def get_rest_server_hardware():
                     iid = item.get("id") or item.get("uuid") or item.get("name")
                     if iid not in existing:
                         res[key].append(item)
+                res["total"] = len(res[key])
+                res[key] = res[key][skip : skip + limit]
+                break
                 res["count"] = len(res[key])
                 if "total" in res:
                     res["total"] = len(res[key])

@@ -136,6 +136,45 @@ class MockAdapter(ServerAdapter):
             return {"status": "success", "detail": "Virtual media mounted"}
         return res
 
+    def list_resources(self, filters: Dict[str, Any], skip: int = 0, limit: int = 10, parameters: Dict[str, Any] = None) -> Dict[str, Any]:
+        """Fetch a paginated list of resources from the iLO mock server using the api_path from parameters."""
+        parameters = parameters or {}
+        api_path = parameters.get("api_path", "/redfish/v1/systems")
+        provider_label = parameters.get("provider_label", "mock_server(iLO)")
+        base_url = "http://127.0.0.1:8010"
+        url = f"{base_url}{api_path}"
+
+        import requests
+        try:
+            resp = requests.get(url, timeout=5)
+            if resp.status_code == 200:
+                data = resp.json()
+                # Normalise to list
+                if isinstance(data, list):
+                    members = data
+                elif isinstance(data, dict):
+                    members = (
+                        data.get("Members")
+                        or data.get("items")
+                        or data.get("devices")
+                        or data.get("members")
+                        or []
+                    )
+                else:
+                    members = []
+                # Tag each device
+                for item in members:
+                    if isinstance(item, dict) and not item.get("management_source"):
+                        item["management_source"] = provider_label
+                total = data.get("Members@odata.count", len(members)) if isinstance(data, dict) else len(members)
+                return {"total": total, "devices": members}
+        except Exception as e:
+            import structlog
+            logger = structlog.stdlib.get_logger()
+            logger.error("Failed to list resources from mock API", error=str(e))
+        return {"total": 0, "devices": []}
+
+
     def discover_inventory(self, filters: Dict[str, Any], parameters: Dict[str, Any] = None) -> List[Dict[str, Any]]:
         parameters = parameters or {}
         api_path = parameters.get("api_path")

@@ -38,17 +38,7 @@ def normalize_metrics(raw_data: Dict[str, Any]) -> ServerMetrics:
             except: mem_val = {}
         raw_data["memory_total_gb"] = (mem_val or {}).get("TotalSystemMemoryGiB") or 128.0
         
-        # Inject standard simulated metrics if not present
-        if "cpu_utilization" not in raw_data: raw_data["cpu_utilization"] = 45.0
-        if "memory_utilization" not in raw_data: raw_data["memory_utilization"] = 50.0
-        if "power_consumed_watts" not in raw_data: raw_data["power_consumed_watts"] = 320.0
-        if "power_capacity_watts" not in raw_data: raw_data["power_capacity_watts"] = 800.0
-        if "inlet_temperature_celsius" not in raw_data: raw_data["inlet_temperature_celsius"] = 22.0
-        if "cpu_temperature_celsius" not in raw_data: raw_data["cpu_temperature_celsius"] = 52.0
-        if "power_supply_status" not in raw_data: raw_data["power_supply_status"] = "OK"
-        if "fan_status" not in raw_data: raw_data["fan_status"] = "OK"
-        if "storage_status" not in raw_data: raw_data["storage_status"] = "OK"
-        if "network_status" not in raw_data: raw_data["network_status"] = "OK"
+        # Agent-side metric randomization removed; now handled by mock_server
 
     # Handle direct sensor response list if passed
     if "sensors" in raw_data:

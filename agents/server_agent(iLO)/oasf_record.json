@@ -13,7 +13,8 @@
     {"name": "server.execute.virtual_media"},
     {"name": "server.discover.inventory"},
     {"name": "server.diagnose.anomaly"},
-    {"name": "server.sync.cmdb"}
+    {"name": "server.sync.cmdb"},
+    {"name": "server.list.resources"}
   ],
   "domains": ["server-infrastructure", "hardware-management", "observability"],
   "locators": [{"type": "openapi", "url": "http://server-agent:8009/openapi.json"}],

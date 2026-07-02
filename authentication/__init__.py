@@ -9,7 +9,6 @@ TO SWITCH PROVIDERS:
     Change the PROVIDER variable to one of:
         "auth0"  → Auth0 PKCE       (ready to use)
         "okta"   → Okta PKCE        (fill in OKTA_DOMAIN + OKTA_CLIENT_ID in okta_provider.py)
-        "azure"  → Azure AD PKCE    (fill in AZURE_TENANT_ID + AZURE_CLIENT_ID in azure_provider.py)
 
 TO ADD A NEW PROVIDER:
     1. Create `my_provider.py` in this folder
@@ -18,10 +17,9 @@ TO ADD A NEW PROVIDER:
     4. Set PROVIDER = "my_provider"
 """
 
-from auth0_provider import Auth0Provider
-from okta_provider  import OktaProvider
-from azure_provider import AzureADProvider
-from local_provider import LocalProvider
+from authentication.auth0_provider import Auth0Provider
+from authentication.okta_provider  import OktaProvider
+from authentication.local_provider import LocalProvider
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Active Provider Selection
@@ -35,12 +33,10 @@ PROVIDER = "local"
 # ─────────────────────────────────────────────────────────────────────────────
 
 PROVIDER_REGISTRY = {
-    "local" : LocalProvider,
-    "auth0" : Auth0Provider,
-    "okta"  : OktaProvider,
-    "azure" : AzureADProvider,
+    "auth0": Auth0Provider,
+    "okta" : OktaProvider,
+    "local": LocalProvider
 }
-
 
 def get_provider(name: str = PROVIDER, **kwargs):
     """

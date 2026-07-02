@@ -1,10 +1,5 @@
-import os
-import sys
-
-# Ensure parent directory in python path
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-from resource_resolver.query_agent import QueryAgent
-
-query = '{"identifier": "gl-ns-008", "action": "STATUS", "category": "Operational"}'
-print(QueryAgent.parse_query(query))
+import psycopg2
+conn = psycopg2.connect(dbname='hpe_agentic_ai', user='postgres', password='Mithles', host='localhost', port=5432)
+cur = conn.cursor()
+cur.execute("SELECT serial_number, management_source, source_host FROM devices WHERE serial_number = 'apollo-node-899'")
+print(cur.fetchall())

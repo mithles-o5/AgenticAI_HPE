@@ -8,7 +8,8 @@
     {"name": "network.monitoring.interface"},
     {"name": "network.monitoring.traffic"},
     {"name": "network.execute.config_push"},
-    {"name": "network.diagnose.fault"}
+    {"name": "network.diagnose.fault"},
+    {"name": "network.list.resources"}
   ],
   "domains": ["network-infrastructure", "observability"],
   "locators": [

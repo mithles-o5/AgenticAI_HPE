@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 import random
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from adapters.base import BaseStorageAdapter
 
@@ -19,7 +19,7 @@ class MockStorageAdapter(BaseStorageAdapter):
         from urllib.parse import urlparse
         try:
             parsed = urlparse(api_path)
-            api_path = f"http://127.0.0.1:8004{parsed.path}"
+            api_path = f"http://127.0.0.1:8005{parsed.path}"
             if parsed.query:
                 api_path += f"?{parsed.query}"
 
@@ -76,3 +76,45 @@ class MockStorageAdapter(BaseStorageAdapter):
         if not api_path:
             return {"result": "failed", "detail": "Dynamic routing failed: No api_path provided by orchestrator. The agent is strictly dynamic."}
         return self._dynamic_call(parameters.get("http_method", "GET"), api_path, resource_id, parameters.get("payload", {}), parameters.get("base_url", ""))
+
+    def list_resources(self, credentials, parameters, skip: int = 0, limit: int = 100) -> Dict[str, Any]:
+        """List storage resources using api_path and provider_label from parameters."""
+        parameters = parameters or {}
+        resource_type = parameters.get("resource_type", "storage_system")
+        api_path = parameters.get("api_path")
+        if not api_path:
+            api_path = f"/data-services/v1beta1/devices?device_type={resource_type}"
+        provider_label = parameters.get("provider_label", "mock_server(storage)")
+
+        import httpx
+        base_url = "http://127.0.0.1:8005"
+        url = f"{base_url}{api_path}"
+        try:
+            resp = httpx.get(url, timeout=5)
+            if resp.status_code != 200:
+                return {"total": 0, "devices": [],
+                        "error": f"{provider_label} HTTP {resp.status_code}"}
+            res = resp.json()
+        except Exception as e:
+            return {"total": 0, "devices": [], "error": str(e)}
+
+        if isinstance(res, list):
+            devices = res
+        elif isinstance(res, dict):
+            devices = (
+                res.get("devices")
+                or res.get("items")
+                or res.get("members")
+                or res.get("resources")
+                or []
+            )
+        else:
+            devices = []
+
+        # Tag provider label
+        for d in devices:
+            if isinstance(d, dict) and not d.get("management_source"):
+                d["management_source"] = provider_label
+
+        paginated = devices[skip: skip + limit] if limit else devices
+        return {"total": len(devices), "devices": paginated}

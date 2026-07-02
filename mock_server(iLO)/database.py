@@ -66,8 +66,9 @@ class Database:
             finally:
                 conn.close()
 
-    def get_all(self, collection_path):
-        return list(self.get_collection(collection_path).values())
+    def get_all(self, collection_path, skip: int = 0, limit: int = 100):
+        items = list(self.get_collection(collection_path).values())
+        return items[skip : skip + limit]
 
     def get_item(self, collection_path, item_id):
         table_name = self._get_table_name(collection_path)

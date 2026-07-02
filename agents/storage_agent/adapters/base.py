@@ -59,3 +59,13 @@ class BaseStorageAdapter(ABC):
         parameters: Dict[str, Any],
     ) -> Dict[str, Any]:
         """Return {"healthy": bool, "detail": str, "checks": dict}."""
+
+    @abstractmethod
+    def list_resources(
+        self,
+        credentials: Dict[str, Any],
+        parameters: Dict[str, Any],
+        skip: int = 0,
+        limit: int = 10,
+    ) -> Dict[str, Any]:
+        """List managed systems/resources with pagination."""

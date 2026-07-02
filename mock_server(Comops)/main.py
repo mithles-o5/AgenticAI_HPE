@@ -3354,12 +3354,15 @@ def get_compute_ops_mgmt_v1beta3_groups_group_id_ilo_settings_compliance_ilo_set
 # --- CRUD Endpoints for Compute Ops Devices ---
 
 @app.get("/compute-ops-mgmt/v1/devices")
-def get_compute_ops_devices():
+def get_compute_ops_devices(device_type: str = Query(None)):
     """
     CRUD Route: GET /compute-ops-mgmt/v1/devices
     """
     collection_path = "/compute-ops-mgmt/v1/devices"
-    return db.get_all(collection_path)
+    all_devices = db.get_all(collection_path)
+    if device_type:
+        all_devices = [d for d in all_devices if d.get("device_type", "").lower() == device_type.lower()]
+    return all_devices
 
 @app.get("/compute-ops-mgmt/v1/devices/{id}")
 def get_compute_ops_device_by_id(id: str):

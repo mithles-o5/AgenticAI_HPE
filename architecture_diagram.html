@@ -464,10 +464,10 @@
         <span class="card-icon">&#128272;</span>
         <div class="card-title">Authentication Module</div>
         <div class="card-subtitle">Pluggable SSO provider registry. PKCE OAuth 2.0 browser-based login. Switch providers by changing PROVIDER variable.</div>
-        <div class="card-tags"><span class="tag">Auth0</span><span class="tag">Okta</span><span class="tag">Azure AD</span><span class="tag">Local</span></div>
+        <div class="card-tags"><span class="tag">Auth0</span><span class="tag">Okta</span><span class="tag">Local</span></div>
         <div class="sub-info">
           <div class="sub-row">auth0_provider.py &middot; okta_provider.py</div>
-          <div class="sub-row">azure_provider.py &middot; local_provider.py</div>
+          <div class="sub-row">local_provider.py</div>
           <div class="sub-row">token_store.py &middot; base_provider.py</div>
         </div>
       </div>
@@ -726,7 +726,7 @@
         <div class="wf-num" style="background:rgba(167,139,250,0.15);color:#a78bfa;border:1px solid rgba(167,139,250,0.3);">2</div>
         <div class="wf-content">
           <h3>Authentication Gate</h3>
-          <p>MCP Server checks <code>token_store</code> for a valid JWT. If absent or expired, the active SSO provider (<code>Auth0 | Okta | Azure AD | Local</code>) opens a PKCE browser flow and saves the token to the store.</p>
+          <p>MCP Server checks <code>token_store</code> for a valid JWT. If absent or expired, the active SSO provider (<code>Auth0 | Okta | Local</code>) opens a PKCE browser flow and saves the token to the store.</p>
         </div>
       </div>
 
@@ -799,7 +799,7 @@
       <div class="tech-pill"><span class="emoji">&#128013;</span> Python 3.11+</div>
       <div class="tech-pill"><span class="emoji">&#9889;</span> FastMCP</div>
       <div class="tech-pill"><span class="emoji">&#128640;</span> FastAPI</div>
-      <div class="tech-pill"><span class="emoji">&#128272;</span> Auth0 / Okta / Azure AD</div>
+      <div class="tech-pill"><span class="emoji">&#128272;</span> Auth0 / Okta</div>
       <div class="tech-pill"><span class="emoji">&#128273;</span> PKCE OAuth 2.0</div>
       <div class="tech-pill"><span class="emoji">&#128190;</span> Memurai / Redis</div>
       <div class="tech-pill"><span class="emoji">&#128452;&#65039;</span> SQLite / PostgreSQL</div>

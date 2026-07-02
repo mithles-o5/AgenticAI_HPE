@@ -98,6 +98,15 @@ class CloudExecutionEngine:
                 metrics = normalize_metrics(raw)
                 actions_taken.append("Fetched metrics for anomaly detection.")
 
+            elif action in ("list", "list_resources"):
+                result = self._list_resources(adapter, request, credentials)
+                if isinstance(result, dict) and "devices" in result:
+                    inventory = result.get("devices", [])
+                    action_result = {"inventory": inventory}
+                    actions_taken.append(f"Listed {len(inventory)} resources.")
+                else:
+                    errors.append(f"Failed to list resources: {result}")
+
             else:
                 errors.append(f"Unknown action '{request.action}'. Supported: fetch_metrics, execute_action, health_check, discover_resources, detect_anomaly.")
 
@@ -179,5 +188,20 @@ class CloudExecutionEngine:
                 resource_type=req.resource_type,
                 credentials=creds,
                 parameters=req.parameters,
+            )
+        return _call()
+
+    def _list_resources(self, adapter, req: TaskRequest, creds: Dict) -> Dict:
+        @_make_retry()
+        def _call():
+            req.parameters["resource_type"] = req.resource_type
+            skip = req.parameters.get("skip", 0)
+            limit = req.parameters.get("limit", 10)
+            return adapter.list_resources(
+                region=req.region,
+                credentials=creds,
+                parameters=req.parameters,
+                skip=skip,
+                limit=limit,
             )
         return _call()

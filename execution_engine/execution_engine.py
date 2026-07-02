@@ -74,6 +74,8 @@ _ACTION_MAP: Dict[str, str] = {
     "CLEAR_EVENT_LOG":     "fetch_event_log",    # clear=True injected by mcp_server
     "DISCOVER_INVENTORY":  "discover_inventory",
     "SYNC_CMDB":           "sync_cmdb",
+    "LIST":                "list_resources",
+    "LIST_RESOURCES":      "list_resources",
 }
 
 # Agent-specific action overrides by domain
@@ -153,6 +155,8 @@ class AgentDispatcher:
                 "RESCAN": "storage.discover.arrays",
                 "ON": "storage.execute.volume_action",
                 "OFF": "storage.execute.volume_action",
+                "LIST": "storage.list.resources",
+                "LIST_RESOURCES": "storage.list.resources",
             }
             target_skill = action_skill_map.get(query_action)
         elif "server" in agent_name:
@@ -171,28 +175,36 @@ class AgentDispatcher:
                 "CLEAR_EVENT_LOG":     "server.monitoring.eventlog",
                 "DISCOVER_INVENTORY":  "server.discover.inventory",
                 "SYNC_CMDB":           "server.sync.cmdb",
+                "LIST":                "server.list.resources",
+                "LIST_RESOURCES":      "server.list.resources",
             }
             target_skill = action_skill_map.get(query_action)
         elif "onprem" in agent_name:
             action_skill_map = {
-                "STATUS": "onprem.monitoring.health",
-                "ON": "onprem.execute.power_action",
-                "OFF": "onprem.execute.power_action",
-                "POWER_ON": "onprem.execute.power_action",
-                "POWER_OFF": "onprem.execute.power_action",
+                "STATUS":        "onprem.monitoring.health",
+                "ON":            "onprem.execute.power_action",
+                "OFF":           "onprem.execute.power_action",
+                "POWER_ON":      "onprem.execute.power_action",
+                "POWER_OFF":     "onprem.execute.power_action",
+                "LIST":          "onprem.list.resources",
+                "LIST_RESOURCES":"onprem.list.resources",
             }
             target_skill = action_skill_map.get(query_action)
         elif "cloud" in agent_name:
             action_skill_map = {
-                "STATUS": "cloud.monitoring.health_check",
-                "ON": "cloud.execute.action",
-                "OFF": "cloud.execute.action",
+                "STATUS":        "cloud.monitoring.health_check",
+                "ON":            "cloud.execute.action",
+                "OFF":           "cloud.execute.action",
+                "LIST":          "cloud.list.resources",
+                "LIST_RESOURCES":"cloud.list.resources",
             }
             target_skill = action_skill_map.get(query_action)
         elif "network" in agent_name:
             action_skill_map = {
-                "STATUS": "network.monitoring.interface",
-                "RESCAN": "network.topology.discover",
+                "STATUS":        "network.monitoring.interface",
+                "RESCAN":        "network.topology.discover",
+                "LIST":          "network.list.resources",
+                "LIST_RESOURCES":"network.list.resources",
             }
             target_skill = action_skill_map.get(query_action)
 

@@ -155,7 +155,7 @@ def test_providers_endpoint():
     r = client.get("/cloud-agent/providers")
     assert r.status_code == 200
     providers = r.json()["providers"]
-    assert set(providers) >= {"mock", "aws", "azure", "gcp"}
+    assert set(providers) >= {"mock", "aws", "gcp"}
 
 
 def test_execute_task_endpoint():

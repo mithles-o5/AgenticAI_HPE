@@ -39,6 +39,11 @@ class ServerAdapter(ABC):
         pass
 
     @abstractmethod
+    def list_resources(self, filters: Dict[str, Any], skip: int = 0, limit: int = 10) -> Dict[str, Any]:
+        """List managed systems/resources with pagination."""
+        pass
+
+    @abstractmethod
     def discover_inventory(self, filters: Dict[str, Any]) -> List[Dict[str, Any]]:
         """List hardware inventory: CPUs, DIMMs, storage controllers, NICs, firmware versions."""
         pass

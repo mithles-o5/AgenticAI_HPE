@@ -202,7 +202,7 @@ mcp = FastMCP(
 
     CRITICAL LOGIN RULES (Follow strictly):
     1. If a tool returns an unauthenticated error, you must use the `sso_login` tool to authenticate the mock session.
-    2. Because this is a mock environment, you can use any of the mock providers (e.g. 'auth0', 'okta', 'azure') without needing real credentials.
+    2. Because this is a mock environment, you can use any of the mock providers (e.g. 'auth0', 'okta') without needing real credentials.
     3. You can either ask the user which mock provider to use, or if they have already given permission, just call `sso_login` directly.
 
     CRITICAL LOGOUT RULES:
@@ -306,7 +306,7 @@ def _require_auth() -> tuple[str, str]:
         raise ValueError(
             "ERROR: UNAUTHENTICATED\n\n"
             "The mock session is unauthenticated. To proceed, please use the `sso_login` tool "
-            "with one of the supported providers ('auth0', 'okta', 'local', or 'azure').\n"
+            "with one of the supported providers ('auth0', 'okta', or 'local').\n"
             "Note: This is a mock environment, no actual credentials are required."
         )
 
@@ -399,7 +399,7 @@ def sso_login(provider: str) -> str:
 
     Args:
         provider : The SSO provider to use.
-                   Must be one of: auth0, okta, azure.
+                   Must be one of: auth0, okta.
                    Always ask the user which provider they want BEFORE calling this.
 
     All providers open a browser window — no credentials are ever sent through the chat.
@@ -513,8 +513,11 @@ def logout() -> str:
 async def manage_infrastructure_resource(query: str) -> str:
     """
     USE THIS TOOL to manage or check the status of ANY resource (cloud, network, storage, server, onprem).
-    You can also use this tool to LIST resources by category (e.g., query='{"action": "LIST", "identifier": "gateways"}').
-    The backend CMDB and Capability Registry will automatically route it to the correct agent.
+    You can also use this tool to LIST resources by category.
+    Pass a natural language sentence for the `query` argument (e.g. query='List all gateways').
+    The backend CMDB and Capability Registry will automatically parse your sentence and route it to the correct agent.
+    
+    IMPORTANT: DO NOT SUMMARIZE the output of this tool! The tool returns specially formatted Markdown (like carousels) that you MUST output EXACTLY AS RETURNED directly to the user so they can interact with the pagination.
     """
     return await _execute_agent_command(
         query=query,
@@ -542,9 +545,11 @@ async def _execute_agent_command(
         return str(e)
 
     import json
-    import os
-    with open(r"c:\AgenticAI_HPE\scratch_query_log.txt", "a", encoding="utf-8") as f:
-        f.write("RAW QUERY RECEIVED:\n" + repr(query) + "\n\n")
+    try:
+        with open("scratch_query_log.txt", "a", encoding="utf-8") as f:
+            f.write("RAW QUERY RECEIVED:\n" + repr(query) + "\n\n")
+    except Exception:
+        pass
 
     # ── Canonical action normalizer — maps any LLM/user alias to the canonical action verb
     _CANONICAL_ACTIONS: dict = {
@@ -627,82 +632,229 @@ async def _execute_agent_command(
 
     # ── Step 2.5: Resource Resolver Validation & CMDB Check ───────────────────
 
-    is_list = action == "LIST"
+    is_list = action == "LIST" or identifier.lower() == "all" or ("all" in identifier.lower() and action == "STATUS")
     if is_list:
         ident_lower = identifier.lower().strip()
-        if "pool" in ident_lower:
-            normalized_category = "storage-pools"
-            resource_type = "storage_pool"
-            provider_or_protocol = "mock_storage"
-        elif "volume" in ident_lower:
-            normalized_category = "storage-volumes"
-            resource_type = "volume"
-            provider_or_protocol = "mock_storage"
-        elif "system" in ident_lower or "array" in ident_lower:
-            normalized_category = "storage-systems"
-            resource_type = "storage_system"
-            provider_or_protocol = "mock_storage"
-        elif "server" in ident_lower:
-            normalized_category = "server-hardware"
-            resource_type = "server"
-            provider_or_protocol = "mock_server"
-        elif "gateway" in ident_lower or "router" in ident_lower:
-            normalized_category = "gateways"
-            resource_type = "gateway"
-            provider_or_protocol = "mock_network"
+        if not ident_lower or ident_lower in {"", "all", "it", "this", "that"}:
+            ident_lower = query.lower()
+        q_lower = query.lower()
+
+        # ── Agent dispatch catalogue ──────────────────────────────────────────
+        # Each entry: (agent_type, provider, api_path, provider_label)
+        #   agent_type    – key used by the execution engine (server/onprem/cloud/network/storage)
+        #   provider      – mock provider string (passed as provider_or_protocol to dispatcher)
+        #   api_path      – the PATH the agent should call on its own mock server
+        #   provider_label– human-readable label attached to every returned device
+
+        ILO_SERVERS    = ("server",  "mock_server", "mock_server(iLO)")
+        COMOPS_SERVERS = ("onprem",  "mock_comops", "mock_server(ComOps)")
+        COMOPS_SWITCH  = ("onprem",  "mock_comops", "mock_server(ComOps)")
+        COMOPS_ROUTER  = ("onprem",  "mock_comops", "mock_server(ComOps)")
+        COMOPS_STORAGE = ("onprem",  "mock_comops", "mock_server(ComOps)")
+        COMOPS_FW      = ("onprem",  "mock_comops", "mock_server(ComOps)")
+        OV_SERVERS     = ("onprem",  "mock_oneview","mock_server(OneView)")
+        OV_SWITCHES    = ("onprem",  "mock_oneview","mock_server(OneView)")
+        CLOUD_VMS      = ("cloud",   "mock_cloud",  "mock_server(cloud)")
+        CLOUD_K8S      = ("cloud",   "mock_cloud",  "mock_server(cloud)")
+        CLOUD_LB       = ("cloud",   "mock_cloud",  "mock_server(cloud)")
+        CLOUD_DB       = ("cloud",   "mock_cloud",  "mock_server(cloud)")
+        CLOUD_VNET     = ("cloud",   "mock_cloud",  "mock_server(cloud)")
+        CLOUD_SUBNET   = ("cloud",   "mock_cloud",  "mock_server(cloud)")
+        CLOUD_SVC      = ("cloud",   "mock_cloud",  "mock_server(cloud)")
+        NET_SWITCH     = ("network", "mock_network","mock_server(network)")
+        NET_ROUTER     = ("network", "mock_network","mock_server(network)")
+        NET_GW         = ("network", "mock_network","mock_server(network)")
+        NET_AP         = ("network", "mock_network","mock_server(network)")
+        NET_WCTRL      = ("network", "mock_network","mock_server(network)")
+        NET_FW         = ("network", "mock_network","mock_server(network)")
+        STOR_SYS       = ("storage", "mock_storage","mock_server(storage)")
+        STOR_POOL      = ("storage", "mock_storage","mock_server(storage)")
+        STOR_VOL       = ("storage", "mock_storage","mock_server(storage)")
+
+        # ── Keyword → sources routing ─────────────────────────────────────────
+        if "server" in ident_lower or "node" in ident_lower or "compute" in ident_lower or "hardware" in ident_lower:
+            normalized_category = "server hardware"
+            sources = [ILO_SERVERS, COMOPS_SERVERS, OV_SERVERS]
+        elif "virtual machine" in ident_lower or " vm" in ident_lower or ident_lower.startswith("vm"):
+            normalized_category = "virtual machines"
+            sources = [CLOUD_VMS]
+        elif "kubernetes" in ident_lower or "k8s" in ident_lower or "cluster" in ident_lower:
+            normalized_category = "kubernetes clusters"
+            sources = [CLOUD_K8S]
+        elif "load balancer" in ident_lower or " lb" in ident_lower:
+            normalized_category = "load balancers"
+            sources = [CLOUD_LB]
+        elif "database" in ident_lower or " db" in ident_lower:
+            normalized_category = "database services"
+            sources = [CLOUD_DB]
+        elif "vnet" in ident_lower or "virtual network" in ident_lower:
+            normalized_category = "virtual networks"
+            sources = [CLOUD_VNET]
+        elif "subnet" in ident_lower:
+            normalized_category = "subnets"
+            sources = [CLOUD_SUBNET]
         elif "switch" in ident_lower:
             normalized_category = "switches"
-            resource_type = "switch"
-            provider_or_protocol = "mock_network"
-        elif "ap" in ident_lower or "access point" in ident_lower:
-            normalized_category = "aps"
-            resource_type = "access_point"
-            provider_or_protocol = "mock_network"
-        elif "vm" in ident_lower or "virtual" in ident_lower or "cloud" in ident_lower or "instance" in ident_lower or "compute" in ident_lower:
-            normalized_category = "virtual-machines"
-            resource_type = "virtual_machine"
-            provider_or_protocol = "mock_cloud"
+            sources = [NET_SWITCH, OV_SWITCHES, COMOPS_SWITCH]
+        elif "gateway" in ident_lower:
+            normalized_category = "gateways"
+            sources = [NET_GW]
+        elif "router" in ident_lower:
+            normalized_category = "routers"
+            sources = [NET_ROUTER, COMOPS_ROUTER]
+        elif "access point" in ident_lower or " ap" in ident_lower or ident_lower == "aps":
+            normalized_category = "access points"
+            sources = [NET_AP]
+        elif "wireless" in ident_lower or "wlan" in ident_lower:
+            normalized_category = "wireless controllers"
+            sources = [NET_WCTRL]
+        elif "firewall" in ident_lower:
+            normalized_category = "firewalls"
+            sources = [NET_FW, COMOPS_FW]
+        elif "storage system" in ident_lower or "array" in ident_lower:
+            normalized_category = "storage systems"
+            sources = [STOR_SYS]
+        elif "storage pool" in ident_lower or "pool" in ident_lower:
+            normalized_category = "storage pools"
+            sources = [STOR_POOL]
+        elif "volume" in ident_lower:
+            normalized_category = "volumes"
+            sources = [STOR_VOL]
+        elif "storage" in ident_lower:
+            normalized_category = "storage devices"
+            sources = [STOR_SYS, STOR_POOL, STOR_VOL, COMOPS_STORAGE, CLOUD_SVC]
+        elif "cloud" in ident_lower:
+            normalized_category = "cloud resources"
+            sources = [CLOUD_VMS, CLOUD_K8S, CLOUD_LB, CLOUD_DB, CLOUD_VNET, CLOUD_SUBNET, CLOUD_SVC]
+        elif "network" in ident_lower or "device" in ident_lower:
+            normalized_category = "network devices"
+            sources = [NET_SWITCH, NET_ROUTER, NET_GW, NET_AP, NET_WCTRL, NET_FW, COMOPS_SWITCH, COMOPS_ROUTER]
         else:
-            normalized_category = "unknown"
-            resource_type = "unknown"
-            provider_or_protocol = "unknown"
+            normalized_category = "all devices"
+            sources = [ILO_SERVERS, COMOPS_SERVERS, OV_SERVERS, CLOUD_VMS, CLOUD_K8S,
+                       NET_SWITCH, NET_ROUTER, STOR_SYS]
 
-        # Step 3: Authorization (RBAC + ABAC)
+        # ── Provider-specific override ────────────────────────────────────────
+        if "oneview" in q_lower:
+            sources = [s for s in sources if s[1] == "oneview"]
+            if not sources:
+                return "No OneView sources configured for that device type."
+        elif "ilo" in q_lower or "redfish" in q_lower:
+            sources = [s for s in sources if s[1] == "mock_server"]
+            if not sources:
+                return "No iLO sources configured for that device type."
+        elif "comops" in q_lower or "compute ops" in q_lower:
+            sources = [s for s in sources if s[1] == "comops"]
+            if not sources:
+                return "No ComOps sources configured for that device type."
+        elif "from cloud" in q_lower or "in cloud" in q_lower or "mock_cloud" in q_lower:
+            sources = [s for s in sources if s[1] == "mock_cloud"]
+            if not sources:
+                return "No cloud sources configured for that device type."
+        elif "from network" in q_lower or "mock_network" in q_lower:
+            sources = [s for s in sources if s[1] == "mock_network"]
+            if not sources:
+                return "No network sources configured for that device type."
+        elif "from storage" in q_lower or "mock_storage" in q_lower:
+            sources = [s for s in sources if s[1] == "mock_storage"]
+            if not sources:
+                return "No storage sources configured for that device type."
+
+        # ── Authorization ─────────────────────────────────────────────────────
         try:
             allowed, reason, identity = _authorize(
                 "read", identifier or "all", normalized_category, env, "HPE"
             )
         except (RuntimeError, ValueError) as e:
             return f"Authorization error for '{identifier}': {e}"
-
         if not allowed:
             return f"Access Denied for {email} (Role: {role}) on '{identifier}'\nReason: {reason}"
 
-        # If authorized, query Postgres CMDB
-        try:
-            import psycopg2
-            conn = psycopg2.connect(dbname=PG_NAME, user=PG_USER, password=PG_PASSWORD, host=PG_HOST, port=PG_PORT)
-            with conn.cursor() as cur:
-                cur.execute(
-                    "SELECT serial_number, ip_address, device_type, management_source FROM devices WHERE device_type = %s",
-                    (resource_type,)
+        # ── Dispatch each source to its agent concurrently ────────────────────
+        async def _dispatch_source(agent_type: str, provider: str, label: str):
+            try:
+                result = await asyncio.get_event_loop().run_in_executor(
+                    None,
+                    lambda: _dispatcher.dispatch(
+                        agent_type=agent_type,
+                        query_action="LIST",
+                        resource_type="server" if "server" in normalized_category else normalized_category.split()[0],
+                        resource_id="all",
+                        provider_or_protocol=provider,
+                        parameters={
+                            "provider_label": label,
+                            "skip": 0,
+                            "limit": 200,
+                        },
+                        credentials_ref="",
+                    )
                 )
-                rows = cur.fetchall()
-            conn.close()
-            
-            if not rows:
-                return f"No {normalized_category.replace('-', ' ')} found in the CMDB registry."
-                
-            lines = [
-                f"📋 List of {normalized_category.replace('-', ' ')} in CMDB registry:",
-                f"Total: {len(rows)}",
-                ""
-            ]
-            for r in rows:
-                lines.append(f"• {r[0]} (IP: {r[1]}, Provider: {r[3]})")
+                # Extract device list from response
+                metrics = result.get("metrics", {})
+                devices = (
+                    metrics.get("inventory")
+                    or metrics.get("devices")
+                    or result.get("inventory")
+                    or []
+                )
+                if result.get("status") == "failed":
+                    errors = result.get("errors", [])
+                    return [], f"Warning {label}: {'; '.join(errors)}"
+                return devices, None
+            except Exception as exc:
+                return [], f"Warning {label}: {exc}"
+
+        dispatch_results = await asyncio.gather(
+            *[_dispatch_source(ag, prov, lbl) for ag, prov, lbl in sources]
+        )
+
+        all_devices = []
+        warnings = []
+        for devs, err in dispatch_results:
+            if err:
+                warnings.append(err)
+            all_devices.extend(devs)
+
+        if not all_devices and warnings:
+            return "No devices found.\n\n" + "\n".join(warnings)
+        if not all_devices:
+            return f"No {normalized_category} found across all providers."
+
+        total_count = len(all_devices)
+        items_per_slide = 10
+
+        def _fmt(d):
+            name  = (d.get("Name") or d.get("name") or d.get("SerialNumber")
+                     or d.get("serial_number") or d.get("id") or d.get("@odata.id") or "Unknown")
+            ip    = (d.get("ip_address") or d.get("ip") or d.get("IPv4Address")
+                     or d.get("ipAddress") or "N/A")
+            prov  = d.get("management_source") or "Unknown"
+            dtype = d.get("device_type") or d.get("type") or ""
+            return f"• **{name}** (IP: {ip}, Type: {dtype}, Provider: {prov})"
+
+        if total_count <= items_per_slide:
+            lines = [f"List of {normalized_category.title()} - {total_count} found\n"]
+            if warnings:
+                lines += warnings + [""]
+            lines += [_fmt(d) for d in all_devices]
             return "\n".join(lines)
-        except Exception as db_err:
-            return f"Error querying CMDB registry: {db_err}"
+
+        total_pages = (total_count + items_per_slide - 1) // items_per_slide
+        header = f"List of {normalized_category.title()} - {total_count} found across {len(sources)} provider(s)"
+        if warnings:
+            header += "\n" + "\n".join(warnings)
+
+        slides = [header]
+        for i in range(0, total_count, items_per_slide):
+            if i > 0:
+                slides.append("<!-- slide -->")
+            page_num = (i // items_per_slide) + 1
+            chunk = all_devices[i: i + items_per_slide]
+            page_lines = [f"### Page {page_num} of {total_pages}\n"] + [_fmt(d) for d in chunk]
+            slides.append("\n".join(page_lines))
+
+        return "````carousel\n" + "\n".join(slides) + "\n````"
+
 
     # ── Step 2.5: Verify CMDB Resource Existence ─────────────────────────────
     device = None
@@ -1513,19 +1665,7 @@ async def _execute_agent_command(
     return "\n".join(lines)
 
 
-@mcp.tool()
-def mcp_list_sessions() -> str:
-    """
-    List all active session IDs in the Redis memory database (for debugging).
-    """
-    try:
-        _require_auth()
-        sessions = list_sessions()
-        return f"📋 Active Redis sessions:\n" + json.dumps(sessions, indent=2)
-    except ValueError as e:
-        return str(e)
-    except Exception as e:
-        return f"❌ Failed to list sessions: {e}"
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Entry Point

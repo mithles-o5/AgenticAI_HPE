@@ -342,10 +342,13 @@ class RedfishAdapter(ServerAdapter):
         # Action map: On, ForceOff, GracefulShutdown, ForceRestart, PowerCycle
         reset_type_map = {
             "on": "On",
+            "off": "GracefulShutdown",
             "forceoff": "ForceOff",
             "gracefulshutdown": "GracefulShutdown",
             "forcerestart": "ForceRestart",
-            "powercycle": "PowerCycle"
+            "powercycle": "PowerCycle",
+            "reset": "ForceRestart",
+            "cold_boot": "ForceOff"
         }
         reset_type = reset_type_map.get(action.lower(), "On")
         path = f"/Systems/{resource_id}/Actions/ComputerSystem.Reset"

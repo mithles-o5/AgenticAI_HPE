@@ -761,37 +761,56 @@ def get_resource_types():
     return static_data
 
 @app.get("/api/v1/storage-systems")
-def SystemsList():
+def SystemsList(skip: int = Query(0), limit: int = Query(10)):
     """
     Dynamic CRUD Route: GET /api/v1/storage-systems
     """
     collection_path = f"/api/v1/storage-systems"
     static_data = db.get_static("SystemsList", dict())
-    dynamic_items = db.get_all(collection_path)
-    if not dynamic_items:
+    all_dynamic_items = db.get_all(collection_path, 0, 999999)
+    
+    if not all_dynamic_items:
+        if isinstance(static_data, dict):
+            res = dict(static_data)
+            for key in ["items", "members"]:
+                if key in res and isinstance(res[key], list):
+                    res["total"] = len(res[key])
+                    res[key] = res[key][skip : skip + limit]
+                    res["pageLimit"] = limit
+                    res["pageOffset"] = skip
+                    return res
+        elif isinstance(static_data, list):
+            # If static data is list, just return dict with total and paginated list
+            return {"total": len(static_data), "items": static_data[skip : skip + limit]}
         return static_data
+        
     if isinstance(static_data, list):
         res = list(static_data)
         existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res if isinstance(item, dict)}
-        for item in dynamic_items:
+        for item in all_dynamic_items:
             iid = item.get("id") or item.get("uuid") or item.get("name")
             if iid not in existing:
                 res.append(item)
-        return res
+        return {"total": len(res), "items": res[skip : skip + limit]}
     elif isinstance(static_data, dict):
         res = dict(static_data)
+        found_key = False
         for key in ["items", "members"]:
             if key in res and isinstance(res[key], list):
+                found_key = True
                 res[key] = list(res[key])
                 existing = {item.get("id") or item.get("uuid") or item.get("name") for item in res[key] if isinstance(item, dict)}
-                for item in dynamic_items:
+                for item in all_dynamic_items:
                     iid = item.get("id") or item.get("uuid") or item.get("name")
                     if iid not in existing:
                         res[key].append(item)
-                res["count"] = len(res[key])
-                if "total" in res:
-                    res["total"] = len(res[key])
-        return res
+                res["total"] = len(res[key])
+                res[key] = res[key][skip : skip + limit]
+                res["pageLimit"] = limit
+                res["pageOffset"] = skip
+                return res
+        if not found_key:
+            return {"total": len(all_dynamic_items), "items": all_dynamic_items[skip : skip + limit]}
     return static_data
 
 @app.get("/api/v1/storage-systems/{id}")

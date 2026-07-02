@@ -177,6 +177,17 @@ class ExecutionEngine:
             log.error("discover_inventory execution failed", error=str(e))
             return {"status": "failed", "error": str(e)}
 
+    def list_resources(self, request: TaskRequest) -> Dict[str, Any]:
+        log = logger.bind(task_id=request.task_id)
+        try:
+            adapter = get_adapter(request.provider, request.credentials_ref)
+            skip = request.parameters.get("skip", 0)
+            limit = request.parameters.get("limit", 10)
+            return adapter.list_resources(filters={}, skip=skip, limit=limit, parameters=request.parameters)
+        except Exception as e:
+            log.error("Action execution failed", action="LIST", error=str(e))
+            return {"status": "failed", "error": f"LIST failed: {str(e)}"}
+
     def fetch_event_log(self, request: TaskRequest) -> Dict[str, Any]:
         task_id = request.task_id
         log = logger.bind(task_id=task_id, agent_type="server")
