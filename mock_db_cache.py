@@ -492,14 +492,15 @@ def _seed_endpoints():
 
     for action, method, path in entries:
         vendor = _infer_vendor(path)
-        dtype = _infer_device_type(path, vendor)
+        dtypes = _infer_device_type(path, vendor)
+        dt_string = ", ".join(sorted(dtypes))
         normalized_actions = _normalize_action_key(vendor, action, method, path)
         for act in normalized_actions:
-            key = (vendor, dtype, act, method, path)
+            key = (vendor, dt_string, act, method, path)
             if key not in seen:
                 seen.add(key)
                 rows_to_insert.append((
-                    str(uuid.uuid4()), vendor, dtype, act, method, path
+                    str(uuid.uuid4()), vendor, dt_string, act, method, path
                 ))
 
     # Explicitly seed mock_cloud endpoints for all cloud resource types
@@ -529,7 +530,7 @@ def _seed_endpoints():
     cur = _shared_conn.cursor()
     cur.executemany(
         """
-        INSERT INTO endpoint_registry (id, vendor, device_type, action_key, http_method, api_path)
+        INSERT INTO endpoint_registry (id, management_source, device_type, action_key, http_method, api_path)
         VALUES (?, ?, ?, ?, ?, ?)
         """,
         rows_to_insert

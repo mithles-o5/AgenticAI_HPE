@@ -13,6 +13,9 @@ import urllib.error
 import ipaddress
 from typing import NamedTuple, List, Literal, Union, Dict, Any, Optional
 from pydantic import BaseModel, Field
+from dotenv import load_dotenv
+
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +47,7 @@ _ACTION_MAPPINGS: tuple[_Mapping, ...] = (
                                                                       "DISCOVER_INVENTORY", "Operational"),
     _Mapping(_compile(r"\b(mount|virtual media|insert.*media|attach.*iso|mount.*iso|mount.*image|attach.*image)\b"),
                                                                       "MOUNT_VIRTUAL_MEDIA", "Operational"),
-    _Mapping(_compile(r"\b(sensor|thermal|fan|psu|power supply|environmental|inlet temperature|fan speed)\b"),
+    _Mapping(_compile(r"\b(sensor|sensors|thermal|fan|psu|power supply|environmental|inlet temperature|fan speed)\b"),
                                                                       "FETCH_SENSORS",  "Operational"),
     _Mapping(_compile(r"\b(cmdb sync|sync cmdb|poll cycle|trigger.*poll|manual poll|sync.*metrics|poll.*trigger)\b"),
                                                                       "SYNC_CMDB",      "Operational"),
@@ -65,19 +68,24 @@ _ACTION_MAPPINGS: tuple[_Mapping, ...] = (
 )
 
 _PREFIX_NOISE: frozenset[str] = frozenset({
-    "the", "a", "an", "of", "for", "on", "at", "to", "my", "our", "their", "is", "was", "be", "about",
+    "the", "a", "an", "of", "for", "on", "at", "to", "my", "our", "their", "is", "was", "be", "about", "from", "in", "are",
+    "what", "who", "where", "how", "when", "could", "can", "would", "will", "do", "does", "did",
+    "please", "kindly", "just", "now", "tell", "me", "show", "give", "i", "we", "us", "need", "want", "you", "it", "this", "that",
     "device", "resource", "system", "systems", "storage-system", "storage_system", "storage-systems", "storage_systems",
     "storage-pool", "storage_pool", "storage-pools", "storage_pools", "storage-volume", "storage_volume", "storage-volumes", "storage_volumes",
     "server", "switch", "router", "firewall", "storage", "node", "nodes", "named", "called", "name", "with", "by", "having",
-    "change", "update", "set", "modify", "configure", "patch", "status", "check", "state", "lookup", "show", "find", "get", "query"
+    "database", "db", "virtual", "machine", "vm",
+    "change", "update", "set", "modify", "configure", "patch", "status", "check", "state", "lookup", "show", "find", "get", "query", "fetch", "read", "display"
 })
 
 _SUFFIX_NOISE: frozenset[str] = frozenset({
-    "the", "of", "for", "on", "at", "to", "my", "our", "their", "is", "was", "be", "about",
+    "the", "of", "for", "on", "at", "to", "my", "our", "their", "is", "was", "be", "about", "from", "in", "are",
+    "please", "kindly", "just", "now", "tell", "me", "show", "give", "i", "we", "us", "need", "want", "you", "it", "this", "that",
     "device", "resource", "system", "systems", "storage-system", "storage_system", "storage-systems", "storage_systems",
     "storage-pool", "storage_pool", "storage-pools", "storage_pools", "storage-volume", "storage_volume", "storage-volumes", "storage_volumes",
     "server", "switch", "router", "firewall", "storage", "node", "nodes", "named", "called", "name", "with", "by", "having",
-    "change", "update", "set", "modify", "configure", "patch", "status", "check", "state", "lookup", "show", "find", "get", "query"
+    "database", "db", "virtual", "machine", "vm",
+    "change", "update", "set", "modify", "configure", "patch", "status", "check", "state", "lookup", "show", "find", "get", "query", "fetch", "read", "display"
 })
 
 _BOUNDARY_PUNCT: re.Pattern = re.compile(r"^[,;:!?()\[\]\"']+|[,;:!?()\[\]\"']+$")
@@ -106,12 +114,14 @@ _FALLBACK_PAYLOAD: dict = {
     "identifier": "",
     "action": "STATUS",
     "category": "Operational",
+    "raw_query": "",
 }
 
 _FAIL_CLOSED_PAYLOAD: dict = {
     "identifier": "",
     "action": "UNPARSEABLE",
     "category": "Error",
+    "raw_query": "",
 }
 
 
@@ -160,14 +170,16 @@ class AttributeItem(BaseModel):
     value: Union[str, int, float, bool]
 
 class LLMQuerySchema(BaseModel):
-    identifier: str = Field(description="The canonical device name, IP address, or serial number.")
+    identifier: str = Field(description="The canonical device name, IP address, or serial number. Do NOT include resource types like 'firmware' or 'certificate' in the identifier.")
     action: str = Field(description="The explicit normalized action intent.")
     category: Literal["Operational", "Provisioning"]
+    resource_type: str = Field(default="", description="The specific resource being managed (e.g. 'firmware', 'certificate', 'metric', 'license', 'port', 'session'). Empty string if acting on the device itself.")
     attributes: List[AttributeItem] = Field(default_factory=list)
     multi_intent: bool = Field(default=False)
     ambiguous: bool = Field(default=False, description="Set to true if there is linguistic syntactic ambiguity.")
     unhandled: str = Field(default="")
     confidence: float = Field(ge=0.0, le=1.0)
+    raw_query: str = Field(default="")
 
 def _dispatch_llm_provider(prompt: str, schema: Dict[str, Any], provider_name: str) -> Dict[str, Any]:
     """Execute LLM request against the configured provider."""
@@ -267,70 +279,6 @@ class QueryAgent:
         return val_str
 
     @staticmethod
-    def _parse_update_details(query: str) -> dict:
-        m1 = re.search(
-            r"\b(?:change|set|update|modify|configure|patch)\b"
-            r"(?:\s+the)?\s+(?P<attr>[\w_]+)\s+(?:of|for|on)\s+"
-            r"(?P<device>[\w\-\.]+)"
-            r"(?:\s+to|\s*=|\s+)\s+"
-            r"(?P<value>[\w\.\-]+)",
-            query, re.IGNORECASE
-        )
-        if m1:
-            raw_attr = m1.group("attr").strip().lower()
-            return {
-                "device": m1.group("device").strip(),
-                "attribute": _FIELD_ALIASES.get(raw_attr, raw_attr.replace(" ", "_")),
-                "value": QueryAgent._coerce_value(m1.group("value").strip())
-            }
-
-        m2 = re.search(
-            r"\b(?:change|set|update|modify|configure|patch)\b"
-            r"\s+(?P<device>[\w\-\.]+)"
-            r"\s+to\s+"
-            r"(?P<attr>[\w_]+)"
-            r"\s+(?P<value>[\w\.\-]+)",
-            query, re.IGNORECASE
-        )
-        if m2:
-            raw_attr = m2.group("attr").strip().lower()
-            return {
-                "device": m2.group("device").strip(),
-                "attribute": _FIELD_ALIASES.get(raw_attr, raw_attr.replace(" ", "_")),
-                "value": QueryAgent._coerce_value(m2.group("value").strip())
-            }
-
-        m3 = re.search(
-            r"\b(?:change|set|update|modify|configure|patch)\b"
-            r"\s+(?P<device>[\w\-\.]+)"
-            r"\s+(?P<attr>(?!to\b)[\w_]+)"
-            r"(?:\s+to\s+|\s*=\s*|\s+)"
-            r"(?P<value>[\w\.\-]+)",
-            query, re.IGNORECASE
-        )
-        if m3:
-            raw_attr = m3.group("attr").strip().lower()
-            return {
-                "device": m3.group("device").strip(),
-                "attribute": _FIELD_ALIASES.get(raw_attr, raw_attr.replace(" ", "_")),
-                "value": QueryAgent._coerce_value(m3.group("value").strip())
-            }
-        return {}
-
-    @staticmethod
-    def _extract_device_identifier(query: str, action: str) -> str:
-        pattern = r"\b(?:server|array|volume|pool|system)(?:\s+(?:named|called))?\s+([a-zA-Z0-9\-\_\.]+)"
-        m = re.search(pattern, query, re.IGNORECASE)
-        if m: return m.group(1).strip()
-        
-        m_fallback = re.search(r"\b(?:of|for|on|at|to)\s+([a-zA-Z0-9\-\_\.]+)", query, re.IGNORECASE)
-        if m_fallback:
-            val = m_fallback.group(1).strip()
-            if not re.match(r"^\d+$", val) and val.upper() not in {"WARNING", "CRITICAL", "OK"}:
-                return val
-        return ""
-
-    @staticmethod
     def _parse(query: str) -> dict:
         """Deterministic regex parsing with confidence scoring."""
         if not isinstance(query, str) or not query.strip():
@@ -387,61 +335,74 @@ class QueryAgent:
         after  = query_clean[best_match.end() :].strip()
         identifier = f"{before} {after}".strip() if before or after else ""
 
-        if matched_action == "UPDATE":
-            details = QueryAgent._parse_update_details(query_clean)
-            if details and details.get("device"):
-                identifier = details["device"]
-                attributes.append({"key": details["attribute"], "value": details["value"]})
-        elif matched_action in {
-            "MOUNT_VIRTUAL_MEDIA", "FETCH_EVENT_LOG", "CLEAR_EVENT_LOG",
-            "DISCOVER_INVENTORY", "FETCH_SENSORS", "SYNC_CMDB",
-            "CREATE", "DELETE", "ALLOCATE", "DEALLOCATE",
-            "STATUS", "POWER_ON", "POWER_OFF", "RESET"
-        }:
-            extracted = QueryAgent._extract_device_identifier(query_clean, matched_action)
-            if extracted: identifier = extracted
-            elif matched_action == "SYNC_CMDB": identifier = ""
-
         identifier = re.sub(r"\s{2,}", " ", identifier)
         identifier = _BOUNDARY_PUNCT.sub("", identifier).strip()
-
-        words = identifier.split()
-        while words and words[0].lower() in _PREFIX_NOISE:
-            if matched_action == "LIST" and words[0].lower() in {"server", "servers", "storage_pool", "storage_pools", "storage_system", "storage_systems", "pool", "pools", "volume", "volumes"}: break
-            words.pop(0)
-        while words and words[-1].lower() in _SUFFIX_NOISE:
-            if matched_action == "LIST" and words[-1].lower() in {"server", "servers", "storage_pool", "storage_pools", "storage_system", "storage_systems", "pool", "pools", "volume", "volumes"}: break
-            words.pop()
-        identifier = " ".join(words)
 
         if identifier.lower() in {"it", "this", "that", "the device", "the server", "the system", "the array", "the pool"}:
             ambiguous = True
             identifier = ""
+            
+        resource_type = ""
+        words = identifier.lower().split()
+        if any(k in words for k in ['firmware', 'firmwares']): resource_type = 'firmware'
+        elif any(k in words for k in ['sensor', 'sensors', 'thermal', 'temperature']): resource_type = 'sensor'
+        elif any(k in words for k in ['inventory', 'hardware', 'hw']): resource_type = 'inventory'
+        elif any(k in words for k in ['media', 'iso', 'image']): resource_type = 'media'
+        elif any(k in words for k in ['certificate', 'certificates', 'ca']): resource_type = 'certificate'
+        elif any(k in words for k in ['metric', 'metrics', 'telemetry']): resource_type = 'metric'
+        elif any(k in words for k in ['account', 'accounts', 'user', 'users']): resource_type = 'account'
+        elif any(k in words for k in ['session', 'sessions', 'login']): resource_type = 'session'
+        elif any(k in words for k in ['event', 'events', 'log', 'logs']): resource_type = 'event'
+        elif any(k in words for k in ['license', 'licenses']): resource_type = 'license'
+        elif any(k in words for k in ['profile', 'profiles']): resource_type = 'profile'
+        elif any(k in words for k in ['power', 'powerstate']): resource_type = 'power'
+        elif any(k in words for k in ['issue', 'issues', 'alert', 'alerts']): resource_type = 'issue'
+        elif any(k in words for k in ['port', 'ports', 'interface', 'interfaces']): resource_type = 'port'
+        elif any(k in words for k in ['route', 'routes']): resource_type = 'route'
 
-        if matched_action in {"LIST", "SYNC_CMDB"}:
-            identifier = ""
+        if resource_type:
+            noise_words = {
+                'firmware', 'firmwares', 'certificate', 'certificates', 'ca', 'metric', 'metrics', 'telemetry',
+                'account', 'accounts', 'user', 'users', 'session', 'sessions', 'login', 'event', 'events', 'log', 'logs',
+                'license', 'licenses', 'profile', 'profiles', 'power', 'powerstate', 'issue', 'issues', 'alert', 'alerts',
+                'port', 'ports', 'interface', 'interfaces', 'route', 'routes',
+                'sensor', 'sensors', 'thermal', 'temperature', 'inventory', 'hardware', 'hw', 'media', 'iso', 'image'
+            }
+            identifier = " ".join([w for w in identifier.split() if w.lower() not in noise_words]).strip()
+            
+        words = identifier.split()
+        while words and words[0].lower() in _PREFIX_NOISE:
+            words.pop(0)
+        while words and words[-1].lower() in _SUFFIX_NOISE:
+            words.pop()
+        identifier = " ".join(words)
 
         # Confidence Scoring
-        if matched_action in {"LIST", "SYNC_CMDB"}:
-            confidence = 1.0 if not ambiguous else 0.5
-        elif matched_action and identifier:
-            conversational_noise = re.search(r"\b(can you|could you|please|investigate|why|what happened|i think)\b", query_clean, re.IGNORECASE)
+        conversational_noise = re.search(r"\b(can you|could you|please|investigate|why|what happened|i think)\b", query_clean, re.IGNORECASE)
+        
+        if matched_action and identifier:
             if conversational_noise or ambiguous:
                 confidence = 0.6
             else:
                 confidence = 0.9
         elif matched_action and not identifier:
-            confidence = 0.3
+            # Action found but no identifier extracted. 
+            # Could be a global action (like LIST) or a missing required parameter.
+            # Assigning 0.8 allows it to pass the 0.7 threshold by default, 
+            # relying on the downstream endpoint resolver to enforce {id} requirements.
+            confidence = 0.8 if not ambiguous else 0.4
         else:
             confidence = 0.0
 
         return {
             "identifier": identifier,
-            "action": matched_action,
-            "category": matched_category,
-            "attributes": attributes,
-            "ambiguous": ambiguous,
-            "confidence": confidence
+            "action":     matched_action,
+            "category":   matched_category,
+            "resource_type": resource_type,
+            "attributes": [],
+            "ambiguous":  ambiguous,
+            "confidence": confidence,
+            "raw_query": query,
         }
 
     @staticmethod
@@ -452,18 +413,7 @@ class QueryAgent:
         """
         return parse_query_hybrid(query)
 
-    @staticmethod
-    def parse_update_payload(query: str) -> dict:
-        """
-        Extract the attribute name and new value from an UPDATE query.
-        """
-        details = QueryAgent._parse_update_details(query)
-        if not details:
-            return {}
-        return {
-            "attribute": details["attribute"],
-            "value": details["value"]
-        }
+
 
 
 def parse_query_hybrid(query: str) -> dict:
@@ -483,26 +433,31 @@ def parse_query_hybrid(query: str) -> dict:
         )
 
         def _extract_pagination(query_text: str, payload: dict):
-            if payload.get("action") == "LIST":
-                params = payload.get("params", {})
-                skip_match = re.search(r"\b(?:skip|offset)\s+(\d+)", query_text, re.IGNORECASE)
-                if skip_match:
-                    params["skip"] = int(skip_match.group(1))
-                limit_match = re.search(r"\b(?:limit|first|take|show|size)\s+(\d+)", query_text, re.IGNORECASE)
-                if limit_match:
-                    params["limit"] = int(limit_match.group(1))
-                page_match = re.search(r"\b(?:page)\s+(\d+)", query_text, re.IGNORECASE)
-                if page_match and "skip" not in params:
-                    page = int(page_match.group(1))
-                    limit = params.get("limit", 10)
-                    params["skip"] = max(0, (page - 1) * limit)
-                if params:
-                    payload["params"] = params
+            params = payload.get("params", {})
+            skip_match = re.search(r"\b(?:skip|offset)\s+(\d+)", query_text, re.IGNORECASE)
+            if skip_match:
+                params["skip"] = int(skip_match.group(1))
+            limit_match = re.search(r"\b(?:limit|first|take|show|size)\s+(\d+)", query_text, re.IGNORECASE)
+            if limit_match:
+                params["limit"] = int(limit_match.group(1))
+            page_match = re.search(r"\b(?:page)\s+(\d+)", query_text, re.IGNORECASE)
+            if page_match and "skip" not in params:
+                page = int(page_match.group(1))
+                limit = params.get("limit", 10)
+                params["skip"] = max(0, (page - 1) * limit)
+            if params:
+                payload["params"] = params
             return payload
 
         if confidence >= QUERY_AGENT_CONFIDENCE_THRESHOLD and is_regex_valid:
-            logger.info("[QueryAgent] Regex parse success | confidence=%.2f action=%s identifier=%s query=%r", 
-                        confidence, regex_res.get("action"), regex_res.get("identifier"), query)
+            if not regex_res.get("resource_type"):
+                logger.info("[QueryAgent] Regex parse success but no resource_type. Escalating to LLM for resource_type guess...")
+                llm_res = _llm_extract(query)
+                if llm_res and llm_res.get("resource_type"):
+                    regex_res["resource_type"] = llm_res.get("resource_type")
+                    
+            logger.info("[QueryAgent] Final parse success | confidence=%.2f action=%s identifier=%s resource_type=%s query=%r", 
+                        confidence, regex_res.get("action"), regex_res.get("identifier"), regex_res.get("resource_type"), query)
             return _extract_pagination(query, regex_res)
 
         logger.info("[QueryAgent] Regex parse low confidence | confidence=%.2f. Escalating to LLM | query=%r", confidence, query)

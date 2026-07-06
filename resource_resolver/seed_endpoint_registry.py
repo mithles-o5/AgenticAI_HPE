@@ -112,71 +112,171 @@ def _infer_vendor(api_path: str) -> str:
     if p.startswith("/rest/"):
         return "oneview"
     if p.startswith("/compute-ops"):
-        return "coms"
+        return "comops"
     parts = [x for x in p.split("/") if x]
     return parts[0] if parts else "unknown"
 
 
-def _infer_device_type(api_path: str, vendor: str) -> str:
-    if vendor == "oneview":
-        m = _ONEVIEW_RESOURCE_RE.match(api_path)
-    else:
-        m = _COMS_RESOURCE_RE.match(api_path)
-    seg = m.group(1).lower() if m else None
-    if seg is None:
-        return "generic"
-    return RESOURCE_TO_DEVICE_TYPE.get(seg, "generic")
+def _infer_device_type(api_path: str, management_source: str) -> list[str]:
+    """
+    Heuristically extract the resource type from the API path,
+    and then map it to the corresponding CMDB device_type.
+    Returns a list of device types. If the endpoint is specific, the list
+    contains only that specific device type. If it is generic, it returns
+    all valid device types for that management source.
+    """
+    management_source = management_source.lower()
+    words = api_path.lower().replace('/', ' ').replace('-', ' ').replace('_', ' ').split()
 
+    # --- MAP TO CMDB DEVICE TYPE ---
+    if management_source == 'oneview':
+        if any(k in words for k in ['switch', 'switches', 'interconnect', 'interconnects', 'uplink', 'uplinks']): return ['switch']
+        if any(k in words for k in ['storage', 'volume', 'volumes', 'san', 'jbod']): return ['storage']
+        if any(k in words for k in ['network', 'networks', 'router', 'routers']): return ['router']
+        if any(k in words for k in ['firewall', 'firewalls']): return ['firewall']
+        if any(k in words for k in ['server', 'servers', 'hardware', 'chassis', 'manager', 'managers']): return ['server']
+        return ['server', 'storage', 'switch', 'router', 'firewall']
+
+    elif management_source in ['comops']:
+        if any(k in words for k in ['switch', 'switches']): return ['switch']
+        if any(k in words for k in ['router', 'routers']): return ['router']
+        if any(k in words for k in ['firewall', 'firewalls']): return ['firewall']
+        if any(k in words for k in ['storage']): return ['storage']
+        if any(k in words for k in ['server', 'servers', 'appliance', 'appliances']): return ['server']
+        return ['server', 'storage', 'switch', 'router', 'firewall']
+
+    elif management_source in ['ilo', 'mock_server']:
+        if any(k in words for k in ['chassis']): return ['blade_server']
+        if any(k in words for k in ['processor', 'processors', 'compute']): return ['compute_node']
+        if any(k in words for k in ['manager', 'managers']): return ['rack_server']
+        if any(k in words for k in ['switch', 'switches']): return ['switch']
+        if any(k in words for k in ['router', 'routers']): return ['router']
+        if any(k in words for k in ['firewall', 'firewalls']): return ['firewall']
+        if any(k in words for k in ['server', 'servers', 'system', 'systems']): return ['server']
+        return ['server', 'blade_server', 'compute_node', 'rack_server']
+
+    elif management_source in ['storage', 'mock_storage']:
+        if any(k in words for k in ['volume', 'volumes']): return ['volume']
+        if any(k in words for k in ['pool', 'pools']): return ['storage_pool']
+        if any(k in words for k in ['host', 'hosts']): return ['host']
+        if any(k in words for k in ['snapshot', 'snapshots']): return ['snapshot']
+        if any(k in words for k in ['filesystem', 'filesystems']): return ['filesystem']
+        if any(k in words for k in ['system', 'systems']): return ['storage_system']
+        return ['storage_system', 'volume', 'host', 'storage_pool', 'snapshot', 'filesystem', 'host_group', 'volume_set']
+
+    elif management_source in ['network', 'mock_network']:
+        if any(k in words for k in ['ap', 'aps', 'access']): return ['access_point']
+        if any(k in words for k in ['switch', 'switches', 'vsx']): return ['switch']
+        if any(k in words for k in ['gateway', 'gateways']): return ['gateway']
+        if any(k in words for k in ['vlan', 'vlans']): return ['vlan']
+        if any(k in words for k in ['router', 'routers']): return ['router']
+        if any(k in words for k in ['firewall', 'firewalls']): return ['firewall']
+        if any(k in words for k in ['controller', 'controllers']): return ['wireless_controller']
+        return ['switch', 'access_point', 'gateway', 'vlan', 'router', 'firewall', 'wireless_controller']
+
+    elif management_source in ['cloud', 'mock_cloud']:
+        if any(k in words for k in ['virtual', 'vm', 'vms']): return ['virtual_machine']
+        if any(k in words for k in ['kubernetes', 'cluster', 'clusters']): return ['kubernetes_cluster']
+        if any(k in words for k in ['load', 'lb']): return ['load_balancer']
+        if any(k in words for k in ['subnet', 'subnets', 'network', 'networks']): return ['subnet']
+        if any(k in words for k in ['namespace', 'namespaces']): return ['namespace']
+        if any(k in words for k in ['database', 'databases', 'db']): return ['database_service']
+        return ['virtual_machine', 'kubernetes_cluster', 'load_balancer', 'subnet', 'namespace', 'database_service']
+
+    return ['generic']
+
+def _infer_resource_type(api_path: str) -> str | None:
+    path_lower = api_path.lower()
+    import re
+    words = set(re.findall(r'[a-z0-9]+', path_lower))
+    
+    # Core resources
+    if any(k in words for k in ['firmware', 'firmwareinventory', 'updates', 'updateservice', 'update']): return 'firmware'
+    if any(k in words for k in ['certificate', 'certificates', 'certificateservice', 'ca']): return 'certificate'
+    if any(k in words for k in ['metric', 'metrics', 'metricreport', 'telemetry', 'telemetryservice']): return 'metric'
+    if any(k in words for k in ['account', 'accounts', 'user', 'users', 'accountservice']): return 'account'
+    if any(k in words for k in ['session', 'sessions', 'sessionservice', 'login']): return 'session'
+    if any(k in words for k in ['event', 'events', 'eventservice', 'log', 'logs', 'logservice']): return 'event'
+    if any(k in words for k in ['license', 'licenses', 'licensing']): return 'license'
+    if any(k in words for k in ['profile', 'profiles', 'server_profile', 'serverprofile']): return 'profile'
+    if any(k in words for k in ['power', 'powerstate', 'computersystem', 'reset']): return 'power'
+    if any(k in words for k in ['issue', 'issues', 'alert', 'alerts']): return 'issue'
+    if any(k in words for k in ['port', 'ports', 'interface', 'interfaces']): return 'port'
+    if any(k in words for k in ['route', 'routes']): return 'route'
+    
+    # Fallback: extract last meaningful segment
+    path_clean = re.sub(r'/\{[^}]+\}', '', api_path.rstrip('/'))
+    segments = path_clean.split('/')
+    if segments:
+        return segments[-1].lower()
+    
+    return 'generic'
 
 # ---------------------------------------------------------------------------
 # Parser
 # ---------------------------------------------------------------------------
 
-def parse_prompt_file(filepath: str) -> list[dict]:
-    """
-    Parse one prompt reference file.
-    Generic paths ({resource_category}) are SKIPPED.
-    Returns a list of exact-path entries:
-        [{"action_key": ..., "http_method": ..., "api_path": ...}, ...]
-    """
-    with open(filepath, encoding="utf-8") as fh:
-        text = fh.read()
+def generate_raw_action_key(http_method: str, api_path: str) -> str:
+    import re
+    clean_path = re.sub(r'[{}]', '', api_path).replace('-', '_')
+    parts = [http_method.lower()] + [p for p in clean_path.split('/') if p]
+    return "_".join(parts)
 
-    blocks  = _BLOCK_SEP.split(text)
+
+def parse_routes_dump(filepath: str) -> list[dict]:
+    """
+    Parse the routes_dump.txt file instead of missing prompt files.
+    """
     entries: list[dict] = []
-    seen:    set[tuple] = set()
+    seen: set[tuple] = set()
     skipped = 0
 
-    for block in blocks:
-        lines      = [ln.strip() for ln in block.splitlines() if ln.strip()]
-        action_key = http_method = api_path = None
-
-        for line in lines:
-            if m := _ACTION_LINE.match(line):
-                action_key = m.group(1).strip()
-            elif m := _METHOD_LINE.match(line):
-                http_method = m.group(1).strip().upper()
-            elif m := _PATH_LINE.match(line):
-                api_path = m.group(1).strip()
-
-        if not (action_key and http_method and api_path):
-            continue
-
-        # ── Skip generic templates entirely ───────────────────────────────
-        if "{resource_category}" in api_path:
-            skipped += 1
-            continue
-
-        key = (action_key, http_method, api_path)
-        if key not in seen:
-            seen.add(key)
-            entries.append(
-                {
-                    "action_key":  action_key,
+    with open(filepath, encoding="utf-8") as fh:
+        vendor = None
+        for line in fh:
+            line = line.strip()
+            if not line: continue
+            
+            if line.startswith('--- Vendor:'):
+                # e.g., --- Vendor: cloud ---
+                parts = line.split(':')
+                if len(parts) >= 2:
+                    vendor = parts[1].strip().split()[0].lower()
+                continue
+                
+            if not vendor: continue
+                
+            parts = line.split(' ', 1)
+            if len(parts) != 2: continue
+            
+            http_method, api_path = parts[0].strip().upper(), parts[1].strip()
+            
+            # Skip generics
+            if "{resource_category}" in api_path:
+                skipped += 1
+                continue
+                
+            action_key = generate_raw_action_key(http_method, api_path)
+            
+            # Note: the dump includes 'cloud' and 'storage', etc. The vendor
+            # normalization in build_rows will handle inferring if needed.
+            # But the DB expects 'management_source' to be 'comops' instead of 'cloud' if it's coms.
+            # Let's map it cleanly if needed:
+            ms = vendor.lower()
+            if ms == "ilo": ms = "mock_server"
+            elif ms == "cloud": ms = "mock_cloud"
+            elif ms == "storage": ms = "storage"
+            elif ms == "network": ms = "network"
+                
+            key = (ms, action_key, http_method, api_path)
+            if key not in seen:
+                seen.add(key)
+                entries.append({
+                    "action_key": action_key,
                     "http_method": http_method,
-                    "api_path":    api_path,
-                }
-            )
+                    "api_path": api_path,
+                    "management_source": ms # Pass explicit vendor to build_rows
+                })
 
     logger.info(
         "%-40s  %3d exact entries  (%d generic skipped)",
@@ -210,12 +310,32 @@ def _normalize_action_key(vendor: str, raw_action_key: str, http_method: str, ap
     elif path_lower.endswith("/power-off"):
         if http_method in ("PUT", "POST", "PATCH"):
             return ["OFF"]
-    elif path_lower.endswith("/reboot") or path_lower.endswith("/restart") or path_lower.endswith("/reset"):
+    elif path_lower.endswith("/reboot") or path_lower.endswith("/restart") or path_lower.endswith("/reset") or path_lower.endswith("computersystem.reset"):
         if http_method in ("PUT", "POST", "PATCH"):
-            return ["RESET"]
+            return ["ON", "OFF", "RESET", "COLD_BOOT"]
     elif path_lower.endswith("/cold-boot") or path_lower.endswith("/coldboot"):
         if http_method in ("PUT", "POST", "PATCH"):
             return ["COLD_BOOT"]
+            
+    # 1.5 Operational / Sensor / Log / Media operations
+    if "/logservices/" in path_lower and path_lower.endswith("/entries"):
+        if http_method == "GET":
+            return ["FETCH_EVENT_LOG"]
+    elif path_lower.endswith("clearlog"):
+        if http_method in ("PUT", "POST", "PATCH"):
+            return ["CLEAR_EVENT_LOG"]
+    elif "virtualmedia" in path_lower and path_lower.endswith("insertmedia"):
+        if http_method in ("PUT", "POST", "PATCH"):
+            return ["MOUNT_VIRTUAL_MEDIA"]
+    elif "/sensors" in path_lower or "/thermal" in path_lower:
+        if http_method == "GET":
+            return ["FETCH_SENSORS"]
+    elif "/firmwareinventory" in path_lower or "/inventory" in path_lower:
+        if http_method == "GET":
+            return ["DISCOVER_INVENTORY"]
+    elif path_lower.endswith("/failover"):
+        if http_method in ("PUT", "POST", "PATCH"):
+            return ["FAILOVER"]
 
     # 2. Single resource lookups / deletions (STATUS, DELETE, DEALLOCATE)
     is_single_resource = False
@@ -224,9 +344,13 @@ def _normalize_action_key(vendor: str, raw_action_key: str, http_method: str, ap
         parts = [p for p in api_path.split("/") if p]
         if len(parts) == 3 and parts[0] == "rest" and parts[2].startswith("{") and parts[2].endswith("}"):
             is_single_resource = True
-    else: # COMS
+    elif "mock_server" in vendor or "ilo" in vendor:
         parts = [p for p in api_path.split("/") if p]
-        if len(parts) == 4 and parts[0].startswith("compute-ops") and parts[3].startswith("{") and parts[3].endswith("}"):
+        if len(parts) == 4 and parts[0] == "redfish" and parts[3].startswith("{") and parts[3].endswith("}"):
+            is_single_resource = True
+    else: # COMS or cloud mocks
+        parts = [p for p in api_path.split("/") if p]
+        if len(parts) >= 4 and parts[-1].startswith("{") and parts[-1].endswith("}") and not path_lower.endswith("power"):
             is_single_resource = True
 
     if is_single_resource:
@@ -234,6 +358,8 @@ def _normalize_action_key(vendor: str, raw_action_key: str, http_method: str, ap
             return ["STATUS"]
         elif http_method == "DELETE":
             return ["DELETE", "DEALLOCATE"]
+        elif http_method in ("PUT", "PATCH"):
+            return ["UPDATE"]
 
     # 3. Collection POSTs (CREATE, ALLOCATE) and GETs (LIST)
     is_collection = False
@@ -241,9 +367,13 @@ def _normalize_action_key(vendor: str, raw_action_key: str, http_method: str, ap
         parts = [p for p in api_path.split("/") if p]
         if len(parts) == 2 and parts[0] == "rest" and not ("{" in parts[1] or "}" in parts[1]):
             is_collection = True
-    else: # COMS
+    elif "mock_server" in vendor or "ilo" in vendor:
         parts = [p for p in api_path.split("/") if p]
-        if len(parts) == 3 and parts[0].startswith("compute-ops") and not ("{" in parts[2] or "}" in parts[2]):
+        if len(parts) == 3 and parts[0] == "redfish" and not ("{" in parts[2] or "}" in parts[2]):
+            is_collection = True
+    else: # COMS or cloud
+        parts = [p for p in api_path.split("/") if p]
+        if len(parts) >= 3 and not ("{" in parts[-1] or "}" in parts[-1]):
             is_collection = True
 
     if is_collection:
@@ -251,6 +381,10 @@ def _normalize_action_key(vendor: str, raw_action_key: str, http_method: str, ap
             return ["CREATE", "ALLOCATE"]
         elif http_method == "GET":
             return ["LIST"]
+        elif http_method in ("PUT", "PATCH"):
+            return ["UPDATE"]
+        elif http_method == "DELETE":
+            return ["CLEAR", "DELETE"]
 
     return [raw_action_key]
 
@@ -262,20 +396,22 @@ def build_rows(entries: list[dict]) -> list[dict]:
 
     for e in entries:
         api_path    = e["api_path"]
-        vendor      = _infer_vendor(api_path)
-        device_type = _infer_device_type(api_path, vendor)
+        vendor      = e.get("management_source") or _infer_vendor(api_path)
+        device_types = _infer_device_type(api_path, vendor)
+        resource_type = _infer_resource_type(api_path)
 
         action_keys = _normalize_action_key(vendor, e["action_key"], e["http_method"], api_path)
         for ak in action_keys:
-            key = (vendor, device_type, ak, e["http_method"], api_path)
+            key = (vendor, ak, e["http_method"], api_path)
             if key in seen:
                 continue
             seen.add(key)
 
             rows.append(
                 {
-                    "vendor":       vendor,
-                    "device_type":  device_type,
+                    "management_source": vendor,
+                    "device_types":  device_types,
+                    "resource_type": resource_type,
                     "action_key":   ak,
                     "http_method":  e["http_method"],
                     "api_path":     api_path,
@@ -299,31 +435,92 @@ def seed(rows: list[dict]) -> int:
     from db import db_manager
     from psycopg2 import extras
 
+    unique_device_types = set()
+    unique_resource_types = set()
+    for r in rows:
+        unique_device_types.update(r["device_types"])
+        if r.get("resource_type"):
+            unique_resource_types.add(r["resource_type"])
+            
     conn = db_manager.get_connection()
     inserted = 0
     try:
         with conn.cursor() as cur:
-            logger.info("Truncating endpoint_registry table to start fresh...")
-            cur.execute("TRUNCATE TABLE endpoint_registry;")
-            
-            args = [
-                (r["vendor"], r["device_type"], r["action_key"],
-                 r["http_method"], r["api_path"])
-                for r in rows
-            ]
+            # 1. Populate device_type mapping table
+            logger.info("Ensuring %d unique device types exist in device_type...", len(unique_device_types))
             extras.execute_values(
                 cur,
-                """
-                INSERT INTO endpoint_registry
-                    (vendor, device_type, action_key, http_method, api_path)
-                VALUES %s
-                ON CONFLICT (vendor, device_type, action_key, api_path, http_method)
-                DO NOTHING
-                """,
-                args,
+                "INSERT INTO device_type (name) VALUES %s ON CONFLICT (name) DO NOTHING",
+                [(dt,) for dt in unique_device_types],
                 page_size=250,
             )
-            inserted = cur.rowcount
+            
+            # 2. Populate resource_type table
+            if unique_resource_types:
+                logger.info("Ensuring %d unique resource types exist in resource_type...", len(unique_resource_types))
+                extras.execute_values(
+                    cur,
+                    "INSERT INTO resource_type (res_type) VALUES %s ON CONFLICT (res_type) DO NOTHING",
+                    [(rt,) for rt in unique_resource_types],
+                    page_size=250,
+                )
+            
+            # Fetch the new/existing IDs
+            cur.execute("SELECT id, name FROM device_type")
+            dt_to_id = {row[1]: row[0] for row in cur.fetchall()}
+            
+            cur.execute("SELECT id, res_type FROM resource_type")
+            rt_to_id = {row[1]: row[0] for row in cur.fetchall()}
+
+            # 3. Seed endpoint_registry
+            logger.info("Truncating tables to start fresh...")
+            cur.execute("TRUNCATE TABLE endpoint_device_mapping CASCADE;")
+            cur.execute("TRUNCATE TABLE endpoint_registry CASCADE;")
+
+            args = [
+                (
+                    r.get("management_source", r.get("vendor")), 
+                    r["action_key"], 
+                    r["http_method"], 
+                    r["api_path"], 
+                    rt_to_id.get(r["resource_type"]) if r.get("resource_type") else None
+                )
+                for r in rows
+            ]
+            
+            insert_query = """
+                INSERT INTO endpoint_registry
+                    (management_source, action_key, http_method, api_path, resource_type_id)
+                VALUES %s
+                ON CONFLICT (management_source, action_key, api_path, http_method)
+                DO NOTHING
+                RETURNING id, management_source, action_key, http_method, api_path
+            """
+            
+            extras.execute_values(cur, insert_query, args, page_size=250, template="(%s, %s, %s, %s, %s)")
+            
+            cur.execute("SELECT id, management_source, action_key, http_method, api_path FROM endpoint_registry")
+            endpoint_map = {(row[1], row[2], row[3], row[4]): row[0] for row in cur.fetchall()}
+            
+            # 4. Insert mappings
+            mapping_args = []
+            for r in rows:
+                ep_key = (r.get("management_source", r.get("vendor")), r["action_key"], r["http_method"], r["api_path"])
+                ep_id = endpoint_map.get(ep_key)
+                if ep_id:
+                    for dt in r["device_types"]:
+                        if dt in dt_to_id:
+                            mapping_args.append((ep_id, dt_to_id[dt]))
+            
+            if mapping_args:
+                extras.execute_values(
+                    cur,
+                    "INSERT INTO endpoint_device_mapping (endpoint_id, device_type_id) VALUES %s ON CONFLICT DO NOTHING",
+                    mapping_args,
+                    page_size=250
+                )
+            
+            inserted = len(endpoint_map)
         conn.commit()
         logger.info(
             "Seed complete: %d inserted.",
@@ -349,10 +546,12 @@ def verify() -> None:
 
     rows = db_manager.execute_query(
         """
-        SELECT vendor, device_type, count(*) AS cnt
-        FROM   endpoint_registry
-        GROUP  BY vendor, device_type
-        ORDER  BY vendor, device_type
+        SELECT e.management_source, d.name, count(*) AS cnt
+        FROM   endpoint_registry e
+        JOIN   endpoint_device_mapping m ON e.id = m.endpoint_id
+        JOIN   device_type d ON m.device_type_id = d.id
+        GROUP  BY e.management_source, d.name
+        ORDER  BY e.management_source, d.name
         """,
         fetch_all=True,
     )
@@ -362,29 +561,26 @@ def verify() -> None:
 
     logger.info("── endpoint_registry summary ──────────────────────────")
     for r in rows:
-        logger.info("  %-12s %-20s %4d rows", r["vendor"], r["device_type"], r["cnt"])
+        logger.info("  %-12s %-20s %4d rows", r["management_source"], r["name"], r["cnt"])
 
     # Spot-check power ops
     spot = db_manager.execute_query(
         """
-        SELECT vendor, device_type, action_key, http_method, api_path
-        FROM   endpoint_registry
-        WHERE  lower(action_key) = ANY(ARRAY['on','off','status','reset','list','cold_boot'])
-           OR  lower(api_path) LIKE '%%power%%'
-        ORDER  BY vendor, device_type, action_key
-        LIMIT  20
+        SELECT e.management_source, d.name, e.action_key, e.http_method, e.api_path
+        FROM   endpoint_registry e
+        JOIN   endpoint_device_mapping m ON e.id = m.endpoint_id
+        JOIN   device_type d ON m.device_type_id = d.id
+        WHERE  e.action_key IN ('ON', 'OFF', 'RESET', 'COLD_BOOT')
+        ORDER  BY e.management_source, d.name, e.action_key
         """,
         fetch_all=True,
     )
-
     if spot:
-        logger.info("── spot-check (power-related endpoints) ──────────────")
-        for r in spot:
-            logger.info(
-                "  %-10s %-12s %-10s %-6s  %s",
-                r["vendor"], r["device_type"], r["action_key"],
-                r["http_method"], r["api_path"],
-            )
+        logger.info("── Power Ops Spot Check ─────────────────────────────")
+        for r in spot[:5]:
+            logger.info("  %s %s: [%s] %s %s", 
+                        r["management_source"], r["name"], r["action_key"],
+                        r["http_method"], r["api_path"])
 
 
 # ---------------------------------------------------------------------------
@@ -392,75 +588,26 @@ def verify() -> None:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    prompt_files = [
-        os.path.join(THIS_DIR, "oneview_api_prompts.txt"),
-        os.path.join(THIS_DIR, "comops_api_prompts.txt"),
-    ]
+    dump_file = os.path.join(os.path.dirname(THIS_DIR), "scratch", "routes_dump.txt")
 
     all_entries: list[dict] = []
-    for fp in prompt_files:
-        if not os.path.exists(fp):
-            logger.warning("Prompt file not found — skipping: %s", fp)
-            continue
-        all_entries.extend(parse_prompt_file(fp))
+    if os.path.exists(dump_file):
+        all_entries.extend(parse_routes_dump(dump_file))
+    else:
+        logger.warning("Routes dump file not found — skipping: %s", dump_file)
 
     logger.info("Total exact entries from all files: %d", len(all_entries))
 
     rows = build_rows(all_entries)
 
-    # Explicitly seed mock_cloud endpoints for all cloud resource types
-    cloud_types = [
-        "vm", "virtual_machine", "kubernetes_cluster", "database_service",
-        "storage_service", "virtual_network", "subnet", "load_balancer", "namespace"
-    ]
-    for dtype in cloud_types:
-        cloud_endpoints = [
-            ("STATUS", "GET", "/api/v1/devices/{id}"),
-            ("ON", "POST", "/api/v1/devices/{id}/power"),
-            ("OFF", "POST", "/api/v1/devices/{id}/power"),
-            ("RESET", "POST", "/api/v1/devices/{id}/power"),
-            ("COLD_BOOT", "POST", "/api/v1/devices/{id}/power"),
-            ("LIST", "GET", "/api/v1/devices"),
-            ("RESCAN", "GET", "/api/v1/devices"),
-            ("UPDATE", "PATCH", "/api/v1/devices/{id}"),
-        ]
-        for act, method, path in cloud_endpoints:
-            rows.append({
-                "vendor": "mock_cloud",
-                "device_type": dtype,
-                "action_key": act,
-                "http_method": method,
-                "api_path": path
-            })
-
-    # Explicitly seed mock_server endpoints for server types
-    server_types = ["server", "server-hardware"]
-    for dtype in server_types:
-        server_endpoints = [
-            ("STATUS", "GET", "/redfish/v1/systems/{id}"),
-            ("ON", "POST", "/redfish/v1/systems/{id}/actions/computersystem.reset"),
-            ("OFF", "POST", "/redfish/v1/systems/{id}/actions/computersystem.reset"),
-            ("RESET", "POST", "/redfish/v1/systems/{id}/actions/computersystem.reset"),
-            ("COLD_BOOT", "POST", "/redfish/v1/systems/{id}/actions/computersystem.reset"),
-            ("LIST", "GET", "/redfish/v1/systems"),
-            ("RESCAN", "GET", "/redfish/v1/systems"),
-            ("UPDATE", "PATCH", "/redfish/v1/systems/{id}"),
-        ]
-        for act, method, path in server_endpoints:
-            rows.append({
-                "vendor": "mock_server",
-                "device_type": dtype,
-                "action_key": act,
-                "http_method": method,
-                "api_path": path
-            })
-
     # Breakdown before insert
     breakdown: dict[str, dict[str, int]] = {}
     for r in rows:
-        breakdown.setdefault(r["vendor"], {})
-        breakdown[r["vendor"]][r["device_type"]] = (
-            breakdown[r["vendor"]].get(r["device_type"], 0) + 1
+        ms = r.get("management_source", r.get("vendor"))
+        breakdown.setdefault(ms, {})
+        dt_str = ", ".join(sorted(r["device_types"]))
+        breakdown[ms][dt_str] = (
+            breakdown[ms].get(dt_str, 0) + 1
         )
     for vendor, dtypes in sorted(breakdown.items()):
         for dtype, cnt in sorted(dtypes.items()):

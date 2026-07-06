@@ -11,8 +11,8 @@ def normalize_management_source(source: str) -> str:
     normalized = (source or "").strip().lower()
     if normalized == "oneview":
         return "oneview"
-    if normalized in {"com", "coms", "compute-ops", "compute_ops"}:
-        return "coms"
+    if normalized in {"com", "coms", "comops", "compute-ops", "compute_ops"}:
+        return "comops"
     if normalized == "manual":
         return "manual"
     if normalized == "static":
@@ -26,7 +26,7 @@ def get_mcp_tool_target(management_source: str) -> str:
     """Map a management source to the MCP tool the orchestrator should invoke."""
     source = normalize_management_source(management_source)
     env_key = f"{source.upper()}_MCP_TOOL"
-    default_tool = "onprem" if source == "coms" else source
+    default_tool = "onprem" if source == "comops" else source
     return os.getenv(env_key, default_tool)
 
 

@@ -120,7 +120,7 @@ def generate_device_batch(
             source_host = f"oneview-{parent_id:02d}.mgmt.local"
             ip_addr = f"10.100.{parent_id}.{(device_num % 254) + 1}"
         else:
-            management_source = "coms"
+            management_source = "comops"
             source_host = "coms-01.cloud.local"
             ip_addr = f"10.200.1.{(device_num % 254) + 1}"
 
@@ -177,7 +177,7 @@ def insert_coms_devices(coms_id: int, count: int = 500):
             start_idx=10000,
             count=count,
             parent_id=coms_id,
-            parent_type="coms",
+            parent_type="comops",
         )
     )
 
@@ -287,14 +287,14 @@ def seed_current_schema(seed_oneview_count: int = 1000, seed_com_count: int = 50
         ("fw-core-01", "10.100.1.14", "fw-core-01.oneview.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-fc01", "firewall"),
         ("fw-edge-02", "10.100.1.23", "fw-edge-02.oneview.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-fwedge02", "firewall"),
 
-        # COMS devices (management_source='coms', source_host='coms-01.cloud.local')
-        ("prod-x1", "10.200.1.13", "prod-x1.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-prodx1", "server"),
-        ("core-r3", "10.200.1.20", "core-r3.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-corer3", "router"),
-        ("agg-sw05", "10.200.1.21", "agg-sw05.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-aggsw05", "switch"),
-        ("fw-west-01", "10.200.1.12", "fw-west-01.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-fwwest01", "firewall"),
-        ("stg-array-02", "10.200.1.11", "stg-array-02.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-stgarray02", "storage"),
-        ("nas-prod-01", "10.200.1.10", "nas-prod-01.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-np01", "storage"),
-        ("backup-san-01", "10.200.1.22", "backup-san-01.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-backupsan01", "storage"),
+        # COMS devices (management_source='comops', source_host='coms-01.cloud.local')
+        ("prod-x1", "10.200.1.13", "prod-x1.cloud.local", "comops", "coms-01.cloud.local", "coms-uuid-prodx1", "server"),
+        ("core-r3", "10.200.1.20", "core-r3.cloud.local", "comops", "coms-01.cloud.local", "coms-uuid-corer3", "router"),
+        ("agg-sw05", "10.200.1.21", "agg-sw05.cloud.local", "comops", "coms-01.cloud.local", "coms-uuid-aggsw05", "switch"),
+        ("fw-west-01", "10.200.1.12", "fw-west-01.cloud.local", "comops", "coms-01.cloud.local", "coms-uuid-fwwest01", "firewall"),
+        ("stg-array-02", "10.200.1.11", "stg-array-02.cloud.local", "comops", "coms-01.cloud.local", "coms-uuid-stgarray02", "storage"),
+        ("nas-prod-01", "10.200.1.10", "nas-prod-01.cloud.local", "comops", "coms-01.cloud.local", "coms-uuid-np01", "storage"),
+        ("backup-san-01", "10.200.1.22", "backup-san-01.cloud.local", "comops", "coms-01.cloud.local", "coms-uuid-backupsan01", "storage"),
     ]
 
     db_manager.execute_many(

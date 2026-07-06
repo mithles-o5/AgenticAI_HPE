@@ -5,12 +5,13 @@ from __future__ import annotations
 import ipaddress
 import logging
 import time
+import re
 from typing import Optional
 
 from cache import ResourceCache
 from enums import CacheStatus, IdentifierType
 from errors import InvalidIdentifierError, ResourceNotFoundError, UnsupportedManagementSourceError, InvalidCMDBRecordError
-from records import RouteResolution
+from records import RouteResolution, DeviceRecord
 from registry import ResourceRegistry
 from protocol_discovery import discover_route
 
@@ -65,20 +66,94 @@ class ResourceResolver:
         resolution_ms = int((time.perf_counter() - start) * 1000)
 
         if device is None:
-            self.registry.log_routing_audit(
-                identifier=normalized_identifier,
-                identifier_type=normalized_type,
-                resolved_source=None,
-                resolved_host=None,
-                cache_hit=cache_hit,
-                resolution_ms=resolution_ms,
-                requested_by=requested_by,
-                user_identity=user_identity,
-                user_role=user_role,
-            )
-            raise ResourceNotFoundError(
-                f"No device found for {normalized_type.value} '{normalized_identifier}'"
-            )
+            if action == "CREATE":
+                # Mock device for provisioning
+                # Dynamically infer device type and management source
+                from db import db_manager
+                conn = db_manager.get_connection()
+                
+                raw_q = parsed_payload.get("raw_query", "").lower()
+                inferred_type = "server"
+                inferred_source = "mock_server"
+                
+                try:
+                    with conn.cursor() as cur:
+                        cur.execute('''
+                            SELECT e.management_source, d.name, COUNT(*)
+                            FROM endpoint_registry e
+                            JOIN endpoint_device_mapping ed ON e.id = ed.endpoint_id
+                            JOIN device_type d ON d.id = ed.device_type_id
+                            WHERE e.action_key = %s
+                            GROUP BY e.management_source, d.name
+                        ''', (action,))
+                        rows = cur.fetchall()
+                        best_score = -1
+                        
+                        # Expand raw_q with common synonyms to improve dynamic matching
+                        expanded_q = raw_q.lower()
+                        synonyms = {
+                            "array": "system",
+                            "vm": "virtual machine",
+                            "k8s": "kubernetes",
+                            "box": "server"
+                        }
+                        for k, v in synonyms.items():
+                            if re.search(r'\b' + re.escape(k) + r'\b', expanded_q):
+                                expanded_q += " " + v
+                                
+                        for ms, dt, count in rows:
+                            score = 0
+                            
+                            # Score management_source match
+                            ms_parts = ms.replace('_', ' ').replace('-', ' ').split()
+                            score += sum(10 for p in ms_parts if p in expanded_q)
+                                
+                            # Score device_type match
+                            dt_parts = dt.replace('_', ' ').replace('-', ' ').split()
+                            score += sum(5 for p in dt_parts if p in expanded_q)
+                                
+                            if dt in expanded_q:
+                                score += 5
+                                
+                            # Break ties using endpoint frequency
+                            score += (count * 0.001)
+                            
+                            if score > best_score:
+                                best_score = score
+                                inferred_source = ms
+                                inferred_type = dt
+                                
+                except Exception as e:
+                    logger.error("[Resolver] Dynamic infer failed: %s", e)
+                    
+                device = DeviceRecord(
+                    id="00000000-0000-0000-0000-000000000000",
+                    serial_number=normalized_identifier,
+                    device_type=inferred_type,
+                    management_source=inferred_source,
+                    ip_address=None,
+                    fqdn=None,
+                    source_host=None,
+                    source_device_id=None,
+                    last_seen=None,
+                    created_at=None,
+                    updated_at=None
+                )
+            else:
+                self.registry.log_routing_audit(
+                    identifier=normalized_identifier,
+                    identifier_type=normalized_type,
+                    resolved_source=None,
+                    resolved_host=None,
+                    cache_hit=cache_hit,
+                    resolution_ms=resolution_ms,
+                    requested_by=requested_by,
+                    user_identity=user_identity,
+                    user_role=user_role,
+                )
+                raise ResourceNotFoundError(
+                    f"No device found for {normalized_type.value} '{normalized_identifier}'"
+                )
 
         # 1. CMDB Record Validation
         if not device.serial_number or not device.management_source or not device.device_type:
@@ -91,7 +166,7 @@ class ResourceResolver:
             )
 
         # 2. Management Source Validation
-        supported_sources = {"oneview", "coms", "mock_server", "mock_storage", "mock_network", "mock_cloud"}
+        supported_sources = {"oneview", "comops", "mock_server", "mock_storage", "mock_network", "mock_cloud", "storage", "network"}
         source_normalized = (device.management_source or "").strip().lower()
         if source_normalized not in supported_sources:
             logger.error(
@@ -123,7 +198,8 @@ class ResourceResolver:
             action={},
             http_method=None
         )
-        exec_ctx = executor.build_execution_context(temp_resolution, action, category)
+        resource_type = parsed_payload.get("resource_type")
+        exec_ctx = executor.build_execution_context(temp_resolution, action, category, resource_type)
 
         result = RouteResolution(
             identifier=normalized_identifier,
@@ -141,7 +217,8 @@ class ResourceResolver:
             },
             action={
                 "category": exec_ctx["category"],
-                "action": exec_ctx["action"]
+                "action": exec_ctx["action"],
+                "resource_type": parsed_payload.get("resource_type")
             },
             http_method=exec_ctx["http_method"]
         )

@@ -534,6 +534,7 @@ class EndpointRegistryQueries:
         vendor: str,
         device_type: str,
         action_key: str,
+        resource_type: str | None = None,
     ) -> dict:
         """
         Resolve a (vendor, device_type, action_key) triple to its exact
@@ -559,16 +560,30 @@ class EndpointRegistryQueries:
             When no row matches via exact or fallback lookup.
         """
         # ── Pass 1: exact match ───────────────────────────────────────────────
-        row = db_manager.execute_query(
-            """
-            SELECT http_method, api_path, device_type
-            FROM   endpoint_registry
-            WHERE  lower(vendor)      = lower(%s)
-              AND  lower(device_type) = lower(%s)
-              AND  lower(action_key)  = lower(%s)
+        query_exact = """
+            SELECT e.http_method, e.api_path, d.name AS device_type
+            FROM   endpoint_registry e
+            JOIN   endpoint_device_mapping m ON e.id = m.endpoint_id
+            JOIN   device_type d ON m.device_type_id = d.id
+            LEFT JOIN resource_type r ON e.resource_type_id = r.id
+            WHERE  lower(e.management_source) = lower(%s)
+              AND  lower(d.name) = lower(%s)
+              AND  lower(e.action_key)  = lower(%s)
+        """
+        params_exact = [vendor, device_type or "server", action_key]
+        
+        if resource_type:
+            query_exact += " AND lower(r.res_type) = lower(%s)"
+            params_exact.append(resource_type)
+            
+        query_exact += """
+            ORDER BY CASE WHEN lower(r.res_type) IN ('systems', 'devices', 'server-hardware', 'chassis', 'storage-systems', 'generic') THEN 0 ELSE 1 END
             LIMIT 1
-            """,
-            (vendor, device_type or "server", action_key),
+        """
+
+        row = db_manager.execute_query(
+            query_exact,
+            tuple(params_exact),
             fetch_one=True,
         )
 
@@ -578,16 +593,30 @@ class EndpointRegistryQueries:
                 "[EndpointRegistry] No exact match for device_type=%r — trying 'server' fallback",
                 device_type,
             )
-            row = db_manager.execute_query(
-                """
-                SELECT http_method, api_path, device_type
-                FROM   endpoint_registry
-                WHERE  lower(vendor)      = lower(%s)
-                  AND  lower(device_type) = 'server'
-                  AND  lower(action_key)  = lower(%s)
+            query_fallback = """
+                SELECT e.http_method, e.api_path, d.name AS device_type
+                FROM   endpoint_registry e
+                JOIN   endpoint_device_mapping m ON e.id = m.endpoint_id
+                JOIN   device_type d ON m.device_type_id = d.id
+                LEFT JOIN resource_type r ON e.resource_type_id = r.id
+                WHERE  lower(e.management_source) = lower(%s)
+                  AND  lower(d.name) = 'server'
+                  AND  lower(e.action_key)  = lower(%s)
+            """
+            params_fallback = [vendor, action_key]
+            
+            if resource_type:
+                query_fallback += " AND lower(r.res_type) = lower(%s)"
+                params_fallback.append(resource_type)
+                
+            query_fallback += """
+                ORDER BY CASE WHEN lower(r.res_type) IN ('systems', 'devices', 'server-hardware', 'chassis', 'storage-systems', 'generic') THEN 0 ELSE 1 END
                 LIMIT 1
-                """,
-                (vendor, action_key),
+            """
+
+            row = db_manager.execute_query(
+                query_fallback,
+                tuple(params_fallback),
                 fetch_one=True,
             )
 
@@ -619,10 +648,13 @@ class EndpointRegistryQueries:
         """Return all registered endpoints for a vendor (useful for debugging)."""
         rows = db_manager.execute_query(
             """
-            SELECT device_type, action_key, http_method, api_path
-            FROM   endpoint_registry
-            WHERE  lower(vendor) = lower(%s)
-            ORDER  BY device_type, action_key
+            SELECT string_agg(d.name, ', ') AS device_type, e.action_key, e.http_method, e.api_path
+            FROM   endpoint_registry e
+            JOIN   endpoint_device_mapping m ON e.id = m.endpoint_id
+            JOIN   device_type d ON m.device_type_id = d.id
+            WHERE  lower(e.management_source) = lower(%s)
+            GROUP BY e.action_key, e.http_method, e.api_path
+            ORDER  BY device_type, e.action_key
             """,
             (vendor,),
             fetch_all=True,
@@ -634,11 +666,13 @@ class EndpointRegistryQueries:
         """Return all endpoints for a specific (vendor, device_type) pair."""
         rows = db_manager.execute_query(
             """
-            SELECT action_key, http_method, api_path
-            FROM   endpoint_registry
-            WHERE  lower(vendor)      = lower(%s)
-              AND  lower(device_type) = lower(%s)
-            ORDER  BY action_key
+            SELECT e.action_key, e.http_method, e.api_path
+            FROM   endpoint_registry e
+            JOIN   endpoint_device_mapping m ON e.id = m.endpoint_id
+            JOIN   device_type d ON m.device_type_id = d.id
+            WHERE  lower(e.management_source) = lower(%s)
+              AND  lower(d.name) = lower(%s)
+            ORDER  BY e.action_key
             """,
             (vendor, device_type),
             fetch_all=True,

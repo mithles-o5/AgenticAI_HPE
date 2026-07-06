@@ -82,18 +82,34 @@ CREATE INDEX IF NOT EXISTS idx_poll_snapshots_source
 -- action_key   : short semantic key ("On", "Status") or verbose API key
 -- api_path     : EXACT vendor API path — no generic {resource_category} allowed
 -- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS resource_type (
+    id SERIAL PRIMARY KEY,
+    res_type VARCHAR(64) UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS device_type (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(64) UNIQUE NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS endpoint_registry (
     id          UUID         PRIMARY KEY DEFAULT gen_random_uuid(),
-    vendor      VARCHAR(64)  NOT NULL,
-    device_type VARCHAR(64)  NOT NULL DEFAULT 'generic',
+    management_source VARCHAR(64)  NOT NULL,
+    resource_type_id INT REFERENCES resource_type(id),
     action_key  VARCHAR(128) NOT NULL,
     http_method VARCHAR(16)  NOT NULL,
     api_path    TEXT         NOT NULL,
     created_at  TIMESTAMPTZ  DEFAULT NOW(),
-    UNIQUE (vendor, device_type, action_key, api_path, http_method)
+    UNIQUE (management_source, action_key, api_path, http_method)
 );
 
--- Covers the primary lookup pattern: vendor + device_type + action_key
+CREATE TABLE IF NOT EXISTS endpoint_device_mapping (
+    endpoint_id UUID REFERENCES endpoint_registry(id) ON DELETE CASCADE,
+    device_type_id INTEGER REFERENCES device_type(id) ON DELETE CASCADE,
+    PRIMARY KEY (endpoint_id, device_type_id)
+);
+
+-- Covers the primary lookup pattern: management_source + device_type + action_key
 CREATE INDEX IF NOT EXISTS idx_endpoint_registry_lookup
-    ON endpoint_registry (lower(vendor), lower(device_type), lower(action_key));
+    ON endpoint_registry (lower(management_source), lower(action_key));
 

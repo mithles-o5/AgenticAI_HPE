@@ -27,9 +27,11 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 _FALLBACK_PATHS: dict[str, str] = {
     "oneview": "/rest/{resource}/{id}",
-    "coms":    "/compute-ops-mgmt/v1/{resource}/{id}",
+    "comops":    "/compute-ops-mgmt/v1/{resource}/{id}",
     "mock_storage": "/data-services/v1beta1/devices/{id}",
     "mock_cloud": "/api/v1/devices/{id}",
+    "mock_server": "/redfish/v1/systems/{id}",
+    "mock_network": "/network/v1/devices/{id}",
 }
 _FALLBACK_METHOD = "GET"
 
@@ -113,7 +115,7 @@ class ExecutionOrchestrator:
     def __init__(self) -> None:
         self._handlers: dict[str, object] = {}
         self.register_handler("oneview", OneViewHandler())
-        self.register_handler("coms",    ComsHandler())
+        self.register_handler("comops",  ComsHandler())
         mock_handler = MockHandler()
         self.register_handler("mock_server",  mock_handler)
         self.register_handler("mock_storage", mock_handler)
@@ -135,6 +137,7 @@ class ExecutionOrchestrator:
         host: str,
         uuid: str,
         device_type: str,
+        resource_type: str | None = None,
     ) -> tuple[str, str]:
         """
         Lookup the registry for (vendor, device_type, action_key) and build
@@ -154,11 +157,13 @@ class ExecutionOrchestrator:
                 vendor=vendor,
                 device_type=device_type or "server",
                 action_key=action_key,
+                resource_type=resource_type,
             )
             http_method = meta["http_method"]
-            # Substitute only resource identity placeholders — path structure
-            # is preserved exactly as defined in the vendor API contract.
-            api_path = meta["api_path"].format(id=uuid, uuid=uuid)
+            # Substitute any resource identity placeholders (like {id}, {system_id}, {volume_id})
+            # path structure is preserved exactly as defined in the vendor API contract.
+            import re
+            api_path = re.sub(r'\{[^}]+\}', uuid, meta["api_path"])
             logger.debug(
                 "[EndpointRegistry] Resolved | vendor=%s device_type=%s "
                 "action=%s method=%s path=%s",
@@ -189,27 +194,39 @@ class ExecutionOrchestrator:
         route: RouteResolution,
         action: str,
         category: str,
+        resource_type: str | None = None,
     ) -> dict:
         """Construct the execution context payload using DB-driven endpoint lookup."""
         device = route.device
-        source = normalize_management_source(device.management_source)
-
+        
         # Base URL components
         mock_port = os.getenv("MOCK_AGENT_PORT")
         mock_host = os.getenv("MOCK_AGENT_HOST", "localhost")
 
-        if mock_port:
-            host   = f"{mock_host}:{mock_port}"
-            scheme = "http"
-        else:
-            host   = device.source_host 
-            if ":" in host or "localhost" in host or "127.0.0.1" in host:
+        if device:
+            source = normalize_management_source(device.management_source)
+            if mock_port:
+                host   = f"{mock_host}:{mock_port}"
                 scheme = "http"
             else:
+                host   = device.source_host or "localhost"
                 scheme = "https"
+            if host and (":" in host or "localhost" in host or "127.0.0.1" in host):
+                scheme = "http"
 
-        uuid        = device.source_device_id or device.id
-        device_type = (device.device_type or "").strip().lower()
+            uuid        = device.source_device_id or device.id
+            device_type = (device.device_type or "").strip().lower()
+        else:
+            # Provisioning operations may not have a device in CMDB yet
+            source = "oneview"  # Fallback source for global provisioning
+            if mock_port:
+                host   = f"{mock_host}:{mock_port}"
+                scheme = "http"
+            else:
+                host   = "localhost"
+                scheme = "https"
+            uuid = ""
+            device_type = "server"
 
         # ── Registry-driven endpoint synthesis ────────────────────────────────
         http_method, endpoint = self._resolve_endpoint(
@@ -219,6 +236,7 @@ class ExecutionOrchestrator:
             host=host,
             uuid=uuid,
             device_type=device_type,
+            resource_type=resource_type,
         )
         # ─────────────────────────────────────────────────────────────────────
 

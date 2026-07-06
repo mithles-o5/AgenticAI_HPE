@@ -865,7 +865,8 @@ async def _execute_agent_command(
             parsed_payload={
                 "identifier": identifier,
                 "action": action,
-                "category": task.category
+                "category": task.category,
+                "raw_query": query
             },
             user_identity=email,
             user_role=role
@@ -913,7 +914,8 @@ async def _execute_agent_command(
                 parsed_payload={
                     "identifier": identifier,
                     "action": action,
-                    "category": "Operational"
+                    "category": "Operational",
+                    "raw_query": query
                 },
                 user_identity=email,
                 user_role=role
@@ -1102,6 +1104,18 @@ async def _execute_agent_command(
     if device and device.management_source:
         provider_or_protocol = device.management_source
         
+        # Default agent_type fallback based on provider
+        if provider_or_protocol in {"mock_storage", "storage"}:
+            agent_type = "storage"
+        elif provider_or_protocol in {"mock_server", "oneview"}:
+            agent_type = "server"
+        elif provider_or_protocol in {"mock_network", "network"}:
+            agent_type = "network"
+        elif provider_or_protocol in {"mock_cloud", "cloud"}:
+            agent_type = "cloud"
+        else:
+            agent_type = "server"
+
         # Override the LLM's guessed agent type based on the Capability Registry
         try:
             async with httpx.AsyncClient() as client:
@@ -1267,68 +1281,19 @@ async def _execute_agent_command(
     # Use resolver-derived routing metadata, management source, and credentials ref.
     if device:
         resolved_provider = device.management_source
-        resolved_credentials_ref = resolution.credential_ref if resolution else "mock"
-        if api_path_step3:
-            api_path = api_path_step3
     else:
         resolved_provider = provider_or_protocol
-        resolved_credentials_ref = None
 
-    if is_creation or resolved_provider in {"mock_storage", "mock_network", "mock_server", "mock_cloud", "oneview"}:
-        if resolved_provider == "mock_storage":
-            api_path = "/data-services/v1beta1/devices/{id}" if not is_creation else "/data-services/v1beta1/devices"
-        elif resolved_provider == "oneview":
-            api_path = "/rest/server-hardware/{id}" if not is_creation else "/rest/server-hardware"
-        elif resolved_provider == "mock_server":
-            api_path = "/redfish/v1/systems/{id}" if not is_creation else "/redfish/v1/systems"
-        elif resolved_provider == "mock_network":
-            # ── Network API path routing (action-aware) ──────────────────────
-            if is_creation:
-                api_path = "/network/v1/devices"
-            elif action in {"ON", "OFF", "RESET", "COLD_BOOT"}:
-                # Power control → /network/v1/devices/{id}/power
-                api_path = "/network/v1/devices/{id}/power"
-            elif action in {"RESCAN"}:
-                # Topology discovery → list all devices
-                api_path = "/network/v1/devices"
-            elif action == "STATUS":
-                # Determine if this is a fleet query or single device
-                _ident_lower = (identifier or "").lower()
-                if _ident_lower in {"switches", "all switches", "switch"}:
-                    api_path = "/monitoring/v1/switches"
-                elif _ident_lower in {"aps", "access points", "access-points"}:
-                    api_path = "/network-monitoring/v1/aps"
-                elif _ident_lower in {"gateways", "routers", "gateway"}:
-                    api_path = "/monitoring/v1/gateways" if False else "/network/v1/devices"
-                else:
-                    api_path = "/network/v1/devices/{id}"
-            else:
-                api_path = "/network/v1/devices/{id}"
-        elif resolved_provider == "mock_cloud":
-            api_path = "/api/v1/devices/{id}" if not is_creation else "/api/v1/devices"
+    resolved_credentials_ref = resolution.credential_ref if resolution else "mock"
+    api_path = resolution.api_endpoint if resolution else ""
 
     # Agent task payload mapping
     agent_task_action = action
     if action == "STATUS":
         if normalized_category in {"storage-systems", "storage-pools", "storage-volumes", "fc-sans"}:
             agent_task_action = "health_check" if (resource_type or "").lower() == "snapshot" else "fetch_capacity_and_performance"
-        elif resolved_provider == "mock_network":
-            # Network STATUS → fetch_metrics (interface/device telemetry)
-            agent_task_action = "fetch_metrics"
         else:
             agent_task_action = "fetch_metrics"
-
-    # ── Network-specific action verb mapping ─────────────────────────────────
-    if resolved_provider == "mock_network":
-        if action in {"ON", "OFF", "RESET", "COLD_BOOT"}:
-            agent_task_action = "execute_action"
-        elif action == "RESCAN":
-            agent_task_action = "discover_topology"
-            api_path = "/network/v1/devices"  # fleet topology
-        elif action in {"CREATE", "DELETE", "ALLOCATE", "DEALLOCATE"}:
-            agent_task_action = "execute_action"
-        elif action in {"FAILOVER", "RELOAD", "POLICY_SYNC"}:
-            agent_task_action = "execute_action"
 
     # ── Dynamic Intent Router Variables ──────────────────────────────────────
     _MOCK_BASE_URLS = {
@@ -1341,11 +1306,6 @@ async def _execute_agent_command(
 
     src = resolved_provider or ""
     dev_id = (device.source_device_id if device else None) or identifier
-
-    def _server_api(path_template: str) -> str:
-        """Build full mock server URL from a Redfish path template."""
-        base = _MOCK_BASE_URLS.get(src, "http://127.0.0.1:8010")
-        return f"{base}{path_template.format(id=dev_id)}"
 
     # ── UPDATE (PATCH) — handled directly via mock REST API ────────────────
     if action == "UPDATE":
@@ -1362,18 +1322,10 @@ async def _execute_agent_command(
         value     = update_payload["value"]
         if device and src in _MOCK_BASE_URLS:
             base_url = _MOCK_BASE_URLS[src]
-            if src == "mock_storage":
-                patch_url = f"{base_url}/data-services/v1beta1/devices/{dev_id}"
-            elif src == "oneview":
-                patch_url = f"{base_url}/rest/server-hardware/{dev_id}"
-            elif src == "mock_server":
-                patch_url = f"{base_url}/redfish/v1/systems/{dev_id}"
-            elif src == "mock_network":
-                patch_url = f"{base_url}/network/v1/devices/{dev_id}"
-            elif src == "mock_cloud":
-                patch_url = f"{base_url}/api/v1/devices/{dev_id}"
-            else:
-                patch_url = ""
+            patch_url = ""
+            if api_path:
+                patch_url = f"{base_url}{api_path}"
+            
             if patch_url:
                 try:
                     async with httpx.AsyncClient() as _client:
@@ -1415,131 +1367,35 @@ async def _execute_agent_command(
                 f"Supported providers: {list(_MOCK_BASE_URLS.keys())}"
             )
 
-    # ── Build dispatch_params dynamically per action type ────────────────────
-    agent_task_action = action
+    # ── Build dispatch_params dynamically ────────────────────────────────────
     dispatch_params: dict = {"user_email": email}
 
     if device:
         dispatch_params["serial_number"] = device.serial_number
         dispatch_params["management_source"] = device.management_source
 
-    if resolution and hasattr(resolution, "http_method"):
+    if resolution:
+        dispatch_params["api_path"] = resolution.api_endpoint
         dispatch_params["http_method"] = resolution.http_method
-
-    if action == "STATUS":
-        if normalized_category in {"storage-systems", "storage-pools", "storage-volumes", "fc-sans"}:
-            agent_task_action = "fetch_capacity_and_performance"
-        else:
-            agent_task_action = "fetch_metrics"
-        dispatch_params["api_path"] = _server_api("/redfish/v1/systems/{id}") if src == "mock_server" else api_path
-        if src == "mock_server" or not dispatch_params.get("http_method"):
-            dispatch_params["http_method"] = "GET"
-
-    elif action == "FETCH_SENSORS":
-        agent_task_action = "FETCH_SENSORS"
-        resource_type = "sensor"
-        dispatch_params["api_path"] = _server_api("/redfish/v1/chassis/{id}/thermal")
-        dispatch_params["http_method"] = "GET"
-
-    elif action == "FETCH_EVENT_LOG":
-        agent_task_action = "FETCH_EVENT_LOG"
-        sev_match = re.search(r"\b(critical|warning|info|fatal)\b", query, re.IGNORECASE)
-        dispatch_params["api_path"] = _server_api("/redfish/v1/systems/{id}/logservices/iml/entries")
-        dispatch_params["http_method"] = "GET"
-        dispatch_params["clear"] = False
-        if sev_match:
-            dispatch_params["severity"] = sev_match.group(1).lower()
-
-    elif action == "CLEAR_EVENT_LOG":
-        agent_task_action = "FETCH_EVENT_LOG"
-        dispatch_params["api_path"] = _server_api("/redfish/v1/systems/{id}/logservices/iml/entries")
-        dispatch_params["http_method"] = "GET"
-        dispatch_params["clear"] = True
-
-    elif action == "DISCOVER_INVENTORY":
-        agent_task_action = "DISCOVER_INVENTORY"
-        dispatch_params["api_path"] = _server_api("/redfish/v1/systems/{id}")
-        dispatch_params["http_method"] = "GET"
-
-    elif action == "MOUNT_VIRTUAL_MEDIA":
-        agent_task_action = "MOUNT_VIRTUAL_MEDIA"
-        url_match = re.search(r'(https?://[^\s\'"]+)', query)
-        media_url = url_match.group(1) if url_match else ""
-        media_type = "CD" if re.search(r"\b(iso|cd|dvd|cdrom)\b", query, re.IGNORECASE) else "USBStick"
-        dispatch_params["api_path"] = _server_api("/redfish/v1/managers/{id}/virtualmedia/2/actions/virtualmedia.insertmedia")
-        dispatch_params["http_method"] = "POST"
-        dispatch_params["action_type"] = "virtual_media"
-        dispatch_params["media_url"] = media_url
-        dispatch_params["device_type"] = media_type
-        dispatch_params["payload"] = {"Image": media_url, "TransferProtocolType": "HTTP", "Inserted": True, "WriteProtected": True}
-
-    elif action == "SYNC_CMDB":
-        agent_task_action = "SYNC_CMDB"
-        dispatch_params["api_path"] = _server_api("/redfish/v1/systems/{id}")
-        dispatch_params["http_method"] = "GET"
-
-    elif action in {"ON", "OFF", "RESET", "COLD_BOOT"} and resolved_provider == "mock_server":
-        agent_task_action = action
-        reset_type_map = {"ON": "On", "OFF": "ForceOff", "RESET": "GracefulRestart", "COLD_BOOT": "PowerCycle"}
-        dispatch_params["api_path"] = _server_api("/redfish/v1/systems/{id}/actions/computersystem.reset")
-        dispatch_params["http_method"] = "POST"
-        dispatch_params["action_type"] = "power_action"
-        dispatch_params["action_verb"] = action.lower()
-        dispatch_params["power_state"] = action.lower()
-        dispatch_params["payload"] = {"ResetType": reset_type_map.get(action, "GracefulRestart")}
-
+        if hasattr(resolution, "action") and isinstance(resolution.action, dict):
+            # Pass through any payload metadata if it was added to action
+            if "payload" in resolution.action:
+                dispatch_params["payload"] = resolution.action["payload"]
+            
+            # The execution engine uses action_verb
+            if "action" in resolution.action:
+                dispatch_params["action_verb"] = str(resolution.action["action"]).lower()
     else:
-        # Generic fallback
-        if not dispatch_params.get("api_path"):
-            dispatch_params["api_path"] = api_path
-
-    # Override api_path with resolver-derived endpoint if better
-    if api_path_step3 and action not in {"ON", "OFF", "RESET", "COLD_BOOT", "FETCH_EVENT_LOG",
-                                          "CLEAR_EVENT_LOG", "DISCOVER_INVENTORY", "MOUNT_VIRTUAL_MEDIA",
-                                          "FETCH_SENSORS", "SYNC_CMDB"}:
-        dispatch_params["api_path"] = api_path_step3
-
-    is_deletion = action in {"DELETE", "DEALLOCATE"}
-    if is_deletion:
-        dispatch_params["http_method"] = "DELETE"
+        dispatch_params["api_path"] = api_path
 
     if payload_to_dispatch:
         dispatch_params["payload"] = payload_to_dispatch
         dispatch_params["http_method"] = "POST"
 
-    # ── Network-specific dispatch enrichment ──────────────────────────────────
-    if resolved_provider == "mock_network":
-        # Always pass action_verb so the adapter knows what to do
-        dispatch_params["action_verb"] = action.lower()
+    is_deletion = action in {"DELETE", "DEALLOCATE"}
+    if is_deletion:
+        dispatch_params["http_method"] = "DELETE"
 
-        if action in {"ON", "OFF", "RESET", "COLD_BOOT"}:
-            agent_task_action = "execute_action"
-            # Power actions → POST to /power endpoint
-            dispatch_params["http_method"] = "POST"
-            dispatch_params["payload"] = {
-                "action": "ON" if action in {"ON", "COLD_BOOT"} else "OFF"
-            }
-            # Ensure the api_path points to the /power sub-route
-            if "/power" not in (dispatch_params.get("api_path") or ""):
-                dispatch_params["api_path"] = "/network/v1/devices/{id}/power"
-
-        elif action == "RESCAN":
-            agent_task_action = "discover_topology"
-            # Topology / neighbor discovery → GET all devices
-            dispatch_params["http_method"] = "GET"
-            dispatch_params["api_path"] = "/network/v1/devices"
-
-        elif action == "STATUS":
-            agent_task_action = "fetch_metrics"
-            dispatch_params["http_method"] = "GET"
-            # api_path already set correctly above (fleet vs single)
-
-        elif action in {"CREATE"}:
-            dispatch_params["http_method"] = "POST"
-
-        elif action in {"DELETE", "DEALLOCATE"}:
-            dispatch_params["http_method"] = "DELETE"
-            dispatch_params["api_path"] = f"/network/v1/devices/{'{id}'}"
     loop = asyncio.get_event_loop()
     result = await loop.run_in_executor(
 
@@ -1627,12 +1483,7 @@ async def _execute_agent_command(
     ]
     if device:
         # Construct Action API Endpoint
-        if action in {"START", "STOP", "RESTART"} and resolved_provider == "mock_server":
-            action_api_endpoint = f"/redfish/v1/systems/{device.source_device_id or identifier}/Actions/ComputerSystem.Reset"
-        elif api_path:
-            action_api_endpoint = api_path.format(id=device.source_device_id or identifier)
-        else:
-            action_api_endpoint = "N/A"
+        action_api_endpoint = api_path or "N/A"
 
         lines.append(f"IP Address   : {getattr(device, 'ip_address', 'N/A')}")
         lines.append(f"Source Host  : {getattr(device, 'source_host', 'N/A')}")
