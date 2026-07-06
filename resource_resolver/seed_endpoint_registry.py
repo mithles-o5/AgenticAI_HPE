@@ -137,7 +137,7 @@ def _infer_device_type(api_path: str, management_source: str) -> list[str]:
         if any(k in words for k in ['server', 'servers', 'hardware', 'chassis', 'manager', 'managers']): return ['server']
         return ['server', 'storage', 'switch', 'router', 'firewall']
 
-    elif management_source in ['comops']:
+    elif management_source in ['coms']:
         if any(k in words for k in ['switch', 'switches']): return ['switch']
         if any(k in words for k in ['router', 'routers']): return ['router']
         if any(k in words for k in ['firewall', 'firewalls']): return ['firewall']
@@ -145,7 +145,7 @@ def _infer_device_type(api_path: str, management_source: str) -> list[str]:
         if any(k in words for k in ['server', 'servers', 'appliance', 'appliances']): return ['server']
         return ['server', 'storage', 'switch', 'router', 'firewall']
 
-    elif management_source in ['ilo', 'mock_server']:
+    elif management_source in ['ilo']:
         if any(k in words for k in ['chassis']): return ['blade_server']
         if any(k in words for k in ['processor', 'processors', 'compute']): return ['compute_node']
         if any(k in words for k in ['manager', 'managers']): return ['rack_server']
@@ -258,12 +258,10 @@ def parse_routes_dump(filepath: str) -> list[dict]:
                 
             action_key = generate_raw_action_key(http_method, api_path)
             
-            # Note: the dump includes 'cloud' and 'storage', etc. The vendor
-            # normalization in build_rows will handle inferring if needed.
-            # But the DB expects 'management_source' to be 'comops' instead of 'cloud' if it's coms.
-            # Let's map it cleanly if needed:
+            # Ensure we use normalized names
             ms = vendor.lower()
-            if ms == "ilo": ms = "mock_server"
+            if ms in ["comops", "coms"]: ms = "coms"
+            if ms == "ilo": ms = "ilo"
             elif ms == "cloud": ms = "mock_cloud"
             elif ms == "storage": ms = "storage"
             elif ms == "network": ms = "network"
@@ -344,7 +342,7 @@ def _normalize_action_key(vendor: str, raw_action_key: str, http_method: str, ap
         parts = [p for p in api_path.split("/") if p]
         if len(parts) == 3 and parts[0] == "rest" and parts[2].startswith("{") and parts[2].endswith("}"):
             is_single_resource = True
-    elif "mock_server" in vendor or "ilo" in vendor:
+    elif vendor == "ilo":
         parts = [p for p in api_path.split("/") if p]
         if len(parts) == 4 and parts[0] == "redfish" and parts[3].startswith("{") and parts[3].endswith("}"):
             is_single_resource = True
@@ -364,10 +362,17 @@ def _normalize_action_key(vendor: str, raw_action_key: str, http_method: str, ap
     # 3. Collection POSTs (CREATE, ALLOCATE) and GETs (LIST)
     is_collection = False
     if vendor == "oneview":
+        logger.info(f"Loaded generic templates for OneView.")
+    elif vendor == "coms":
+        logger.info(f"Loaded generic templates for COMS.")
+    elif vendor == "ilo":
+        logger.info(f"Loaded generic templates for iLO.")
+    
+    if vendor == "oneview":
         parts = [p for p in api_path.split("/") if p]
         if len(parts) == 2 and parts[0] == "rest" and not ("{" in parts[1] or "}" in parts[1]):
             is_collection = True
-    elif "mock_server" in vendor or "ilo" in vendor:
+    elif vendor == "ilo":
         parts = [p for p in api_path.split("/") if p]
         if len(parts) == 3 and parts[0] == "redfish" and not ("{" in parts[2] or "}" in parts[2]):
             is_collection = True

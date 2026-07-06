@@ -49,6 +49,7 @@ class DatabaseManager:
     _instance: Optional[DatabaseManager] = None
     _connection_pool: Optional[pool.ThreadedConnectionPool] = None
     _pg_available: bool = False
+    _last_reconnect_attempt: float = 0.0
 
     def __new__(cls) -> DatabaseManager:
         if cls._instance is None:
@@ -61,7 +62,7 @@ class DatabaseManager:
             port: int = int(os.getenv("DB_PORT", "5432")),
             database: str = os.getenv("DB_NAME", "hpe_agentic_ai"),
             user: str = os.getenv("DB_USER", "postgres"),
-            password: str = os.getenv("DB_PASSWORD", "Mithles"),
+            password: str = os.getenv("DB_PASSWORD", ""),
             min_connections: int = 2,
             max_connections: int = 10,
     ) -> None:
@@ -73,6 +74,7 @@ class DatabaseManager:
         self.port = port
         self.database = database
         self.user = user
+        self.password = password
         self.min_connections = min_connections
         self.max_connections = max_connections
 
@@ -105,6 +107,29 @@ class DatabaseManager:
                 self._connection_pool = None
                 DatabaseManager._pg_available = False
 
+    def _attempt_reconnect(self) -> None:
+        """Attempt to reinitialize the connection pool."""
+        import time
+        DatabaseManager._last_reconnect_attempt = time.time()
+        logger.info("[DB] Attempting PostgreSQL reconnection...")
+        try:
+            self._connection_pool = pool.ThreadedConnectionPool(
+                self.min_connections,
+                self.max_connections,
+                host=self.host,
+                port=self.port,
+                database=self.database,
+                user=self.user,
+                password=self.password,
+                connect_timeout=5,
+            )
+            DatabaseManager._pg_available = True
+            logger.info("[DB] PostgreSQL reconnected successfully. Operating in PG mode.")
+        except Exception as e:
+            logger.warning(f"[DB] PostgreSQL reconnection failed ({e}). Still in SQLite-only mode.")
+            self._connection_pool = None
+            DatabaseManager._pg_available = False
+
     # ── Internal helpers ──────────────────────────────────────────────────────
 
     @property
@@ -116,6 +141,11 @@ class DatabaseManager:
 
     def get_connection(self):
         """Get a connection from the pool. Returns None if PG is unavailable."""
+        import time
+        if not self._pg_available and _PSYCOPG2_AVAILABLE:
+            if time.time() - DatabaseManager._last_reconnect_attempt > 30.0:
+                self._attempt_reconnect()
+
         if not self._pg_available or self._connection_pool is None:
             return None
         try:
@@ -152,17 +182,13 @@ class DatabaseManager:
         """
         Execute a query and optionally fetch results.
 
-        Returns None/[] gracefully if PostgreSQL is unavailable.
         """
-        if not self._pg_available or self._connection_pool is None:
-            logger.debug("[DB] PostgreSQL unavailable — returning empty result for query")
-            return None if fetch_one else []
-
         conn = None
         cur = None
         try:
             conn = self.get_connection()
             if conn is None:
+                logger.debug("[DB] PostgreSQL unavailable — returning empty result for query")
                 return None if fetch_one else []
 
             cur = conn.cursor(cursor_factory=extras.RealDictCursor)

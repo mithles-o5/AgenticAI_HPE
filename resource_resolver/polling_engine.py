@@ -170,29 +170,38 @@ class PollingEngine:
         )
         return devices
 
-    def poll_mock_server(self, host: str) -> list[dict]:
-        """Fetch the current mock_server inventory from PostgreSQL."""
-        logger.info("[Polling][Mock Server] Starting collection | host=%s", host)
-        t0 = time.perf_counter()
-        rows = DeviceQueries.list_devices_by_management_source(
-            management_source="mock_server", source_host=host
-        )
-        devices = [DeviceRecord.from_row(row).to_dict() for row in rows]
-        elapsed_ms = int((time.perf_counter() - t0) * 1000)
-        logger.info(
-            "[Polling][Mock Server] Collection complete | host=%s devices=%d elapsed_ms=%d",
-            host, len(devices), elapsed_ms,
-        )
-        return devices
+    def poll_ilo(self, host: str) -> list[dict]:
+        """Fetch the current ilo inventory from PostgreSQL."""
+        try:
+            from db_queries import DeviceQueries
+            # For ilo, we just re-read our current knowledge to refresh the timestamp
+            devices = DeviceQueries.get_devices_by_source(
+                management_source="ilo", source_host=host
+            )
+            # Ensure proper schema for the integration mapper
+            result = []
+            for d in devices:
+                result.append({
+                    "id": d["id"],
+                    "serial_number": d["serial_number"],
+                    "management_source": "ilo",
+                    "source_host": host,
+                    "ip_address": d.get("ip_address"),
+                    "fqdn": d.get("fqdn"),
+                })
+            return result
+        except Exception as e:
+            logger.error("[Poll] ilo failed: %s", e)
+            return []
 
-    def poll_mock_storage(self, host: str) -> list[dict]:
-        """Fetch the current mock_storage inventory from the live REST endpoint.
+    def poll_storage(self, host: str) -> list[dict]:
+        """Fetch the current storage inventory from the live REST endpoint.
 
         Queries GET /data-services/v1beta1/devices on the mock storage server
         (default: http://127.0.0.1:8004) and normalises each item into the
         dict shape expected by DeviceQueries.sync_source_devices.
         """
-        logger.info("[Polling][Mock Storage] Starting HTTP collection | host=%s", host)
+        logger.info("[Polling][Storage] Starting HTTP collection | host=%s", host)
         t0 = time.perf_counter()
 
         base_url = os.getenv("MOCK_STORAGE_URL", "http://127.0.0.1:8004")
@@ -206,7 +215,7 @@ class PollingEngine:
         except httpx.HTTPError as exc:
             elapsed_ms = int((time.perf_counter() - t0) * 1000)
             logger.error(
-                "[Polling][Mock Storage] HTTP request failed | host=%s url=%s error=%s elapsed_ms=%d",
+                "[Polling][Storage] HTTP request failed | host=%s url=%s error=%s elapsed_ms=%d",
                 host, endpoint, exc, elapsed_ms,
             )
             raise
@@ -221,14 +230,14 @@ class PollingEngine:
             )
             if not serial:
                 logger.warning(
-                    "[Polling][Mock Storage] Skipping item with no serial_number | item=%r", item
+                    "[Polling][Storage] Skipping item with no serial_number | item=%r", item
                 )
                 continue
             devices.append({
                 "serial_number":   str(serial),
                 "ip_address":      item.get("ip_address"),
                 "fqdn":            item.get("fqdn"),
-                "management_source": "mock_storage",
+                "management_source": "storage",
                 "source_host":     host,
                 "source_device_id": str(item.get("id") or serial),
                 "device_type":     item.get("device_type"),
@@ -237,14 +246,14 @@ class PollingEngine:
 
         elapsed_ms = int((time.perf_counter() - t0) * 1000)
         logger.info(
-            "[Polling][Mock Storage] HTTP collection complete | host=%s devices=%d elapsed_ms=%d",
+            "[Polling][Storage] HTTP collection complete | host=%s devices=%d elapsed_ms=%d",
             host, len(devices), elapsed_ms,
         )
         return devices
 
-    def poll_mock_network(self, host: str) -> list[dict]:
-        """Fetch the current mock_network inventory from the live REST endpoint."""
-        logger.info("[Polling][Mock Network] Starting HTTP collection | host=%s", host)
+    def poll_network(self, host: str) -> list[dict]:
+        """Fetch the current network inventory from the live REST endpoint."""
+        logger.info("[Polling][Network] Starting HTTP collection | host=%s", host)
         t0 = time.perf_counter()
 
         base_url = os.getenv("MOCK_NETWORK_URL", "http://127.0.0.1:8002")
@@ -258,7 +267,7 @@ class PollingEngine:
         except httpx.HTTPError as exc:
             elapsed_ms = int((time.perf_counter() - t0) * 1000)
             logger.error(
-                "[Polling][Mock Network] HTTP request failed | host=%s url=%s error=%s elapsed_ms=%d",
+                "[Polling][Network] HTTP request failed | host=%s url=%s error=%s elapsed_ms=%d",
                 host, endpoint, exc, elapsed_ms,
             )
             raise
@@ -276,7 +285,7 @@ class PollingEngine:
                 "serial_number":   str(serial),
                 "ip_address":      item.get("ip_address"),
                 "fqdn":            item.get("fqdn"),
-                "management_source": "mock_network",
+                "management_source": "network",
                 "source_host":     host,
                 "source_device_id": str(item.get("id") or serial),
                 "device_type":     item.get("device_type"),
@@ -285,55 +294,7 @@ class PollingEngine:
 
         elapsed_ms = int((time.perf_counter() - t0) * 1000)
         logger.info(
-            "[Polling][Mock Network] HTTP collection complete | host=%s devices=%d elapsed_ms=%d",
-            host, len(devices), elapsed_ms,
-        )
-        return devices
-
-    def poll_mock_cloud(self, host: str) -> list[dict]:
-        """Fetch the current mock_cloud inventory from the live REST endpoint."""
-        logger.info("[Polling][Mock Cloud] Starting HTTP collection | host=%s", host)
-        t0 = time.perf_counter()
-
-        base_url = os.getenv("MOCK_CLOUD_URL", "http://127.0.0.1:8003")
-        endpoint = f"{base_url}/api/v1/devices"
-        timeout = float(os.getenv("MOCK_CLOUD_TIMEOUT", "10"))
-
-        try:
-            response = httpx.get(endpoint, timeout=timeout)
-            response.raise_for_status()
-            raw_items: list[dict] = response.json()
-        except httpx.HTTPError as exc:
-            elapsed_ms = int((time.perf_counter() - t0) * 1000)
-            logger.error(
-                "[Polling][Mock Cloud] HTTP request failed | host=%s url=%s error=%s elapsed_ms=%d",
-                host, endpoint, exc, elapsed_ms,
-            )
-            raise
-
-        devices: list[dict] = []
-        for item in raw_items:
-            serial = (
-                item.get("serial_number")
-                or item.get("serialNumber")
-                or ""
-            )
-            if not serial:
-                continue
-            devices.append({
-                "serial_number":   str(serial),
-                "ip_address":      item.get("ip_address"),
-                "fqdn":            item.get("fqdn"),
-                "management_source": "mock_cloud",
-                "source_host":     host,
-                "source_device_id": str(item.get("id") or serial),
-                "device_type":     item.get("device_type"),
-                "last_seen":       item.get("updated_at") or item.get("last_seen"),
-            })
-
-        elapsed_ms = int((time.perf_counter() - t0) * 1000)
-        logger.info(
-            "[Polling][Mock Cloud] HTTP collection complete | host=%s devices=%d elapsed_ms=%d",
+            "[Polling][Network] HTTP collection complete | host=%s devices=%d elapsed_ms=%d",
             host, len(devices), elapsed_ms,
         )
         return devices
@@ -480,14 +441,13 @@ class PollingEngine:
         coms_acid = os.getenv("COMS_ACID", "coms-01.cloud.local")
 
         # Build the full list of (source_type, source_host) work items
-        work_items: list[tuple[str, str]] = [
+        work_items = [
             ("oneview", ov) for ov in ov_instances
         ] + [
-            ("coms", coms_acid),
-            ("mock_server", "mock-server-manager.local"),
-            ("mock_storage", "mock-storage-manager.local"),
-            ("mock_network", "mock-network-manager.local"),
-            ("mock_cloud", "mock-cloud-manager.local"),
+            ("ilo", "mock-server-manager.local"),
+            ("storage", "mock-storage-manager.local"),
+            ("network", "mock-network-manager.local"),
+            ("coms", "coms-01.cloud.local"),
         ]
         logger.info(
             "[Polling] Sources scheduled | cycle=%s count=%d sources=%s",

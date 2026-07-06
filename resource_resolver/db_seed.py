@@ -120,7 +120,7 @@ def generate_device_batch(
             source_host = f"oneview-{parent_id:02d}.mgmt.local"
             ip_addr = f"10.100.{parent_id}.{(device_num % 254) + 1}"
         else:
-            management_source = "comops"
+            management_source = "coms"
             source_host = "coms-01.cloud.local"
             ip_addr = f"10.200.1.{(device_num % 254) + 1}"
 
@@ -177,7 +177,7 @@ def insert_coms_devices(coms_id: int, count: int = 500):
             start_idx=10000,
             count=count,
             parent_id=coms_id,
-            parent_type="comops",
+            parent_type="coms",
         )
     )
 
@@ -223,7 +223,7 @@ def insert_mock_devices(count_per_source: int = 200) -> None:
         fqdn = f"{serial}.server.local"
         host = "mock-server-manager.local"
         uuid_val = str(_uuid.uuid4())
-        batch_params.append((serial, ip, fqdn, "mock_server", host, uuid_val, dev_type))
+        batch_params.append((serial, ip, fqdn, "ilo", host, uuid_val, dev_type))
 
     # 2. mock_storage
     for i in range(count_per_source):
@@ -234,7 +234,7 @@ def insert_mock_devices(count_per_source: int = 200) -> None:
         fqdn = f"{serial}.storage.local"
         host = "mock-storage-manager.local"
         uuid_val = str(_uuid.uuid4())
-        batch_params.append((serial, ip, fqdn, "mock_storage", host, uuid_val, dev_type))
+        batch_params.append((serial, ip, fqdn, "storage", host, uuid_val, dev_type))
 
     # 3. mock_network
     for i in range(count_per_source):
@@ -245,7 +245,7 @@ def insert_mock_devices(count_per_source: int = 200) -> None:
         fqdn = f"{serial}.network.local"
         host = "mock-network-manager.local"
         uuid_val = str(_uuid.uuid4())
-        batch_params.append((serial, ip, fqdn, "mock_network", host, uuid_val, dev_type))
+        batch_params.append((serial, ip, fqdn, "network", host, uuid_val, dev_type))
 
     # 4. mock_cloud
     for i in range(count_per_source):
@@ -256,7 +256,7 @@ def insert_mock_devices(count_per_source: int = 200) -> None:
         fqdn = f"{serial}.cloud.local"
         host = "mock-cloud-manager.local"
         uuid_val = str(_uuid.uuid4())
-        batch_params.append((serial, ip, fqdn, "mock_cloud", host, uuid_val, dev_type))
+        batch_params.append((serial, ip, fqdn, "coms", host, uuid_val, dev_type))
 
     db_manager.execute_many(query, batch_params)
     logger.info(f"[Seed] Inserted {count_per_source * 4} mock provider devices successfully")
@@ -266,13 +266,13 @@ def insert_mock_devices(count_per_source: int = 200) -> None:
 # Additional current-schema seed helpers
 # ─────────────────────────────────────────────────────────────────────────────
 
-def seed_current_schema(seed_oneview_count: int = 1000, seed_com_count: int = 500) -> None:
+def seed_current_schema(seed_oneview_count: int = 1000, seed_coms_count: int = 500) -> None:
     """Populate the current schema with sample device rows."""
     clear_database()
     oneview_id = create_oneview(1)
     insert_oneview_devices(oneview_id, count=seed_oneview_count, start_idx=0)
     coms_id = create_coms_source()
-    insert_coms_devices(coms_id, count=seed_com_count)
+    insert_coms_devices(coms_id, count=seed_coms_count)
 
     # Insert explicit testing devices matching exact enterprise naming guidelines
     testing_devices = [
@@ -287,14 +287,14 @@ def seed_current_schema(seed_oneview_count: int = 1000, seed_com_count: int = 50
         ("fw-core-01", "10.100.1.14", "fw-core-01.oneview.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-fc01", "firewall"),
         ("fw-edge-02", "10.100.1.23", "fw-edge-02.oneview.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-fwedge02", "firewall"),
 
-        # COMS devices (management_source='comops', source_host='coms-01.cloud.local')
-        ("prod-x1", "10.200.1.13", "prod-x1.cloud.local", "comops", "coms-01.cloud.local", "coms-uuid-prodx1", "server"),
-        ("core-r3", "10.200.1.20", "core-r3.cloud.local", "comops", "coms-01.cloud.local", "coms-uuid-corer3", "router"),
-        ("agg-sw05", "10.200.1.21", "agg-sw05.cloud.local", "comops", "coms-01.cloud.local", "coms-uuid-aggsw05", "switch"),
-        ("fw-west-01", "10.200.1.12", "fw-west-01.cloud.local", "comops", "coms-01.cloud.local", "coms-uuid-fwwest01", "firewall"),
-        ("stg-array-02", "10.200.1.11", "stg-array-02.cloud.local", "comops", "coms-01.cloud.local", "coms-uuid-stgarray02", "storage"),
-        ("nas-prod-01", "10.200.1.10", "nas-prod-01.cloud.local", "comops", "coms-01.cloud.local", "coms-uuid-np01", "storage"),
-        ("backup-san-01", "10.200.1.22", "backup-san-01.cloud.local", "comops", "coms-01.cloud.local", "coms-uuid-backupsan01", "storage"),
+        # COMS devices (management_source='coms', source_host='coms-01.cloud.local')
+        ("prod-x1", "10.200.1.13", "prod-x1.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-prodx1", "server"),
+        ("core-r3", "10.200.1.20", "core-r3.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-corer3", "router"),
+        ("agg-sw05", "10.200.1.21", "agg-sw05.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-aggsw05", "switch"),
+        ("fw-west-01", "10.200.1.12", "fw-west-01.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-fwwest01", "firewall"),
+        ("stg-array-02", "10.200.1.11", "stg-array-02.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-stgarray02", "storage"),
+        ("nas-prod-01", "10.200.1.10", "nas-prod-01.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-np01", "storage"),
+        ("backup-san-01", "10.200.1.22", "backup-san-01.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-backupsan01", "storage"),
     ]
 
     db_manager.execute_many(
@@ -329,10 +329,13 @@ def main():
             sys.exit(1)
 
         seed_current_schema()
+        
+        count_row = db_manager.execute_query("SELECT COUNT(*) AS c FROM devices", fetch_one=True)
+        device_count = count_row["c"] if count_row else 0
 
         logger.info("[Seed] ✓ Database population complete!")
         logger.info("[Seed] Summary:")
-        logger.info("[Seed]   - Devices: 1,516 sample rows")
+        logger.info(f"[Seed]   - Devices: {device_count:,} sample rows")
         logger.info("[Seed]   - routing_audit: populated by runtime resolver only")
         logger.info("[Seed]   - poll_history:  populated by runtime polling engine only")
 

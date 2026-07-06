@@ -22,7 +22,7 @@ The **Resource Resolver** solves this problem by acting as a high-performance, v
   * A serialized `RouteResolution` JSON payload containing:
     * `identifier`: Normalized query token used for lookup.
     * `identifier_type`: Resolved category (`ip`, `sn`, or `fqdn`).
-    * `management_source`: Inferred vendor host type (`oneview` or `coms`).
+    * `management_source`: Inferred vendor host type (`oneview`, `coms`, `ilo`, `storage`, or `network`).
     * `source_host`: FQDN or IP of the managing orchestrator.
     * `mcp_tool`: Target MCP tool name downstream (e.g., `oneview` or `compute_ops`).
     * `credential_ref`: Safe reference to vault-stored credentials.
@@ -83,7 +83,7 @@ The Resource Resolver is designed with strict separation of concerns:
 2. **Identifier Extraction and Normalization**: Extracting clean tokens (IPs, serials, hostnames) and stripping boundary punctuation.
 3. **Identifier Type Inference**: Automatically identifying whether a token is an IP address, FQDN, or serial number.
 4. **Hot Cache Lookup**: Providing sub-millisecond lookups via Redis/Memurai using key-value serialization.
-5. **Database Registry Lookup**: Performing fallback queries on Cache Misses against PostgreSQL database indexes.
+5. **Database Registry Lookup**: Performing strict queries on Cache Misses against PostgreSQL database indexes (array-based aliasing has been removed for CMDB strictness).
 6. **Cache Re-Warming**: Executing pipelined updates to Redis when missing keys are queried and resolved from PostgreSQL.
 7. **Dynamic Route Synthesis**: Querying the database-driven `endpoint_registry` to construct execution URLs by mapping `(vendor, device_type, action)` to parameterized API paths.
 8. **Routing Audit Logging**: Writing resolution metadata (time, requestor, cache status) into database audit tables.
@@ -172,7 +172,7 @@ Here is the functional map of files associated with the **Resource Resolver** su
   * `DeviceQueries`: Selects/upserts/syncs records.
   * `RoutingAuditQueries`: Commits telemetry logs.
   * `PollHistoryQueries`: Registers background sync states.
-  * `EndpointRegistryQueries`: Lookups dynamic REST templates with a fallback mechanism.
+  * `EndpointRegistryQueries`: Lookups dynamic REST templates (strictly matched, no implicit fallbacks).
 * **Runtime Role**: Orchestrates queries. Without this file, the resolver cannot retrieve device records, write logs, or find endpoint paths.
 
 ## [db_manage.py](db_manage.py)
@@ -330,7 +330,7 @@ The PostgreSQL registry consists of four tables designed for inventory managemen
   * `serial_number` (`VARCHAR(64)`, UNIQUE, NOT NULL): Device hardware serial number.
   * `ip_address` (`INET`): Assigned management IP.
   * `fqdn` (`VARCHAR(255)`): Fully qualified domain name.
-  * `management_source` (`VARCHAR(32)`, NOT NULL): Controller type (`oneview` or `coms`).
+  * `management_source` (`VARCHAR(32)`, NOT NULL): Controller type (`oneview`, `coms`, `ilo`, `storage`, or `network`).
   * `source_host` (`VARCHAR(255)`): FQDN or IP of the managing controller.
   * `source_device_id` (`VARCHAR(128)`): Identifier on the remote manager.
   * `device_type` (`VARCHAR(64)`): Device classification (e.g. `server`, `switch`, `storage`).
@@ -349,7 +349,7 @@ The PostgreSQL registry consists of four tables designed for inventory managemen
 * **Purpose**: Stores API routing endpoints to map management operations dynamically.
 * **Columns**:
   * `id` (`UUID`, PK): Primary identifier.
-  * `vendor` (`VARCHAR(64)`, NOT NULL): Controller type (`oneview` or `coms`).
+  * `vendor` (`VARCHAR(64)`, NOT NULL): Controller type (`oneview`, `coms`, `ilo`, `storage`, or `network`).
   * `device_type` (`VARCHAR(64)`, NOT NULL, default `'generic'`): Hardware category.
   * `action_key` (`VARCHAR(128)`, NOT NULL): Command token (e.g. `ON`, `OFF`, `STATUS`).
   * `http_method` (`VARCHAR(16)`, NOT NULL): API verb (`GET`, `POST`, `PUT`, `DELETE`).
@@ -625,13 +625,14 @@ python seed_endpoint_registry.py
 ```
 
 * **Workflow**:
-  1. Reads `oneview_api_prompts.txt` and `comops_api_prompts.txt` from the project root.
+  1. Reads `oneview_api_prompts.txt` and `coms_api_prompts.txt` from the project root.
   2. Parses block segments, filtering out generic template paths containing `{resource_category}`.
-  3. Infers the `device_type` from the path (e.g. `/rest/server-hardware` maps to `server`, `/rest/storage-systems` maps to `storage`).
-  4. Normalizes action mappings (e.g., PUT /powerState maps to actions `ON`, `OFF`, `RESET`, `COLD_BOOT`).
-  5. Runs a bulk-insert transaction to populate the `endpoint_registry` table.
+  3. Pre-populates the `resource_type` and `device_type` relational lookup tables.
+  4. Infers the mapped device types from the path (e.g. `/rest/server-hardware` maps to `server`, `/rest/storage-systems` maps to `storage`).
+  5. Normalizes action mappings (e.g., PUT /powerState maps to actions `ON`, `OFF`, `RESET`, `COLD_BOOT`).
+  6. Runs a bulk-insert transaction to populate the `endpoint_registry` table and constructs many-to-many associations in the `endpoint_device_mapping` table.
 * **Usage**:
-  The `ExecutionOrchestrator` queries these endpoint configurations at runtime to translate actions like `OFF` into the target manager's API path (e.g., `/compute-ops-mgmt/v1/switches/{id}/power-off`).
+  The `ExecutionOrchestrator` queries these mapped endpoint configurations at runtime, joining `endpoint_registry` with `endpoint_device_mapping` via the `device_type` lookup, to seamlessly translate canonical actions like `OFF` into the target manager's exact API path.
 
 ---
 
@@ -643,8 +644,9 @@ This setup guide assumes a clean machine environment.
 * Install Python 3.9+ (Ensure it is added to your system path).
 * Install **PostgreSQL** Database Server.
 * Install **Redis** (or Memurai for native Windows development).
+* **Optional**: Install **Ollama** if you plan to run local LLM workloads.
 
-### 2. Configure Local Databases
+### 2. Configure Local Databases & AI Models
 * Create a database named `hpe_agentic_ai` in your PostgreSQL instance.
 * Start Redis/Memurai:
   ```bash
@@ -654,6 +656,13 @@ This setup guide assumes a clean machine environment.
   # Linux
   sudo systemctl start redis-server
   ```
+* Set up Ollama (for local intelligence inference):
+  1. Download and install from [ollama.com](https://ollama.com).
+  2. Pull a performant coding/reasoning model (e.g., `llama3` or `codellama`) via your terminal:
+     ```bash
+     ollama run llama3
+     ```
+  3. Keep the Ollama server running locally; the Agentic framework will automatically connect to its default inference port (`11434`).
 
 ### 3. Install Dependencies
 Run the install command inside your virtual environment:
@@ -702,7 +711,7 @@ python mcp_tool.py
 | Error | Primary Cause | Fix |
 | :--- | :--- | :--- |
 | `ResourceNotFoundError` | The requested identifier is missing from both the Redis cache and PostgreSQL database. | Verify the serial number or IP matches an active record. Run `python db_manage.py seed` or call the `manual_register_device` tool. |
-| `EndpointNotFoundError` | The `endpoint_registry` table does not contain a mapping matching the `(vendor, device_type, action)` query. | Ensure `seed_endpoint_registry.py` has run. If the mapping is custom, add it to `oneview_api_prompts.txt` / `comops_api_prompts.txt` and re-run the script. |
+| `EndpointNotFoundError` | The `endpoint_registry` table does not contain a mapping matching the `(vendor, device_type, action)` query. | Ensure `seed_endpoint_registry.py` has run. If the mapping is custom, add it to `oneview_api_prompts.txt` / `coms_api_prompts.txt` and re-run the script. |
 | Connection Pool Timeout | Database connections are exhausted or the database server is unresponsive. | Confirm PostgreSQL is running. Check connection pool configurations in `db.py` and adjust pool sizing. |
 | `redis.exceptions.ConnectionError` | The Redis/Memurai server is stopped or running on an alternate port. | Confirm Redis/Memurai is running. Check `.env` port configurations. |
 | Overridden FQDN Lookups | An FQDN identifier was resolved as a serial number because it lacked dots. | The resolver requires a dot (`.`) in the query to classify it as an FQDN. Check FQDN formatting. |
@@ -754,7 +763,7 @@ Follow these steps to extend the Resource Resolver subsystem:
 5. Update `DeviceQueries.upsert` and related queries in `db_queries.py` to read and write the new column.
 
 ### 5. Add a New Route Mapping
-1. Add the endpoint definition block to the source prompt files (`oneview_api_prompts.txt` or `comops_api_prompts.txt`).
+1. Add the endpoint definition block to the source prompt files (`oneview_api_prompts.txt` or `coms_api_prompts.txt`).
    * *Example block*:
      ```text
      Action Key : CustomAction
@@ -775,3 +784,10 @@ If you only remember five things about the Resource Resolver, remember these:
 3. **Database-Driven Endpoint Mappings**: All API endpoints and URL patterns are stored in the `endpoint_registry` database table. The resolver has no hardcoded if/elif conditional routing trees.
 4. **Deterministic Token Isolation**: The `QueryAgent` parses query strings deterministically using regex. It does not make database, cache, or network calls.
 5. **Periodic background polling**: The `PollingEngine` daemon thread runs concurrent updates to keep PostgreSQL and Redis synced with remote inventories.
+
+## Recent Architectural Updates
+- **Strict Canonical Naming**: Management sources strictly use `oneview`, `coms`, `ilo`, `storage`, and `network`. All legacy `mock_` prefixes, `comops` aliases, and fallback source arrays have been completely eradicated from the system (`db_queries.py`, `polling_engine.py`, `protocol_discovery.py`, `db_seed.py`).
+- **Decoupled Provisioning**: Global provisioning operations (which lack a CMDB device record) no longer default to `oneview` or `server`. They require explicit `default_source` and `default_device_type` resolution (either via caller arguments or `.env` configs), raising explicit `ValueError`s if routing cannot be resolved (`power_ops.py`).
+- **PostgreSQL Native & Auto-Recovery**: The `db.py` layer has been hardened to exclusively use PostgreSQL, completely removing the legacy SQLite fallback logic. It now includes dynamic connection retry logic and periodic thread-safe connection pool initialization, allowing the service to seamlessly recover if PostgreSQL is temporarily unavailable during startup or runtime.
+- **Optional Device Records**: The `RouteResolution` dataclass has been updated to mark `device` as an `Optional[DeviceRecord]` and gracefully check it in `to_dict()`, perfectly aligning the data model to natively support pre-discovery and global provisioning orchestrations where a device does not yet exist in the CMDB.
+- **Strict Registry Matching**: The `"server"` fallback logic was removed from both `db_queries.py` and `power_ops.py`. Endpoint resolution now strictly matches the exact `device_type` against the `endpoint_registry` without blindly defaulting to servers, enforcing true CMDB data integrity.

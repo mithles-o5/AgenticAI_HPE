@@ -15,84 +15,30 @@ import os
 from typing import Optional
 
 from records import RouteResolution
-from protocol_discovery import normalize_management_source
 from errors import EndpointNotFoundError
+from protocol_discovery import normalize_management_source
 
 logger = logging.getLogger(__name__)
-
-# ---------------------------------------------------------------------------
-# Vendor-agnostic fallback path templates
-# Used ONLY when the registry contains no row for (vendor, device_type, action_key).
-# These are last-resort safe paths — only {resource} and {id} are substituted.
-# ---------------------------------------------------------------------------
-_FALLBACK_PATHS: dict[str, str] = {
-    "oneview": "/rest/{resource}/{id}",
-    "comops":    "/compute-ops-mgmt/v1/{resource}/{id}",
-    "mock_storage": "/data-services/v1beta1/devices/{id}",
-    "mock_cloud": "/api/v1/devices/{id}",
-    "mock_server": "/redfish/v1/systems/{id}",
-    "mock_network": "/network/v1/devices/{id}",
-}
-_FALLBACK_METHOD = "GET"
-
-
 
 # ---------------------------------------------------------------------------
 # Management-source execution handlers
 # ---------------------------------------------------------------------------
 
-
-class OneViewHandler:
-    """Handler for HPE OneView operations on generalized infrastructure."""
+class GenericHandler:
+    """Generic handler for operations on generalized infrastructure."""
 
     def execute(self, context: dict) -> dict:
+        source = context.get("management_source", "UNKNOWN").upper()
         logger.info(
-            "[Execution] OneView Handler invoking %s %s for action %s",
+            "[Execution] %s Handler invoking %s %s for action %s",
+            source,
             context["http_method"],
             context["api_endpoint"],
             context["action"],
         )
         return {
             "status":       "success",
-            "handler":      "ONEVIEW",
-            "action":       context["action"],
-            "http_method":  context["http_method"],
-            "api_endpoint": context["api_endpoint"],
-        }
-
-
-class ComsHandler:
-    """Handler for HPE COMS operations on generalized infrastructure."""
-
-    def execute(self, context: dict) -> dict:
-        logger.info(
-            "[Execution] COMS Handler invoking %s %s for action %s",
-            context["http_method"],
-            context["api_endpoint"],
-            context["action"],
-        )
-        return {
-            "status":       "success",
-            "handler":      "COMS",
-            "action":       context["action"],
-            "http_method":  context["http_method"],
-            "api_endpoint": context["api_endpoint"],
-        }
-
-
-class MockHandler:
-    """Generic handler for mock operations."""
-
-    def execute(self, context: dict) -> dict:
-        logger.info(
-            "[Execution] Mock Handler invoking %s %s for action %s",
-            context["http_method"],
-            context["api_endpoint"],
-            context["action"],
-        )
-        return {
-            "status":       "success",
-            "handler":      "MOCK",
+            "handler":      source,
             "action":       context["action"],
             "http_method":  context["http_method"],
             "api_endpoint": context["api_endpoint"],
@@ -114,13 +60,7 @@ class ExecutionOrchestrator:
 
     def __init__(self) -> None:
         self._handlers: dict[str, object] = {}
-        self.register_handler("oneview", OneViewHandler())
-        self.register_handler("comops",  ComsHandler())
-        mock_handler = MockHandler()
-        self.register_handler("mock_server",  mock_handler)
-        self.register_handler("mock_storage", mock_handler)
-        self.register_handler("mock_network", mock_handler)
-        self.register_handler("mock_cloud",   mock_handler)
+        self._generic_handler = GenericHandler()
 
     def register_handler(self, name: str, handler: object) -> None:
         self._handlers[name.lower()] = handler
@@ -152,35 +92,22 @@ class ExecutionOrchestrator:
         """
         from db_queries import EndpointRegistryQueries
 
-        try:
-            meta = EndpointRegistryQueries.get_endpoint(
-                vendor=vendor,
-                device_type=device_type or "server",
-                action_key=action_key,
-                resource_type=resource_type,
-            )
-            http_method = meta["http_method"]
-            # Substitute any resource identity placeholders (like {id}, {system_id}, {volume_id})
-            # path structure is preserved exactly as defined in the vendor API contract.
-            import re
-            api_path = re.sub(r'\{[^}]+\}', uuid, meta["api_path"])
-            logger.debug(
-                "[EndpointRegistry] Resolved | vendor=%s device_type=%s "
-                "action=%s method=%s path=%s",
-                vendor, meta["device_type"], action_key, http_method, api_path,
-            )
-        except EndpointNotFoundError:
-            # Graceful fallback: generic REST path rather than crashing.
-            fallback_tpl = _FALLBACK_PATHS.get(vendor, "/rest/{resource}/{id}")
-            api_path     = fallback_tpl.format(
-                resource=device_type or "servers", id=uuid
-            )
-            http_method  = _FALLBACK_METHOD
-            logger.warning(
-                "[EndpointRegistry] No registry row for vendor=%r device_type=%r "
-                "action_key=%r — using fallback path %s",
-                vendor, device_type, action_key, api_path,
-            )
+        meta = EndpointRegistryQueries.get_endpoint(
+            vendor=vendor,
+            device_type=device_type,
+            action_key=action_key,
+            resource_type=resource_type,
+        )
+        http_method = meta["http_method"]
+        # Substitute any resource identity placeholders (like {id}, {system_id}, {volume_id})
+        # path structure is preserved exactly as defined in the vendor API contract.
+        import re
+        api_path = re.sub(r'\{[^}]+\}', uuid, meta["api_path"])
+        logger.debug(
+            "[EndpointRegistry] Resolved | vendor=%s device_type=%s "
+            "action=%s method=%s path=%s",
+            vendor, meta["device_type"], action_key, http_method, api_path,
+        )
 
         return http_method, f"{scheme}://{host}{api_path}"
 
@@ -195,6 +122,8 @@ class ExecutionOrchestrator:
         action: str,
         category: str,
         resource_type: str | None = None,
+        default_source: str | None = None,
+        default_device_type: str | None = None,
     ) -> dict:
         """Construct the execution context payload using DB-driven endpoint lookup."""
         device = route.device
@@ -218,7 +147,13 @@ class ExecutionOrchestrator:
             device_type = (device.device_type or "").strip().lower()
         else:
             # Provisioning operations may not have a device in CMDB yet
-            source = "oneview"  # Fallback source for global provisioning
+            source = default_source or os.getenv("DEFAULT_PROVISIONING_SOURCE")
+            if not source:
+                raise ValueError(
+                    f"Global {action} action requires a management source, but none was provided "
+                    "in the route or defaults."
+                )
+
             if mock_port:
                 host   = f"{mock_host}:{mock_port}"
                 scheme = "http"
@@ -226,7 +161,13 @@ class ExecutionOrchestrator:
                 host   = "localhost"
                 scheme = "https"
             uuid = ""
-            device_type = "server"
+            
+            device_type = default_device_type or os.getenv("DEFAULT_PROVISIONING_DEVICE_TYPE")
+            if not device_type:
+                raise ValueError(
+                    f"Global {action} action requires a device_type, but none was provided "
+                    "in the route or defaults."
+                )
 
         # ── Registry-driven endpoint synthesis ────────────────────────────────
         http_method, endpoint = self._resolve_endpoint(
@@ -255,13 +196,16 @@ class ExecutionOrchestrator:
     # ------------------------------------------------------------------
     # Dispatch
     # ------------------------------------------------------------------
-#Just prints the log messages, that's it
     def execute_operation(self, context: dict) -> dict:
-        """Route the operation to the correct registered management source handler."""
-        source  = context["management_source"].lower()
-        handler = self._handlers.get(source)
-        if handler is not None:
-            return handler.execute(context)
-        raise ValueError(
-            f"Unsupported management source for execution: {context['management_source']!r}"
-        )
+        """Route the operation to the correct registered management source handler or generic handler."""
+        source  = context.get("management_source", "").lower()
+        
+        # Ensure the source is supported based on DB query
+        from db_queries import ManagementSourceQueries
+        if not ManagementSourceQueries.is_supported(source):
+             raise ValueError(
+                f"Unsupported management source for execution: {source!r}"
+             )
+
+        handler = self._handlers.get(source, self._generic_handler)
+        return handler.execute(context)

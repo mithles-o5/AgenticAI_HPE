@@ -73,7 +73,6 @@ class RouteResolution:
 
     identifier: str
     identifier_type: IdentifierType
-    device: DeviceRecord
     mcp_tool: str
     credential_ref: Optional[str]
     cache_status: CacheStatus
@@ -82,6 +81,7 @@ class RouteResolution:
     management_source: str
     resource: dict
     action: dict
+    device: Optional[DeviceRecord] = None
     http_method: Optional[str] = None
 
     def to_dict(self) -> dict:
@@ -89,7 +89,7 @@ class RouteResolution:
             "identifier": self.identifier,
             "identifier_type": self.identifier_type.value,
             "management_source": self.management_source,
-            "source_host": self.device.source_host,
+            "source_host": self.device.source_host if self.device else None,
             "mcp_tool": self.mcp_tool,
             "credential_ref": self.credential_ref,
             "cache_status": self.cache_status.value,
@@ -98,6 +98,6 @@ class RouteResolution:
             "http_method": self.http_method,
             "resource": self.resource,
             "action": self.action,
-            "device": self.device.to_dict(),
+            "device": self.device.to_dict() if self.device else None,
         }
 

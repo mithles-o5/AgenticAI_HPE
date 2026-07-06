@@ -74,7 +74,7 @@ class ResourceResolver:
                 
                 raw_q = parsed_payload.get("raw_query", "").lower()
                 inferred_type = "server"
-                inferred_source = "mock_server"
+                inferred_source = None
                 
                 try:
                     with conn.cursor() as cur:
@@ -125,7 +125,11 @@ class ResourceResolver:
                                 
                 except Exception as e:
                     logger.error("[Resolver] Dynamic infer failed: %s", e)
-                    
+                
+                if not inferred_source:
+                    from errors import ResolverError
+                    raise ResolverError("Unable to infer management source for provisioning. Target resource must explicitly match an endpoint_registry source.")
+
                 device = DeviceRecord(
                     id="00000000-0000-0000-0000-000000000000",
                     serial_number=normalized_identifier,
@@ -166,9 +170,9 @@ class ResourceResolver:
             )
 
         # 2. Management Source Validation
-        supported_sources = {"oneview", "comops", "mock_server", "mock_storage", "mock_network", "mock_cloud", "storage", "network"}
+        from db_queries import ManagementSourceQueries
         source_normalized = (device.management_source or "").strip().lower()
-        if source_normalized not in supported_sources:
+        if not ManagementSourceQueries.is_supported(source_normalized):
             logger.error(
                 "[Resolver] Unsupported management source: %r for device serial_number=%s",
                 device.management_source, device.serial_number

@@ -107,26 +107,25 @@ class DeviceQueries:
         source_host: Optional[str] = None,
     ) -> list[dict]:
         source = normalize_management_source(management_source)
-        source_aliases = [source]
         if source_host:
             query = (
                 _device_select()
                 + """
-                    WHERE lower(d.management_source) = ANY(%s)
+                    WHERE lower(d.management_source) = lower(%s)
                       AND lower(d.source_host) = lower(%s)
                     ORDER BY d.serial_number
                 """
             )
-            params = ([alias.lower() for alias in source_aliases], source_host)
+            params = (source, source_host)
         else:
             query = (
                 _device_select()
                 + """
-                    WHERE lower(d.management_source) = ANY(%s)
+                    WHERE lower(d.management_source) = lower(%s)
                     ORDER BY d.serial_number
                 """
             )
-            params = ([alias.lower() for alias in source_aliases],)
+            params = (source,)
         return db_manager.execute_query(query, params, fetch_all=True) or []
 
     @staticmethod
@@ -146,7 +145,7 @@ class DeviceQueries:
 
     @staticmethod
     def upsert(device: dict) -> dict:
-        source = normalize_management_source(device["management_source"])
+        source = normalize_management_source(device.get("management_source", ""))
         row = db_manager.execute_query(
             """
             INSERT INTO devices (
@@ -570,7 +569,7 @@ class EndpointRegistryQueries:
               AND  lower(d.name) = lower(%s)
               AND  lower(e.action_key)  = lower(%s)
         """
-        params_exact = [vendor, device_type or "server", action_key]
+        params_exact = [vendor, device_type, action_key]
         
         if resource_type:
             query_exact += " AND lower(r.res_type) = lower(%s)"
@@ -586,39 +585,6 @@ class EndpointRegistryQueries:
             tuple(params_exact),
             fetch_one=True,
         )
-
-        if row is None and (device_type or "server").lower() != "server":
-            # ── Pass 2: fallback to 'server' (most common operational type) ───
-            logger_ep.debug(
-                "[EndpointRegistry] No exact match for device_type=%r — trying 'server' fallback",
-                device_type,
-            )
-            query_fallback = """
-                SELECT e.http_method, e.api_path, d.name AS device_type
-                FROM   endpoint_registry e
-                JOIN   endpoint_device_mapping m ON e.id = m.endpoint_id
-                JOIN   device_type d ON m.device_type_id = d.id
-                LEFT JOIN resource_type r ON e.resource_type_id = r.id
-                WHERE  lower(e.management_source) = lower(%s)
-                  AND  lower(d.name) = 'server'
-                  AND  lower(e.action_key)  = lower(%s)
-            """
-            params_fallback = [vendor, action_key]
-            
-            if resource_type:
-                query_fallback += " AND lower(r.res_type) = lower(%s)"
-                params_fallback.append(resource_type)
-                
-            query_fallback += """
-                ORDER BY CASE WHEN lower(r.res_type) IN ('systems', 'devices', 'server-hardware', 'chassis', 'storage-systems', 'generic') THEN 0 ELSE 1 END
-                LIMIT 1
-            """
-
-            row = db_manager.execute_query(
-                query_fallback,
-                tuple(params_fallback),
-                fetch_one=True,
-            )
 
         if row is None:
             logger_ep.warning(
@@ -678,3 +644,17 @@ class EndpointRegistryQueries:
             fetch_all=True,
         )
         return [dict(r) for r in rows] if rows else []
+
+
+class ManagementSourceQueries:
+    """Provides canonical source validation mapping."""
+
+    @staticmethod
+    def is_supported(source: str) -> bool:
+        """Validate if a source exists in the authoritative endpoint registry."""
+        row = db_manager.execute_query(
+            "SELECT 1 FROM endpoint_registry WHERE lower(management_source) = lower(%s) LIMIT 1",
+            (source,),
+            fetch_one=True
+        )
+        return row is not None

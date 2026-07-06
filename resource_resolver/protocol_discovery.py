@@ -8,25 +8,14 @@ from typing import Optional
 
 def normalize_management_source(source: str) -> str:
     """Return the canonical management-source name used by routing."""
-    normalized = (source or "").strip().lower()
-    if normalized == "oneview":
-        return "oneview"
-    if normalized in {"com", "coms", "comops", "compute-ops", "compute_ops"}:
-        return "comops"
-    if normalized == "manual":
-        return "manual"
-    if normalized == "static":
-        return "static"
-    if normalized in {"mock_server", "mock_storage", "mock_network", "mock_cloud"}:
-        return normalized
-    return (source or "").strip()
+    return (source or "").strip().lower()
 
 
 def get_mcp_tool_target(management_source: str) -> str:
     """Map a management source to the MCP tool the orchestrator should invoke."""
     source = normalize_management_source(management_source)
     env_key = f"{source.upper()}_MCP_TOOL"
-    default_tool = "onprem" if source == "comops" else source
+    default_tool = source
     return os.getenv(env_key, default_tool)
 
 

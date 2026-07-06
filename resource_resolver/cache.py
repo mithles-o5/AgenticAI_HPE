@@ -15,6 +15,7 @@ from enums import CacheStatus, IdentifierType
 from records import DeviceRecord
 from protocol_discovery import normalize_management_source
 
+
 logger = logging.getLogger(__name__)
 
 DEFAULT_TTL = 900
@@ -52,19 +53,13 @@ class ResourceCache:
     @staticmethod
     def source_key(device: DeviceRecord) -> str:
         source = normalize_management_source(device.management_source)
-        if source == "coms":
-            device_id = device.source_device_id or device.id or "unknown"
-            return f"resolver:source:coms:{device_id}"
-        host = device.source_host or "unknown"
-        return f"resolver:source:{host}"
+        device_id = device.source_device_id or device.id or "unknown"
+        return f"resolver:source:{source}:{device_id}"
 
     @staticmethod
     def poll_key(source_type: str, source_host: str, source_device_id: str | None = None) -> str:
         source = normalize_management_source(source_type)
-        if source == "coms":
-            device_id = source_device_id or source_host or "unknown"
-            return f"resolver:poll:coms:{device_id}"
-        return f"resolver:poll:{source_host}"
+        return f"resolver:poll:{source}:{source_host}"
 
     def put_device(self, device: DeviceRecord) -> None:
         """Store lookup keys and source membership for one device in Memurai using pipelines."""
