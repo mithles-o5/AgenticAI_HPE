@@ -973,14 +973,16 @@ async def _execute_agent_command(
             resource_type = device.device_type or resource_type
             
             # Resolve agent_type based on provider_or_protocol
-            if provider_or_protocol == "mock_storage":
+            if provider_or_protocol in {"mock_storage", "storage"}:
                 agent_type = "storage"
-            elif provider_or_protocol in {"mock_server", "oneview"}:
+            elif provider_or_protocol in {"mock_server", "oneview", "ilo"}:
                 agent_type = "server"
-            elif provider_or_protocol == "mock_network":
+            elif provider_or_protocol in {"mock_network", "network"}:
                 agent_type = "network"
-            elif provider_or_protocol == "mock_cloud":
+            elif provider_or_protocol in {"mock_cloud", "cloud"}:
                 agent_type = "cloud"
+            elif provider_or_protocol in {"coms"}:
+                agent_type = "onprem"
         else:
             source_device_id_uuid = str(uuid.uuid4())
             query_lower = query.lower()
@@ -996,7 +998,7 @@ async def _execute_agent_command(
                     resource_type = "storage_system"
             elif "server" in query_lower or "compute" in query_lower or "hardware" in query_lower:
                 agent_type = "server"
-                provider_or_protocol = "mock_server"
+                provider_or_protocol = "ilo"
                 api_path = "/rest/server-hardware"
                 resource_type = "server"
             elif "network" in query_lower or "switch" in query_lower or "vlan" in query_lower or "port" in query_lower:
@@ -1006,12 +1008,12 @@ async def _execute_agent_command(
                 resource_type = "switch"
             elif "cloud" in query_lower or "vm" in query_lower or "cluster" in query_lower:
                 agent_type = "cloud"
-                provider_or_protocol = "mock_cloud"
+                provider_or_protocol = "coms"
                 api_path = "/api/v1/devices"
                 resource_type = "virtual_machine"
             else:
                 agent_type = "server"
-                provider_or_protocol = "mock_server"
+                provider_or_protocol = "ilo"
                 api_path = "/rest/server-hardware"
                 resource_type = "server"
 
@@ -1036,11 +1038,11 @@ async def _execute_agent_command(
             creation_payload["ip_address"] = "10.12.99.5"
             creation_payload["total_capacity_gb"] = 10000
             creation_payload["free_capacity_gb"] = 10000
-        elif provider_or_protocol == "mock_server":
+        elif provider_or_protocol == "ilo":
             creation_payload["ip_address"] = "10.11.99.5"
         elif provider_or_protocol == "mock_network":
             creation_payload["ip_address"] = "10.13.99.5"
-        elif provider_or_protocol == "mock_cloud":
+        elif provider_or_protocol == "coms":
             creation_payload["ip_address"] = "10.14.99.5"
 
         payload_to_dispatch = creation_payload
@@ -1103,16 +1105,20 @@ async def _execute_agent_command(
     # OVERRIDE the LLM's guessed provider with the actual CMDB source
     if device and device.management_source:
         provider_or_protocol = device.management_source
+        if provider_or_protocol == "storage":
+            provider_or_protocol = "mock_storage"
         
         # Default agent_type fallback based on provider
         if provider_or_protocol in {"mock_storage", "storage"}:
             agent_type = "storage"
-        elif provider_or_protocol in {"mock_server", "oneview"}:
+        elif provider_or_protocol in {"mock_server", "oneview", "ilo"}:
             agent_type = "server"
         elif provider_or_protocol in {"mock_network", "network"}:
             agent_type = "network"
         elif provider_or_protocol in {"mock_cloud", "cloud"}:
             agent_type = "cloud"
+        elif provider_or_protocol in {"coms"}:
+            agent_type = "onprem"
         else:
             agent_type = "server"
 

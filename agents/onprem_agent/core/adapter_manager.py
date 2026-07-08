@@ -21,7 +21,7 @@ class AdapterManager:
         prov = provider.lower().strip()
         if prov == "oneview":
             return self._oneview
-        elif prov in ("mock_onprem", "mock_oneview", "mock_comops"):
+        elif prov in ("mock_onprem", "mock_oneview", "mock_comops", "coms"):
             return self._mock
         else:
             raise AdapterError(f"Unsupported provider '{provider}'")

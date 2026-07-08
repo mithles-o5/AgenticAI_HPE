@@ -74,7 +74,7 @@ _PREFIX_NOISE: frozenset[str] = frozenset({
     "device", "resource", "system", "systems", "storage-system", "storage_system", "storage-systems", "storage_systems",
     "storage-pool", "storage_pool", "storage-pools", "storage_pools", "storage-volume", "storage_volume", "storage-volumes", "storage_volumes",
     "server", "switch", "router", "firewall", "storage", "node", "nodes", "named", "called", "name", "with", "by", "having",
-    "database", "db", "virtual", "machine", "vm",
+    "database", "db", "virtual", "machine", "vm", "new", "array",
     "change", "update", "set", "modify", "configure", "patch", "status", "check", "state", "lookup", "show", "find", "get", "query", "fetch", "read", "display"
 })
 
@@ -84,9 +84,10 @@ _SUFFIX_NOISE: frozenset[str] = frozenset({
     "device", "resource", "system", "systems", "storage-system", "storage_system", "storage-systems", "storage_systems",
     "storage-pool", "storage_pool", "storage-pools", "storage_pools", "storage-volume", "storage_volume", "storage-volumes", "storage_volumes",
     "server", "switch", "router", "firewall", "storage", "node", "nodes", "named", "called", "name", "with", "by", "having",
-    "database", "db", "virtual", "machine", "vm",
+    "database", "db", "virtual", "machine", "vm", "new", "array",
     "change", "update", "set", "modify", "configure", "patch", "status", "check", "state", "lookup", "show", "find", "get", "query", "fetch", "read", "display"
 })
+
 
 _BOUNDARY_PUNCT: re.Pattern = re.compile(r"^[,;:!?()\[\]\"']+|[,;:!?()\[\]\"']+$")
 
@@ -216,12 +217,30 @@ def _llm_extract(query: str) -> dict | None:
 
     schema = LLMQuerySchema.model_json_schema()
     prompt = (
-        "You are a deterministic natural language infrastructure command parser.\n"
-        "Extract details from this query and output ONLY a JSON object matching the JSON schema below.\n"
+        "You are a deterministic natural-language infrastructure command parser.\n"
+        "Your job is ONLY to extract information explicitly stated in the user's query.\n"
+        "Do NOT infer, assume, guess, enrich, classify, normalize, or invent values that are not present in the query.\n"
+        "Do NOT map generic resource names to specific vendor products, platforms, device types, management systems, or technologies unless the user explicitly states them.\n"
+        "For example:\n"
+        "- 'create storage apollo-node-999' DOES NOT mean Alletra storage.\n"
+        "- 'restart server01' DOES NOT imply iLO, OneView, Redfish, or any management source.\n"
+        "- 'create volume' DOES NOT imply a storage platform.\n"
+        "\n"
+        "Output ONLY a JSON object matching the provided JSON schema.\n"
+        "\n"
         "Rules:\n"
-        "1. For boot order or target changes (e.g. CD, USB, PXE, BIOS Setup), set action=UPDATE and attributes=[{\"key\": \"Boot\", \"value\": \"<NormalizedTarget>\"}] using Pxe/Cd/Usb/Hdd/BiosSetup/UefiTarget.\n"
-        "2. If multiple actions are present (e.g. A and then B), parse only the first action/identifier, set multi_intent=true, and put the rest in unhandled.\n"
-        "3. If the query uses a pronoun ('it', 'this') without a clear device name, set ambiguous=true.\n"
+        "1. Extract only entities, identifiers, actions, attributes, and values explicitly present in the query.\n"
+        "2. Never generate vendor names, product names, resource types, management sources, device types, locations, IDs, or attributes that do not appear in the query.\n"
+        "3. If a required value is missing, leave the corresponding field empty/null according to the schema instead of guessing.\n"
+        "4. For boot order or boot target changes (CD, USB, PXE, HDD, BIOS Setup, UEFI Target), set action='UPDATE' and attributes=[{'key':'Boot','value':'<NormalizedTarget>'}] using only: Pxe, Cd, Usb, Hdd, BiosSetup, UefiTarget.\n"
+        "5. If multiple actions are requested, parse only the first actionable request, set multi_intent=true, and place remaining content in unhandled.\n"
+        "6. If pronouns such as 'it', 'this', 'that', 'the device', 'the server', or 'the system' are used without a clear antecedent in the same query, set ambiguous=true.\n"
+        "7. If an entity type cannot be determined explicitly from the query, do not invent one.\n"
+        "8. Preserve user-provided identifiers exactly as written unless schema normalization rules explicitly require otherwise.\n"
+        "9. Treat unknown names as opaque identifiers. Never reinterpret them.\n"
+        "10. Determinism is mandatory. The same query must always produce the same JSON output.\n"
+        "11. Return valid JSON only. No explanations, markdown, comments, or additional text.\n"
+        "\n"
         f"User query: {query}\n"
         f"JSON Schema: {json.dumps(schema)}"
     )
@@ -413,6 +432,30 @@ class QueryAgent:
         """
         return parse_query_hybrid(query)
 
+    @staticmethod
+    def parse_update_payload(query: str) -> dict | None:
+        """Extract attribute and value for UPDATE actions."""
+        try:
+            payload = QueryAgent.parse_query(query)
+            attrs = payload.get("attributes", [])
+            if attrs and isinstance(attrs, list) and len(attrs) > 0:
+                attr = attrs[0]
+                if isinstance(attr, dict) and "key" in attr and "value" in attr:
+                    return {"attribute": attr["key"], "value": attr["value"]}
+        except Exception:
+            pass
+            
+        # Fallback to simple regex
+        query_lower = query.lower()
+        m1 = re.search(r'\b(?:set|change|update)\s+([a-z0-9_]+)\s+(?:of\s+[^\s]+\s+)?to\s+([^\s]+)\b', query_lower)
+        if m1:
+            return {"attribute": m1.group(1), "value": QueryAgent._coerce_value(m1.group(2))}
+        
+        m2 = re.search(r'\b(?:modify)\s+([a-z0-9_]+)\s+version\s+(?:of\s+[^\s]+\s+)?to\s+([^\s]+)\b', query_lower)
+        if m2:
+            return {"attribute": f"{m2.group(1)}_version", "value": QueryAgent._coerce_value(m2.group(2))}
+            
+        return None
 
 
 
