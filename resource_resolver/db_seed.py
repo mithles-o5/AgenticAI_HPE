@@ -65,7 +65,7 @@ def create_oneview(ov_num: int) -> int:
 
 def create_coms_source() -> int:
     """Return a configured COMS source marker for sample inventory."""
-    coms_host = "coms-01.cloud.local"
+    coms_host = "mock-cloud-manager.local"
     logger.info(f"[Seed] Configured COMS source: {coms_host}")
     return 1
 
@@ -75,7 +75,19 @@ def get_enterprise_name(device_type: str, index: int, parent_type: str) -> tuple
     domain = "oneview.local" if parent_type == "oneview" else "cloud.local"
     t = (device_type or "server").lower()
     
-    if t == "server":
+    if t == "virtual_machine":
+        name = f"gl-vm-{index:03d}"
+    elif t == "kubernetes_cluster":
+        name = f"gl-k8s-{index:03d}"
+    elif t == "load_balancer":
+        name = f"gl-lb-{index:03d}"
+    elif t == "subnet":
+        name = f"gl-subnet-{index:03d}"
+    elif t == "namespace":
+        name = f"gl-ns-{index:03d}"
+    elif t == "database_service":
+        name = f"gl-db-{index:03d}"
+    elif t == "server":
         rack = (index % 50) + 1
         node = (index % 10) + 1
         name = f"rack{rack}-compute-{node}-{index}"
@@ -107,7 +119,7 @@ def generate_device_batch(
     parent_type: str,
 ) -> Generator[tuple, None, None]:
     """Generate device data for batch insertion."""
-    types = ["server", "switch", "router", "firewall", "storage"]
+    types = ["virtual_machine", "kubernetes_cluster", "load_balancer", "subnet", "namespace", "database_service"] if parent_type == "coms" else ["server", "switch", "router", "firewall", "storage"]
     for i in range(count):
         device_num = start_idx + i
         device_uuid = str(_uuid.uuid4())
@@ -121,7 +133,7 @@ def generate_device_batch(
             ip_addr = f"10.100.{parent_id}.{(device_num % 254) + 1}"
         else:
             management_source = "coms"
-            source_host = "coms-01.cloud.local"
+            source_host = "mock-cloud-manager.local"
             ip_addr = f"10.200.1.{(device_num % 254) + 1}"
 
         yield (
@@ -256,7 +268,7 @@ def insert_mock_devices(count_per_source: int = 200) -> None:
         fqdn = f"{serial}.cloud.local"
         host = "mock-cloud-manager.local"
         uuid_val = str(_uuid.uuid4())
-        batch_params.append((serial, ip, fqdn, "coms", host, uuid_val, dev_type))
+        batch_params.append((serial, ip, fqdn, "mock_cloud", host, uuid_val, dev_type))
 
     db_manager.execute_many(query, batch_params)
     logger.info(f"[Seed] Inserted {count_per_source * 4} mock provider devices successfully")
@@ -287,14 +299,14 @@ def seed_current_schema(seed_oneview_count: int = 1000, seed_coms_count: int = 5
         ("fw-core-01", "10.100.1.14", "fw-core-01.oneview.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-fc01", "firewall"),
         ("fw-edge-02", "10.100.1.23", "fw-edge-02.oneview.local", "oneview", "oneview-01.mgmt.local", "ov-uuid-fwedge02", "firewall"),
 
-        # COMS devices (management_source='coms', source_host='coms-01.cloud.local')
-        ("prod-x1", "10.200.1.13", "prod-x1.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-prodx1", "server"),
-        ("core-r3", "10.200.1.20", "core-r3.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-corer3", "router"),
-        ("agg-sw05", "10.200.1.21", "agg-sw05.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-aggsw05", "switch"),
-        ("fw-west-01", "10.200.1.12", "fw-west-01.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-fwwest01", "firewall"),
-        ("stg-array-02", "10.200.1.11", "stg-array-02.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-stgarray02", "storage"),
-        ("nas-prod-01", "10.200.1.10", "nas-prod-01.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-np01", "storage"),
-        ("backup-san-01", "10.200.1.22", "backup-san-01.cloud.local", "coms", "coms-01.cloud.local", "coms-uuid-backupsan01", "storage"),
+        # COMS devices (management_source='coms', source_host='mock-cloud-manager.local')
+        ("prod-vm-01", "10.200.1.13", "prod-vm-01.cloud.local", "coms", "mock-cloud-manager.local", "coms-uuid-prodx1", "virtual_machine"),
+        ("core-r3", "10.200.1.20", "core-r3.cloud.local", "network", "mock-network-manager.local", "net-uuid-corer3", "router"),
+        ("agg-sw05", "10.200.1.21", "agg-sw05.cloud.local", "network", "mock-network-manager.local", "coms-uuid-aggsw05", "switch"),
+        ("fw-west-01", "10.200.1.12", "fw-west-01.cloud.local", "network", "mock-network-manager.local", "net-uuid-fwwest01", "firewall"),
+        ("stg-array-02", "10.200.1.11", "stg-array-02.cloud.local", "storage", "mock-storage-manager.local", "stg-uuid-stgarray02", "storage"),
+        ("nas-prod-01", "10.200.1.10", "nas-prod-01.cloud.local", "storage", "mock-storage-manager.local", "stg-uuid-np01", "storage"),
+        ("backup-san-01", "10.200.1.22", "backup-san-01.cloud.local", "storage", "mock-storage-manager.local", "stg-uuid-backupsan01", "storage"),
     ]
 
     db_manager.execute_many(

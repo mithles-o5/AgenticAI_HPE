@@ -112,7 +112,7 @@ def _infer_vendor(api_path: str) -> str:
     if p.startswith("/rest/"):
         return "oneview"
     if p.startswith("/compute-ops"):
-        return "comops"
+        return "coms"
     parts = [x for x in p.split("/") if x]
     return parts[0] if parts else "unknown"
 
@@ -138,22 +138,23 @@ def _infer_device_type(api_path: str, management_source: str) -> list[str]:
         return ['server', 'storage', 'switch', 'router', 'firewall']
 
     elif management_source in ['coms']:
-        if any(k in words for k in ['switch', 'switches']): return ['switch']
-        if any(k in words for k in ['router', 'routers']): return ['router']
-        if any(k in words for k in ['firewall', 'firewalls']): return ['firewall']
-        if any(k in words for k in ['storage']): return ['storage']
-        if any(k in words for k in ['server', 'servers', 'appliance', 'appliances']): return ['server']
-        return ['server', 'storage', 'switch', 'router', 'firewall']
+        if any(k in words for k in ['virtual', 'vm', 'vms']): return ['virtual_machine']
+        if any(k in words for k in ['kubernetes', 'cluster', 'clusters']): return ['kubernetes_cluster']
+        if any(k in words for k in ['load', 'lb']): return ['load_balancer']
+        if any(k in words for k in ['subnet', 'subnets', 'network', 'networks']): return ['subnet']
+        if any(k in words for k in ['namespace', 'namespaces']): return ['namespace']
+        if any(k in words for k in ['database', 'databases', 'db']): return ['database_service']
+        return ['virtual_machine', 'kubernetes_cluster', 'load_balancer', 'subnet', 'namespace', 'database_service']
 
     elif management_source in ['ilo']:
-        if any(k in words for k in ['chassis']): return ['blade_server']
-        if any(k in words for k in ['processor', 'processors', 'compute']): return ['compute_node']
-        if any(k in words for k in ['manager', 'managers']): return ['rack_server']
+        if any(k in words for k in ['chassis']): return ['server', 'blade_server']
+        if any(k in words for k in ['processor', 'processors', 'compute']): return ['server', 'compute_node']
+        if any(k in words for k in ['manager', 'managers']): return ['server', 'rack_server']
         if any(k in words for k in ['switch', 'switches']): return ['switch']
         if any(k in words for k in ['router', 'routers']): return ['router']
         if any(k in words for k in ['firewall', 'firewalls']): return ['firewall']
-        if any(k in words for k in ['server', 'servers', 'system', 'systems']): return ['server']
-        return ['server', 'blade_server', 'compute_node', 'rack_server']
+        if any(k in words for k in ['server', 'servers', 'system', 'systems']): return ['server', 'blade_server', 'compute_node', 'rack_server', 'hypervisor']
+        return ['server', 'blade_server', 'compute_node', 'rack_server', 'hypervisor']
 
     elif management_source in ['storage', 'mock_storage']:
         if any(k in words for k in ['volume', 'volumes']): return ['volume']
@@ -162,7 +163,7 @@ def _infer_device_type(api_path: str, management_source: str) -> list[str]:
         if any(k in words for k in ['snapshot', 'snapshots']): return ['snapshot']
         if any(k in words for k in ['filesystem', 'filesystems']): return ['filesystem']
         if any(k in words for k in ['system', 'systems']): return ['storage_system']
-        return ['storage_system', 'volume', 'host', 'storage_pool', 'snapshot', 'filesystem', 'host_group', 'volume_set']
+        return ['storage_system', 'volume', 'host', 'storage_pool', 'snapshot', 'filesystem', 'host_group', 'volume_set', 'replication_group']
 
     elif management_source in ['network', 'mock_network']:
         if any(k in words for k in ['ap', 'aps', 'access']): return ['access_point']
@@ -260,7 +261,7 @@ def parse_routes_dump(filepath: str) -> list[dict]:
             
             # Ensure we use normalized names
             ms = vendor.lower()
-            if ms in ["comops", "coms"]: ms = "coms"
+            if ms in ["coms"]: ms = "coms"
             if ms == "ilo": ms = "ilo"
             elif ms == "cloud": ms = "mock_cloud"
             elif ms == "storage": ms = "storage"

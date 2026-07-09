@@ -656,7 +656,7 @@ PATCH /api/v1/devices/{id}
 POST /api/v1/devices/{id}
 PUT /api/v1/devices/{id}
 POST /api/v1/devices/{id}/power
---- Vendor: Comops ---
+--- Vendor: coms ---
 GET /openapi.json
 GET /docs
 GET /docs/oauth2-redirect

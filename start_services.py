@@ -38,7 +38,7 @@ def main():
         print("[+] Starting Compute Ops Mock Server on port 8001...")
         processes.append(subprocess.Popen(
             [sys.executable, "-m", "uvicorn", "main:app", "--port", "8001", "--log-level", "error"],
-            cwd=os.path.join(ROOT_DIR, "mock_server(Comops)")
+            cwd=os.path.join(ROOT_DIR, "mock_server(coms)")
         ))
 
         print("[+] Starting Network Mock Server on port 8002...")

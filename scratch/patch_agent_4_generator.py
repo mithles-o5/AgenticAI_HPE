@@ -1,4 +1,6 @@
-"""
+import sys
+
+FILE_CONTENT = '''"""
 Lightweight deterministic NLP Query Agent for intent and identifier extraction.
 Hybrid fallback to LLM for complex queries.
 """
@@ -12,7 +14,6 @@ import json
 import urllib.request
 import urllib.error
 import ipaddress
-import string
 from typing import NamedTuple, List, Literal, Union, Dict, Any, Optional
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
@@ -73,28 +74,28 @@ class ActionRegistryItem(NamedTuple):
     pattern: re.Pattern
 
 ACTION_ALIASES = {
-    "ON": r"\b(poweron|turn on|power on|start)\b",
-    "OFF": r"\b(poweroff|turn off|power off|shutdown)\b",
-    "COLD_BOOT": r"\b(cold boot|hard reset)\b",
-    "FETCH_EVENT_LOG": r"\b(event log|event logs|system log|system logs|sel|log entries|iml|integrated management log)\b",
-    "CLEAR_EVENT_LOG": r"\b(clear.*log|reset.*log|wipe.*log|erase.*log)\b",
-    "DISCOVER_INVENTORY": r"\b(hardware inventory|inventory|discover.*hardware|hw inventory|discover.*inventory)\b",
-    "MOUNT_VIRTUAL_MEDIA": r"\b(mount|virtual media|insert.*media|attach.*iso|mount.*iso|mount.*image|attach.*image)\b",
-    "FETCH_SENSORS": r"\b(sensor|sensors|thermal|fan|psu|power supply|environmental|inlet temperature|fan speed)\b",
-    "SYNC_CMDB": r"\b(cmdb sync|sync cmdb|poll cycle|trigger.*poll|manual poll|sync.*metrics|poll.*trigger)\b",
-    "UPDATE": r"\b(change|update|set|modify|configure|patch)\b",
-    "RESET": r"\b(reboot|restart|reset)\b",
-    "RELOAD": r"\b(reload)\b",
-    "POLICY_SYNC": r"\b(policy sync|sync)\b",
-    "FAILOVER": r"\b(failover)\b",
-    "FAILBACK": r"\b(failback)\b",
-    "RESCAN": r"\b(rescan)\b",
-    "LIST": r"\b(list)\b",
-    "STATUS": r"\b(status|check|state|lookup|show|find|get|retrieve|fetch|read|display)\b",
-    "CREATE": r"\b(provision|create)\b",
-    "ALLOCATE": r"\b(allocate|deploy)\b",
-    "DEALLOCATE": r"\b(deallocate|release)\b",
-    "DELETE": r"\b(deprovision|destroy|delete|nuke)\b",
+    "ON": r"\\b(poweron|turn on|power on|start)\\b",
+    "OFF": r"\\b(poweroff|turn off|power off|shutdown)\\b",
+    "COLD_BOOT": r"\\b(cold boot|hard reset)\\b",
+    "FETCH_EVENT_LOG": r"\\b(event log|event logs|system log|system logs|sel|log entries|iml|integrated management log)\\b",
+    "CLEAR_EVENT_LOG": r"\\b(clear.*log|reset.*log|wipe.*log|erase.*log)\\b",
+    "DISCOVER_INVENTORY": r"\\b(hardware inventory|inventory|discover.*hardware|hw inventory|discover.*inventory)\\b",
+    "MOUNT_VIRTUAL_MEDIA": r"\\b(mount|virtual media|insert.*media|attach.*iso|mount.*iso|mount.*image|attach.*image)\\b",
+    "FETCH_SENSORS": r"\\b(sensor|sensors|thermal|fan|psu|power supply|environmental|inlet temperature|fan speed)\\b",
+    "SYNC_CMDB": r"\\b(cmdb sync|sync cmdb|poll cycle|trigger.*poll|manual poll|sync.*metrics|poll.*trigger)\\b",
+    "UPDATE": r"\\b(change|update|set|modify|configure|patch)\\b",
+    "RESET": r"\\b(reboot|restart|reset)\\b",
+    "RELOAD": r"\\b(reload)\\b",
+    "POLICY_SYNC": r"\\b(policy sync|sync)\\b",
+    "FAILOVER": r"\\b(failover)\\b",
+    "FAILBACK": r"\\b(failback)\\b",
+    "RESCAN": r"\\b(rescan)\\b",
+    "LIST": r"\\b(list)\\b",
+    "STATUS": r"\\b(status|check|state|lookup|show|find|get|retrieve|fetch|read|display)\\b",
+    "CREATE": r"\\b(provision|create)\\b",
+    "ALLOCATE": r"\\b(allocate|deploy)\\b",
+    "DEALLOCATE": r"\\b(deallocate|release)\\b",
+    "DELETE": r"\\b(deprovision|destroy|delete|nuke)\\b",
 }
 
 ACTION_REGISTRY = []
@@ -106,50 +107,25 @@ NOISE_STOP_WORDS = [
     "the", "a", "an", "of", "for", "on", "at", "to", "my", "our", "their", "is", "was", "be", "about", "from", "in", "are",
     "what", "who", "where", "how", "when", "could", "can", "would", "will", "do", "does", "did",
     "please", "kindly", "just", "now", "tell", "me", "show", "give", "i", "we", "us", "need", "want", "you", "it", "this", "that",
-    "named", "called", "name", "with", "by", "having", "new",
-    "get", "show", "fetch", "retrieve", "read", "display", "check", "status", "state", "lookup", "find"
+    "named", "called", "name", "with", "by", "having", "new"
 ]
 
-NOISE_DEVICE_TYPES = [
-    "device", "devices", "resource", "system", "systems", "storage-system", "storage_system", "storage-systems", "storage_systems",
-    "storage-pool", "storage_pool", "storage-pools", "storage_pools", "storage-volume", "storage_volume", "storage-volumes", "storage_volumes",
-    "server", "switch", "switches", "router", "routers", "firewall", "storage", "node", "nodes", "database", "db", "virtual", "machine", "vm", "array", "network", "volume"
+NOISE_GENERIC = [
+    "device", "devices", "resource", "system", "systems"
 ]
 
 NOISE_ATTRIBUTES = [
-    "health", "firmware", "version", "temperature", "capacity", "free", "total", "power", "memory", "cpu", "cores", "state", "status"
+    "health", "firmware", "version", "temperature", "status", "capacity", "free", "total", "power", "memory", "cpu", "cores", "state"
 ]
 
-RESOURCE_TYPE_ALIASES = {
-    "firmware": {"firmware", "firmwares"},
-    "sensor": {"sensor", "sensors", "thermal", "temperature"},
-    "inventory": {"inventory", "hardware", "hw"},
-    "media": {"media", "iso", "image"},
-    "certificate": {"certificate", "certificates", "ca"},
-    "metric": {"metric", "metrics", "telemetry"},
-    "account": {"account", "accounts", "user", "users"},
-    "session": {"session", "sessions", "login"},
-    "event": {"event", "events", "log", "logs"},
-    "license": {"license", "licenses"},
-    "profile": {"profile", "profiles"},
-    "power": {"power", "powerstate"},
-    "issue": {"issue", "issues", "alert", "alerts"},
-    "port": {"port", "ports", "interface", "interfaces"},
-    "route": {"route", "routes"},
-}
-
-NOISE_RESOURCE_TYPES = []
-for aliases in RESOURCE_TYPE_ALIASES.values():
-    NOISE_RESOURCE_TYPES.extend(aliases)
-
-ALL_NOISE = set(NOISE_STOP_WORDS + NOISE_DEVICE_TYPES + NOISE_ATTRIBUTES + NOISE_RESOURCE_TYPES)
+ALL_NOISE = set(NOISE_STOP_WORDS + NOISE_GENERIC + NOISE_ATTRIBUTES)
 PREFIX_PATTERN = re.compile(r'^(?:' + '|'.join(map(re.escape, ALL_NOISE)) + r')(?:\s+|$)', re.IGNORECASE)
 SUFFIX_PATTERN = re.compile(r'(?:^|\s+)(?:' + '|'.join(map(re.escape, ALL_NOISE)) + r')$', re.IGNORECASE)
 
 PAYLOAD_PATTERNS = [
-    re.compile(r'^(?P<attr>.+?)\s+of\s+(?P<ident>.+?)\s+to\s+(?P<val>.+)$', re.IGNORECASE),
-    re.compile(r'^(?P<attr>.+?)\s+to\s+(?P<val>.+?)\s+for\s+(?P<ident>.+)$', re.IGNORECASE),
-    re.compile(r'^(?P<attr>.+?)\s+to\s+(?P<val>.+)$', re.IGNORECASE),
+    re.compile(r'^(?P<attr>.+?)\\s+of\\s+(?P<ident>.+?)\\s+to\\s+(?P<val>.+)$', re.IGNORECASE),
+    re.compile(r'^(?P<attr>.+?)\\s+to\\s+(?P<val>.+?)\\s+for\\s+(?P<ident>.+)$', re.IGNORECASE),
+    re.compile(r'^(?P<attr>.+?)\\s+to\\s+(?P<val>.+)$', re.IGNORECASE),
 ]
 
 
@@ -230,6 +206,7 @@ def _dispatch_llm_provider(prompt: str, schema: Dict[str, Any], provider_name: s
         except Exception as e:
             return {"_error": f"{type(e).__name__}: {e}"}
     
+    # Future enterprise providers can be integrated here
     return {"_error": f"Provider '{provider_name}' not implemented"}
 
 def _llm_extract(query: str) -> dict | None:
@@ -243,31 +220,31 @@ def _llm_extract(query: str) -> dict | None:
 
     schema = LLMQuerySchema.model_json_schema()
     prompt = (
-        "You are a deterministic natural-language infrastructure command parser.\n"
-        "Your job is ONLY to extract information explicitly stated in the user's query.\n"
-        "Do NOT infer, assume, guess, enrich, classify, normalize, or invent values that are not present in the query.\n"
-        "Do NOT map generic resource names to specific vendor products, platforms, device types, management systems, or technologies unless the user explicitly states them.\n"
-        "For example:\n"
-        "- 'create storage apollo-node-999' DOES NOT mean Alletra storage.\n"
-        "- 'restart server01' DOES NOT imply iLO, OneView, Redfish, or any management source.\n"
-        "- 'create volume' DOES NOT imply a storage platform.\n"
-        "\n"
-        "Output ONLY a JSON object matching the provided JSON schema.\n"
-        "\n"
-        "Rules:\n"
-        "1. Extract only entities, identifiers, actions, attributes, and values explicitly present in the query.\n"
-        "2. Never generate vendor names, product names, resource types, management sources, device types, locations, IDs, or attributes that do not appear in the query.\n"
-        "3. If a required value is missing, leave the corresponding field empty/null according to the schema instead of guessing.\n"
-        "4. For boot order or boot target changes (CD, USB, PXE, HDD, BIOS Setup, UEFI Target), set action='UPDATE' and attributes=[{'key':'Boot','value':'<NormalizedTarget>'}] using only: Pxe, Cd, Usb, Hdd, BiosSetup, UefiTarget.\n"
-        "5. If multiple actions are requested, parse only the first actionable request, set multi_intent=true, and place remaining content in unhandled.\n"
-        "6. If pronouns such as 'it', 'this', 'that', 'the device', 'the server', or 'the system' are used without a clear antecedent in the same query, set ambiguous=true.\n"
-        "7. If an entity type cannot be determined explicitly from the query, do not invent one.\n"
-        "8. Preserve user-provided identifiers exactly as written unless schema normalization rules explicitly require otherwise.\n"
-        "9. Treat unknown names as opaque identifiers. Never reinterpret them.\n"
-        "10. Determinism is mandatory. The same query must always produce the same JSON output.\n"
-        "11. Return valid JSON only. No explanations, markdown, comments, or additional text.\n"
-        "\n"
-        f"User query: {query}\n"
+        "You are a deterministic natural-language infrastructure command parser.\\n"
+        "Your job is ONLY to extract information explicitly stated in the user's query.\\n"
+        "Do NOT infer, assume, guess, enrich, classify, normalize, or invent values that are not present in the query.\\n"
+        "Do NOT map generic resource names to specific vendor products, platforms, device types, management systems, or technologies unless the user explicitly states them.\\n"
+        "For example:\\n"
+        "- 'create storage apollo-node-999' DOES NOT mean Alletra storage.\\n"
+        "- 'restart server01' DOES NOT imply iLO, OneView, Redfish, or any management source.\\n"
+        "- 'create volume' DOES NOT imply a storage platform.\\n"
+        "\\n"
+        "Output ONLY a JSON object matching the provided JSON schema.\\n"
+        "\\n"
+        "Rules:\\n"
+        "1. Extract only entities, identifiers, actions, attributes, and values explicitly present in the query.\\n"
+        "2. Never generate vendor names, product names, resource types, management sources, device types, locations, IDs, or attributes that do not appear in the query.\\n"
+        "3. If a required value is missing, leave the corresponding field empty/null according to the schema instead of guessing.\\n"
+        "4. For boot order or boot target changes (CD, USB, PXE, HDD, BIOS Setup, UEFI Target), set action='UPDATE' and attributes=[{'key':'Boot','value':'<NormalizedTarget>'}] using only: Pxe, Cd, Usb, Hdd, BiosSetup, UefiTarget.\\n"
+        "5. If multiple actions are requested, parse only the first actionable request, set multi_intent=true, and place remaining content in unhandled.\\n"
+        "6. If pronouns such as 'it', 'this', 'that', 'the device', 'the server', or 'the system' are used without a clear antecedent in the same query, set ambiguous=true.\\n"
+        "7. If an entity type cannot be determined explicitly from the query, do not invent one.\\n"
+        "8. Preserve user-provided identifiers exactly as written unless schema normalization rules explicitly require otherwise.\\n"
+        "9. Treat unknown names as opaque identifiers. Never reinterpret them.\\n"
+        "10. Determinism is mandatory. The same query must always produce the same JSON output.\\n"
+        "11. Return valid JSON only. No explanations, markdown, comments, or additional text.\\n"
+        "\\n"
+        f"User query: {query}\\n"
         f"JSON Schema: {json.dumps(schema)}"
     )
 
@@ -331,58 +308,25 @@ class QueryAgent:
 
         # 1. Normalization
         q = " ".join(query.lower().strip().split())
-        punctuation_to_strip = ".,;:!?()[]\"'"
+        import string
+        punctuation_to_strip = ".,;:!?()[]\\\"'"
         q = q.strip(punctuation_to_strip)
 
-        # 2. Extract resource type ONLY (no device type inference)
-        # We do this from the original query string (q) before we start destroying it.
-        # Normalize separators for resource type detection (so 'firmware-version' -> 'firmware', 'version')
-        r_type_q = re.sub(r'[-_/\\\\]', ' ', q.lower())
-        resource_type = ""
-        words = r_type_q.split()
-        for r_type, aliases in RESOURCE_TYPE_ALIASES.items():
-            if any(alias in words for alias in aliases):
-                resource_type = r_type
-                break
-
-        # 3. Action Detection
+        # 2. Action Detection
         action = "STATUS"
         category = "Operational"
         remaining_query = q
         
-        matches = []
         for reg_item in ACTION_REGISTRY:
             m = reg_item.pattern.search(remaining_query)
-            if m: matches.append((reg_item, m))
-            
-        if matches:
-            # Filter out sub-matches (e.g., "get" is a sub-match if "get event log" matched)
-            filtered_matches = []
-            for item1, m1 in matches:
-                is_submatch = False
-                for item2, m2 in matches:
-                    if item1.action == item2.action: continue
-                    if m1.start() >= m2.start() and m1.end() <= m2.end():
-                        is_submatch = True
-                        break
-                if not is_submatch:
-                    filtered_matches.append((item1, m1))
-                    
-            if not filtered_matches:
-                filtered_matches = matches
-                
-            unique_actions = {m[0].action for m in filtered_matches}
-            if "STATUS" in unique_actions and len(unique_actions) > 1:
-                filtered_matches = [m for m in filtered_matches if m[0].action != "STATUS"]
-                
-            best_item, best_match = filtered_matches[0]
-            action = best_item.action
-            category = best_item.category
-            
-            remaining_query = remaining_query[:best_match.start()] + remaining_query[best_match.end():]
-            remaining_query = " ".join(remaining_query.split())
+            if m:
+                action = reg_item.action
+                category = reg_item.category
+                remaining_query = remaining_query[:m.start()] + remaining_query[m.end():]
+                remaining_query = " ".join(remaining_query.split())
+                break
 
-        # 4. Payload Extraction
+        # 3. Payload Extraction
         payload_dict = {}
         if action == "UPDATE":
             for pat in PAYLOAD_PATTERNS:
@@ -404,7 +348,7 @@ class QueryAgent:
                     remaining_query = " ".join(remaining_query.split())
                     break
 
-        # 5. Identifier Extraction
+        # 4. Identifier Extraction
         prev = None
         identifier = remaining_query
         
@@ -417,16 +361,35 @@ class QueryAgent:
             if remaining_query in ["all", "all routers", "all switches", "all devices", "network"]:
                 identifier = remaining_query
 
+        # 5. Extract resource type ONLY (no device type inference)
+        resource_type = ""
+        words = identifier.lower().split()
+        if any(k in words for k in ['firmware', 'firmwares']): resource_type = 'firmware'
+        elif any(k in words for k in ['sensor', 'sensors', 'thermal', 'temperature']): resource_type = 'sensor'
+        elif any(k in words for k in ['inventory', 'hardware', 'hw']): resource_type = 'inventory'
+        elif any(k in words for k in ['media', 'iso', 'image']): resource_type = 'media'
+        elif any(k in words for k in ['certificate', 'certificates', 'ca']): resource_type = 'certificate'
+        elif any(k in words for k in ['metric', 'metrics', 'telemetry']): resource_type = 'metric'
+        elif any(k in words for k in ['account', 'accounts', 'user', 'users']): resource_type = 'account'
+        elif any(k in words for k in ['session', 'sessions', 'login']): resource_type = 'session'
+        elif any(k in words for k in ['event', 'events', 'log', 'logs']): resource_type = 'event'
+        elif any(k in words for k in ['license', 'licenses']): resource_type = 'license'
+        elif any(k in words for k in ['profile', 'profiles']): resource_type = 'profile'
+        elif any(k in words for k in ['power', 'powerstate']): resource_type = 'power'
+        elif any(k in words for k in ['issue', 'issues', 'alert', 'alerts']): resource_type = 'issue'
+        elif any(k in words for k in ['port', 'ports', 'interface', 'interfaces']): resource_type = 'port'
+        elif any(k in words for k in ['route', 'routes']): resource_type = 'route'
+
         # Strip resource_type from identifier if present
         if resource_type:
-            clean_words = []
-            for w in identifier.split():
-                parts = re.split(r'[-_/\\\\]', w.lower())
-                # If the hyphenated word consists entirely of resource types and attributes, strip it.
-                if all(p in NOISE_RESOURCE_TYPES or p in NOISE_ATTRIBUTES for p in parts):
-                    continue
-                clean_words.append(w)
-            identifier = " ".join(clean_words).strip()
+            noise_words = {
+                'firmware', 'firmwares', 'certificate', 'certificates', 'ca', 'metric', 'metrics', 'telemetry',
+                'account', 'accounts', 'user', 'users', 'session', 'sessions', 'login', 'event', 'events', 'log', 'logs',
+                'license', 'licenses', 'profile', 'profiles', 'power', 'powerstate', 'issue', 'issues', 'alert', 'alerts',
+                'port', 'ports', 'interface', 'interfaces', 'route', 'routes',
+                'sensor', 'sensors', 'thermal', 'temperature', 'inventory', 'hardware', 'hw', 'media', 'iso', 'image'
+            }
+            identifier = " ".join([w for w in identifier.split() if w.lower() not in noise_words]).strip()
         
         # Strip generic noise again just in case (e.g. "for" after resource_type removal)
         prev = None
@@ -435,12 +398,11 @@ class QueryAgent:
             identifier = PREFIX_PATTERN.sub('', identifier).strip()
             identifier = SUFFIX_PATTERN.sub('', identifier).strip()
 
-        # 6. Confidence Scoring
+        # Confidence Scoring
         confidence = 0.9 
         if not identifier:
             confidence = 0.5
         elif action == "STATUS" and remaining_query == q:
-            # If nothing was parsed out and it just defaulted to STATUS
             confidence = 0.7
             
         if identifier in {"it", "this", "that", "the device", "the server", "the system"}:
@@ -503,13 +465,13 @@ def parse_query_hybrid(query: str) -> dict:
 
         def _extract_pagination(query_text: str, payload: dict):
             params = payload.get("params", {})
-            skip_match = re.search(r"\b(?:skip|offset)\s+(\d+)", query_text, re.IGNORECASE)
+            skip_match = re.search(r"\\b(?:skip|offset)\\s+(\\d+)", query_text, re.IGNORECASE)
             if skip_match:
                 params["skip"] = int(skip_match.group(1))
-            limit_match = re.search(r"\b(?:limit|first|take|show|size)\s+(\d+)", query_text, re.IGNORECASE)
+            limit_match = re.search(r"\\b(?:limit|first|take|show|size)\\s+(\\d+)", query_text, re.IGNORECASE)
             if limit_match:
                 params["limit"] = int(limit_match.group(1))
-            page_match = re.search(r"\b(?:page)\s+(\d+)", query_text, re.IGNORECASE)
+            page_match = re.search(r"\\b(?:page)\\s+(\\d+)", query_text, re.IGNORECASE)
             if page_match and "skip" not in params:
                 page = int(page_match.group(1))
                 limit = params.get("limit", 10)
@@ -519,6 +481,12 @@ def parse_query_hybrid(query: str) -> dict:
             return payload
 
         if confidence >= QUERY_AGENT_CONFIDENCE_THRESHOLD and is_regex_valid:
+            if not regex_res.get("resource_type"):
+                logger.info("[QueryAgent] Regex parse success but no resource_type. Escalating to LLM for resource_type guess...")
+                llm_res = _llm_extract(query)
+                if llm_res and llm_res.get("resource_type"):
+                    regex_res["resource_type"] = llm_res.get("resource_type")
+                    
             logger.info("[QueryAgent] Final parse success | confidence=%.2f action=%s identifier=%s resource_type=%s query=%r", 
                         confidence, regex_res.get("action"), regex_res.get("identifier"), regex_res.get("resource_type"), query)
             return _extract_pagination(query, regex_res)
@@ -535,3 +503,7 @@ def parse_query_hybrid(query: str) -> dict:
     except Exception as exc:
         logger.warning("[QueryAgent] Parse error — using fallback | error=%s query=%r", exc, query)
         return dict(_FALLBACK_PAYLOAD)
+'''
+
+with open(r'c:\AgenticAI_HPE\scratch\patch_agent_4.py', 'w', encoding='utf-8') as f:
+    f.write(f"with open(r'c:\\AgenticAI_HPE\\resource_resolver\\query_agent.py', 'w', encoding='utf-8') as f:\\n    f.write('''{FILE_CONTENT}''')\\n")

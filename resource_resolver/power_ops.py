@@ -6,7 +6,7 @@ Execution handlers and orchestrator for infrastructure routing.
 Endpoint paths are fully registry-driven: all if/elif branching on vendor /
 device_type has been removed. The authoritative source for API paths is the
 endpoint_registry PostgreSQL table (seeded from oneview_api_prompts.txt and
-comops_api_prompts.txt via seed_endpoint_registry.py).
+coms_api_prompts.txt via seed_endpoint_registry.py).
 """
 from __future__ import annotations
 
@@ -143,7 +143,7 @@ class ExecutionOrchestrator:
             if host and (":" in host or "localhost" in host or "127.0.0.1" in host):
                 scheme = "http"
 
-            uuid        = device.source_device_id or device.id
+            uuid        = device.serial_number or device.source_device_id or device.id
             device_type = (device.device_type or "").strip().lower()
         else:
             # Provisioning operations may not have a device in CMDB yet

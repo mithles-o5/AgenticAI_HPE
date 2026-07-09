@@ -10,7 +10,7 @@ from psycopg2 import extras
 from seed_endpoint_registry import _infer_device_type, _infer_resource_type
 
 def extract_routes(workspace_dir=r"c:\AgenticAI_HPE"):
-    mock_dirs = glob.glob(os.path.join(workspace_dir, "mock_server(*)")) + glob.glob(os.path.join(workspace_dir, "mock_*")) + glob.glob(os.path.join(workspace_dir, "oneview")) + glob.glob(os.path.join(workspace_dir, "comops"))
+    mock_dirs = glob.glob(os.path.join(workspace_dir, "mock_server(*)")) + glob.glob(os.path.join(workspace_dir, "mock_*")) + glob.glob(os.path.join(workspace_dir, "oneview")) + glob.glob(os.path.join(workspace_dir, "coms"))
     
     # ensure uniqueness of directories
     mock_dirs = list(set(d for d in mock_dirs if os.path.isdir(d)))

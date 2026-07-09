@@ -79,16 +79,16 @@ class MockAdapter(BaseAdapter):
         limit: int = 100,
     ) -> dict:
         """
-        List resources from OneView or ComOps mock server.
+        List resources from OneView or coms mock server.
         Routing is driven by the api_path parameter passed from mcp_server.
           - /rest/*               -> OneView mock (port 8002)
-          - /compute-ops-mgmt/*  -> ComOps mock  (port 8001)
+          - /compute-ops-mgmt/*  -> coms mock  (port 8001)
         """
         api_path = parameters.get("api_path", "")
         provider_label = parameters.get("provider_label", "mock_server(onprem)")
 
         if not api_path:
-            if "ComOps" in provider_label:
+            if "coms" in provider_label:
                 api_path = f"/compute-ops-mgmt/v1/devices?device_type={resource_type}"
             else:
                 if resource_type == "server":

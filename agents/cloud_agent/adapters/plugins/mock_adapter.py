@@ -204,7 +204,7 @@ class MockCloudAdapter(BaseCloudAdapter):
                         devices = res[key]
                         break
         else:
-            # If no specific api_path, fetch from both ComOps and Cloud Mock
+            # If no specific api_path, fetch from both coms and Cloud Mock
             import httpx
             import asyncio
             
@@ -218,7 +218,7 @@ class MockCloudAdapter(BaseCloudAdapter):
                     pass
                 return None
     
-            comops_url = f"http://127.0.0.1:8001/compute-ops-mgmt/v1/servers"
+            coms_url = f"http://127.0.0.1:8001/compute-ops-mgmt/v1/servers"
             cloud_url = f"http://127.0.0.1:8003/api/v1/devices"
             
             loop = asyncio.get_event_loop()
@@ -226,7 +226,7 @@ class MockCloudAdapter(BaseCloudAdapter):
                 import nest_asyncio
                 nest_asyncio.apply()
                 
-            results = loop.run_until_complete(asyncio.gather(fetch(comops_url), fetch(cloud_url)))
+            results = loop.run_until_complete(asyncio.gather(fetch(coms_url), fetch(cloud_url)))
             for res in results:
                 if not res:
                     continue

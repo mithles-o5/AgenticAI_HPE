@@ -8,9 +8,9 @@ logger = logging.getLogger("cloud_agent.adapters.com")
 
 DEVICES_PATH = "/compute-ops-mgmt/v1/devices"
 
-class ComOpsAdapter(BaseCloudAdapter):
+class ComsAdapter(BaseCloudAdapter):
     """
-    Adapter for the ComOps (coms) mock server at port 8001.
+    Adapter for the coms (coms) mock server at port 8001.
     All data is fetched live from the SQLite-backed mock server.
     """
 
@@ -35,7 +35,7 @@ class ComOpsAdapter(BaseCloudAdapter):
         if resp.status_code == 200:
             return resp.json()
         logger.warning(
-            f"ComOps device lookup failed for '{resource_id}': "
+            f"coms device lookup failed for '{resource_id}': "
             f"{resp.status_code} {resp.text[:120]}"
         )
         return None
@@ -58,7 +58,7 @@ class ComOpsAdapter(BaseCloudAdapter):
                 return {"healthy": True, "detail": device.get("health", "OK"), "raw": device}
             return {
                 "healthy": False,
-                "detail": f"Device '{resource_id}' not found in ComOps mock server",
+                "detail": f"Device '{resource_id}' not found in coms mock server",
             }
 
     def fetch_metrics(
@@ -70,14 +70,14 @@ class ComOpsAdapter(BaseCloudAdapter):
         parameters: Dict[str, Any],
     ) -> Dict[str, Any]:
         """
-        Returns live metrics from compute_ops_db.sqlite via the ComOps mock server.
+        Returns live metrics from compute_ops_db.sqlite via the coms mock server.
         """
         with self._get_client(credentials) as client:
             device = self._get_device(client, resource_id)
             if not device:
                 return {
                     "status": "failed",
-                    "error": f"Device '{resource_id}' not found in ComOps mock server",
+                    "error": f"Device '{resource_id}' not found in coms mock server",
                 }
 
             return {
@@ -131,7 +131,7 @@ class ComOpsAdapter(BaseCloudAdapter):
                     }
                 return {
                     "result": "failed",
-                    "detail": f"ComOps returned {resp.status_code}: {resp.text[:120]}",
+                    "detail": f"coms returned {resp.status_code}: {resp.text[:120]}",
                 }
 
             # Firmware update
@@ -179,3 +179,16 @@ class ComOpsAdapter(BaseCloudAdapter):
                 if isinstance(items, dict):
                     return list(items.get("members", items.get("items", items.values())))
             return []
+
+    def list_resources(
+        self,
+        region: Optional[str],
+        credentials: Dict[str, Any],
+        parameters: Dict[str, Any],
+        skip: int = 0,
+        limit: int = 10,
+    ) -> Dict[str, Any]:
+        api_path = parameters.get('api_path')
+        if not api_path:
+            return {'result': 'failed', 'detail': 'Dynamic routing failed: No api_path provided by orchestrator.'}
+        return self._dynamic_call(parameters.get('http_method', 'GET'), api_path, '', parameters.get('payload', {}), parameters.get('base_url', ''))

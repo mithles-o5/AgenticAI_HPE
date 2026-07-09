@@ -10,7 +10,7 @@ PG_HOST = "localhost"
 # Map of SQLite DBs
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SQLITE_DBS = {
-    "Comops": os.path.join(BASE_DIR, "mock_server(Comops)", "compute_ops_db.sqlite"),
+    "Comops": os.path.join(BASE_DIR, "mock_server(coms)", "compute_ops_db.sqlite"),
     "Storage": os.path.join(BASE_DIR, "mock_server(storage)", "storage_db.sqlite"),
     "Cloud": os.path.join(BASE_DIR, "mock_server(cloud)", "cloud_db.sqlite"),
     "Network": os.path.join(BASE_DIR, "mock_server(network)", "network_db.sqlite"),

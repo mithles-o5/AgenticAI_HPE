@@ -647,11 +647,11 @@ async def _execute_agent_command(
         #   provider_label– human-readable label attached to every returned device
 
         ILO_SERVERS    = ("server",  "mock_server", "mock_server(iLO)")
-        COMOPS_SERVERS = ("onprem",  "mock_comops", "mock_server(ComOps)")
-        COMOPS_SWITCH  = ("onprem",  "mock_comops", "mock_server(ComOps)")
-        COMOPS_ROUTER  = ("onprem",  "mock_comops", "mock_server(ComOps)")
-        COMOPS_STORAGE = ("onprem",  "mock_comops", "mock_server(ComOps)")
-        COMOPS_FW      = ("onprem",  "mock_comops", "mock_server(ComOps)")
+        COMS_SERVERS = ("onprem",  "coms", "mock_server(coms)")
+        COMS_SWITCH  = ("onprem",  "coms", "mock_server(coms)")
+        COMS_ROUTER  = ("onprem",  "coms", "mock_server(coms)")
+        COMS_STORAGE = ("onprem",  "coms", "mock_server(coms)")
+        COMS_FW      = ("onprem",  "coms", "mock_server(coms)")
         OV_SERVERS     = ("onprem",  "mock_oneview","mock_server(OneView)")
         OV_SWITCHES    = ("onprem",  "mock_oneview","mock_server(OneView)")
         CLOUD_VMS      = ("cloud",   "mock_cloud",  "mock_server(cloud)")
@@ -674,7 +674,7 @@ async def _execute_agent_command(
         # ── Keyword → sources routing ─────────────────────────────────────────
         if "server" in ident_lower or "node" in ident_lower or "compute" in ident_lower or "hardware" in ident_lower:
             normalized_category = "server hardware"
-            sources = [ILO_SERVERS, COMOPS_SERVERS, OV_SERVERS]
+            sources = [ILO_SERVERS, COMS_SERVERS, OV_SERVERS]
         elif "virtual machine" in ident_lower or " vm" in ident_lower or ident_lower.startswith("vm"):
             normalized_category = "virtual machines"
             sources = [CLOUD_VMS]
@@ -695,13 +695,13 @@ async def _execute_agent_command(
             sources = [CLOUD_SUBNET]
         elif "switch" in ident_lower:
             normalized_category = "switches"
-            sources = [NET_SWITCH, OV_SWITCHES, COMOPS_SWITCH]
+            sources = [NET_SWITCH, OV_SWITCHES, COMS_SWITCH]
         elif "gateway" in ident_lower:
             normalized_category = "gateways"
             sources = [NET_GW]
         elif "router" in ident_lower:
             normalized_category = "routers"
-            sources = [NET_ROUTER, COMOPS_ROUTER]
+            sources = [NET_ROUTER, COMS_ROUTER]
         elif "access point" in ident_lower or " ap" in ident_lower or ident_lower == "aps":
             normalized_category = "access points"
             sources = [NET_AP]
@@ -710,7 +710,7 @@ async def _execute_agent_command(
             sources = [NET_WCTRL]
         elif "firewall" in ident_lower:
             normalized_category = "firewalls"
-            sources = [NET_FW, COMOPS_FW]
+            sources = [NET_FW, COMS_FW]
         elif "storage system" in ident_lower or "array" in ident_lower:
             normalized_category = "storage systems"
             sources = [STOR_SYS]
@@ -722,16 +722,16 @@ async def _execute_agent_command(
             sources = [STOR_VOL]
         elif "storage" in ident_lower:
             normalized_category = "storage devices"
-            sources = [STOR_SYS, STOR_POOL, STOR_VOL, COMOPS_STORAGE, CLOUD_SVC]
+            sources = [STOR_SYS, STOR_POOL, STOR_VOL, COMS_STORAGE, CLOUD_SVC]
         elif "cloud" in ident_lower:
             normalized_category = "cloud resources"
             sources = [CLOUD_VMS, CLOUD_K8S, CLOUD_LB, CLOUD_DB, CLOUD_VNET, CLOUD_SUBNET, CLOUD_SVC]
         elif "network" in ident_lower or "device" in ident_lower:
             normalized_category = "network devices"
-            sources = [NET_SWITCH, NET_ROUTER, NET_GW, NET_AP, NET_WCTRL, NET_FW, COMOPS_SWITCH, COMOPS_ROUTER]
+            sources = [NET_SWITCH, NET_ROUTER, NET_GW, NET_AP, NET_WCTRL, NET_FW, COMS_SWITCH, COMS_ROUTER]
         else:
             normalized_category = "all devices"
-            sources = [ILO_SERVERS, COMOPS_SERVERS, OV_SERVERS, CLOUD_VMS, CLOUD_K8S,
+            sources = [ILO_SERVERS, COMS_SERVERS, OV_SERVERS, CLOUD_VMS, CLOUD_K8S,
                        NET_SWITCH, NET_ROUTER, STOR_SYS]
 
         # ── Provider-specific override ────────────────────────────────────────
@@ -743,10 +743,10 @@ async def _execute_agent_command(
             sources = [s for s in sources if s[1] == "mock_server"]
             if not sources:
                 return "No iLO sources configured for that device type."
-        elif "comops" in q_lower or "compute ops" in q_lower:
-            sources = [s for s in sources if s[1] == "comops"]
+        elif "compute ops" in q_lower or "coms" in q_lower:
+            sources = [s for s in sources if s[1] == "coms"]
             if not sources:
-                return "No ComOps sources configured for that device type."
+                return "No coms sources configured for that device type."
         elif "from cloud" in q_lower or "in cloud" in q_lower or "mock_cloud" in q_lower:
             sources = [s for s in sources if s[1] == "mock_cloud"]
             if not sources:
@@ -1115,10 +1115,8 @@ async def _execute_agent_command(
             agent_type = "server"
         elif provider_or_protocol in {"mock_network", "network"}:
             agent_type = "network"
-        elif provider_or_protocol in {"mock_cloud", "cloud"}:
+        elif provider_or_protocol in {"mock_cloud", "cloud", "coms"}:
             agent_type = "cloud"
-        elif provider_or_protocol in {"coms"}:
-            agent_type = "onprem"
         else:
             agent_type = "server"
 
@@ -1308,6 +1306,7 @@ async def _execute_agent_command(
         "mock_network": os.getenv("MOCK_NETWORK_URL", "http://127.0.0.1:8002"),
         "mock_cloud":   os.getenv("MOCK_CLOUD_URL",   "http://127.0.0.1:8003"),
         "oneview":      os.getenv("HPE_OV_URL",       "http://127.0.0.1:8000"),
+        "storage":      os.getenv("MOCK_STORAGE_URL", "http://127.0.0.1:8004"),
     }
 
     src = resolved_provider or ""
@@ -1330,7 +1329,9 @@ async def _execute_agent_command(
             base_url = _MOCK_BASE_URLS[src]
             patch_url = ""
             if api_path:
-                patch_url = f"{base_url}{api_path}"
+                from urllib.parse import urlparse
+                parsed_api = urlparse(api_path)
+                patch_url = f"{base_url}{parsed_api.path}"
             
             if patch_url:
                 try:

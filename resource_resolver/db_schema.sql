@@ -75,7 +75,7 @@ CREATE INDEX IF NOT EXISTS idx_poll_snapshots_source
 -- ---------------------------------------------------------------------------
 -- Endpoint Registry — vendor-agnostic, DB-driven API endpoint catalogue
 -- ---------------------------------------------------------------------------
--- Seeded from oneview_api_prompts.txt and comops_api_prompts.txt via
+-- Seeded from oneview_api_prompts.txt and coms_api_prompts.txt via
 -- seed_endpoint_registry.py. Replaces hardcoded if/elif endpoint trees.
 --
 -- device_type  : inferred from api_path resource segment ("server", "storage"…)

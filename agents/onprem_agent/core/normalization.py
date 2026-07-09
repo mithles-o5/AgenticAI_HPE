@@ -19,7 +19,7 @@ def normalize_status(health_val: str) -> str:
     return "healthy"
 
 def normalize_server_data(provider: str, raw_data: dict) -> dict:
-    """Normalize server profile or hardware data from OneView or ComOps."""
+    """Normalize server profile or hardware data from OneView or coms."""
     try:
         if provider == "oneview":
             return {

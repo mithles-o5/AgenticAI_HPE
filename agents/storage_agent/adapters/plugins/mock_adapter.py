@@ -19,7 +19,7 @@ class MockStorageAdapter(BaseStorageAdapter):
         from urllib.parse import urlparse
         try:
             parsed = urlparse(api_path)
-            api_path = f"http://127.0.0.1:8005{parsed.path}"
+            api_path = f"http://127.0.0.1:8004{parsed.path}"
             if parsed.query:
                 api_path += f"?{parsed.query}"
 
@@ -87,7 +87,7 @@ class MockStorageAdapter(BaseStorageAdapter):
         provider_label = parameters.get("provider_label", "mock_server(storage)")
 
         import httpx
-        base_url = "http://127.0.0.1:8005"
+        base_url = "http://127.0.0.1:8004"
         url = f"{base_url}{api_path}"
         try:
             resp = httpx.get(url, timeout=5)
