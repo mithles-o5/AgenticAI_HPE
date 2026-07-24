@@ -2,10 +2,8 @@
   "name": "onprem-agent",
   "version": "1.0.0",
   "schema_version": "0.7.0",
-  "description": "HPE OneView and Composable Operations Manager agent for on-premises infrastructure monitoring, lifecycle management, inventory discovery and anomaly detection",
-  "authors": [
-    "infra-team@company.com"
-  ],
+  "description": "HPE OneView composable infrastructure agent for on-premises server, storage and interconnect management.",
+  "authors": ["infra-team@company.com"],
   "skills": [
     {"name": "onprem.monitoring.health"},
     {"name": "onprem.monitoring.utilization"},
@@ -18,35 +16,19 @@
     {"name": "onprem.sync.cmdb"},
     {"name": "onprem.list.resources"}
   ],
-  "domains": [
-    "onprem-infrastructure",
-    "composable-infrastructure",
-    "observability"
-  ],
+  "domains": ["onprem-infrastructure", "composable-infrastructure", "observability"],
   "locators": [
-    {
-      "type": "openapi",
-      "url": "http://onprem-agent:8008/openapi.json"
-    }
+    {"type": "openapi", "url": "http://onprem-agent:8008/openapi.json"}
   ],
   "modules": {
-    "providers": [
-      "oneview",
-      "comops",
-      "mock_onprem",
-      "mock_comops",
-      "mock_oneview"
-    ],
-    "resource_types": [
-      "server",
-      "server_hardware",
-      "server_profile",
-      "enclosure",
-      "interconnect",
-      "logical_switch",
-      "composable_resource",
-      "firmware",
-      "switch"
-    ]
+    "providers": ["oneview", "mock_onprem", "mock_oneview"],
+    "resource_types": ["server", "server_hardware", "server_profile", "enclosure", "interconnect", "logical_switch", "composable_resource", "firmware", "switch"],
+    "provider_resource_map": {
+      "mock_oneview": {
+        "label": "mock_server(OneView)",
+        "api_base": "/rest/server-hardware",
+        "resource_types": ["server", "server_hardware", "server_profile", "enclosure", "interconnect", "switch"]
+      }
+    }
   }
 }

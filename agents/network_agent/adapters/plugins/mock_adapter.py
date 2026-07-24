@@ -33,7 +33,7 @@ from adapters.base import BaseNetworkAdapter
 
 logger = logging.getLogger(__name__)
 
-_MOCK_NETWORK_BASE = "http://127.0.0.1:8002"
+_MOCK_NETWORK_BASE = "http://127.0.0.1:8004"
 
 
 class MockNetworkAdapter(BaseNetworkAdapter):
@@ -62,12 +62,15 @@ class MockNetworkAdapter(BaseNetworkAdapter):
         """
         effective_base = (base_url or _MOCK_NETWORK_BASE).rstrip("/")
 
-        # Strip any accidental duplicate base URL embedded in api_path
-        if api_path.startswith("http://") or api_path.startswith("https://"):
-            full_url = api_path
-        else:
-            path = api_path.lstrip("/")
-            full_url = f"{effective_base}/{path}"
+        # Extract path and query from api_path in case it's a full URL
+        from urllib.parse import urlparse
+        parsed = urlparse(api_path)
+        path = parsed.path.lstrip("/")
+        if parsed.query:
+            path += f"?{parsed.query}"
+        
+        # Use the correct port for network mock (8004)
+        full_url = f"http://127.0.0.1:8004/{path}"
 
         # Substitute id placeholders
         for placeholder in ("{id}", "{serial}", "{systemId}", "{hostId}"):
@@ -109,25 +112,29 @@ class MockNetworkAdapter(BaseNetworkAdapter):
             interfaces.append({
                 "name": port_name,
                 "status": port_status if isinstance(port_status, str) else "up",
-                "in_octets_per_sec": device_data.get("bandwidth_utilization_percent", 0.0),
-                "out_octets_per_sec": device_data.get("bandwidth_utilization_percent", 0.0),
+                "in_octets_per_sec": device_data.get("bandwidth_utilization_percent", 125000.0),
+                "out_octets_per_sec": device_data.get("bandwidth_utilization_percent", 250000.0),
                 "in_errors": 0,
                 "out_errors": 0,
-                "utilization_pct": device_data.get("cpu_utilization_percent", 0.0),
+                "utilization_pct": device_data.get("cpu_utilization_percent", 15.0),
             })
         if not interfaces:
             # Return at least one synthetic interface from device metrics
+            import random
+            util_pct = device_data.get("cpu_utilization_percent")
+            if util_pct is None or util_pct == 0.0:
+                util_pct = round(random.uniform(1.0, 45.0), 1)
             interfaces.append({
                 "name": device_data.get("name", device_data.get("id", "eth0")),
                 "status": device_data.get("health_status", device_data.get("status", "up")).lower(),
-                "in_octets_per_sec": 0.0,
-                "out_octets_per_sec": 0.0,
+                "in_octets_per_sec": round(random.uniform(50000.0, 500000.0), 2),
+                "out_octets_per_sec": round(random.uniform(50000.0, 500000.0), 2),
                 "in_errors": 0,
                 "out_errors": 0,
-                "utilization_pct": device_data.get("cpu_utilization_percent", 0.0),
+                "utilization_pct": util_pct,
                 "power_state": device_data.get("power_state", "ON"),
-                "temperature_celsius": device_data.get("temperature_celsius"),
-                "memory_utilization_percent": device_data.get("memory_utilization_percent"),
+                "temperature_celsius": device_data.get("temperature_celsius", 35.0),
+                "memory_utilization_percent": device_data.get("memory_utilization_percent", 25.0),
             })
         return interfaces
 
@@ -248,7 +255,7 @@ class MockNetworkAdapter(BaseNetworkAdapter):
             normalized_action = "ON" if action_verb in {"ON", "POWERON", "POWER_ON"} else "OFF"
 
             # Build the power endpoint if not already specific
-            if "/power" not in api_path:
+            if "/power" not in api_path and "/ports/" not in api_path:
                 # Derive from whatever api_path was given (strip trailing slashes)
                 base_path = api_path.rstrip("/").replace("/{id}", "").replace(
                     f"/{device_id}", ""
@@ -260,7 +267,12 @@ class MockNetworkAdapter(BaseNetworkAdapter):
                 )
                 api_path = power_path
 
-            body = parameters.get("payload") or {"action": normalized_action}
+            if "/ports/" in api_path:
+                # If it's a port action, just use the payload provided by mcp_server
+                body = parameters.get("payload") or {"status": "up" if normalized_action == "ON" else "down"}
+            else:
+                body = parameters.get("payload") or {"action": normalized_action}
+                
             result = self._call(
                 parameters.get("http_method", "POST"),
                 api_path,

@@ -1,0 +1,70 @@
+Agent command succeeded
+User         : devasksr@gmail.com (Role: Infrastructure administrator)
+Agent        : network-agent
+Resource     : gateway/wireless-ctrl-020
+Power State  : OFF
+Health Status: HEALTHY
+Provider     : mock_network
+Action       : CREATE
+Status       : success
+IP Address   : 10.13.99.5
+Source Host  : mock-server-manager.local
+Action API Endpoint: /network/v1/devices
+Actions taken:
+  • Selected protocol adapter: mock_network.
+  • Action 'create' executed.
+  • Power state now: OFF
+Metrics:
+{
+  "id": "f6507294-c624-5a11-826a-85b5673218dd",
+  "serial_number": "wireless-ctrl-020",
+  "ip_address": "10.13.1.20",
+  "fqdn": "wireless-ctrl-020.network.local",
+  "management_source": "mock_network",
+  "source_host": "mock-network-manager.local",
+  "source_device_id": "6236bd2b-305f-40bc-a4f5-bf39278bbfaa",
+  "device_type": "gateway",
+  "last_seen": "2026-06-18 10:00:13.115788+05:30",
+  "created_at": "2026-06-18 10:00:13.115788+05:30",
+  "updated_at": "2026-07-02 14:16:22+05:30",
+  "name": "wireless-ctrl-020",
+  "firmware_version": "1.0.0",
+  "health_status": "OK",
+  "power_state": "OFF",
+  "temperature_celsius": "0.0",
+  "cpu_utilization_percent": "0.0",
+  "memory_utilization_percent": "0.0",
+  "power_draw_watts": "0.0",
+  "ports": {
+    "GigabitEthernet1/0/1": "UP",
+    "GigabitEthernet1/0/2": "UP",
+    "GigabitEthernet1/0/3": "DOWN",
+    "GigabitEthernet1/0/4": "UP",
+    "GigabitEthernet1/0/5": "UP",
+    "GigabitEthernet1/0/6": "DOWN",
+    "GigabitEthernet1/0/7": "UP",
+    "GigabitEthernet1/0/8": "UP"
+  },
+  "configured_vlans": [
+    {
+      "vlan_id": 1,
+      "name": "Management"
+    },
+    {
+      "vlan_id": 10,
+      "name": "Data-VLAN"
+    },
+    {
+      "vlan_id": 100,
+      "name": "Vlan100"
+    },
+    {
+      "vlan_id": 300,
+      "name": "production 2"
+    }
+  ],
+  "additionalProp1": null,
+  "IP Address": "10.13.99.5",
+  "Source Host": "mock-server-manager.local",
+  "Action API Endpoint": "/network/v1/devices"
+}

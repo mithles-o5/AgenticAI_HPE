@@ -1,0 +1,9 @@
+Agent command failed
+User       : devasksr@gmail.com (Role: Infrastructure administrator)
+Agent      : storage-agent
+Resource   : volume/vol-db-test-01
+Provider   : mock_storage
+Action     : CREATE
+Errors:
+  Adapter error: HTTP Error 405: {'detail': 'Method Not Allowed'}
+Tip: ensure the storage-agent is running (python agents/storage_agent/main.py)

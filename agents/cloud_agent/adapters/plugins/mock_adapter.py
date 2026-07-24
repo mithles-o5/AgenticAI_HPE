@@ -20,14 +20,16 @@ class MockCloudAdapter(BaseCloudAdapter):
         import httpx
         from urllib.parse import urlparse
         import re
-        import re
         try:
             parsed = urlparse(api_path)
-            api_path = f"http://127.0.0.1:8003{parsed.path}"
+            path_and_query = parsed.path
             if parsed.query:
-                api_path += f"?{parsed.query}"
-
-            url = f"{base_url}{api_path}".format(id=resource_id, systemId=resource_id, hostId=resource_id)
+                path_and_query += f"?{parsed.query}"
+            
+            # Use the correct port for cloud mock (8003)
+            url = f"http://127.0.0.1:8003{path_and_query}"
+                
+            url = url.format(id=resource_id, systemId=resource_id, hostId=resource_id)
             response = httpx.request(method, url, json=payload, timeout=10.0)
             response.raise_for_status()
             try:
@@ -147,51 +149,11 @@ class MockCloudAdapter(BaseCloudAdapter):
     ) -> Dict[str, Any]:
         """
         List cloud resources using the api_path and provider_label passed from mcp_server.
-        Calls the cloud mock server at port 8003.
+        Calls the cloud mock server and ComOps mock server.
         """
         parameters = parameters or {}
         resource_type = parameters.get("resource_type", "virtual_machine")
         api_path = parameters.get("api_path", "")
-        if not api_path:
-            api_path = f"/api/v1/devices?device_type={resource_type}"
-        provider_label = parameters.get("provider_label", "mock_server(cloud)")
-        base_url = "http://127.0.0.1:8003"
-        url = f"{base_url}{api_path}"
-
-        import requests
-        try:
-            resp = requests.get(url, timeout=5)
-            if resp.status_code != 200:
-                return {"total": 0, "devices": [],
-                        "error": f"{provider_label} HTTP {resp.status_code}"}
-            data = resp.json()
-        except Exception as e:
-            return {"total": 0, "devices": [], "error": str(e)}
-
-        # Normalise to list
-        if isinstance(data, list):
-            devices = data
-        elif isinstance(data, dict):
-            devices = (
-                data.get("items")
-                or data.get("devices")
-                or data.get("members")
-                or data.get("Members")
-                or data.get("resources")
-                or []
-            )
-        else:
-            devices = []
-
-        # Tag provider
-        for item in devices:
-            if isinstance(item, dict) and not item.get("management_source"):
-                item["management_source"] = provider_label
-
-        paginated = devices[skip: skip + limit] if limit else devices
-        return {"total": len(devices), "devices": paginated}
-
-        resource_type = parameters.get("resource_type")
         devices = []
         
         if api_path:

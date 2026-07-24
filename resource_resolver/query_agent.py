@@ -33,8 +33,8 @@ def _compile(pattern: str) -> re.Pattern:
     return re.compile(pattern, re.IGNORECASE)
 
 _ACTION_MAPPINGS: tuple[_Mapping, ...] = (
-    _Mapping(_compile(r"\b(turn on|power on|start)\b"),              "ON",            "Operational"),
-    _Mapping(_compile(r"\b(turn off|power off|shutdown)\b"),          "OFF",           "Operational"),
+    _Mapping(_compile(r"\b(turn on|power on|start|bring up)\b"),              "ON",            "Operational"),
+    _Mapping(_compile(r"\b(turn off|power off|shutdown|bring down)\b"),          "OFF",           "Operational"),
     _Mapping(_compile(r"\b(cold boot)\b"),                            "COLD_BOOT",     "Operational"),
     _Mapping(_compile(r"\b(event log|event logs|system log|system logs|sel|log entries|iml|integrated management log)\b"),
                                                                       "FETCH_EVENT_LOG", "Operational"),
@@ -396,7 +396,7 @@ class QueryAgent:
             "MOUNT_VIRTUAL_MEDIA", "FETCH_EVENT_LOG", "CLEAR_EVENT_LOG",
             "DISCOVER_INVENTORY", "FETCH_SENSORS", "SYNC_CMDB",
             "CREATE", "DELETE", "ALLOCATE", "DEALLOCATE",
-            "STATUS", "POWER_ON", "POWER_OFF", "RESET"
+            "STATUS", "ON", "OFF", "RESET", "COLD_BOOT", "RELOAD"
         }:
             extracted = QueryAgent._extract_device_identifier(query_clean, matched_action)
             if extracted: identifier = extracted

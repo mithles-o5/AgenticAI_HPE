@@ -102,7 +102,7 @@ class MockAdapter(BaseAdapter):
         if "compute-ops-mgmt" in api_path:
             base = "http://127.0.0.1:8001"
         else:
-            base = "http://127.0.0.1:8002"
+            base = "http://127.0.0.1:8000"
 
         import httpx
         url = f"{base}{api_path}"

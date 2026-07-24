@@ -19,11 +19,15 @@ class MockStorageAdapter(BaseStorageAdapter):
         from urllib.parse import urlparse
         try:
             parsed = urlparse(api_path)
-            api_path = f"http://127.0.0.1:8005{parsed.path}"
+            path_and_query = parsed.path
             if parsed.query:
-                api_path += f"?{parsed.query}"
+                path_and_query += f"?{parsed.query}"
+            
+            # Use the correct port for storage mock (8002)
+            url = f"http://127.0.0.1:8002{path_and_query}"
 
-            url = f"{base_url}{api_path}".format(id=resource_id, systemId=resource_id, hostId=resource_id)
+            url = url.format(id=resource_id, systemId=resource_id, hostId=resource_id)
+            print(f"DEBUG STORAGE MOCK: method={method} url={url} payload={payload}")
             response = httpx.request(method, url, json=payload, timeout=10.0)
             response.raise_for_status()
             try:
@@ -87,7 +91,7 @@ class MockStorageAdapter(BaseStorageAdapter):
         provider_label = parameters.get("provider_label", "mock_server(storage)")
 
         import httpx
-        base_url = "http://127.0.0.1:8005"
+        base_url = parameters.get("base_url", "http://127.0.0.1:8002")
         url = f"{base_url}{api_path}"
         try:
             resp = httpx.get(url, timeout=5)

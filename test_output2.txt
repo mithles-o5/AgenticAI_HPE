@@ -1,0 +1,35 @@
+Agent command succeeded
+User         : devasksr@gmail.com (Role: Infrastructure administrator)
+Agent        : network-agent
+Resource     : switch/aruba-cx-017
+Power State  : OFF
+Health Status: HEALTHY
+Provider     : mock_network
+Action       : OFF
+Status       : success
+IP Address   : 10.13.1.17
+Source Host  : mock-network-manager.local
+Action API Endpoint: /network/v1/devices/7638b571-f587-54a8-8554-90ed58606af2/power
+Actions taken:
+  • Selected protocol adapter: mock_network.
+  • Fetched metrics for 1 interface(s)/device(s).
+Metrics:
+{
+  "interfaces": [
+    {
+      "name": "eth0",
+      "status": "up",
+      "in_octets_per_sec": 0.0,
+      "out_octets_per_sec": 0.0,
+      "in_errors": 0,
+      "out_errors": 0,
+      "utilization_pct": 0.0,
+      "power_state": "ON",
+      "temperature_celsius": null,
+      "memory_utilization_percent": null
+    }
+  ],
+  "IP Address": "10.13.1.17",
+  "Source Host": "mock-network-manager.local",
+  "Action API Endpoint": "/network/v1/devices/7638b571-f587-54a8-8554-90ed58606af2/power"
+}

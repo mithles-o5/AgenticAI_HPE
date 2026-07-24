@@ -4,50 +4,26 @@
   "schema_version": "0.7.0",
   "description": "Storage capacity monitoring, volume management, SAN/NAS/S3 health checks, anomaly detection, and GreenLake DSCC integration via pluggable adapters.",
   "skills": [
-    {
-      "name": "storage.monitoring.capacity"
-    },
-    {
-      "name": "storage.monitoring.performance"
-    },
-    {
-      "name": "storage.execute.volume_action"
-    },
-    {
-      "name": "storage.discover.arrays"
-    },
-    {
-      "name": "storage.diagnose.fault"
-    },
-    {
-      "name": "storage.list.resources"
-    }
+    {"name": "storage.monitoring.capacity"},
+    {"name": "storage.monitoring.performance"},
+    {"name": "storage.execute.volume_action"},
+    {"name": "storage.discover.arrays"},
+    {"name": "storage.diagnose.fault"},
+    {"name": "storage.list.resources"}
   ],
-  "domains": [
-    "storage-infrastructure",
-    "observability"
-  ],
+  "domains": ["storage-infrastructure", "observability"],
   "locators": [
-    {
-      "type": "openapi",
-      "url": "http://storage-agent:8007/openapi.json"
-    }
+    {"type": "openapi", "url": "http://storage-agent:8007/openapi.json"}
   ],
   "modules": {
-    "protocols": [
-      "dscc",
-      "nas",
-      "s3",
-      "mock_storage"
-    ],
-    "resource_types": [
-      "volume",
-      "array",
-      "pool",
-      "lun",
-      "share",
-      "bucket",
-      "snapshot"
-    ]
+    "protocols": ["dscc", "nas", "s3", "mock_storage"],
+    "resource_types": ["storage_system", "storage_pool", "volume", "lun", "share", "bucket", "snapshot"],
+    "provider_resource_map": {
+      "mock_storage": {
+        "label": "mock_server(storage)",
+        "api_base": "/data-services/v1beta1/devices",
+        "resource_types": ["storage_system", "storage_pool", "volume", "lun", "snapshot"]
+      }
+    }
   }
 }

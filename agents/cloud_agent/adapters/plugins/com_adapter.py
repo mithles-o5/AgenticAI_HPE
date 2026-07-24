@@ -179,3 +179,34 @@ class ComOpsAdapter(BaseCloudAdapter):
                 if isinstance(items, dict):
                     return list(items.get("members", items.get("items", items.values())))
             return []
+
+    def list_resources(
+        self,
+        region: Optional[str],
+        credentials: Dict[str, Any],
+        parameters: Dict[str, Any],
+        skip: int = 0,
+        limit: int = 100,
+    ) -> List[Dict[str, Any]]:
+        """
+        List devices from ComOps, filtering by device_type if provided in parameters.
+        """
+        resource_type = parameters.get("resource_type", "")
+        devices = self.discover_resources(region, resource_type, credentials, parameters)
+        
+        # Fallback filtering if the mock server doesn't support ?device_type
+        if resource_type and devices:
+            filter_norm = resource_type.lower().rstrip("s")
+            filtered = [
+                d for d in devices
+                if (d.get("device_type") or "").lower().rstrip("s") == filter_norm
+            ]
+            if filtered:
+                devices = filtered
+                
+        # Apply skip and limit
+        if skip or limit:
+            end = skip + limit if limit else None
+            devices = devices[skip:end]
+            
+        return devices

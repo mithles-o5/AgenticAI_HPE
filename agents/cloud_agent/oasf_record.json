@@ -17,6 +17,18 @@
   ],
   "modules": {
     "protocols": ["rest", "mock", "mock_cloud", "aws", "gcp", "coms"],
-    "resource_types": ["vm", "container", "function", "storage_bucket", "network_interface", "cluster_node"]
+    "resource_types": ["virtual_machine", "kubernetes_cluster", "namespace", "load_balancer", "virtual_network", "subnet", "database_service", "storage_service", "server", "switch", "router", "firewall", "storage"],
+    "provider_resource_map": {
+      "mock_cloud": {
+        "label": "mock_server(cloud)",
+        "api_base": "/api/v1/devices",
+        "resource_types": ["virtual_machine", "kubernetes_cluster", "namespace", "load_balancer", "virtual_network", "subnet", "database_service", "storage_service"]
+      },
+      "coms": {
+        "label": "mock_server(ComOps)",
+        "api_base": "/compute-ops-mgmt/v1/devices",
+        "resource_types": ["server", "switch", "router", "firewall", "storage"]
+      }
+    }
   }
 }

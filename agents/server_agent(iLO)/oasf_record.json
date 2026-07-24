@@ -20,6 +20,13 @@
   "locators": [{"type": "openapi", "url": "http://server-agent:8009/openapi.json"}],
   "modules": {
     "providers": ["redfish", "ilo", "mock", "mock_server"],
-    "resource_types": ["server", "bmc", "sensor", "firmware", "event_log"]
+    "resource_types": ["server", "bmc", "sensor", "firmware", "event_log"],
+    "provider_resource_map": {
+      "mock_server": {
+        "label": "mock_server(iLO)",
+        "api_base": "/redfish/v1/Systems",
+        "resource_types": ["server", "bmc", "sensor", "firmware", "event_log"]
+      }
+    }
   }
 }

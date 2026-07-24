@@ -17,6 +17,13 @@
   ],
   "modules": {
     "protocols": ["snmp", "netconf", "rest", "mock", "mock_network"],
-    "resource_types": ["switch", "router", "interface", "vlan", "bgp_session", "access_point"]
+    "resource_types": ["switch", "router", "firewall", "gateway", "access_point", "wireless_controller", "port_channel", "vlan", "interface", "bgp_session"],
+    "provider_resource_map": {
+      "mock_network": {
+        "label": "mock_server(network)",
+        "api_base": "/network/v1/devices",
+        "resource_types": ["switch", "router", "firewall", "gateway", "access_point", "wireless_controller", "port_channel", "vlan"]
+      }
+    }
   }
 }

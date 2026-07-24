@@ -8,7 +8,8 @@ class MockAdapter(ServerAdapter):
         from urllib.parse import urlparse
         try:
             parsed = urlparse(api_path)
-            api_path = f"http://127.0.0.1:8010{parsed.path}"
+            path_str = parsed.path.replace("/Systems", "/systems")
+            api_path = f"http://127.0.0.1:8010{path_str}"
             if parsed.query:
                 api_path += f"?{parsed.query}"
 
@@ -140,6 +141,8 @@ class MockAdapter(ServerAdapter):
         """Fetch a paginated list of resources from the iLO mock server using the api_path from parameters."""
         parameters = parameters or {}
         api_path = parameters.get("api_path", "/redfish/v1/systems")
+        if api_path:
+            api_path = api_path.replace("/Systems", "/systems")
         provider_label = parameters.get("provider_label", "mock_server(iLO)")
         base_url = "http://127.0.0.1:8010"
         url = f"{base_url}{api_path}"

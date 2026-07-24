@@ -178,14 +178,18 @@ class NetworkExecutionEngine:
 
             elif action in ("list", "list_resources"):
                 result = self._list_resources(adapter, request, credentials, parameters)
-                if isinstance(result, dict) and "devices" in result:
+                if isinstance(result, list):
+                    inventory = result
+                    metrics = {"inventory": inventory}
+                    actions.append(f"Listed {len(inventory)} resources.")
+                    status_level = "healthy"
+                elif isinstance(result, dict) and "devices" in result:
                     inventory = result.get("devices", [])
                     metrics = {"inventory": inventory}
                     actions.append(f"Listed {len(inventory)} resources.")
                     status_level = "healthy"
                 else:
                     errors.append(f"Failed to list resources: {result}")
-
             else:
                 errors.append(f"Unknown action '{request.action}'.")
 

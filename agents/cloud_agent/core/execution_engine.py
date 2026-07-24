@@ -100,7 +100,11 @@ class CloudExecutionEngine:
 
             elif action in ("list", "list_resources"):
                 result = self._list_resources(adapter, request, credentials)
-                if isinstance(result, dict) and "devices" in result:
+                if isinstance(result, list):
+                    inventory = result
+                    action_result = {"inventory": inventory}
+                    actions_taken.append(f"Listed {len(inventory)} resources.")
+                elif isinstance(result, dict) and "devices" in result:
                     inventory = result.get("devices", [])
                     action_result = {"inventory": inventory}
                     actions_taken.append(f"Listed {len(inventory)} resources.")

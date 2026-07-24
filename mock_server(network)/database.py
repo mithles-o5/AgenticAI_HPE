@@ -91,7 +91,7 @@ class Database:
             
         return None
 
-    def get_all(self, collection_path, skip: int = 0, limit: int = 100):
+    def get_all(self, collection_path, skip: int = 0, limit: int = 10000):
         intercepted = self._intercept_devices(collection_path)
         if intercepted is not None:
             return intercepted[skip : skip + limit]

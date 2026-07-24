@@ -1,0 +1,483 @@
+````carousel
+List of All Devices - 370 found across 6 provider(s)
+### Page 1 of 37
+
+• **gl-vm-009** (IP: 10.14.1.9, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-010** (IP: 10.14.1.10, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-017** (IP: 10.14.1.17, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-018** (IP: 10.14.1.18, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-025** (IP: 10.14.1.25, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-026** (IP: 10.14.1.26, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-033** (IP: 10.14.1.33, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-034** (IP: 10.14.1.34, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-041** (IP: 10.14.1.41, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-042** (IP: 10.14.1.42, Type: kubernetes_cluster, Provider: mock_cloud)
+<!-- slide -->
+### Page 2 of 37
+
+• **gl-vm-049** (IP: 10.14.1.49, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-050** (IP: 10.14.1.50, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-057** (IP: 10.14.1.57, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-058** (IP: 10.14.1.58, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-065** (IP: 10.14.1.65, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-066** (IP: 10.14.1.66, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-073** (IP: 10.14.1.73, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-074** (IP: 10.14.1.74, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-081** (IP: 10.14.1.81, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-082** (IP: 10.14.1.82, Type: kubernetes_cluster, Provider: mock_cloud)
+<!-- slide -->
+### Page 3 of 37
+
+• **gl-vm-089** (IP: 10.14.1.89, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-090** (IP: 10.14.1.90, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-097** (IP: 10.14.1.97, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-098** (IP: 10.14.1.98, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-105** (IP: 10.14.1.105, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-106** (IP: 10.14.1.106, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-113** (IP: 10.14.1.113, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-114** (IP: 10.14.1.114, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-121** (IP: 10.14.1.121, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-122** (IP: 10.14.1.122, Type: kubernetes_cluster, Provider: mock_cloud)
+<!-- slide -->
+### Page 4 of 37
+
+• **gl-vm-129** (IP: 10.14.1.129, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-130** (IP: 10.14.1.130, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-137** (IP: 10.14.1.137, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-138** (IP: 10.14.1.138, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-145** (IP: 10.14.1.145, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-146** (IP: 10.14.1.146, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-153** (IP: 10.14.1.153, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-154** (IP: 10.14.1.154, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-161** (IP: 10.14.1.161, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-162** (IP: 10.14.1.162, Type: kubernetes_cluster, Provider: mock_cloud)
+<!-- slide -->
+### Page 5 of 37
+
+• **gl-vm-169** (IP: 10.14.1.169, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-170** (IP: 10.14.1.170, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-177** (IP: 10.14.1.177, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-178** (IP: 10.14.1.178, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-185** (IP: 10.14.1.185, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-186** (IP: 10.14.1.186, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-193** (IP: 10.14.1.193, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-194** (IP: 10.14.1.194, Type: kubernetes_cluster, Provider: mock_cloud)
+• **gl-vm-001** (IP: 10.14.1.1, Type: virtual_machine, Provider: mock_cloud)
+• **gl-k8s-002** (IP: 10.14.1.2, Type: kubernetes_cluster, Provider: mock_cloud)
+<!-- slide -->
+### Page 6 of 37
+
+• **rack16-compute-6-10015** (IP: 10.200.1.110, Type: server, Provider: coms)
+• **rack21-compute-1-10020** (IP: 10.200.1.115, Type: server, Provider: coms)
+• **rack26-compute-6-10025** (IP: 10.200.1.120, Type: server, Provider: coms)
+• **rack31-compute-1-10030** (IP: 10.200.1.125, Type: server, Provider: coms)
+• **rack36-compute-6-10035** (IP: 10.200.1.130, Type: server, Provider: coms)
+• **rack41-compute-1-10040** (IP: 10.200.1.135, Type: server, Provider: coms)
+• **rack46-compute-6-10045** (IP: 10.200.1.140, Type: server, Provider: coms)
+• **rack1-compute-1-10050** (IP: 10.200.1.145, Type: server, Provider: coms)
+• **rack6-compute-6-10055** (IP: 10.200.1.150, Type: server, Provider: coms)
+• **rack11-compute-1-10060** (IP: 10.200.1.155, Type: server, Provider: coms)
+<!-- slide -->
+### Page 7 of 37
+
+• **rack16-compute-6-10065** (IP: 10.200.1.160, Type: server, Provider: coms)
+• **rack21-compute-1-10070** (IP: 10.200.1.165, Type: server, Provider: coms)
+• **rack26-compute-6-10075** (IP: 10.200.1.170, Type: server, Provider: coms)
+• **rack31-compute-1-10080** (IP: 10.200.1.175, Type: server, Provider: coms)
+• **rack36-compute-6-10085** (IP: 10.200.1.180, Type: server, Provider: coms)
+• **rack41-compute-1-10090** (IP: 10.200.1.185, Type: server, Provider: coms)
+• **rack46-compute-6-10095** (IP: 10.200.1.190, Type: server, Provider: coms)
+• **rack1-compute-1-10100** (IP: 10.200.1.195, Type: server, Provider: coms)
+• **rack6-compute-6-10105** (IP: 10.200.1.200, Type: server, Provider: coms)
+• **rack11-compute-1-10110** (IP: 10.200.1.205, Type: server, Provider: coms)
+<!-- slide -->
+### Page 8 of 37
+
+• **rack16-compute-6-10115** (IP: 10.200.1.210, Type: server, Provider: coms)
+• **rack21-compute-1-10120** (IP: 10.200.1.215, Type: server, Provider: coms)
+• **rack26-compute-6-10125** (IP: 10.200.1.220, Type: server, Provider: coms)
+• **rack31-compute-1-10130** (IP: 10.200.1.225, Type: server, Provider: coms)
+• **rack36-compute-6-10135** (IP: 10.200.1.230, Type: server, Provider: coms)
+• **rack41-compute-1-10140** (IP: 10.200.1.235, Type: server, Provider: coms)
+• **rack46-compute-6-10145** (IP: 10.200.1.240, Type: server, Provider: coms)
+• **rack1-compute-1-10150** (IP: 10.200.1.245, Type: server, Provider: coms)
+• **rack6-compute-6-10155** (IP: 10.200.1.250, Type: server, Provider: coms)
+• **rack11-compute-1-10160** (IP: 10.200.1.1, Type: server, Provider: coms)
+<!-- slide -->
+### Page 9 of 37
+
+• **rack16-compute-6-10165** (IP: 10.200.1.6, Type: server, Provider: coms)
+• **rack21-compute-1-10170** (IP: 10.200.1.11, Type: server, Provider: coms)
+• **rack26-compute-6-10175** (IP: 10.200.1.16, Type: server, Provider: coms)
+• **rack31-compute-1-10180** (IP: 10.200.1.21, Type: server, Provider: coms)
+• **rack36-compute-6-10185** (IP: 10.200.1.26, Type: server, Provider: coms)
+• **rack41-compute-1-10190** (IP: 10.200.1.31, Type: server, Provider: coms)
+• **rack46-compute-6-10195** (IP: 10.200.1.36, Type: server, Provider: coms)
+• **rack1-compute-1-10200** (IP: 10.200.1.41, Type: server, Provider: coms)
+• **rack6-compute-6-10205** (IP: 10.200.1.46, Type: server, Provider: coms)
+• **rack11-compute-1-10210** (IP: 10.200.1.51, Type: server, Provider: coms)
+<!-- slide -->
+### Page 10 of 37
+
+• **rack16-compute-6-10215** (IP: 10.200.1.56, Type: server, Provider: coms)
+• **rack21-compute-1-10220** (IP: 10.200.1.61, Type: server, Provider: coms)
+• **rack26-compute-6-10225** (IP: 10.200.1.66, Type: server, Provider: coms)
+• **rack31-compute-1-10230** (IP: 10.200.1.71, Type: server, Provider: coms)
+• **rack36-compute-6-10235** (IP: 10.200.1.76, Type: server, Provider: coms)
+• **rack41-compute-1-10240** (IP: 10.200.1.81, Type: server, Provider: coms)
+• **rack46-compute-6-10245** (IP: 10.200.1.86, Type: server, Provider: coms)
+• **rack1-compute-1-10250** (IP: 10.200.1.91, Type: server, Provider: coms)
+• **rack6-compute-6-10255** (IP: 10.200.1.96, Type: server, Provider: coms)
+• **rack11-compute-1-10260** (IP: 10.200.1.101, Type: server, Provider: coms)
+<!-- slide -->
+### Page 11 of 37
+
+• **rack16-compute-6-10265** (IP: 10.200.1.106, Type: server, Provider: coms)
+• **rack21-compute-1-10270** (IP: 10.200.1.111, Type: server, Provider: coms)
+• **rack26-compute-6-10275** (IP: 10.200.1.116, Type: server, Provider: coms)
+• **rack31-compute-1-10280** (IP: 10.200.1.121, Type: server, Provider: coms)
+• **rack36-compute-6-10285** (IP: 10.200.1.126, Type: server, Provider: coms)
+• **rack41-compute-1-10290** (IP: 10.200.1.131, Type: server, Provider: coms)
+• **rack46-compute-6-10295** (IP: 10.200.1.136, Type: server, Provider: coms)
+• **rack1-compute-1-10300** (IP: 10.200.1.141, Type: server, Provider: coms)
+• **rack6-compute-6-10305** (IP: 10.200.1.146, Type: server, Provider: coms)
+• **rack11-compute-1-10310** (IP: 10.200.1.151, Type: server, Provider: coms)
+<!-- slide -->
+### Page 12 of 37
+
+• **rack16-compute-6-10315** (IP: 10.200.1.156, Type: server, Provider: coms)
+• **rack21-compute-1-10320** (IP: 10.200.1.161, Type: server, Provider: coms)
+• **rack26-compute-6-10325** (IP: 10.200.1.166, Type: server, Provider: coms)
+• **rack31-compute-1-10330** (IP: 10.200.1.171, Type: server, Provider: coms)
+• **rack36-compute-6-10335** (IP: 10.200.1.176, Type: server, Provider: coms)
+• **rack41-compute-1-10340** (IP: 10.200.1.181, Type: server, Provider: coms)
+• **rack46-compute-6-10345** (IP: 10.200.1.186, Type: server, Provider: coms)
+• **rack1-compute-1-10350** (IP: 10.200.1.191, Type: server, Provider: coms)
+• **rack6-compute-6-10355** (IP: 10.200.1.196, Type: server, Provider: coms)
+• **rack11-compute-1-10360** (IP: 10.200.1.201, Type: server, Provider: coms)
+<!-- slide -->
+### Page 13 of 37
+
+• **rack16-compute-6-10365** (IP: 10.200.1.206, Type: server, Provider: coms)
+• **rack21-compute-1-10370** (IP: 10.200.1.211, Type: server, Provider: coms)
+• **rack26-compute-6-10375** (IP: 10.200.1.216, Type: server, Provider: coms)
+• **rack31-compute-1-10380** (IP: 10.200.1.221, Type: server, Provider: coms)
+• **rack36-compute-6-10385** (IP: 10.200.1.226, Type: server, Provider: coms)
+• **rack41-compute-1-10390** (IP: 10.200.1.231, Type: server, Provider: coms)
+• **rack46-compute-6-10395** (IP: 10.200.1.236, Type: server, Provider: coms)
+• **rack1-compute-1-10400** (IP: 10.200.1.241, Type: server, Provider: coms)
+• **rack6-compute-6-10405** (IP: 10.200.1.246, Type: server, Provider: coms)
+• **rack11-compute-1-10410** (IP: 10.200.1.251, Type: server, Provider: coms)
+<!-- slide -->
+### Page 14 of 37
+
+• **rack16-compute-6-10415** (IP: 10.200.1.2, Type: server, Provider: coms)
+• **rack21-compute-1-10420** (IP: 10.200.1.7, Type: server, Provider: coms)
+• **rack26-compute-6-10425** (IP: 10.200.1.12, Type: server, Provider: coms)
+• **rack31-compute-1-10430** (IP: 10.200.1.17, Type: server, Provider: coms)
+• **rack36-compute-6-10435** (IP: 10.200.1.22, Type: server, Provider: coms)
+• **rack41-compute-1-10440** (IP: 10.200.1.27, Type: server, Provider: coms)
+• **rack46-compute-6-10445** (IP: 10.200.1.32, Type: server, Provider: coms)
+• **rack1-compute-1-10450** (IP: 10.200.1.37, Type: server, Provider: coms)
+• **rack6-compute-6-10455** (IP: 10.200.1.42, Type: server, Provider: coms)
+• **rack11-compute-1-10460** (IP: 10.200.1.47, Type: server, Provider: coms)
+<!-- slide -->
+### Page 15 of 37
+
+• **rack16-compute-6-10465** (IP: 10.200.1.52, Type: server, Provider: coms)
+• **rack21-compute-1-10470** (IP: 10.200.1.57, Type: server, Provider: coms)
+• **rack26-compute-6-10475** (IP: 10.200.1.62, Type: server, Provider: coms)
+• **rack31-compute-1-10480** (IP: 10.200.1.67, Type: server, Provider: coms)
+• **rack36-compute-6-10485** (IP: 10.200.1.72, Type: server, Provider: coms)
+• **rack41-compute-1-10490** (IP: 10.200.1.77, Type: server, Provider: coms)
+• **rack46-compute-6-10495** (IP: 10.200.1.82, Type: server, Provider: coms)
+• **rack1-compute-1-10500** (IP: 10.200.1.87, Type: server, Provider: coms)
+• **rack6-compute-6-10505** (IP: 10.200.1.92, Type: server, Provider: coms)
+• **rack11-compute-1-10510** (IP: 10.200.1.97, Type: server, Provider: coms)
+<!-- slide -->
+### Page 16 of 37
+
+• **rack16-compute-6-10515** (IP: 10.200.1.102, Type: server, Provider: coms)
+• **rack21-compute-1-10520** (IP: 10.200.1.107, Type: server, Provider: coms)
+• **rack26-compute-6-10525** (IP: 10.200.1.112, Type: server, Provider: coms)
+• **rack31-compute-1-10530** (IP: 10.200.1.117, Type: server, Provider: coms)
+• **rack36-compute-6-10535** (IP: 10.200.1.122, Type: server, Provider: coms)
+• **rack41-compute-1-10540** (IP: 10.200.1.127, Type: server, Provider: coms)
+• **rack46-compute-6-10545** (IP: 10.200.1.132, Type: server, Provider: coms)
+• **rack1-compute-1-10550** (IP: 10.200.1.137, Type: server, Provider: coms)
+• **rack6-compute-6-10555** (IP: 10.200.1.142, Type: server, Provider: coms)
+• **rack11-compute-1-10560** (IP: 10.200.1.147, Type: server, Provider: coms)
+<!-- slide -->
+### Page 17 of 37
+
+• **rack16-compute-6-10565** (IP: 10.200.1.152, Type: server, Provider: coms)
+• **rack21-compute-1-10570** (IP: 10.200.1.157, Type: server, Provider: coms)
+• **rack26-compute-6-10575** (IP: 10.200.1.162, Type: server, Provider: coms)
+• **rack31-compute-1-10580** (IP: 10.200.1.167, Type: server, Provider: coms)
+• **rack36-compute-6-10585** (IP: 10.200.1.172, Type: server, Provider: coms)
+• **rack41-compute-1-10590** (IP: 10.200.1.177, Type: server, Provider: coms)
+• **rack46-compute-6-10595** (IP: 10.200.1.182, Type: server, Provider: coms)
+• **rack1-compute-1-10600** (IP: 10.200.1.187, Type: server, Provider: coms)
+• **rack6-compute-6-10605** (IP: 10.200.1.192, Type: server, Provider: coms)
+• **rack11-compute-1-10610** (IP: 10.200.1.197, Type: server, Provider: coms)
+<!-- slide -->
+### Page 18 of 37
+
+• **rack16-compute-6-10615** (IP: 10.200.1.202, Type: server, Provider: coms)
+• **rack21-compute-1-10620** (IP: 10.200.1.207, Type: server, Provider: coms)
+• **rack26-compute-6-10625** (IP: 10.200.1.212, Type: server, Provider: coms)
+• **rack31-compute-1-10630** (IP: 10.200.1.217, Type: server, Provider: coms)
+• **rack36-compute-6-10635** (IP: 10.200.1.222, Type: server, Provider: coms)
+• **rack41-compute-1-10640** (IP: 10.200.1.227, Type: server, Provider: coms)
+• **rack46-compute-6-10645** (IP: 10.200.1.232, Type: server, Provider: coms)
+• **rack1-compute-1-10650** (IP: 10.200.1.237, Type: server, Provider: coms)
+• **rack6-compute-6-10655** (IP: 10.200.1.242, Type: server, Provider: coms)
+• **rack11-compute-1-10660** (IP: 10.200.1.247, Type: server, Provider: coms)
+<!-- slide -->
+### Page 19 of 37
+
+• **rack16-compute-6-10665** (IP: 10.200.1.252, Type: server, Provider: coms)
+• **rack21-compute-1-10670** (IP: 10.200.1.3, Type: server, Provider: coms)
+• **rack26-compute-6-10675** (IP: 10.200.1.8, Type: server, Provider: coms)
+• **rack31-compute-1-10680** (IP: 10.200.1.13, Type: server, Provider: coms)
+• **rack36-compute-6-10685** (IP: 10.200.1.18, Type: server, Provider: coms)
+• **rack41-compute-1-10690** (IP: 10.200.1.23, Type: server, Provider: coms)
+• **rack46-compute-6-10695** (IP: 10.200.1.28, Type: server, Provider: coms)
+• **rack1-compute-1-10700** (IP: 10.200.1.33, Type: server, Provider: coms)
+• **rack6-compute-6-10705** (IP: 10.200.1.38, Type: server, Provider: coms)
+• **rack11-compute-1-10710** (IP: 10.200.1.43, Type: server, Provider: coms)
+<!-- slide -->
+### Page 20 of 37
+
+• **rack16-compute-6-10715** (IP: 10.200.1.48, Type: server, Provider: coms)
+• **rack21-compute-1-10720** (IP: 10.200.1.53, Type: server, Provider: coms)
+• **rack26-compute-6-10725** (IP: 10.200.1.58, Type: server, Provider: coms)
+• **rack31-compute-1-10730** (IP: 10.200.1.63, Type: server, Provider: coms)
+• **rack36-compute-6-10735** (IP: 10.200.1.68, Type: server, Provider: coms)
+• **rack41-compute-1-10740** (IP: 10.200.1.73, Type: server, Provider: coms)
+• **rack46-compute-6-10745** (IP: 10.200.1.78, Type: server, Provider: coms)
+• **rack1-compute-1-10750** (IP: 10.200.1.83, Type: server, Provider: coms)
+• **rack6-compute-6-10755** (IP: 10.200.1.88, Type: server, Provider: coms)
+• **rack11-compute-1-10760** (IP: 10.200.1.93, Type: server, Provider: coms)
+<!-- slide -->
+### Page 21 of 37
+
+• **rack16-compute-6-10765** (IP: 10.200.1.98, Type: server, Provider: coms)
+• **rack21-compute-1-10770** (IP: 10.200.1.103, Type: server, Provider: coms)
+• **rack26-compute-6-10775** (IP: 10.200.1.108, Type: server, Provider: coms)
+• **rack31-compute-1-10780** (IP: 10.200.1.113, Type: server, Provider: coms)
+• **rack36-compute-6-10785** (IP: 10.200.1.118, Type: server, Provider: coms)
+• **rack41-compute-1-10790** (IP: 10.200.1.123, Type: server, Provider: coms)
+• **rack46-compute-6-10795** (IP: 10.200.1.128, Type: server, Provider: coms)
+• **rack1-compute-1-10800** (IP: 10.200.1.133, Type: server, Provider: coms)
+• **rack6-compute-6-10805** (IP: 10.200.1.138, Type: server, Provider: coms)
+• **rack11-compute-1-10810** (IP: 10.200.1.143, Type: server, Provider: coms)
+<!-- slide -->
+### Page 22 of 37
+
+• **rack16-compute-6-10815** (IP: 10.200.1.148, Type: server, Provider: coms)
+• **rack21-compute-1-10820** (IP: 10.200.1.153, Type: server, Provider: coms)
+• **rack26-compute-6-10825** (IP: 10.200.1.158, Type: server, Provider: coms)
+• **rack31-compute-1-10830** (IP: 10.200.1.163, Type: server, Provider: coms)
+• **rack36-compute-6-10835** (IP: 10.200.1.168, Type: server, Provider: coms)
+• **rack41-compute-1-10840** (IP: 10.200.1.173, Type: server, Provider: coms)
+• **rack46-compute-6-10845** (IP: 10.200.1.178, Type: server, Provider: coms)
+• **rack1-compute-1-10850** (IP: 10.200.1.183, Type: server, Provider: coms)
+• **rack6-compute-6-10855** (IP: 10.200.1.188, Type: server, Provider: coms)
+• **rack11-compute-1-10860** (IP: 10.200.1.193, Type: server, Provider: coms)
+<!-- slide -->
+### Page 23 of 37
+
+• **rack16-compute-6-10865** (IP: 10.200.1.198, Type: server, Provider: coms)
+• **rack21-compute-1-10870** (IP: 10.200.1.203, Type: server, Provider: coms)
+• **rack26-compute-6-10875** (IP: 10.200.1.208, Type: server, Provider: coms)
+• **rack31-compute-1-10880** (IP: 10.200.1.213, Type: server, Provider: coms)
+• **rack36-compute-6-10885** (IP: 10.200.1.218, Type: server, Provider: coms)
+• **rack41-compute-1-10890** (IP: 10.200.1.223, Type: server, Provider: coms)
+• **rack46-compute-6-10895** (IP: 10.200.1.228, Type: server, Provider: coms)
+• **rack1-compute-1-10900** (IP: 10.200.1.233, Type: server, Provider: coms)
+• **rack6-compute-6-10905** (IP: 10.200.1.238, Type: server, Provider: coms)
+• **rack11-compute-1-10910** (IP: 10.200.1.243, Type: server, Provider: coms)
+<!-- slide -->
+### Page 24 of 37
+
+• **rack16-compute-6-10915** (IP: 10.200.1.248, Type: server, Provider: coms)
+• **rack21-compute-1-10920** (IP: 10.200.1.253, Type: server, Provider: coms)
+• **rack26-compute-6-10925** (IP: 10.200.1.4, Type: server, Provider: coms)
+• **rack31-compute-1-10930** (IP: 10.200.1.9, Type: server, Provider: coms)
+• **rack36-compute-6-10935** (IP: 10.200.1.14, Type: server, Provider: coms)
+• **rack41-compute-1-10940** (IP: 10.200.1.19, Type: server, Provider: coms)
+• **rack46-compute-6-10945** (IP: 10.200.1.24, Type: server, Provider: coms)
+• **rack1-compute-1-10950** (IP: 10.200.1.29, Type: server, Provider: coms)
+• **rack6-compute-6-10955** (IP: 10.200.1.34, Type: server, Provider: coms)
+• **rack11-compute-1-10960** (IP: 10.200.1.39, Type: server, Provider: coms)
+<!-- slide -->
+### Page 25 of 37
+
+• **rack16-compute-6-10965** (IP: 10.200.1.44, Type: server, Provider: coms)
+• **rack21-compute-1-10970** (IP: 10.200.1.49, Type: server, Provider: coms)
+• **rack26-compute-6-10975** (IP: 10.200.1.54, Type: server, Provider: coms)
+• **rack31-compute-1-10980** (IP: 10.200.1.59, Type: server, Provider: coms)
+• **rack36-compute-6-10985** (IP: 10.200.1.64, Type: server, Provider: coms)
+• **rack41-compute-1-10990** (IP: 10.200.1.69, Type: server, Provider: coms)
+• **rack46-compute-6-10995** (IP: 10.200.1.74, Type: server, Provider: coms)
+• **prod-x1** (IP: 10.200.1.13, Type: server, Provider: coms)
+• **rack1-compute-1-10000** (IP: 10.200.1.95, Type: server, Provider: coms)
+• **rack6-compute-6-10005** (IP: 10.200.1.100, Type: server, Provider: coms)
+<!-- slide -->
+### Page 26 of 37
+
+• **port-channel-cfg-016** (IP: 10.13.1.16, Type: port_channel, Provider: mock_network)
+• **aruba-cx-017** (IP: 10.13.1.17, Type: switch, Provider: mock_network)
+• **core-sw-018** (IP: 10.13.1.18, Type: router, Provider: mock_network)
+• **edge-router-019** (IP: 10.13.1.19, Type: firewall, Provider: mock_network)
+• **ap-floor-022** (IP: 10.13.1.22, Type: access_point, Provider: mock_network)
+• **vlan-cfg-023** (IP: 10.13.1.23, Type: vlan, Provider: mock_network)
+• **port-channel-cfg-024** (IP: 10.13.1.24, Type: port_channel, Provider: mock_network)
+• **aruba-cx-025** (IP: 10.13.1.25, Type: switch, Provider: mock_network)
+• **core-sw-026** (IP: 10.13.1.26, Type: router, Provider: mock_network)
+• **edge-router-027** (IP: 10.13.1.27, Type: firewall, Provider: mock_network)
+<!-- slide -->
+### Page 27 of 37
+
+• **nimble-prod-009** (IP: 10.12.1.9, Type: replication_group, Provider: mock_storage)
+• **primera-san-010** (IP: 10.12.1.10, Type: storage_system, Provider: mock_storage)
+• **3par-array-011** (IP: 10.12.1.11, Type: storage_pool, Provider: mock_storage)
+• **storeonce-backup-012** (IP: 10.12.1.12, Type: volume, Provider: mock_storage)
+• **nas-prod-013** (IP: 10.12.1.13, Type: volume_set, Provider: mock_storage)
+• **san-host-014** (IP: 10.12.1.14, Type: filesystem, Provider: mock_storage)
+• **alletra-array-015** (IP: 10.12.1.15, Type: storage_system, Provider: mock_storage)
+• **nimble-prod-016** (IP: 10.12.1.16, Type: host_group, Provider: mock_storage)
+• **primera-san-017** (IP: 10.12.1.17, Type: snapshot, Provider: mock_storage)
+• **3par-array-018** (IP: 10.12.1.18, Type: replication_group, Provider: mock_storage)
+<!-- slide -->
+### Page 28 of 37
+
+• **Prod-Server-DB01** (IP: 10.0.0.100, Type: server-hardware-12, Provider: mock_server(OneView))
+• **Dev-Server-Web02** (IP: 10.0.1.101, Type: server-hardware-12, Provider: mock_server(OneView))
+• **fw-west-04-8** (IP: 10.100.1.9, Type: firewall, Provider: oneview)
+• **rack11-compute-1-10** (IP: 10.100.1.11, Type: server, Provider: oneview)
+• **agg-sw12-11** (IP: 10.100.1.12, Type: switch, Provider: oneview)
+• **edge-r03-12** (IP: 10.100.1.13, Type: router, Provider: oneview)
+• **fw-east-04-13** (IP: 10.100.1.14, Type: firewall, Provider: oneview)
+• **stg-array-14** (IP: 10.100.1.15, Type: storage, Provider: oneview)
+• **rack16-compute-6-15** (IP: 10.100.1.16, Type: server, Provider: oneview)
+• **leaf-sw17-16** (IP: 10.100.1.17, Type: switch, Provider: oneview)
+<!-- slide -->
+### Page 29 of 37
+
+• **wan-r08-17** (IP: 10.100.1.18, Type: router, Provider: oneview)
+• **fw-west-04-18** (IP: 10.100.1.19, Type: firewall, Provider: oneview)
+• **stg-nas-19** (IP: 10.100.1.20, Type: storage, Provider: oneview)
+• **rack21-compute-1-20** (IP: 10.100.1.21, Type: server, Provider: oneview)
+• **agg-sw02-21** (IP: 10.100.1.22, Type: switch, Provider: oneview)
+• **edge-r03-22** (IP: 10.100.1.23, Type: router, Provider: oneview)
+• **fw-east-04-23** (IP: 10.100.1.24, Type: firewall, Provider: oneview)
+• **stg-array-24** (IP: 10.100.1.25, Type: storage, Provider: oneview)
+• **rack26-compute-6-25** (IP: 10.100.1.26, Type: server, Provider: oneview)
+• **leaf-sw07-26** (IP: 10.100.1.27, Type: switch, Provider: oneview)
+<!-- slide -->
+### Page 30 of 37
+
+• **wan-r08-27** (IP: 10.100.1.28, Type: router, Provider: oneview)
+• **fw-west-04-28** (IP: 10.100.1.29, Type: firewall, Provider: oneview)
+• **stg-nas-29** (IP: 10.100.1.30, Type: storage, Provider: oneview)
+• **rack31-compute-1-30** (IP: 10.100.1.31, Type: server, Provider: oneview)
+• **agg-sw12-31** (IP: 10.100.1.32, Type: switch, Provider: oneview)
+• **edge-r03-32** (IP: 10.100.1.33, Type: router, Provider: oneview)
+• **fw-east-04-33** (IP: 10.100.1.34, Type: firewall, Provider: oneview)
+• **stg-array-34** (IP: 10.100.1.35, Type: storage, Provider: oneview)
+• **rack36-compute-6-35** (IP: 10.100.1.36, Type: server, Provider: oneview)
+• **leaf-sw17-36** (IP: 10.100.1.37, Type: switch, Provider: oneview)
+<!-- slide -->
+### Page 31 of 37
+
+• **wan-r08-37** (IP: 10.100.1.38, Type: router, Provider: oneview)
+• **fw-west-04-38** (IP: 10.100.1.39, Type: firewall, Provider: oneview)
+• **stg-nas-39** (IP: 10.100.1.40, Type: storage, Provider: oneview)
+• **rack41-compute-1-40** (IP: 10.100.1.41, Type: server, Provider: oneview)
+• **agg-sw02-41** (IP: 10.100.1.42, Type: switch, Provider: oneview)
+• **edge-r03-42** (IP: 10.100.1.43, Type: router, Provider: oneview)
+• **fw-east-04-43** (IP: 10.100.1.44, Type: firewall, Provider: oneview)
+• **stg-array-44** (IP: 10.100.1.45, Type: storage, Provider: oneview)
+• **rack46-compute-6-45** (IP: 10.100.1.46, Type: server, Provider: oneview)
+• **leaf-sw07-46** (IP: 10.100.1.47, Type: switch, Provider: oneview)
+<!-- slide -->
+### Page 32 of 37
+
+• **wan-r08-47** (IP: 10.100.1.48, Type: router, Provider: oneview)
+• **fw-west-04-48** (IP: 10.100.1.49, Type: firewall, Provider: oneview)
+• **stg-nas-49** (IP: 10.100.1.50, Type: storage, Provider: oneview)
+• **rack1-compute-1-50** (IP: 10.100.1.51, Type: server, Provider: oneview)
+• **agg-sw12-51** (IP: 10.100.1.52, Type: switch, Provider: oneview)
+• **edge-r03-52** (IP: 10.100.1.53, Type: router, Provider: oneview)
+• **fw-east-04-53** (IP: 10.100.1.54, Type: firewall, Provider: oneview)
+• **stg-array-54** (IP: 10.100.1.55, Type: storage, Provider: oneview)
+• **rack6-compute-6-55** (IP: 10.100.1.56, Type: server, Provider: oneview)
+• **leaf-sw17-56** (IP: 10.100.1.57, Type: switch, Provider: oneview)
+<!-- slide -->
+### Page 33 of 37
+
+• **wan-r08-57** (IP: 10.100.1.58, Type: router, Provider: oneview)
+• **fw-west-04-58** (IP: 10.100.1.59, Type: firewall, Provider: oneview)
+• **stg-nas-59** (IP: 10.100.1.60, Type: storage, Provider: oneview)
+• **rack11-compute-1-60** (IP: 10.100.1.61, Type: server, Provider: oneview)
+• **agg-sw02-61** (IP: 10.100.1.62, Type: switch, Provider: oneview)
+• **edge-r03-62** (IP: 10.100.1.63, Type: router, Provider: oneview)
+• **fw-east-04-63** (IP: 10.100.1.64, Type: firewall, Provider: oneview)
+• **stg-array-64** (IP: 10.100.1.65, Type: storage, Provider: oneview)
+• **rack16-compute-6-65** (IP: 10.100.1.66, Type: server, Provider: oneview)
+• **leaf-sw07-66** (IP: 10.100.1.67, Type: switch, Provider: oneview)
+<!-- slide -->
+### Page 34 of 37
+
+• **wan-r08-67** (IP: 10.100.1.68, Type: router, Provider: oneview)
+• **fw-west-04-68** (IP: 10.100.1.69, Type: firewall, Provider: oneview)
+• **stg-nas-69** (IP: 10.100.1.70, Type: storage, Provider: oneview)
+• **rack21-compute-1-70** (IP: 10.100.1.71, Type: server, Provider: oneview)
+• **agg-sw12-71** (IP: 10.100.1.72, Type: switch, Provider: oneview)
+• **edge-r03-72** (IP: 10.100.1.73, Type: router, Provider: oneview)
+• **fw-east-04-73** (IP: 10.100.1.74, Type: firewall, Provider: oneview)
+• **stg-array-74** (IP: 10.100.1.75, Type: storage, Provider: oneview)
+• **rack26-compute-6-75** (IP: 10.100.1.76, Type: server, Provider: oneview)
+• **leaf-sw17-76** (IP: 10.100.1.77, Type: switch, Provider: oneview)
+<!-- slide -->
+### Page 35 of 37
+
+• **wan-r08-77** (IP: 10.100.1.78, Type: router, Provider: oneview)
+• **fw-west-04-78** (IP: 10.100.1.79, Type: firewall, Provider: oneview)
+• **stg-nas-79** (IP: 10.100.1.80, Type: storage, Provider: oneview)
+• **rack31-compute-1-80** (IP: 10.100.1.81, Type: server, Provider: oneview)
+• **agg-sw02-81** (IP: 10.100.1.82, Type: switch, Provider: oneview)
+• **edge-r03-82** (IP: 10.100.1.83, Type: router, Provider: oneview)
+• **fw-east-04-83** (IP: 10.100.1.84, Type: firewall, Provider: oneview)
+• **stg-array-84** (IP: 10.100.1.85, Type: storage, Provider: oneview)
+• **rack36-compute-6-85** (IP: 10.100.1.86, Type: server, Provider: oneview)
+• **leaf-sw07-86** (IP: 10.100.1.87, Type: switch, Provider: oneview)
+<!-- slide -->
+### Page 36 of 37
+
+• **wan-r08-87** (IP: 10.100.1.88, Type: router, Provider: oneview)
+• **fw-west-04-88** (IP: 10.100.1.89, Type: firewall, Provider: oneview)
+• **stg-nas-89** (IP: 10.100.1.90, Type: storage, Provider: oneview)
+• **rack41-compute-1-90** (IP: 10.100.1.91, Type: server, Provider: oneview)
+• **agg-sw12-91** (IP: 10.100.1.92, Type: switch, Provider: oneview)
+• **edge-r03-92** (IP: 10.100.1.93, Type: router, Provider: oneview)
+• **fw-east-04-93** (IP: 10.100.1.94, Type: firewall, Provider: oneview)
+• **stg-array-94** (IP: 10.100.1.95, Type: storage, Provider: oneview)
+• **rack46-compute-6-95** (IP: 10.100.1.96, Type: server, Provider: oneview)
+• **leaf-sw17-96** (IP: 10.100.1.97, Type: switch, Provider: oneview)
+<!-- slide -->
+### Page 37 of 37
+
+• **wan-r08-97** (IP: 10.100.1.98, Type: router, Provider: oneview)
+• **fw-west-04-98** (IP: 10.100.1.99, Type: firewall, Provider: oneview)
+• **stg-nas-99** (IP: 10.100.1.100, Type: storage, Provider: oneview)
+• **rack1-compute-1-100** (IP: 10.100.1.101, Type: server, Provider: oneview)
+• **agg-sw02-101** (IP: 10.100.1.102, Type: switch, Provider: oneview)
+• **edge-r03-102** (IP: 10.100.1.103, Type: router, Provider: oneview)
+• **fw-east-04-103** (IP: 10.100.1.104, Type: firewall, Provider: oneview)
+• **stg-array-104** (IP: 10.100.1.105, Type: storage, Provider: oneview)
+• **rack6-compute-6-105** (IP: 10.100.1.106, Type: server, Provider: oneview)
+• **leaf-sw07-106** (IP: 10.100.1.107, Type: switch, Provider: oneview)
+````

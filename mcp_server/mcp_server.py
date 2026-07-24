@@ -639,126 +639,138 @@ async def _execute_agent_command(
             ident_lower = query.lower()
         q_lower = query.lower()
 
-        # ── Agent dispatch catalogue ──────────────────────────────────────────
-        # Each entry: (agent_type, provider, api_path, provider_label)
-        #   agent_type    – key used by the execution engine (server/onprem/cloud/network/storage)
-        #   provider      – mock provider string (passed as provider_or_protocol to dispatcher)
-        #   api_path      – the PATH the agent should call on its own mock server
-        #   provider_label– human-readable label attached to every returned device
+        # ── Keyword → canonical device_type ──────────────────────────────────
+        # Map natural-language keywords to the exact device_type string used in
+        # the mock servers.  All routing knowledge is in the OASF records +
+        # Capability Registry — NOT here.
+        _DTYPE_MAP = {
+            # Network
+            "gateway":              "gateway",
+            "gateways":             "gateway",
+            "switch":               "switch",
+            "switches":             "switch",
+            "router":               "router",
+            "routers":              "router",
+            "firewall":             "firewall",
+            "firewalls":            "firewall",
+            "access point":         "access_point",
+            "access points":        "access_point",
+            " ap ":                 "access_point",
+            "wireless controller":  "wireless_controller",
+            "wireless controllers": "wireless_controller",
+            "wireless":             "wireless_controller",
+            "wlan":                 "wireless_controller",
+            "port channel":         "port_channel",
+            "port channels":        "port_channel",
+            "vlan":                 "vlan",
+            "vlans":                "vlan",
+            # Cloud
+            "virtual machine":      "virtual_machine",
+            "virtual machines":     "virtual_machine",
+            " vm ":                 "virtual_machine",
+            "vms":                  "virtual_machine",
+            "kubernetes":           "kubernetes_cluster",
+            "k8s":                  "kubernetes_cluster",
+            "cluster":              "kubernetes_cluster",
+            "clusters":             "kubernetes_cluster",
+            "load balancer":        "load_balancer",
+            "load balancers":       "load_balancer",
+            " lb ":                 "load_balancer",
+            "database":             "database_service",
+            "databases":            "database_service",
+            " db ":                 "database_service",
+            "virtual network":      "virtual_network",
+            "virtual networks":     "virtual_network",
+            "vnet":                 "virtual_network",
+            "subnet":               "subnet",
+            "subnets":              "subnet",
+            "namespace":            "namespace",
+            "namespaces":           "namespace",
+            # Server / Compute
+            "server":               "server",
+            "servers":              "server",
+            "compute":              "server",
+            "node":                 "server",
+            "nodes":                "server",
+            "hardware":             "server",
+            # Storage
+            "storage system":       "storage_system",
+            "storage systems":      "storage_system",
+            "storage array":        "storage_system",
+            "storage arrays":       "storage_system",
+            "storage pool":         "storage_pool",
+            "storage pools":        "storage_pool",
+            "pool":                 "storage_pool",
+            "pools":                "storage_pool",
+            "volume":               "volume",
+            "volumes":              "volume",
+            "snapshot":             "snapshot",
+            "snapshots":            "snapshot",
+        }
 
-        ILO_SERVERS    = ("server",  "mock_server", "mock_server(iLO)")
-        COMOPS_SERVERS = ("onprem",  "mock_comops", "mock_server(ComOps)")
-        COMOPS_SWITCH  = ("onprem",  "mock_comops", "mock_server(ComOps)")
-        COMOPS_ROUTER  = ("onprem",  "mock_comops", "mock_server(ComOps)")
-        COMOPS_STORAGE = ("onprem",  "mock_comops", "mock_server(ComOps)")
-        COMOPS_FW      = ("onprem",  "mock_comops", "mock_server(ComOps)")
-        OV_SERVERS     = ("onprem",  "mock_oneview","mock_server(OneView)")
-        OV_SWITCHES    = ("onprem",  "mock_oneview","mock_server(OneView)")
-        CLOUD_VMS      = ("cloud",   "mock_cloud",  "mock_server(cloud)")
-        CLOUD_K8S      = ("cloud",   "mock_cloud",  "mock_server(cloud)")
-        CLOUD_LB       = ("cloud",   "mock_cloud",  "mock_server(cloud)")
-        CLOUD_DB       = ("cloud",   "mock_cloud",  "mock_server(cloud)")
-        CLOUD_VNET     = ("cloud",   "mock_cloud",  "mock_server(cloud)")
-        CLOUD_SUBNET   = ("cloud",   "mock_cloud",  "mock_server(cloud)")
-        CLOUD_SVC      = ("cloud",   "mock_cloud",  "mock_server(cloud)")
-        NET_SWITCH     = ("network", "mock_network","mock_server(network)")
-        NET_ROUTER     = ("network", "mock_network","mock_server(network)")
-        NET_GW         = ("network", "mock_network","mock_server(network)")
-        NET_AP         = ("network", "mock_network","mock_server(network)")
-        NET_WCTRL      = ("network", "mock_network","mock_server(network)")
-        NET_FW         = ("network", "mock_network","mock_server(network)")
-        STOR_SYS       = ("storage", "mock_storage","mock_server(storage)")
-        STOR_POOL      = ("storage", "mock_storage","mock_server(storage)")
-        STOR_VOL       = ("storage", "mock_storage","mock_server(storage)")
+        # Find the canonical device_type — check longest matching keyword first
+        device_type: str = ""
+        normalized_category: str = ""
+        for kw in sorted(_DTYPE_MAP, key=len, reverse=True):
+            if kw.strip() in ident_lower:
+                device_type = _DTYPE_MAP[kw]
+                normalized_category = kw.strip().replace("_", " ").title()
+                break
 
-        # ── Keyword → sources routing ─────────────────────────────────────────
-        if "server" in ident_lower or "node" in ident_lower or "compute" in ident_lower or "hardware" in ident_lower:
-            normalized_category = "server hardware"
-            sources = [ILO_SERVERS, COMOPS_SERVERS, OV_SERVERS]
-        elif "virtual machine" in ident_lower or " vm" in ident_lower or ident_lower.startswith("vm"):
-            normalized_category = "virtual machines"
-            sources = [CLOUD_VMS]
-        elif "kubernetes" in ident_lower or "k8s" in ident_lower or "cluster" in ident_lower:
-            normalized_category = "kubernetes clusters"
-            sources = [CLOUD_K8S]
-        elif "load balancer" in ident_lower or " lb" in ident_lower:
-            normalized_category = "load balancers"
-            sources = [CLOUD_LB]
-        elif "database" in ident_lower or " db" in ident_lower:
-            normalized_category = "database services"
-            sources = [CLOUD_DB]
-        elif "vnet" in ident_lower or "virtual network" in ident_lower:
-            normalized_category = "virtual networks"
-            sources = [CLOUD_VNET]
-        elif "subnet" in ident_lower:
-            normalized_category = "subnets"
-            sources = [CLOUD_SUBNET]
-        elif "switch" in ident_lower:
-            normalized_category = "switches"
-            sources = [NET_SWITCH, OV_SWITCHES, COMOPS_SWITCH]
-        elif "gateway" in ident_lower:
-            normalized_category = "gateways"
-            sources = [NET_GW]
-        elif "router" in ident_lower:
-            normalized_category = "routers"
-            sources = [NET_ROUTER, COMOPS_ROUTER]
-        elif "access point" in ident_lower or " ap" in ident_lower or ident_lower == "aps":
-            normalized_category = "access points"
-            sources = [NET_AP]
-        elif "wireless" in ident_lower or "wlan" in ident_lower:
-            normalized_category = "wireless controllers"
-            sources = [NET_WCTRL]
-        elif "firewall" in ident_lower:
-            normalized_category = "firewalls"
-            sources = [NET_FW, COMOPS_FW]
-        elif "storage system" in ident_lower or "array" in ident_lower:
-            normalized_category = "storage systems"
-            sources = [STOR_SYS]
-        elif "storage pool" in ident_lower or "pool" in ident_lower:
-            normalized_category = "storage pools"
-            sources = [STOR_POOL]
-        elif "volume" in ident_lower:
-            normalized_category = "volumes"
-            sources = [STOR_VOL]
-        elif "storage" in ident_lower:
-            normalized_category = "storage devices"
-            sources = [STOR_SYS, STOR_POOL, STOR_VOL, COMOPS_STORAGE, CLOUD_SVC]
-        elif "cloud" in ident_lower:
-            normalized_category = "cloud resources"
-            sources = [CLOUD_VMS, CLOUD_K8S, CLOUD_LB, CLOUD_DB, CLOUD_VNET, CLOUD_SUBNET, CLOUD_SVC]
-        elif "network" in ident_lower or "device" in ident_lower:
-            normalized_category = "network devices"
-            sources = [NET_SWITCH, NET_ROUTER, NET_GW, NET_AP, NET_WCTRL, NET_FW, COMOPS_SWITCH, COMOPS_ROUTER]
-        else:
+        if not device_type:
+            # Broad fallback: entire query becomes label, return everything
             normalized_category = "all devices"
-            sources = [ILO_SERVERS, COMOPS_SERVERS, OV_SERVERS, CLOUD_VMS, CLOUD_K8S,
-                       NET_SWITCH, NET_ROUTER, STOR_SYS]
+            device_type = ""
 
-        # ── Provider-specific override ────────────────────────────────────────
+        # ── Query Capability Registry for all matching (agent, provider) pairs ─
+        # The registry reads provider_resource_map from each agent's OASF record
+        # and returns every dispatch descriptor that supports device_type.
+        REGISTRY_URL = "http://127.0.0.1:8020"
+        try:
+            import httpx as _httpx
+            params = {"resource_type": device_type} if device_type else {}
+            _reg_resp = _httpx.get(
+                f"{REGISTRY_URL}/agents/lookup-all",
+                params=params,
+                timeout=3.0,
+            )
+            _reg_resp.raise_for_status()
+            sources = _reg_resp.json()   # list of dispatch descriptor dicts
+        except Exception as _reg_err:
+            return (
+                f"⚠️ Capability Registry unavailable: {_reg_err}\n"
+                f"Ensure the registry is running at {REGISTRY_URL}."
+            )
+
+        if not sources:
+            return (
+                f"No agents registered in the Capability Registry support "
+                f"resource type **{device_type or 'any'}**.\n"
+                f"Register the relevant agent's OASF record first."
+            )
+
+        # ── Provider-pin override (user explicitly names a provider) ──────────
+        # If the user says "from ComOps" / "from cloud" / "from network" etc.,
+        # we narrow sources to that provider only.
+        _prov_pin: str = ""
         if "oneview" in q_lower:
-            sources = [s for s in sources if s[1] == "oneview"]
-            if not sources:
-                return "No OneView sources configured for that device type."
+            _prov_pin = "mock_oneview"
         elif "ilo" in q_lower or "redfish" in q_lower:
-            sources = [s for s in sources if s[1] == "mock_server"]
-            if not sources:
-                return "No iLO sources configured for that device type."
+            _prov_pin = "mock_server"
         elif "comops" in q_lower or "compute ops" in q_lower:
-            sources = [s for s in sources if s[1] == "comops"]
-            if not sources:
-                return "No ComOps sources configured for that device type."
+            _prov_pin = "coms"
         elif "from cloud" in q_lower or "in cloud" in q_lower or "mock_cloud" in q_lower:
-            sources = [s for s in sources if s[1] == "mock_cloud"]
-            if not sources:
-                return "No cloud sources configured for that device type."
+            _prov_pin = "mock_cloud"
         elif "from network" in q_lower or "mock_network" in q_lower:
-            sources = [s for s in sources if s[1] == "mock_network"]
-            if not sources:
-                return "No network sources configured for that device type."
+            _prov_pin = "mock_network"
         elif "from storage" in q_lower or "mock_storage" in q_lower:
-            sources = [s for s in sources if s[1] == "mock_storage"]
+            _prov_pin = "mock_storage"
+
+        if _prov_pin:
+            sources = [s for s in sources if s.get("provider") == _prov_pin]
             if not sources:
-                return "No storage sources configured for that device type."
+                return f"No sources for provider **{_prov_pin}** support **{device_type}**."
+
 
         # ── Authorization ─────────────────────────────────────────────────────
         try:
@@ -771,21 +783,44 @@ async def _execute_agent_command(
             return f"Access Denied for {email} (Role: {role}) on '{identifier}'\nReason: {reason}"
 
         # ── Dispatch each source to its agent concurrently ────────────────────
-        async def _dispatch_source(agent_type: str, provider: str, label: str):
+        # `sources` is now a list of dispatch descriptor dicts from the registry.
+        # Each dict has: agent_type, provider, label, api_base, resource_types.
+        async def _dispatch_source(src: dict):
+            agent_type   = src.get("agent_type", "cloud")
+            provider     = src.get("provider", "mock_cloud")
+            label        = src.get("label", provider)
+            api_base     = src.get("api_base", "")
+            dtype_filter = device_type  # canonical device_type extracted from query
+
             try:
+                # Build the api_path from api_base + device_type filter.
+                # Every agent whose mock server accepts ?device_type= gets a filtered URL.
+                if api_base and dtype_filter:
+                    api_path = f"{api_base}?device_type={dtype_filter}"
+                elif api_base:
+                    api_path = api_base
+                else:
+                    api_path = ""
+
+                params: dict = {
+                    "provider_label": label,
+                    "skip": 0,
+                    "limit": 200,
+                }
+                if api_path:
+                    params["api_path"] = api_path
+                if dtype_filter:
+                    params["resource_type"] = dtype_filter
+
                 result = await asyncio.get_event_loop().run_in_executor(
                     None,
                     lambda: _dispatcher.dispatch(
                         agent_type=agent_type,
                         query_action="LIST",
-                        resource_type="server" if "server" in normalized_category else normalized_category.split()[0],
+                        resource_type=dtype_filter or "server",
                         resource_id="all",
                         provider_or_protocol=provider,
-                        parameters={
-                            "provider_label": label,
-                            "skip": 0,
-                            "limit": 200,
-                        },
+                        parameters=params,
                         credentials_ref="",
                     )
                 )
@@ -800,13 +835,28 @@ async def _execute_agent_command(
                 if result.get("status") == "failed":
                     errors = result.get("errors", [])
                     return [], f"Warning {label}: {'; '.join(errors)}"
+
+                # ── Client-side safety filter ──────────────────────────────────
+                # Drop records whose device_type doesn't match the requested type.
+                # This is a fallback for mock servers that ignore the ?device_type= param.
+                if dtype_filter and devices:
+                    dt_norm = dtype_filter.lower().rstrip("s")
+                    filtered = [
+                        d for d in devices
+                        if (d.get("device_type") or d.get("type") or "").lower().rstrip("s") == dt_norm
+                    ]
+                    # Only apply if it produces ≥1 result; otherwise surface raw results.
+                    if filtered:
+                        devices = filtered
+
                 return devices, None
             except Exception as exc:
                 return [], f"Warning {label}: {exc}"
 
         dispatch_results = await asyncio.gather(
-            *[_dispatch_source(ag, prov, lbl) for ag, prov, lbl in sources]
+            *[_dispatch_source(src) for src in sources]
         )
+
 
         all_devices = []
         warnings = []
@@ -1332,9 +1382,9 @@ async def _execute_agent_command(
 
     # ── Dynamic Intent Router Variables ──────────────────────────────────────
     _MOCK_BASE_URLS = {
-        "mock_storage": os.getenv("MOCK_STORAGE_URL", "http://127.0.0.1:8004"),
+        "mock_storage": os.getenv("MOCK_STORAGE_URL", "http://127.0.0.1:8002"),
         "mock_server":  os.getenv("MOCK_SERVER_URL",  "http://127.0.0.1:8010"),
-        "mock_network": os.getenv("MOCK_NETWORK_URL", "http://127.0.0.1:8002"),
+        "mock_network": os.getenv("MOCK_NETWORK_URL", "http://127.0.0.1:8004"),
         "mock_cloud":   os.getenv("MOCK_CLOUD_URL",   "http://127.0.0.1:8003"),
         "oneview":      os.getenv("HPE_OV_URL",       "http://127.0.0.1:8000"),
     }
@@ -1494,7 +1544,7 @@ async def _execute_agent_command(
             dispatch_params["api_path"] = api_path
 
     # Override api_path with resolver-derived endpoint if better
-    if api_path_step3 and action not in {"ON", "OFF", "RESET", "COLD_BOOT", "FETCH_EVENT_LOG",
+    if api_path_step3 and action not in {"CREATE", "ALLOCATE", "ON", "OFF", "RESET", "COLD_BOOT", "FETCH_EVENT_LOG",
                                           "CLEAR_EVENT_LOG", "DISCOVER_INVENTORY", "MOUNT_VIRTUAL_MEDIA",
                                           "FETCH_SENSORS", "SYNC_CMDB"}:
         dispatch_params["api_path"] = api_path_step3
@@ -1514,14 +1564,33 @@ async def _execute_agent_command(
 
         if action in {"ON", "OFF", "RESET", "COLD_BOOT"}:
             agent_task_action = "execute_action"
-            # Power actions → POST to /power endpoint
             dispatch_params["http_method"] = "POST"
-            dispatch_params["payload"] = {
-                "action": "ON" if action in {"ON", "COLD_BOOT"} else "OFF"
-            }
-            # Ensure the api_path points to the /power sub-route
-            if "/power" not in (dispatch_params.get("api_path") or ""):
-                dispatch_params["api_path"] = "/network/v1/devices/{id}/power"
+            
+            # Check for port/interface in the original query
+            port_match = re.search(r'(?:GigabitEthernet|eth|port|interface)[\s-]*([A-Za-z0-9/]+)', query, re.IGNORECASE)
+            if port_match and action in {"ON", "OFF"}:
+                port_val = port_match.group(1)
+                full_match = port_match.group(0).lower()
+                if full_match.startswith("gigabitethernet"):
+                    port_name = f"GigabitEthernet{port_val}"
+                elif full_match.startswith("eth"):
+                    port_name = f"eth{port_val}"
+                else:
+                    port_name = port_val
+                    
+                # Update payload and api_path for port status
+                dispatch_params["payload"] = {
+                    "status": "down" if action == "OFF" else "up"
+                }
+                dispatch_params["api_path"] = f"/network/v1/devices/{{id}}/ports/{port_name}/status"
+            else:
+                # Power actions → POST to /power endpoint
+                dispatch_params["payload"] = {
+                    "action": "ON" if action in {"ON", "COLD_BOOT"} else "OFF"
+                }
+                # Ensure the api_path points to the /power sub-route
+                if "/power" not in (dispatch_params.get("api_path") or ""):
+                    dispatch_params["api_path"] = "/network/v1/devices/{id}/power"
 
         elif action == "RESCAN":
             agent_task_action = "discover_topology"
@@ -1536,6 +1605,16 @@ async def _execute_agent_command(
 
         elif action in {"CREATE"}:
             dispatch_params["http_method"] = "POST"
+            vlan_match = re.search(r'vlan\s+(\d+)', query, re.IGNORECASE)
+            if vlan_match:
+                vlan_id = int(vlan_match.group(1))
+                name_match = re.search(r'(?:labeled as|named|name|label)\s+([a-zA-Z0-9_\-\s]+)', query, re.IGNORECASE)
+                vlan_name = name_match.group(1).strip() if name_match else f"VLAN{vlan_id}"
+                dispatch_params["api_path"] = f"/network/v1/devices/{{id}}/vlans"
+                dispatch_params["payload"] = {
+                    "vlan_id": vlan_id,
+                    "name": vlan_name
+                }
 
         elif action in {"DELETE", "DEALLOCATE"}:
             dispatch_params["http_method"] = "DELETE"
@@ -1629,8 +1708,9 @@ async def _execute_agent_command(
         # Construct Action API Endpoint
         if action in {"START", "STOP", "RESTART"} and resolved_provider == "mock_server":
             action_api_endpoint = f"/redfish/v1/systems/{device.source_device_id or identifier}/Actions/ComputerSystem.Reset"
-        elif api_path:
-            action_api_endpoint = api_path.format(id=device.source_device_id or identifier)
+        elif dispatch_params.get("api_path") or api_path:
+            actual_api_path = dispatch_params.get("api_path") or api_path
+            action_api_endpoint = actual_api_path.format(id=device.source_device_id or identifier)
         else:
             action_api_endpoint = "N/A"
 

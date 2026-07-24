@@ -115,6 +115,64 @@ async def lookup_agent(
 
     raise HTTPException(status_code=404, detail="No matching OASF agent found in registry.")
 
+@app.get("/agents/lookup-all")
+async def lookup_all_agents(
+    resource_type: Optional[str] = None,
+):
+    """
+    Return EVERY (agent, provider) dispatch descriptor that can handle the given resource_type.
+
+    Each entry in the returned list contains:
+      - agent_name      : canonical name from the OASF record
+      - agent_type      : execution-engine key (cloud / network / storage / server / onprem)
+      - provider        : provider/protocol string for the adapter (e.g. mock_cloud, coms)
+      - label           : human-readable display label
+      - api_base        : base API path to call on the provider's mock server
+      - resource_types  : all resource_types this (agent, provider) pair supports
+
+    Matching is done against modules.provider_resource_map in the OASF record.
+    Falls back to modules.resource_types (flat list) if no provider_resource_map is present.
+    """
+    rt = resource_type.lower().strip() if resource_type else None
+    results = []
+
+    for name, agent in _REGISTRY.items():
+        modules = agent.get("modules", {})
+        provider_resource_map = modules.get("provider_resource_map", {})
+        # Derive a short agent_type key from the agent name (e.g. "cloud-agent" -> "cloud")
+        agent_type = name.replace("-agent", "").lower().strip()
+
+        if provider_resource_map:
+            # Structured lookup: each provider declares its own resource_types
+            for provider, info in provider_resource_map.items():
+                supported = [r.lower() for r in info.get("resource_types", [])]
+                if rt is None or rt in supported or any(rt in r or r in rt for r in supported):
+                    results.append({
+                        "agent_name":     name,
+                        "agent_type":     agent_type,
+                        "provider":       provider,
+                        "label":          info.get("label", f"mock_server({provider})"),
+                        "api_base":       info.get("api_base", ""),
+                        "resource_types": info.get("resource_types", []),
+                    })
+        else:
+            # Fallback: flat resource_types list — treat agent-level protocols as providers
+            flat_rts = [r.lower() for r in modules.get("resource_types", [])]
+            if rt is None or rt in flat_rts or any(rt in r or r in rt for r in flat_rts):
+                protocols = modules.get("protocols", modules.get("providers", []))
+                for prov in protocols:
+                    results.append({
+                        "agent_name":     name,
+                        "agent_type":     agent_type,
+                        "provider":       prov,
+                        "label":          f"mock_server({prov})",
+                        "api_base":       "",
+                        "resource_types": modules.get("resource_types", []),
+                    })
+
+    return results
+
+
 @app.get("/health")
 def health():
     return {"status": "healthy", "service": "capability-registry"}

@@ -19,3 +19,126 @@ RAW QUERY RECEIVED:
 RAW QUERY RECEIVED:
 'list all servers'
 
+RAW QUERY RECEIVED:
+'list all virtual machines'
+
+RAW QUERY RECEIVED:
+'list all virtual machines'
+
+RAW QUERY RECEIVED:
+'list all virtual machines'
+
+RAW QUERY RECEIVED:
+'list all routers'
+
+RAW QUERY RECEIVED:
+'list all routers'
+
+RAW QUERY RECEIVED:
+'list all routers'
+
+RAW QUERY RECEIVED:
+'list all routers'
+
+RAW QUERY RECEIVED:
+'list all routers'
+
+RAW QUERY RECEIVED:
+'list all virtual machines'
+
+RAW QUERY RECEIVED:
+'list all routers'
+
+RAW QUERY RECEIVED:
+'list all switches'
+
+RAW QUERY RECEIVED:
+'status nimble-prod-009'
+
+RAW QUERY RECEIVED:
+'status nimble-prod-009'
+
+RAW QUERY RECEIVED:
+'status nimble-prod-009'
+
+RAW QUERY RECEIVED:
+'status nimble-prod-009'
+
+RAW QUERY RECEIVED:
+'status nimble-prod-009'
+
+RAW QUERY RECEIVED:
+'status nimble-prod-009'
+
+RAW QUERY RECEIVED:
+'list all virtual machines'
+
+RAW QUERY RECEIVED:
+'list all switches'
+
+RAW QUERY RECEIVED:
+'list all servers'
+
+RAW QUERY RECEIVED:
+'status nimble-prod-009'
+
+RAW QUERY RECEIVED:
+'list all servers'
+
+RAW QUERY RECEIVED:
+'bring down GigabitEthernet1/0/1 for aruba-cx-017'
+
+RAW QUERY RECEIVED:
+'bring down GigabitEthernet1/0/1 for aruba-cx-017'
+
+RAW QUERY RECEIVED:
+'bring down GigabitEthernet1/0/1 for aruba-cx-017'
+
+RAW QUERY RECEIVED:
+'Create VLAN 300 for wireless-ctrl-020 labeled as production 2'
+
+RAW QUERY RECEIVED:
+'List all devices'
+
+RAW QUERY RECEIVED:
+'List all vms'
+
+RAW QUERY RECEIVED:
+'bring down GigabitEthernet1/0/1 for aruba-cx-017'
+
+RAW QUERY RECEIVED:
+'status of nimble-prod-009'
+
+RAW QUERY RECEIVED:
+'reboot wireless-ctrl-020'
+
+RAW QUERY RECEIVED:
+'Create apollo-node-299'
+
+RAW QUERY RECEIVED:
+'Delete apollo-node-299'
+
+RAW QUERY RECEIVED:
+'Create storage volume vol-db-test-01'
+
+RAW QUERY RECEIVED:
+'Create storage volume vol-db-test-01'
+
+RAW QUERY RECEIVED:
+'Create storage volume vol-db-test-01'
+
+RAW QUERY RECEIVED:
+'Create storage volume vol-db-test-01'
+
+RAW QUERY RECEIVED:
+'Create storage volume vol-db-test-01'
+
+RAW QUERY RECEIVED:
+'Create storage volume vol-db-test-01'
+
+RAW QUERY RECEIVED:
+'reboot wireless-ctrl-020'
+
+RAW QUERY RECEIVED:
+'detect faults ap-floor-022'
+
